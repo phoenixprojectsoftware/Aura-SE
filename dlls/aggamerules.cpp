@@ -911,8 +911,8 @@ void AgGameRules::GoToIntermission()
     if (ARENA != AgGametype() && LMS != AgGametype())
     {
         m_ScoreLog.End();
-        CVAR_SET_FLOAT("sv_ag_match_running", 0);
-        CVAR_SET_FLOAT("sv_ag_show_gibs", 1);
+        CVAR_SET_FLOAT("sv_aura_match_running", 0);
+        CVAR_SET_FLOAT("sv_aura_show_gibs", 1);
         CVAR_SET_FLOAT("ag_spectalk", 1);
     }
 }

@@ -21,7 +21,7 @@ DLL_GLOBAL BYTE g_GameType = STANDARD;
 
 void SetupGametype()
 {
-    AgString sGametype = CVAR_GET_STRING("sv_ag_gametype");
+    AgString sGametype = CVAR_GET_STRING("sv_aura_gametype");
     g_GameType = STANDARD;
     if (sGametype == "arena")
         g_GameType = ARENA;
@@ -150,13 +150,13 @@ void AgGameMode::Think()
         return;
     m_fNextCheck = gpGlobals->time + 1; //Check every second.
 
-    if (g_sGamemode != CVAR_GET_STRING("sv_ag_gamemode"))
+    if (g_sGamemode != CVAR_GET_STRING("sv_aura_gamemode"))
     {
         //Gamemode has changed. Save the new one and changelevel. The new settings will be set just before allocating the new gamerules.
-        g_sGamemode = CVAR_GET_STRING("sv_ag_gamemode");
-        CVAR_SET_FLOAT("sv_ag_match_running", 0);
+        g_sGamemode = CVAR_GET_STRING("sv_aura_gamemode");
+        CVAR_SET_FLOAT("sv_aura_match_running", 0);
         CVAR_SET_FLOAT("ag_spectalk", 1);
-        CVAR_SET_FLOAT("sv_ag_show_gibs", 1);
+        CVAR_SET_FLOAT("sv_aura_show_gibs", 1);
         g_pGameRules->m_Settings.Changelevel(STRING(gpGlobals->mapname));
     }
 }
@@ -165,7 +165,7 @@ void AgGameMode::Gamemode(const AgString& sGamemode, CBasePlayer* pPlayer)
 {
     if ((IsGamemode(sGamemode) && !pPlayer) || IsAllowedGamemode(sGamemode, pPlayer))
     {
-        CVAR_SET_STRING("sv_ag_gamemode", sGamemode.c_str());
+        CVAR_SET_STRING("sv_aura_gamemode", sGamemode.c_str());
         AgConsole("Gamemode changed.", pPlayer);
         g_sNextmode = "";
     }
@@ -194,11 +194,11 @@ void AgGameMode::ExecConfig()
 
     if (g_sNextmode.size())
     {
-        CVAR_SET_STRING("sv_ag_gamemode", g_sNextmode.c_str());
+        CVAR_SET_STRING("sv_aura_gamemode", g_sNextmode.c_str());
         g_sNextmode = "";
     }
 
-    AgGameMap::iterator itrGames = m_mapGames.find(CVAR_GET_STRING("sv_ag_gamemode"));
+    AgGameMap::iterator itrGames = m_mapGames.find(CVAR_GET_STRING("sv_aura_gamemode"));
     if (itrGames == m_mapGames.end())
     {
         //eh? - error in config.
@@ -212,7 +212,7 @@ void AgGameMode::ExecConfig()
         SERVER_EXECUTE();
 
         //So that map does not restart directly.
-        g_sGamemode = CVAR_GET_STRING("sv_ag_gamemode");
+        g_sGamemode = CVAR_GET_STRING("sv_aura_gamemode");
 
         //Setup the gametype.
         SetupGametype();
@@ -237,18 +237,18 @@ bool AgGameMode::IsAllowedGamemode(const AgString& sGamemode, CBasePlayer* pPlay
         return false;
 
     //If empty we allow all.
-    if (0 == strlen(CVAR_GET_STRING("sv_ag_allowed_gamemodes")))
+    if (0 == strlen(CVAR_GET_STRING("sv_aura_allowed_gamemodes")))
         return true;
 
     //Check what gamemodes that are allowed.
-    return (NULL != strstr(CVAR_GET_STRING("sv_ag_allowed_gamemodes"), sGamemode.c_str()));
+    return (NULL != strstr(CVAR_GET_STRING("sv_aura_allowed_gamemodes"), sGamemode.c_str()));
 }
 
 
 void AgGameMode::Init()
 {
     //Set this initially, so server dont restart map right away.
-    g_sGamemode = CVAR_GET_STRING("sv_ag_gamemode");
+    g_sGamemode = CVAR_GET_STRING("sv_aura_gamemode");
 
     LoadGames();
 

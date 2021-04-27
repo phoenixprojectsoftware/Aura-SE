@@ -19,9 +19,9 @@ AgMatch::AgMatch()
     m_fMatchStart = 0.0;
     m_fNextSay = 0.0;
     m_fNextHLTV = 0.0;
-    CVAR_SET_FLOAT("sv_ag_match_running", 0);
+    CVAR_SET_FLOAT("sv_aura_match_running", 0);
     CVAR_SET_FLOAT("ag_spectalk", 1);
-    CVAR_SET_FLOAT("sv_ag_show_gibs", 1);
+    CVAR_SET_FLOAT("sv_aura_show_gibs", 1);
 }
 
 AgMatch::~AgMatch()
@@ -112,9 +112,9 @@ void AgMatch::Start(const AgString& sSpawn)
     }
 
     //Set match flag. (All entered after matchstart will go into specmode and they cant respawn.)
-    CVAR_SET_FLOAT("sv_ag_match_running", 1);
+    CVAR_SET_FLOAT("sv_aura_match_running", 1);
     CVAR_SET_FLOAT("ag_spectalk", 0);
-    CVAR_SET_FLOAT("sv_ag_show_gibs", 0);
+    CVAR_SET_FLOAT("sv_aura_show_gibs", 0);
 
     //Set match start time.
     m_fMatchStart = gpGlobals->time + 10.0;
@@ -210,8 +210,8 @@ void AgMatch::MatchStart()
 void AgMatch::Abort()
 {
     //Turn off match
-    CVAR_SET_FLOAT("sv_ag_match_running", 0);
-    CVAR_SET_FLOAT("sv_ag_show_gibs", 1);
+    CVAR_SET_FLOAT("sv_aura_match_running", 0);
+    CVAR_SET_FLOAT("sv_aura_show_gibs", 1);
     CVAR_SET_FLOAT("ag_spectalk", 1);
 
     m_fMatchStart = -1;
