@@ -4508,7 +4508,7 @@
 {
 ( 784 1232 -1552 ) ( 784 1232 -1680 ) ( 784 1216 -1552 ) C2A4E_W1 [ 0 -1 0 0 ] [ 0 0 1 0 ] 180 1 1
 ( 784 1216 -1552 ) ( 784 1216 -1680 ) ( 576 1216 -1552 ) C2A4E_W1 [ 1 0 0 0 ] [ 0 0 -1 0 ] -0 1 1
-( 593.333 1232 -1552 ) ( 593.333 1232 -1680 ) ( 784 1232 -1552 ) C2A4E_W1 [ 1 0 0 0 ] [ 0 0 -1 0 ] -0 1 1
+( 593.333 1232 -1552 ) ( 593.333 1232 -1680 ) ( 784 1232 -1552 ) C2A4E_W1 [ 1 0 0 14.3216 ] [ 0 0 -1 -20 ] 0 1.48958 0.8
 ( 593.333 1232 -1680 ) ( 576 1216 -1680 ) ( 784 1232 -1680 ) SILO2_WETDR [ 1 0 0 0 ] [ 0 -1 0 0 ] -0 1 1
 ( 576 1216 -1552 ) ( 593.333 1232 -1552 ) ( 784 1216 -1552 ) -0CRETE2_FLR04 [ 1 0 0 0 ] [ 0 -1 0 0 ] -0 1 1
 ( 576 1216 -1552 ) ( 576 1216 -1680 ) ( 593.333 1232 -1552 ) C2A4E_W1 [ 0 1 0 0 ] [ 0 0 -1 0 ] -0 1 1
@@ -6593,8 +6593,8 @@
 "locked_sentence" "0"
 "unlocked_sentence" "0"
 "renderamt" "0"
-"movesnd" "1"
-"stopsnd" "6"
+"movesnd" "5"
+"stopsnd" "4"
 {
 ( 336 48 -1872 ) ( 336 48 -1712 ) ( 336 80 -1872 ) GENERIC031B [ 0 0 1 0 ] [ 0 1 -0 -17 ] 270 1 1
 ( 304 80 -1872 ) ( 304 80 -1712 ) ( 304 48 -1872 ) GENERIC031B [ 0 0 1 0 ] [ 0 1 -0 -17 ] 270 1 1
@@ -6614,7 +6614,7 @@
 }
 {
 "classname" "ambient_generic"
-"message" "sweep_alarm.wav"
+"message" "ambience/siren.wav"
 "health" "10"
 "preset" "0"
 "volstart" "10"
@@ -6636,7 +6636,7 @@
 }
 {
 "classname" "ambient_generic"
-"message" "sweep_alarm.wav"
+"message" "ambience/siren.wav"
 "health" "10"
 "preset" "0"
 "volstart" "10"
@@ -6658,7 +6658,7 @@
 }
 {
 "classname" "ambient_generic"
-"message" "sweep_alarm.wav"
+"message" "ambience/siren.wav"
 "health" "10"
 "preset" "0"
 "volstart" "10"
@@ -6680,7 +6680,7 @@
 }
 {
 "classname" "ambient_generic"
-"message" "sweep_alarm.wav"
+"message" "ambience/siren.wav"
 "health" "10"
 "preset" "0"
 "volstart" "10"
@@ -6702,7 +6702,7 @@
 }
 {
 "classname" "ambient_generic"
-"message" "sweep_alarm.wav"
+"message" "ambience/siren.wav"
 "health" "10"
 "preset" "0"
 "volstart" "10"
@@ -6724,7 +6724,7 @@
 }
 {
 "classname" "ambient_generic"
-"message" "sweep_alarm.wav"
+"message" "ambience/siren.wav"
 "health" "10"
 "preset" "0"
 "volstart" "10"
@@ -6746,7 +6746,7 @@
 }
 {
 "classname" "ambient_generic"
-"message" "sweep_alarm.wav"
+"message" "ambience/siren.wav"
 "health" "10"
 "preset" "0"
 "volstart" "10"
@@ -6786,10 +6786,9 @@
 }
 }
 {
-"classname" "func_illusionary"
+"classname" "func_wall"
 "rendermode" "4"
 "renderamt" "255"
-"skin" "-1"
 "angles" "0 0 0"
 {
 ( 256 1344 -1696 ) ( 256 1344 -1664 ) ( 256 1348 -1696 ) {RAIL1 [ 0 1 0 -1 ] [ 0 0 -1 0 ] -0 1 1
@@ -6962,8 +6961,8 @@
 "locked_sentence" "0"
 "unlocked_sentence" "0"
 "renderamt" "0"
-"movesnd" "1"
-"stopsnd" "6"
+"movesnd" "5"
+"stopsnd" "4"
 {
 ( -304 1328 -1872 ) ( -304 1328 -1712 ) ( -304 1360 -1872 ) GENERIC031B [ 0 0 1 0 ] [ 0 1 -0 -17 ] 270 1 1
 ( -336 1360 -1872 ) ( -336 1360 -1712 ) ( -336 1328 -1872 ) GENERIC031B [ 0 0 1 0 ] [ 0 1 -0 -17 ] 270 1 1
@@ -7026,8 +7025,8 @@
 "locked_sentence" "0"
 "unlocked_sentence" "0"
 "renderamt" "0"
-"movesnd" "1"
-"stopsnd" "6"
+"movesnd" "5"
+"stopsnd" "4"
 "renderfx" "0"
 "rendermode" "0"
 {
@@ -7092,8 +7091,8 @@
 "locked_sentence" "0"
 "unlocked_sentence" "0"
 "renderamt" "0"
-"movesnd" "1"
-"stopsnd" "6"
+"movesnd" "5"
+"stopsnd" "4"
 {
 ( -816 1248 -1872 ) ( -816 1248 -1712 ) ( -816 1280 -1872 ) GENERIC031B [ 0 0 1 0 ] [ 0 1 -0 -17 ] 270 1 1
 ( -848 1280 -1872 ) ( -848 1280 -1712 ) ( -848 1248 -1872 ) GENERIC031B [ 0 0 1 0 ] [ 0 1 -0 -17 ] 270 1 1
@@ -8099,30 +8098,6 @@
 "angles" "0 0 0"
 "spawnflags" "1"
 "origin" "64 -1720 -1296"
-}
-{
-"classname" "multi_manager"
-"targetname" "strike_mm"
-"strike_siren" "0"
-"strike_siren#1" "45"
-"bunker_maindoor" "20"
-"strike_flybywav" "44"
-"strike_flash" "52"
-"strike_shake" "52"
-"strike_wav" "52"
-"strike_pain" "52"
-"strike_pain#1" "52.1"
-"bunker_maindoor#1" "64"
-"bunker_towerdoors" "47"
-"strike_timer_mmb" "55"
-"towers_button_doors" "2"
-"strike_ready_door" "2"
-"bunker_towerdoors#1" "54"
-"angles" "0 0 0"
-"train" "44"
-"bunker_amb" "0"
-"bunker_amb#1" "57"
-"origin" "64 -2304 -1840"
 }
 {
 "classname" "ambient_generic"
@@ -9246,7 +9221,7 @@
 "_falloff" "0"
 "_fade" "1.0"
 "style" "0"
-"_light" "255 255 127 255"
+"_light" "255 255 255 255"
 "angles" "0 0 0"
 "origin" "-286 -167 -1424"
 }
@@ -9255,7 +9230,7 @@
 "_falloff" "0"
 "_fade" "1.0"
 "style" "0"
-"_light" "255 255 127 255"
+"_light" "255 255 255 255"
 "angles" "0 0 0"
 "origin" "1 -169 -1424"
 }
@@ -9264,7 +9239,7 @@
 "_falloff" "0"
 "_fade" "1.0"
 "style" "0"
-"_light" "255 255 127 255"
+"_light" "255 255 255 255"
 "angles" "0 0 0"
 "origin" "288 -170 -1424"
 }
@@ -9356,7 +9331,7 @@
 "style" "0"
 "_light" "255 255 255 200"
 "angles" "0 0 0"
-"origin" "516 9 -1374"
+"origin" "512 9 -1408"
 }
 {
 "classname" "light"
@@ -9576,7 +9551,6 @@
 "speed" "40"
 "angles" "0 0 0"
 "target" "secret_door"
-"message" "WAR MODE ACTIVATED\nHAVE FUN!!\n-Wesley"
 {
 ( 632 1424 -1696 ) ( 632 1424 -1856 ) ( 632 1520 -1696 ) AAATRIGGER [ 0 1 0 0 ] [ 0 0 -1 0 ] 0 1 1
 ( 664 1520 -1696 ) ( 664 1520 -1856 ) ( 664 1424 -1696 ) AAATRIGGER [ 0 1 0 0 ] [ 0 0 -1 0 ] 0 1 1
@@ -9933,68 +9907,39 @@
 "origin" "-104 80 -1507"
 }
 {
-"classname" "path_track"
-"spawnflags" "0"
-"speed" "0"
-"angles" "0 0 0"
-"targetname" "start"
-"target" "go1"
-"origin" "-5 -1159 -2269"
-}
-{
-"classname" "path_track"
-"speed" "0"
-"angles" "0 0 0"
-"targetname" "go1"
-"target" "go2"
-"origin" "-329 -2245 -584"
-}
-{
-"classname" "path_track"
-"speed" "0"
-"angles" "0 0 0"
-"targetname" "go2"
-"target" "go3"
-"origin" "-329 -1021 -583"
-}
-{
-"classname" "path_track"
-"speed" "0"
-"angles" "0 0 0"
-"targetname" "go3"
-"target" "start"
-"origin" "-329 2585 -606"
-}
-{
 "classname" "light"
 "_falloff" "0"
 "_fade" "1.0"
-"style" "0"
+"style" "2"
 "_light" "255 255 255 200"
+"angles" "0 0 0"
 "origin" "-544 -77 -1728"
 }
 {
 "classname" "light"
 "_falloff" "0"
 "_fade" "1.0"
-"style" "0"
+"style" "2"
 "_light" "255 255 255 200"
+"angles" "0 0 0"
 "origin" "-738 -244 -1731"
 }
 {
 "classname" "light"
 "_falloff" "0"
 "_fade" "1.0"
-"style" "0"
+"style" "2"
 "_light" "255 255 255 200"
+"angles" "0 0 0"
 "origin" "737 -76 -1726"
 }
 {
 "classname" "light"
 "_falloff" "0"
 "_fade" "1.0"
-"style" "0"
+"style" "2"
 "_light" "255 255 255 200"
+"angles" "0 0 0"
 "origin" "456 -96 -1730"
 }
 {
@@ -10003,6 +9948,7 @@
 "_fade" "1.0"
 "style" "0"
 "_light" "255 255 255 200"
+"angles" "0 0 0"
 "origin" "563 253 -1619"
 }
 {
@@ -10011,6 +9957,7 @@
 "_fade" "1.0"
 "style" "0"
 "_light" "255 255 255 200"
+"angles" "0 0 0"
 "origin" "-705 202 -1617"
 }
 {
@@ -10019,6 +9966,7 @@
 "_fade" "1.0"
 "style" "0"
 "_light" "255 255 255 200"
+"angles" "0 0 0"
 "origin" "-886 193 -1619"
 }
 {
@@ -10027,6 +9975,7 @@
 "_fade" "1.0"
 "style" "0"
 "_light" "255 255 255 255"
+"angles" "0 0 0"
 "origin" "519 1016 -1570"
 }
 {
@@ -10035,6 +9984,7 @@
 "_fade" "1.0"
 "style" "0"
 "_light" "255 255 255 255"
+"angles" "0 0 0"
 "origin" "311 1184 -1570"
 }
 {
@@ -10043,6 +9993,7 @@
 "_fade" "1.0"
 "style" "0"
 "_light" "255 255 255 255"
+"angles" "0 0 0"
 "origin" "480 1480 -1570"
 }
 {
@@ -10051,6 +10002,7 @@
 "_fade" "1.0"
 "style" "0"
 "_light" "255 255 255 255"
+"angles" "0 0 0"
 "origin" "761 1150 -1570"
 }
 {
@@ -10059,6 +10011,7 @@
 "_fade" "1.0"
 "style" "0"
 "_light" "255 255 255 255"
+"angles" "0 0 0"
 "origin" "351 1356 -1575"
 }
 {
@@ -10067,6 +10020,7 @@
 "_fade" "1.0"
 "style" "0"
 "_light" "255 255 255 200"
+"angles" "0 0 0"
 "origin" "-70 1459 -1570"
 }
 {
@@ -10075,6 +10029,7 @@
 "_fade" "1.0"
 "style" "0"
 "_light" "255 255 255 200"
+"angles" "0 0 0"
 "origin" "-320 1466 -1570"
 }
 {
@@ -10083,6 +10038,7 @@
 "_fade" "1.0"
 "style" "0"
 "_light" "255 255 255 200"
+"angles" "0 0 0"
 "origin" "-56 1169 -1571"
 }
 {
@@ -10091,6 +10047,7 @@
 "_fade" "1.0"
 "style" "0"
 "_light" "255 255 255 200"
+"angles" "0 0 0"
 "origin" "-328 1174 -1571"
 }
 {
@@ -10099,6 +10056,7 @@
 "_fade" "1.0"
 "style" "0"
 "_light" "255 255 255 255"
+"angles" "0 0 0"
 "origin" "354 1323 -1380"
 }
 {
@@ -10107,6 +10065,7 @@
 "_fade" "1.0"
 "style" "0"
 "_light" "255 255 255 200"
+"angles" "0 0 0"
 "origin" "800 758 -1721"
 }
 {
@@ -10115,6 +10074,7 @@
 "_fade" "1.0"
 "style" "0"
 "_light" "255 255 255 200"
+"angles" "0 0 0"
 "origin" "-830 1385 -1571"
 }
 {
@@ -10136,6 +10096,7 @@
 "health" "10"
 "targetname" "bunker_amb"
 "message" "ambient/mesa_amb_a1.wav"
+"angles" "0 0 0"
 "origin" "-7 -1883 -1618"
 }
 {
@@ -10157,6 +10118,7 @@
 "health" "10"
 "targetname" "bunker_amb"
 "message" "ambient/mesa_amb_a1.wav"
+"angles" "0 0 0"
 "origin" "17 -2338 -1872"
 }
 {
@@ -10178,6 +10140,7 @@
 "health" "10"
 "targetname" "bunker_amb"
 "message" "ambient/mesa_amb_a1.wav"
+"angles" "0 0 0"
 "origin" "544 -2543 -1711"
 }
 {
@@ -10199,6 +10162,7 @@
 "health" "10"
 "targetname" "bunker_amb"
 "message" "ambient/mesa_amb_a1.wav"
+"angles" "0 0 0"
 "origin" "-554 -2560 -1711"
 }
 {
@@ -10220,6 +10184,7 @@
 "health" "10"
 "targetname" "bunker_amb"
 "message" "ambient/mesa_amb_a1.wav"
+"angles" "0 0 0"
 "origin" "455 -1890 -1714"
 }
 {
@@ -10241,6 +10206,7 @@
 "health" "10"
 "targetname" "bunker_amb"
 "message" "ambient/mesa_amb_a1.wav"
+"angles" "0 0 0"
 "origin" "506 -2187 -1735"
 }
 {
@@ -10262,6 +10228,7 @@
 "health" "10"
 "targetname" "bunker_amb"
 "message" "ambient/mesa_amb_a1.wav"
+"angles" "0 0 0"
 "origin" "-584 -2237 -1718"
 }
 {
@@ -10283,6 +10250,7 @@
 "health" "10"
 "targetname" "bunker_amb"
 "message" "ambient/mesa_amb_a1.wav"
+"angles" "0 0 0"
 "origin" "-470 -1941 -1698"
 }
 {
@@ -10304,6 +10272,7 @@
 "health" "10"
 "targetname" "bunker_amb"
 "message" "ambient/mesa_amb_a1.wav"
+"angles" "0 0 0"
 "origin" "-406 -1690 -1702"
 }
 {
@@ -10325,6 +10294,7 @@
 "health" "10"
 "targetname" "bunker_amb"
 "message" "ambient/mesa_amb_a1.wav"
+"angles" "0 0 0"
 "origin" "467 -1679 -1690"
 }
 {
@@ -10346,6 +10316,7 @@
 "health" "3"
 "targetname" "computer_amb"
 "message" "ambient/Trans5LP.wav"
+"angles" "0 0 0"
 "origin" "1 -2249 -1807"
 }
 {
@@ -10367,6 +10338,7 @@
 "health" "10"
 "targetname" "computer_amb"
 "message" "ambience/computalk1.wav"
+"angles" "0 0 0"
 "origin" "-71 -2249 -1804"
 }
 {
@@ -10388,6 +10360,7 @@
 "health" "10"
 "targetname" "computer_amb"
 "message" "ambience/techamb1.wav"
+"angles" "0 0 0"
 "origin" "57 -2249 -1806"
 }
 {
@@ -10396,6 +10369,7 @@
 "_fade" "1.0"
 "style" "0"
 "_light" "255 255 255 200"
+"angles" "0 0 0"
 "origin" "-162 -1885 -1648"
 }
 {
@@ -10404,6 +10378,7 @@
 "_fade" "1.0"
 "style" "0"
 "_light" "255 255 255 200"
+"angles" "0 0 0"
 "origin" "-98 -2072 -1625"
 }
 {
@@ -10412,6 +10387,7 @@
 "_fade" "1.0"
 "style" "0"
 "_light" "255 255 255 200"
+"angles" "0 0 0"
 "origin" "94 -2073 -1625"
 }
 {
@@ -10420,6 +10396,7 @@
 "_fade" "1.0"
 "style" "0"
 "_light" "255 255 255 200"
+"angles" "0 0 0"
 "origin" "160 -1888 -1648"
 }
 {
@@ -10428,6 +10405,7 @@
 "_fade" "1.0"
 "style" "0"
 "_light" "0 170 255 200"
+"angles" "0 0 0"
 "origin" "-231 -140 -1843"
 }
 {
@@ -10436,6 +10414,7 @@
 "_fade" "1.0"
 "style" "0"
 "_light" "0 170 255 200"
+"angles" "0 0 0"
 "origin" "-231 114 -1843"
 }
 {
@@ -10444,6 +10423,7 @@
 "_fade" "1.0"
 "style" "0"
 "_light" "255 255 255 200"
+"angles" "0 0 0"
 "origin" "352 205 -1618"
 }
 {
@@ -10465,6 +10445,7 @@
 "health" "4"
 "targetname" "house_amb"
 "message" "ambient/mesa_amb_a2.wav"
+"angles" "0 0 0"
 "origin" "-874 810 -1520"
 }
 {
@@ -10486,6 +10467,7 @@
 "health" "4"
 "targetname" "house_amb"
 "message" "ambient/mesa_amb_a2.wav"
+"angles" "0 0 0"
 "origin" "-853 1060 -1500"
 }
 {
@@ -10507,6 +10489,7 @@
 "health" "4"
 "targetname" "house_amb"
 "message" "ambient/mesa_amb_a2.wav"
+"angles" "0 0 0"
 "origin" "-856 1136 -1620"
 }
 {
@@ -10528,6 +10511,7 @@
 "health" "4"
 "targetname" "house_amb"
 "message" "ambient/mesa_amb_a2.wav"
+"angles" "0 0 0"
 "origin" "-857 521 -1642"
 }
 {
@@ -10549,6 +10533,7 @@
 "health" "4"
 "targetname" "house_amb"
 "message" "ambient/mesa_amb_a2.wav"
+"angles" "0 0 0"
 "origin" "-181 1173 -1627"
 }
 {
@@ -10570,6 +10555,7 @@
 "health" "4"
 "targetname" "house_amb"
 "message" "ambient/mesa_amb_a2.wav"
+"angles" "0 0 0"
 "origin" "-123 1278 -1454"
 }
 {
@@ -10591,6 +10577,7 @@
 "health" "4"
 "targetname" "house_amb"
 "message" "ambient/mesa_amb_a2.wav"
+"angles" "0 0 0"
 "origin" "360 1338 -1460"
 }
 {
@@ -10612,6 +10599,7 @@
 "health" "4"
 "targetname" "house_amb"
 "message" "ambient/mesa_amb_a2.wav"
+"angles" "0 0 0"
 "origin" "676 1216 -1461"
 }
 {
@@ -10633,6 +10621,7 @@
 "health" "4"
 "targetname" "house_amb"
 "message" "ambient/mesa_amb_a2.wav"
+"angles" "0 0 0"
 "origin" "661 845 -1473"
 }
 {
@@ -10654,6 +10643,7 @@
 "health" "4"
 "targetname" "house_amb"
 "message" "ambient/mesa_amb_a2.wav"
+"angles" "0 0 0"
 "origin" "608 446 -1470"
 }
 {
@@ -10675,6 +10665,7 @@
 "health" "4"
 "targetname" "house_amb"
 "message" "ambient/mesa_amb_a2.wav"
+"angles" "0 0 0"
 "origin" "714 50 -1476"
 }
 {
@@ -10696,6 +10687,7 @@
 "health" "4"
 "targetname" "house_amb"
 "message" "ambient/mesa_amb_a2.wav"
+"angles" "0 0 0"
 "origin" "7 65 -1621"
 }
 {
@@ -10717,6 +10709,7 @@
 "health" "4"
 "targetname" "house_amb"
 "message" "ambient/mesa_amb_a2.wav"
+"angles" "0 0 0"
 "origin" "13 -208 -1648"
 }
 {
@@ -10738,6 +10731,7 @@
 "health" "4"
 "targetname" "house_amb"
 "message" "ambient/mesa_amb_a2.wav"
+"angles" "0 0 0"
 "origin" "-227 -192 -1647"
 }
 {
@@ -10759,6 +10753,7 @@
 "health" "4"
 "targetname" "house_amb"
 "message" "ambient/mesa_amb_a2.wav"
+"angles" "0 0 0"
 "origin" "308 -195 -1641"
 }
 {
@@ -10780,6 +10775,7 @@
 "health" "4"
 "targetname" "house_amb"
 "message" "ambient/mesa_amb_a2.wav"
+"angles" "0 0 0"
 "origin" "394 -1652 -1236"
 }
 {
@@ -10801,6 +10797,7 @@
 "health" "4"
 "targetname" "house_amb"
 "message" "ambient/mesa_amb_a2.wav"
+"angles" "0 0 0"
 "origin" "-383 -1631 -1245"
 }
 {
@@ -10809,6 +10806,7 @@
 "_fade" "1.0"
 "style" "0"
 "_light" "255 0 0 200"
+"angles" "0 0 0"
 "origin" "334 -1729 -1410"
 }
 {
@@ -10817,6 +10815,7 @@
 "_fade" "1.0"
 "style" "0"
 "_light" "255 0 0 200"
+"angles" "0 0 0"
 "origin" "334 -1729 -1536"
 }
 {
@@ -10825,6 +10824,7 @@
 "_fade" "1.0"
 "style" "0"
 "_light" "255 0 0 200"
+"angles" "0 0 0"
 "origin" "-336 -1727 -1408"
 }
 {
@@ -10833,6 +10833,7 @@
 "_fade" "1.0"
 "style" "0"
 "_light" "255 0 0 200"
+"angles" "0 0 0"
 "origin" "-336 -1728 -1538"
 }
 {
@@ -10841,6 +10842,7 @@
 "_fade" "1.0"
 "style" "0"
 "_light" "255 255 255 200"
+"angles" "0 0 0"
 "origin" "-925 -74 -1729"
 }
 {
@@ -10853,6 +10855,7 @@
 "rendermode" "0"
 "renderfx" "0"
 "targetname" "stop_going_oob"
+"angles" "0 0 0"
 {
 ( 1531 3300 -2024 ) ( 1531 3300 -2173 ) ( 1531 -2328 -2024 ) AAATRIGGER [ 0 1 0 0 ] [ 0 0 -1 0 ] 0 1 1
 ( -1477 -2328 -2024 ) ( -1477 -2328 -2173 ) ( -1477 3300 -2024 ) AAATRIGGER [ 0 1 0 0 ] [ 0 0 -1 0 ] 0 1 1
@@ -10967,9 +10970,33 @@
 "fadeout" "0"
 "fadein" "0"
 "volstart" "0"
-"preset" "0"
+"preset" "24"
 "health" "3"
 "targetname" "secret_door"
 "message" "music/war_games_l1.wav"
+"angles" "0 0 0"
 "origin" "741 1380 -1665"
+}
+{
+"classname" "multi_manager"
+"targetname" "strike_mm"
+"strike_siren" "0"
+"bunker_amb" "0"
+"towers_button_doors" "2"
+"strike_ready_door" "2"
+"bunker_maindoor" "20"
+"strike_flybywav" "44"
+"bunker_towerdoors" "47"
+"strike_flash" "52"
+"strike_shake" "52"
+"strike_wav" "52"
+"strike_pain" "52"
+"strike_pain#1" "52.1"
+"bunker_towerdoors#1" "54"
+"strike_timer_mmb" "55"
+"strike_siren#1" "0"
+"bunker_amb#1" "57"
+"bunker_maindoor#1" "64"
+"strike_siren#2" "55"
+"origin" "95 -2285 -1888"
 }
