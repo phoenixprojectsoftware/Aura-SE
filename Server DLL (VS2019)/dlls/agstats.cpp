@@ -206,7 +206,7 @@ void AgStats::FireHit(CBasePlayer* pPlayer, int iDamage, entvars_t* pevAttacker)
 
 void AgStats::PlayerKilled(CBasePlayer* pInflictor, CBasePlayer* pKilled)
 {
-    if (GR_TEAMMATE == g_pGameRules->PlayerRelationship(pInflictor, pKilled))
+    if (pInflictor->IsTeammate(pKilled))
         GetStats(pInflictor)->m_iTeamKills++;
     else
         GetStats(pInflictor)->m_iKills++;

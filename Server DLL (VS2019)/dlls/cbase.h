@@ -346,6 +346,8 @@ public:
 	virtual	BOOL FVisible ( CBaseEntity *pEntity );
 	virtual	BOOL FVisible ( const Vector &vecOrigin );
 
+	float DistanceTo(CBaseEntity* pOther) { return (pev->origin - pOther->pev->origin).Length(); };
+
 	//We use this variables to store each ammo count.
 	int ammo_9mm;
 	int ammo_357;

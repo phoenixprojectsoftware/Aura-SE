@@ -34,6 +34,13 @@ FILE_GLOBAL char* s_szVotes[] =
   "agnextmap <mapname> - Change level after this is done.",
   "ag_spectalk <0/1> - Allow spectators to talk to all.",
   "agnextmode <mode> - Change mode after this level.",
+  "ag_spawn_system <0-3> - Change the player spawn system. 0=classic, 1=random, 2=far, 3=position-aware.",
+  "ag_spawn_history_entries <number> - How many of the last used spawnpoints have to be remembered",
+  "ag_spawn_avoid_last_spots <fraction> - A fraction of total spawnpoints, that tells the PA and Far systems to avoid using that number of recently used spots. 0.3 is 30%, which is 5 spawns in crossfire, or 7 in boot_camp",
+  "ag_spawn_far_spots <fraction> - A fraction of total spawnpoints, that tells the Far system to use that many of the furthest spots to pick one randomly"
+  "ag_spawn_pa_visible_chance <number> - Probability of a visible spawnpoint being chosen in the PA system",
+  "ag_spawn_pa_audible_chance <number> - Probability of an audible spawnpoint being chosen in the PA system",
+  "ag_spawn_pa_safe_chance <number> - Probability of a safe spawnpoint being chosen in the PA system",
 };
 
 AgVote::AgVote()
@@ -279,12 +286,20 @@ bool AgVote::HandleCommand(CBasePlayer* pPlayer)
                 return true;
             }
             //Check setting
+            // TODO: either remove or support `mp_friendlyfire` and `mp_weaponstay`, as they're being silently rejected in `AgSettings::AdminSetting()`
+            // TODO: refactor this, it's getting huge and unmaintainable
             else if ((
                 0 == strncmp(m_sVote.c_str(), "ag_gauss_fix", 12) ||
                 0 == strncmp(m_sVote.c_str(), "ag_rpg_fix", 10) ||
                 0 == strncmp(m_sVote.c_str(), "ag_spectalk", 11) ||
                 0 == strncmp(m_sVote.c_str(), "mp_friendlyfire", 15) ||
-                0 == strncmp(m_sVote.c_str(), "mp_weaponstay", 13))
+                0 == strncmp(m_sVote.c_str(), "mp_weaponstay", 13) ||
+                0 == strncmp(m_sVote.c_str(), "ag_spawn_system", 15) ||
+                0 == strncmp(m_sVote.c_str(), "ag_spawn_history_entries", 24) ||
+                0 == strncmp(m_sVote.c_str(), "ag_spawn_avoid_last_spots", 25) ||
+                0 == strncmp(m_sVote.c_str(), "ag_spawn_pa_visible_chance", 26) ||
+                0 == strncmp(m_sVote.c_str(), "ag_spawn_pa_audible_chance", 26) ||
+                0 == strncmp(m_sVote.c_str(), "ag_spawn_pa_safe_chance", 23))
                 && m_sValue.size())
             {
                 if (!ag_vote_setting.value)
@@ -326,6 +341,7 @@ bool AgVote::HandleCommand(CBasePlayer* pPlayer)
                 CallVote(pPlayer);
                 return true;
             }
+            // TODO: remove sv_maxspeed as it's silently rejected in `AgSettings::AdminSetting()` anyways
             else if (0 == strncmp(m_sVote.c_str(), "sv_maxspeed", 11))
             {
                 if (!ag_vote_setting.value)

@@ -486,7 +486,7 @@ void CHalfLifeTeamplay::DeathNotice( CBasePlayer *pVictim, entvars_t *pKiller, e
 
 		if ( pk )
 		{
-			if ( (pk != pVictim) && (PlayerRelationship( pVictim, pk ) == GR_TEAMMATE) )
+			if ( (pk != pVictim) && pVictim->IsTeammate(pk) )
 			{
 				MESSAGE_BEGIN( MSG_ALL, gmsgDeathMsg );
 					WRITE_BYTE( ENTINDEX(ENT(pKiller)) );		// the killer
@@ -530,7 +530,7 @@ BOOL CHalfLifeTeamplay::IsTeamplay( void )
 
 BOOL CHalfLifeTeamplay::FPlayerCanTakeDamage( CBasePlayer *pPlayer, CBaseEntity *pAttacker )
 {
-	if ( pAttacker && PlayerRelationship( pPlayer, pAttacker ) == GR_TEAMMATE )
+	if ( pAttacker && pPlayer->IsTeammate(pAttacker) )
 	{
 		// my teammate hit me.
 		if ( (friendlyfire.value == 0) && (pAttacker != pPlayer) )
@@ -572,7 +572,7 @@ BOOL CHalfLifeTeamplay::ShouldAutoAim( CBasePlayer *pPlayer, edict_t *target )
 	CBaseEntity *pTgt = CBaseEntity::Instance( target );
 	if ( pTgt && pTgt->IsPlayer() )
 	{
-		if ( PlayerRelationship( pPlayer, pTgt ) == GR_TEAMMATE )
+		if ( pPlayer->IsTeammate(pTgt) )
 			return FALSE; // don't autoaim at teammates
 	}
 
@@ -592,7 +592,7 @@ int CHalfLifeTeamplay::IPointsForKill( CBasePlayer *pAttacker, CBasePlayer *pKil
 	if ( !pAttacker )
 		return 1;
 
-	if ( pAttacker != pKilled && PlayerRelationship( pAttacker, pKilled ) == GR_TEAMMATE )
+	if ( pAttacker != pKilled && pAttacker->IsTeammate(pKilled) )
 		return -1;
 
 	return 1;

@@ -26,12 +26,15 @@
 #include "saverestore.h"
 #include "nodes.h"
 #include "doors.h"
+#include "gamerules.h"
 
 extern CGraph WorldGraph;
 
 extern BOOL FEntIsVisible(entvars_t* pev, entvars_t* pevTarget);
 
 extern DLL_GLOBAL int g_iSkillLevel;
+
+extern std::vector<CBaseEntity*> g_spawnPoints;
 
 
 // Landmark class
@@ -61,6 +64,7 @@ class CBaseDMStart : public CPointEntity
 public:
 	void		KeyValue( KeyValueData *pkvd );
 	BOOL		IsTriggered( CBaseEntity *pEntity );
+	void		Spawn(void);
 
 private:
 };
@@ -69,6 +73,13 @@ private:
 LINK_ENTITY_TO_CLASS(info_player_deathmatch,CBaseDMStart);
 LINK_ENTITY_TO_CLASS(info_player_start,CPointEntity);
 LINK_ENTITY_TO_CLASS(info_landmark,CPointEntity);
+
+void CBaseDMStart::Spawn(void)
+{
+	// If a spawn point is created on the fly, reload the list
+	// that different spawn systems use to select a spawn point
+	g_spawnPoints.push_back(this);
+}
 
 void CBaseDMStart::KeyValue( KeyValueData *pkvd )
 {

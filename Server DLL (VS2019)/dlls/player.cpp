@@ -36,6 +36,7 @@
 #include "game.h"
 #include "pm_shared.h"
 #include "hltv.h"
+#include "spawnchooser.h"
 
 // #define DUCKFIX
 
@@ -51,7 +52,8 @@ BOOL gInitHUD = TRUE;
 extern void CopyToBodyQue(entvars_t* pev);
 extern void respawn(entvars_t *pev, BOOL fCopyCorpse);
 extern Vector VecBModelOrigin(entvars_t *pevBModel );
-extern edict_t *EntSelectSpawnPoint( CBaseEntity *pPlayer );
+extern edict_t *EntSelectSpawnPoint(CBasePlayer *pPlayer);
+extern void SetupVisibility(edict_t *pViewEntity, edict_t *pClient, unsigned char **pvs, unsigned char **pas);
 
 // the world node graph
 extern CGraph	WorldGraph;
@@ -1837,7 +1839,7 @@ void CBasePlayer::AddPointsToTeam( int score, BOOL bAllowNegativeScore )
 
 		if ( pPlayer && i != index )
 		{
-			if ( g_pGameRules->PlayerRelationship( this, pPlayer ) == GR_TEAMMATE )
+			if ( IsTeammate(pPlayer) )
 			{
 				pPlayer->AddPoints( score, bAllowNegativeScore );
 			}
@@ -1881,7 +1883,7 @@ void CBasePlayer::UpdateStatusBar()
 				strcpy( sbuf1, "1 %p1\n2 Health: %i2%%\n3 Armor: %i3%%" );
 
 				// allies and medics get to see the targets health
-				if ( g_pGameRules->PlayerRelationship( this, pEntity ) == GR_TEAMMATE )
+				if ( IsTeammate(pEntity) )
 				{
 					newSBarState[ SBAR_ID_TARGETHEALTH ] = 100 * (pEntity->pev->health / pEntity->pev->max_health);
 					newSBarState[ SBAR_ID_TARGETARMOR ] = pEntity->pev->armorvalue; //No need to get it % based since 100 it's the max.
@@ -1997,10 +1999,12 @@ void CBasePlayer::PreThink(void)
         (int)CVAR_GET_FLOAT("mp_fraglimit"),
         (int)CVAR_GET_FLOAT("mp_friendlyfire"),
         (int)CVAR_GET_FLOAT("mp_weaponstay"),
-        CVAR_GET_STRING("sv_aura_wallgauss"));
+        CVAR_GET_STRING("sv_ag_wallgauss"));
     
       AgSay(this,szSetting,NULL,6,0.75,0.15,4);
 #else
+    const auto spawnSystem = spawnSystemName[(int)CVAR_GET_FLOAT("ag_spawn_system")];
+
     MESSAGE_BEGIN( MSG_ONE_UNRELIABLE, gmsgSettings, NULL, pev );
       WRITE_BYTE((int)ag_match_running.value);
       WRITE_STRING(AgGamename().c_str());
@@ -2008,10 +2012,11 @@ void CBasePlayer::PreThink(void)
       WRITE_BYTE((int)CVAR_GET_FLOAT("mp_fraglimit"));
       WRITE_BYTE((int)CVAR_GET_FLOAT("mp_friendlyfire"));
       WRITE_BYTE((int)CVAR_GET_FLOAT("mp_weaponstay"));
-      WRITE_STRING(CVAR_GET_STRING("sv_aura_version"));
-      WRITE_STRING(CVAR_GET_STRING("sv_aura_wallgauss"));
-      WRITE_STRING(CVAR_GET_STRING("sv_aura_headshot"));
-      WRITE_STRING(CVAR_GET_STRING("sv_aura_blastradius"));
+      WRITE_STRING(CVAR_GET_STRING("sv_ag_version"));
+      WRITE_STRING(CVAR_GET_STRING("sv_ag_wallgauss"));
+      WRITE_STRING(CVAR_GET_STRING("sv_ag_headshot"));
+      WRITE_STRING(CVAR_GET_STRING("sv_ag_blastradius"));
+      WRITE_STRING(spawnSystem.c_str());
     MESSAGE_END();
 #endif  
 
@@ -2965,100 +2970,76 @@ pt_end:
 }
 
 
-// checks if the spot is clear of players
-BOOL IsSpawnPointValid( CBaseEntity *pPlayer, CBaseEntity *pSpot )
-{
-	CBaseEntity *ent = NULL;
+std::vector<CBaseEntity*> g_spawnHistory;
 
-	if ( !pSpot->IsTriggered( pPlayer ) )
-	{
-		return FALSE;
-	}
-
-	while ( (ent = UTIL_FindEntityInSphere( ent, pSpot->pev->origin, 128 )) != NULL )
-	{
-		// if ent is a client, don't spawn on 'em
-		if ( ent->IsPlayer() && ent != pPlayer )
-			return FALSE;
-	}
-
-	return TRUE;
-}
-
-
-DLL_GLOBAL CBaseEntity	*g_pLastSpawn;
 inline int FNullEnt( CBaseEntity *ent ) { return (ent == NULL) || FNullEnt( ent->edict() ); }
+
 
 /*
 ============
 EntSelectSpawnPoint
 
 Returns the entity to spawn at
-
-USES AND SETS GLOBAL g_pLastSpawn
 ============
 */
 //++ BulliT
 edict_t *EntSelectCTFSpawnPoint( CBaseEntity *pPlayer );
 //-- Martin Webrant
-edict_t *EntSelectSpawnPoint( CBaseEntity *pPlayer )
+
+edict_t *EntSelectSpawnPoint( CBasePlayer *pPlayer )
 {
-  //++ BulliT
-  if (CTF == AgGametype())
-  {
-    return EntSelectCTFSpawnPoint(pPlayer);
-  }
-  //-- Martin Webrant
-	CBaseEntity *pSpot;
-	edict_t		*player;
+	//++ BulliT
+	if (CTF == AgGametype())
+	{
+		return EntSelectCTFSpawnPoint(pPlayer);
+	}
+	//-- Martin Webrant
 
-	player = pPlayer->edict();
+	CBaseEntity *pSpot  = nullptr;
+	CBaseEntity *pLastSpot = nullptr;
+	edict_t	    *player = pPlayer->edict();
 
-// choose a info_player_deathmatch point
+	if (!g_spawnHistory.empty())
+	{
+		pLastSpot = g_spawnHistory.back();
+		pSpot = pLastSpot;
+	}
+
+	// choose a info_player_deathmatch point
 	if (g_pGameRules->IsCoOp())
 	{
-		pSpot = UTIL_FindEntityByClassname( g_pLastSpawn, "info_player_coop");
+		pSpot = UTIL_FindEntityByClassname( pLastSpot, "info_player_coop");
 		if ( !FNullEnt(pSpot) )
 			goto ReturnSpot;
-		pSpot = UTIL_FindEntityByClassname( g_pLastSpawn, "info_player_start");
+
+		pSpot = UTIL_FindEntityByClassname( pLastSpot, "info_player_start");
 		if ( !FNullEnt(pSpot) ) 
 			goto ReturnSpot;
 	}
 	else if ( g_pGameRules->IsDeathmatch() )
 	{
-		pSpot = g_pLastSpawn;
-		// Randomize the start spot
-		for ( int i = RANDOM_LONG(1,5); i > 0; i-- )
-			pSpot = UTIL_FindEntityByClassname( pSpot, "info_player_deathmatch" );
-		if ( FNullEnt( pSpot ) )  // skip over the null point
-			pSpot = UTIL_FindEntityByClassname( pSpot, "info_player_deathmatch" );
-		if ( FNullEnt(pSpot) && singleplayer.value > 0.0f)
-			pSpot = UTIL_FindEntityByClassname( pSpot, "info_player_start" );
+		ALERT(at_aiconsole, "ag_spawn_system is %0.f\n", ag_spawn_system.value);
 
-		CBaseEntity *pFirstSpot = pSpot;
+		CSpawnChooser spawnChooser{pPlayer, pLastSpot};
 
-		do 
+		switch ((int)ag_spawn_system.value)
 		{
-			if ( pSpot )
-			{
-				// check if pSpot is valid
-				if ( IsSpawnPointValid( pPlayer, pSpot ) )
-				{
-					if ( pSpot->pev->origin == Vector( 0, 0, 0 ) )
-					{
-						pSpot = UTIL_FindEntityByClassname( pSpot, "info_player_deathmatch" );
-						continue;
-					}
+			case 0:  pSpot = spawnChooser.GetClassicSpawnPoint(); break;
+			case 1:  pSpot = spawnChooser.GetRandomSpawnPoint(); break;
+			case 2:  pSpot = spawnChooser.GetFarSpawnPoint(); break;
+			case 3:  pSpot = spawnChooser.GetPositionAwareSpawnPoint(); break;
+			default: pSpot = spawnChooser.GetClassicSpawnPoint(); break;
+		}
 
-					// if so, go to pSpot
-					goto ReturnSpot;
-				}
-			}
-			// increment pSpot
-			pSpot = UTIL_FindEntityByClassname( pSpot, "info_player_deathmatch" );
-		} while ( pSpot != pFirstSpot ); // loop if we're not back to the start
+		if (FNullEnt(pSpot))
+		{
+			ALERT(at_aiconsole, "No valid spawn point found, getting next one\n");
+			pSpot = UTIL_FindEntityByClassname(pLastSpot, "info_player_deathmatch");
+		}
+		else
+			goto ReturnSpot;
 
-		// we haven't found a place to spawn yet,  so kill any guy at the first spawn point and spawn there
+		// we haven't found a place to spawn yet, so kill any guy at the first spawn point and spawn there
 		if ( !FNullEnt( pSpot ) )
 		{
 			CBaseEntity *ent = NULL;
@@ -3092,8 +3073,11 @@ ReturnSpot:
 		ALERT(at_error, "PutClientInServer: no info_player_start on level");
 		return INDEXENT(0);
 	}
+	g_spawnHistory.push_back(pSpot);
 
-	g_pLastSpawn = pSpot;
+	if (g_spawnHistory.size() > ag_spawn_history_entries.value)
+		g_spawnHistory.erase(g_spawnHistory.begin());
+
 	return pSpot->edict();
 }
 
@@ -3127,7 +3111,7 @@ void CBasePlayer::Spawn( void )
 	g_engfuncs.pfnSetPhysicsKeyValue( edict(), "slj", "0" );
 	g_engfuncs.pfnSetPhysicsKeyValue( edict(), "hl", "1" );
   //++ BulliT
-  g_engfuncs.pfnSetPhysicsKeyValue( edict(), "bj", CVAR_GET_STRING("sv_aura_oldphysics") );
+  g_engfuncs.pfnSetPhysicsKeyValue( edict(), "bj", CVAR_GET_STRING("sv_ag_oldphysics") );
   m_fPlayerIdCheck = gpGlobals->time + 2;
   m_fLongjumpTimer = gpGlobals->time;
   //-- Martin Webrant
@@ -3837,7 +3821,7 @@ void CBasePlayer::ImpulseCommands( )
 		}
 		break;
 
-	case	201:// paint decal
+	case 201:// paint decal
 		
 		if ( gpGlobals->time < m_flNextDecalTime )
 		{
@@ -3855,6 +3839,10 @@ void CBasePlayer::ImpulseCommands( )
 			pCan->Spawn( pev );
 		}
 
+		break;
+
+	case 231:
+		GetInventoryInfo();
 		break;
 
 	default:
@@ -5497,7 +5485,7 @@ void CBasePlayer::UpdatePlayerId()
         m_iLastPlayerId = pPlayer->entindex();
         m_fNextPlayerId = gpGlobals->time + 2; 
 
-        if (IsSpectator() || GR_TEAMMATE == g_pGameRules->PlayerRelationship(this, pPlayer))
+        if (IsSpectator() || IsTeammate(pPlayer))
         {
           MESSAGE_BEGIN( MSG_ONE_UNRELIABLE, gmsgPlayerId, NULL, pev );
             WRITE_BYTE(pPlayer->entindex());
@@ -5885,3 +5873,126 @@ void CBasePlayer::ShowVGUI(int iMenu)
       WRITE_BYTE( iMenu );
     MESSAGE_END();
 }
+
+
+///// begin WIP stuff for an experimental spawn system /////
+
+void CBasePlayer::GetInventoryInfo()
+{
+	CBasePlayerItem* pWeapon;
+
+	// Loop through weapon categories (1 -> crowbar, 2 -> glock and 357, etc.,
+	// like in the weapons menu used with slot1 to slot5 commands)
+	for (auto i = 0; i < MAX_ITEM_TYPES; i++)
+	{
+		pWeapon = m_rgpPlayerItems[i];
+
+		while (pWeapon)
+		{
+			std::string str = "Weapon(";
+			char iterationNumber[3];
+			sprintf(iterationNumber, "%d", i);
+			str.append(iterationNumber);
+			str.append("): ");
+			str.append(STRING(pWeapon->pev->classname));
+
+			if (pWeapon == m_pActiveItem)
+				str.append(" (active)");
+
+			str.append("; Ammo: ");
+
+			const auto iAmmoIndex = GetAmmoIndex(pWeapon->pszAmmo1());
+
+			if (iAmmoIndex != -1)
+			{
+				CBasePlayerWeapon* weapon = dynamic_cast<CBasePlayerWeapon*>(pWeapon->GetWeaponPtr());
+				if (weapon && weapon->m_iClip != -1)
+				{
+					char clip[4];
+					sprintf(clip, "%d", weapon->m_iClip);
+					str.append(clip);
+					str.append("|");
+				}
+
+				char ammo[4];
+				sprintf(ammo, "%d", m_rgAmmo[iAmmoIndex]);
+				str.append(ammo);
+
+				if (pWeapon->iFlags() & ITEM_FLAG_EXHAUSTIBLE)
+				{
+					str.append(" (exhaustible)");
+				}
+
+			}
+			else
+			{
+				str.append("none");
+			}
+			str.append("\n");
+
+			ALERT(at_console, const_cast<char*>(str.c_str()));
+
+			pWeapon = pWeapon->m_pNext;
+		}
+	}
+}
+
+float CBasePlayer::GetSpawnkillingPotential()
+{
+	// Some coefficient that we'll be building to determine
+	// how well armed the player is for spawnkilling
+	auto skTotal = 0.0f;
+
+	const auto skHealthArmor = ((pev->health * 0.9f + pev->armorvalue * 1.1f) / 2.0f);
+
+	CBasePlayerItem* pWeapon;
+	for (auto i = 0; i < MAX_ITEM_TYPES; i++)
+	{
+		pWeapon = m_rgpPlayerItems[i];
+
+		while (pWeapon)
+		{
+			const auto ammoIdx = GetAmmoIndex(pWeapon->pszAmmo1()); // crowbar has -1
+			const auto bpAmmo = (ammoIdx != -1) ? m_rgAmmo[ammoIdx] : 0;
+			const auto weapon = dynamic_cast<CBasePlayerWeapon*>(pWeapon->GetWeaponPtr());
+
+			skTotal += weapon->GetSpawnkillingPotential(this, bpAmmo);
+
+			pWeapon = pWeapon->m_pNext;
+		}
+	}
+	
+	skTotal = (skHealthArmor / 100.0f) * skTotal;
+
+	return skTotal;
+}
+
+///// end WIP stuff for an experimental spawn system /////
+
+
+std::vector<CBasePlayer*> CBasePlayer::GetPlayingEnemies()
+{
+	std::vector<CBasePlayer*> result;
+
+	for (int i = 1; i <= gpGlobals->maxClients; i++)
+	{
+		CBasePlayer* plr = AgPlayerByIndex(i);
+
+		if (!plr)
+			continue;
+
+		if (plr->IsSpectator())
+			continue;
+
+		if (IsTeammate(plr))
+			continue;
+
+		if (edict() == plr->edict()) // ourselves
+			continue;
+
+		result.push_back(plr);
+	}
+
+	return result;
+}
+

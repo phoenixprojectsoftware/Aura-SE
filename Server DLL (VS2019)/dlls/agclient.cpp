@@ -714,9 +714,7 @@ void AgClient::Say(CBasePlayer* pPlayer, say_type Type)
                 }
 
                 // for team or close we only say to our own team
-                if ((Team == Type || Close == Type) &&
-                    g_pGameRules->PlayerRelationship(pPlayerLoop, pPlayer) != GR_TEAMMATE &&
-                    pPlayer != pPlayerLoop)
+                if ((Team == Type || Close == Type) && !pPlayer->IsTeammate(pPlayerLoop) && pPlayer != pPlayerLoop)
                     continue;
 
                 //Dont let spectators read your team talk.
@@ -769,7 +767,7 @@ void AgClient::Play(CBasePlayer* pPlayer, say_type Type, const char* pszWave)
     {
         CBasePlayer* pPlayerLoop = AgPlayerByIndex(i);
         // for team or close we only play to our own team
-        if ((Team == Type || Close == Type) && !(pPlayerLoop == pPlayer || g_pGameRules->PlayerRelationship(pPlayer, pPlayerLoop) == GR_TEAMMATE))
+        if ((Team == Type || Close == Type) && !(pPlayerLoop == pPlayer || pPlayer->IsTeammate(pPlayerLoop)))
             continue;
 
         vec3_t vDist = pPlayerLoop->pev->origin - pPlayer->pev->origin;

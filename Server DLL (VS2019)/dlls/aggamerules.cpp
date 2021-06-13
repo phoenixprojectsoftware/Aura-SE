@@ -1,4 +1,5 @@
 //++ BulliT
+#include <vector>
 
 #include "extdll.h"
 #include "util.h"
@@ -30,6 +31,8 @@ extern int gmsgGameMode;
 extern int gmsgAuthID;
 extern int gmsgMapList;
 
+std::vector<CBaseEntity*> g_spawnPoints;
+
 AgGameRules::AgGameRules()
 {
     g_bPaused = false;
@@ -37,6 +40,7 @@ AgGameRules::AgGameRules()
     g_bUseTeamColors = CVAR_GET_FLOAT("mp_teamplay") > 0;
     m_sHostname = CVAR_GET_STRING("hostname");
     AdminCache.Load();
+
 #ifdef AG_NO_CLIENT_DLL
     m_LocationCache.Load();
 #endif
@@ -1250,6 +1254,5 @@ void AgGameRules::SendMapListToClient(CBasePlayer* pPlayer, bool bStart)
     if (pPlayer->m_iMapListSent >= (int)g_sMapList.size())
         pPlayer->m_iMapListSent = -1;
 }
-
 
 //-- Martin Webrant

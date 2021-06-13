@@ -27,7 +27,7 @@
 #include	"skill.h"
 #include	"game.h"
 
-extern edict_t *EntSelectSpawnPoint( CBaseEntity *pPlayer );
+extern edict_t *EntSelectSpawnPoint( CBasePlayer *pPlayer );
 
 #ifdef _WIN32
 //++ BulliT

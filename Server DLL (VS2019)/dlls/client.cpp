@@ -452,7 +452,7 @@ void Host_Say( edict_t *pEntity, int teamonly )
 		if ( g_VoiceGameMgr.PlayerHasBlockedPlayer( client, player ) )
 			continue;
 
-		if ( !player->IsObserver() && teamonly && g_pGameRules->PlayerRelationship(client, CBaseEntity::Instance(pEntity)) != GR_TEAMMATE )
+		if ( !player->IsObserver() && teamonly && !client->IsTeammate(CBaseEntity::Instance(pEntity)) )
 			continue;
 
 		// Spectators can only talk to other specs

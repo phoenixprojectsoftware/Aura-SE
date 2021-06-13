@@ -214,32 +214,33 @@ FILE_GLOBAL COMMANDS s_Commands[] =
 
 FILE_GLOBAL char* s_szVars[] =
 {
-  "sv_aura_max_spectators <0-32> - Max spectators allowed.",
-  "sv_aura_spec_enable_disable<0/1> - Allow players to disable tracking in spectator.",
-  "sv_aura_pure <0/1> - 0 spike check and simple variable checks, 1 harder variable check.",
-  "sv_aura_match_running <0/1> - Tells if a match is running.",
-  "sv_aura_allow_vote <0/1> - Allow any vote.",
-  "sv_aura_vote_setting <0/1> - Vote ag_xxx and mp_xxx settings.",
-  "sv_aura_vote_gamemode <0/1> - Allow gamemode switching.",
-  "sv_aura_vote_kick <0/1> - Allow voting a kick.",
-  "sv_aura_vote_admin <0/1> - Allow voting an admin.",
-  "sv_aura_vote_map <0/1> - Allow map voting.",
-  "sv_aura_vote_mp_timelimit_low <0-999> - Lowest timelimit to vote on.",
-  "sv_aura_vote_mp_timelimit_high <0-999> - Highest timelimit to vote on.",
-  "sv_aura_vote_mp_fraglimit_low <0-999> - Lowest fraglimit to vote on.",
-  "sv_aura_vote_mp_fraglimit_high <0-999> - Highest fraglimit to vote on.",
-  "sv_aura_floodmsgs <4> - Flood messages to tolerate. 0 will deactive it.",
-  "sv_aura_floodpersecond <4> - Flood messages per second.",
-  "sv_aura_floodwaitdelay <10> - Flood penalty timer.",
-  "sv_aura_show_gibs <0/1> - Show dead bodies.",
-  "sv_aura_spawn_volume <0-1> - The spawn sound volume.",
-  "sv_aura_player_id <5> - Player id show to other players. In seconds.",
-  "sv_aura_auto_admin <1> - Give auto admin to admins in admin list.",
-  "sv_aura_lj_timer <0-999> - Countdown seconds for long jump. 0 turns it off.",
-  "sv_aura_wallgauss <0/1> - Wallgauss on/off. On is for the weak :)",
-  "sv_aura_headshot <1-3> - Set power of headshot. Normally 3.",
-  "sv_aura_blastradius <1> - Blast radius for explosions. Normally 1",
-  "sv_aura_allowed_gamemodes <ffa;tdm> - Allowed gamemodes, could be any off ffa;tdm;arena;arcade;sgbow;instagib",
+  "sv_ag_max_spectators <0-32> - Max spectators allowed.",
+  "sv_ag_spec_enable_disable<0/1> - Allow players to disable tracking in spectator.",
+  "sv_ag_pure <0/1> - 0 spike check and simple variable checks, 1 harder variable check.",
+  "sv_ag_match_running <0/1> - Tells if a match is running.",
+  "sv_ag_allow_vote <0/1> - Allow any vote.",
+  "sv_ag_vote_setting <0/1> - Vote ag_xxx and mp_xxx settings.",
+  "sv_ag_vote_gamemode <0/1> - Allow gamemode switching.",
+  "sv_ag_vote_kick <0/1> - Allow voting a kick.",
+  "sv_ag_vote_admin <0/1> - Allow voting an admin.",
+  "sv_ag_vote_map <0/1> - Allow map voting.",
+  "sv_ag_vote_mp_timelimit_low <0-999> - Lowest timelimit to vote on.",
+  "sv_ag_vote_mp_timelimit_high <0-999> - Highest timelimit to vote on.",
+  "sv_ag_vote_mp_fraglimit_low <0-999> - Lowest fraglimit to vote on.",
+  "sv_ag_vote_mp_fraglimit_high <0-999> - Highest fraglimit to vote on.",
+  "sv_ag_floodmsgs <4> - Flood messages to tolerate. 0 will deactive it.",
+  "sv_ag_floodpersecond <4> - Flood messages per second.",
+  "sv_ag_floodwaitdelay <10> - Flood penalty timer.",
+  "sv_ag_show_gibs <0/1> - Show dead bodies.",
+  "sv_ag_spawn_volume <0-1> - The spawn sound volume.",
+  "sv_ag_player_id <5> - Player id show to other players. In seconds.",
+  "sv_ag_auto_admin <1> - Give auto admin to admins in admin list.",
+  "sv_ag_lj_timer <0-999> - Countdown seconds for long jump. 0 turns it off.",
+  "sv_ag_wallgauss <0/1> - Wallgauss on/off. On is for the weak :)",
+  "sv_ag_headshot <1-3> - Set power of headshot. Normally 3.",
+  "sv_ag_blastradius <1> - Blast radius for explosions. Normally 1",
+  // TODO: update this
+  "sv_ag_allowed_gamemodes <ffa;tdm> - Allowed gamemodes, could be any off ffa;tdm;arena;arcade;sgbow;instagib",
 };
 
 AgCommand::AgCommand()
@@ -315,7 +316,7 @@ bool AgCommand::HandleCommand(CBasePlayer* pPlayer)
             }
         }
 
-
+        // TODO: Refactor this, it's getting huge and unmaintainable
         if (0 < CMD_ARGC() &&
             (0 == strnicmp(CMD_ARGV(0), "ag_spectalk", 11)
                 || 0 == strnicmp(CMD_ARGV(0), "mp_timelimit", 12)
@@ -324,6 +325,13 @@ bool AgCommand::HandleCommand(CBasePlayer* pPlayer)
                 || 0 == strnicmp(CMD_ARGV(0), "mp_fraglimit", 12)
                 || 0 == strnicmp(CMD_ARGV(0), "mp_friendlyfire", 15)
                 || 0 == strnicmp(CMD_ARGV(0), "mp_weaponstay", 13)
+                || 0 == strnicmp(CMD_ARGV(0), "ag_spawn_system", 15)
+                || 0 == strnicmp(CMD_ARGV(0), "ag_spawn_history_entries", 24)
+                || 0 == strnicmp(CMD_ARGV(0), "ag_spawn_avoid_last_spots", 25)
+                || 0 == strnicmp(CMD_ARGV(0), "ag_spawn_far_spots", 18)
+                || 0 == strnicmp(CMD_ARGV(0), "ag_spawn_pa_visible_chance", 26)
+                || 0 == strnicmp(CMD_ARGV(0), "ag_spawn_pa_audible_chance", 26)
+                || 0 == strnicmp(CMD_ARGV(0), "ag_spawn_pa_safe_chance", 23)
                 ))
         {
             if (1 == CMD_ARGC())

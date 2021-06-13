@@ -165,6 +165,14 @@ extern cvar_t ag_dom_scorelimit;
 extern cvar_t ag_gauss_fix;
 extern cvar_t ag_rpg_fix;
 
+extern cvar_t ag_spawn_system;
+extern cvar_t ag_spawn_history_entries;
+extern cvar_t ag_spawn_avoid_last_spots;
+extern cvar_t ag_spawn_far_spots;
+extern cvar_t ag_spawn_pa_visible_chance;
+extern cvar_t ag_spawn_pa_audible_chance;
+extern cvar_t ag_spawn_pa_safe_chance;
+
 extern bool g_bLangame;
 extern bool g_bUseTeamColors;
 

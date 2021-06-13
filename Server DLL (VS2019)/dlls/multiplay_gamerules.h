@@ -41,6 +41,8 @@ class CHalfLifeMultiplay : public AgGameRules
 	//class CHalfLifeMultiplay : public CGameRules
 	//-- Martin Webrant
 {
+private:
+	void CHalfLifeMultiplay::ClampIntermissionTime();
 public:
 	CHalfLifeMultiplay();
 
@@ -135,6 +137,8 @@ public:
 
 	// Immediately end a multiplayer game
 	virtual void EndMultiplayerGame(void) { GoToIntermission(); }
+
+	virtual void LoadSpawnPoints();
 
 protected:
 	virtual void ChangeLevel(void);

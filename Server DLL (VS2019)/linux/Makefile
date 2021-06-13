@@ -8,7 +8,7 @@ OS:=$(shell uname)
 HOSTNAME:=$(shell hostname)
 
 ifeq "$(CFG)" ""
-CFG=debug
+CFG=release
 endif
 
 SOURCE_DIR=..

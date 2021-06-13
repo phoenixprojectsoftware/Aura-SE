@@ -36,6 +36,7 @@ extern cvar_t	teamlist;
 extern cvar_t	teamoverride;
 extern cvar_t	defaultteam;
 extern cvar_t	allowmonsters;
+extern cvar_t	mp_chattime;
 
 extern cvar_t	singleplayer;
 extern cvar_t	sploading;

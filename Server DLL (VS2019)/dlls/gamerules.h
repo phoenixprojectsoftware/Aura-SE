@@ -165,6 +165,8 @@ public:
 
 	// Immediately end a multiplayer game
 	virtual void EndMultiplayerGame( void ) {}
+
+	virtual void LoadSpawnPoints() {}
 };
 
 //++ BulliT

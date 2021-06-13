@@ -37,7 +37,6 @@
 extern CGraph WorldGraph;
 extern CSoundEnt *pSoundEnt;
 
-extern CBaseEntity				*g_pLastSpawn;
 DLL_GLOBAL edict_t				*g_pBodyQueueHead;
 CGlobalState					gGlobalState;
 extern DLL_GLOBAL	int			gDisplayTitle;
@@ -476,9 +475,13 @@ void CWorld :: Spawn( void )
 	g_flWeaponCheat = CVAR_GET_FLOAT( "sv_cheats" );  // Is the impulse 101 command allowed?
 }
 
+extern std::vector<CBaseEntity*> g_spawnPoints;
+extern std::vector<CBaseEntity*> g_spawnHistory;
+
 void CWorld :: Precache( void )
 {
-	g_pLastSpawn = NULL;
+	g_spawnPoints.clear();
+	g_spawnHistory.clear();
 	
 #if 1
 	CVAR_SET_STRING("sv_gravity", "800"); // 67ft/sec

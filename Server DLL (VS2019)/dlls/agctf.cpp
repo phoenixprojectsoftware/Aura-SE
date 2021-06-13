@@ -10,6 +10,7 @@
 #include "aggamerules.h"
 #include "agglobal.h"
 #include "agctf.h"
+#include "spawnchooser.h"
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -398,7 +399,7 @@ void AgCTF::PlayerKilled(CBasePlayer* pPlayer, entvars_t* pKiller)
 
 void AgCTF::AddPointsForKill(CBasePlayer* pAttacker, CBasePlayer* pKilled)
 {
-    if (pAttacker != pKilled && g_pGameRules->PlayerRelationship(pAttacker, pKilled) == GR_TEAMMATE)
+    if (pAttacker != pKilled && pAttacker->IsTeammate(pKilled))
         return; //Killed his team m8.
 
     if (FStrEq(CTF_TEAM1_NAME, pKilled->m_szTeamName) && pKilled->m_bFlagTeam2
@@ -1164,24 +1165,23 @@ LINK_ENTITY_TO_CLASS(game_mode_ctf, AgCTFDetect); //HLE CTF detect
 EntSelectCTFSpawnPoint
 
 Returns the CTF entity to spawn at
-
-USES AND SETS GLOBAL g_pLastSpawn
 ============
 */
-extern CBaseEntity* g_pLastSpawn;
-BOOL IsSpawnPointValid(CBaseEntity* pPlayer, CBaseEntity* pSpot);
+extern std::vector<CBaseEntity*> g_spawnHistory;
 inline int FNullEnt(CBaseEntity* ent) { return (ent == NULL) || FNullEnt(ent->edict()); }
 
-
+// TODO: refactor to use CSpawnChooser
 edict_t* EntSelectCTFSpawnPoint(CBaseEntity* pPlayer)
 {
-    CBaseEntity* pSpot;
+    CBaseEntity* pSpot = nullptr;
     edict_t* player;
 
     player = pPlayer->edict();
     CBasePlayer* cbPlayer = (CBasePlayer*)pPlayer; //we need a CBasePlayer
 
-    pSpot = g_pLastSpawn;
+    if (!g_spawnHistory.empty())
+        pSpot = g_spawnHistory.back();
+
     // Randomize the start spot
     for (int i = RANDOM_LONG(1, 5); i > 0; i--)
     {
@@ -1209,7 +1209,7 @@ edict_t* EntSelectCTFSpawnPoint(CBaseEntity* pPlayer)
         if (pSpot)
         {
             // check if pSpot is valid
-            if (IsSpawnPointValid(pPlayer, pSpot))
+            if (IsSpawnPointValid(cbPlayer, pSpot))
             {
                 if (pSpot->pev->origin == Vector(0, 0, 0))
                 {
@@ -1257,8 +1257,11 @@ ReturnSpot:
         if (FNullEnt(pSpot))
             return INDEXENT(0);
     }
+	g_spawnHistory.push_back(pSpot);
 
-    g_pLastSpawn = pSpot;
+	if (g_spawnHistory.size() > ag_spawn_history_entries.value)
+		g_spawnHistory.erase(g_spawnHistory.begin());
+
     return pSpot->edict();
 }
 

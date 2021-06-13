@@ -15,6 +15,8 @@
 //
 // teamplay_gamerules.cpp
 //
+#include	<vector>
+
 #include	"extdll.h"
 #include	"util.h"
 #include	"cbase.h"
@@ -47,6 +49,7 @@ extern int gmsgMOTD;
 extern int gmsgServerName;
 
 extern int g_teamplay;
+extern std::vector<CBaseEntity*> g_spawnPoints;
 
 float g_flIntermissionStartTime = 0;
 
@@ -66,7 +69,7 @@ public:
 			if (pListener->IsSpectator() || pTalker->IsSpectator())
 				return false;
 			//-- Martin Webrant
-			if ( g_pGameRules->PlayerRelationship( pListener, pTalker ) != GR_TEAMMATE )
+			if ( !pListener->IsTeammate(pTalker) )
 			{
 				return false;
 			}
@@ -192,12 +195,15 @@ void CHalfLifeMultiplay::RefreshSkillData( void )
 	gSkillData.plrDmgHornet = 10;
 }
 
-// longest the intermission can last, in seconds
-#define MAX_INTERMISSION_TIME		120
-
-extern cvar_t timeleft, fragsleft;
+// Hard cap to mp_intermission_time, we don't want players to wait forever because they don't know
+// how to skip intermission (e.g.: by trying to attack) when the server is somehow misconfigured
+constexpr float MIN_INTERMISSION_TIME = 1.0;
+constexpr float MAX_INTERMISSION_TIME = 120.0;
 
 extern cvar_t mp_chattime;
+extern cvar_t mp_intermission_time;
+
+extern cvar_t timeleft, fragsleft;
 
 //=========================================================
 //=========================================================
@@ -218,12 +224,9 @@ void CHalfLifeMultiplay :: Think ( void )
 
 	if ( g_fGameOver )   // someone else quit the game already
 	{
-		// bounds check
-		int time = (int)CVAR_GET_FLOAT( "mp_chattime" );
-		if ( time < 1 )
-			CVAR_SET_STRING( "mp_chattime", "1" );
-		else if ( time > MAX_INTERMISSION_TIME )
-			CVAR_SET_STRING( "mp_chattime", UTIL_dtos1( MAX_INTERMISSION_TIME ) );
+		// I'm not sure in what cases executing this would be necessary, having the same code
+		// in `GoToIntermission`. Anyways it was repeated in both places before I touched this
+		ClampIntermissionTime();
 
 		m_flIntermissionEndTime = g_flIntermissionStartTime + mp_chattime.value;
 
@@ -231,7 +234,7 @@ void CHalfLifeMultiplay :: Think ( void )
 		if ( m_flIntermissionEndTime < gpGlobals->time )
 		{
 			if ( m_iEndIntermissionButtonHit  // check that someone has pressed a key, or the max intermission time is over
-				|| ( ( g_flIntermissionStartTime + MAX_INTERMISSION_TIME ) < gpGlobals->time) ) 
+				|| ( ( g_flIntermissionStartTime + mp_intermission_time.value ) < gpGlobals->time) )
 					//				ChangeLevel(); // intermission is over
 					//++ BulliT
 				{
@@ -631,6 +634,11 @@ void CHalfLifeMultiplay :: PlayerThink( CBasePlayer *pPlayer )
 //=========================================================
 void CHalfLifeMultiplay :: PlayerSpawn( CBasePlayer *pPlayer )
 {
+	//++ BulliT
+	AgGameRules::PlayerSpawn(pPlayer);
+	return;
+	//-- Martin Webrant
+
 	BOOL		addDefault;
 	CBaseEntity	*pWeaponEntity = NULL;
 
@@ -1206,6 +1214,12 @@ int CHalfLifeMultiplay::DeadPlayerAmmo( CBasePlayer *pPlayer )
 
 edict_t *CHalfLifeMultiplay::GetPlayerSpawnSpot( CBasePlayer *pPlayer )
 {
+	if (g_spawnPoints.empty())
+	{
+		// Load these first time this is called and reuse them afterwards
+		LoadSpawnPoints();
+	}
+
 	edict_t *pentSpawnSpot = CGameRules::GetPlayerSpawnSpot( pPlayer );	
 	if ( IsMultiplayer() && pentSpawnSpot->v.target )
 	{
@@ -1249,7 +1263,6 @@ BOOL CHalfLifeMultiplay :: FAllowMonsters( void )
 
 //=========================================================
 //======== CHalfLifeMultiplay private functions ===========
-#define INTERMISSION_TIME		6
 
 void CHalfLifeMultiplay :: GoToIntermission( void )
 {
@@ -1263,18 +1276,30 @@ void CHalfLifeMultiplay :: GoToIntermission( void )
 	MESSAGE_BEGIN(MSG_ALL, SVC_INTERMISSION);
 	MESSAGE_END();
 
-	// bounds check
-	int time = (int)CVAR_GET_FLOAT( "mp_chattime" );
-	if ( time < 1 )
-		CVAR_SET_STRING( "mp_chattime", "1" );
-	else if ( time > MAX_INTERMISSION_TIME )
-		CVAR_SET_STRING( "mp_chattime", UTIL_dtos1( MAX_INTERMISSION_TIME ) );
+	ClampIntermissionTime();
 
 	m_flIntermissionEndTime = gpGlobals->time + ( (int)mp_chattime.value );
 	g_flIntermissionStartTime = gpGlobals->time;
 
 	g_fGameOver = TRUE;
 	m_iEndIntermissionButtonHit = FALSE;
+}
+
+void CHalfLifeMultiplay::ClampIntermissionTime()
+{
+	const auto time    = CVAR_GET_FLOAT( "mp_chattime" );
+	const auto maxTime = CVAR_GET_FLOAT( "mp_intermission_time" );
+
+	// Bounds checks
+	if (maxTime > MAX_INTERMISSION_TIME)
+		CVAR_SET_FLOAT( "mp_intermission_time", MAX_INTERMISSION_TIME );
+	else if (maxTime < MIN_INTERMISSION_TIME)
+		CVAR_SET_FLOAT( "mp_intermission_time", MIN_INTERMISSION_TIME );
+
+	if (time > mp_intermission_time.value)
+		CVAR_SET_FLOAT( "mp_chattime", mp_intermission_time.value );
+	else if (time < MIN_INTERMISSION_TIME)
+		CVAR_SET_FLOAT( "mp_chattime", MIN_INTERMISSION_TIME );
 }
 
 #define MAX_RULE_BUFFER 1024
@@ -1813,4 +1838,14 @@ void CHalfLifeMultiplay :: SendMOTDToClient( edict_t *client )
 	FREE_FILE( aFileList );
 }
 	
+void CHalfLifeMultiplay::LoadSpawnPoints()
+{
+	g_spawnPoints.clear(); // just to make sure
 
+	CBaseEntity* pSpot = NULL;
+	while ((pSpot = UTIL_FindEntityByClassname(pSpot, "info_player_deathmatch")) != NULL)
+	{
+		g_spawnPoints.push_back(pSpot);
+	}
+	ALERT(at_aiconsole, "Deathmatch spawnpoints: %d\n", g_spawnPoints.size());
+}

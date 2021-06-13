@@ -296,7 +296,11 @@
 // byte (brightness)
 
 #define TE_GLOWSPRITE		23		
-// coord, coord, coord (pos) short (model index) byte (scale / 10)
+// coord, coord, coord (pos)
+// short (model index)
+// byte (life in 0.1's)
+// byte (scale / 10)
+// byte (brightness)
 
 #define TE_BEAMRING			24		// connect a beam ring to two entities
 // short (start entity) 

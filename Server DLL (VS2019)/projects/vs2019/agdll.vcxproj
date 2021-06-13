@@ -206,6 +206,7 @@
     <ClCompile Include="..\..\dlls\skill.cpp" />
     <ClCompile Include="..\..\dlls\sound.cpp" />
     <ClCompile Include="..\..\dlls\soundent.cpp" />
+    <ClCompile Include="..\..\dlls\spawnchooser.cpp" />
     <ClCompile Include="..\..\dlls\spectator.cpp" />
     <ClCompile Include="..\..\dlls\squadmonster.cpp" />
     <ClCompile Include="..\..\dlls\squeakgrenade.cpp" />
@@ -256,6 +257,7 @@
     <ClCompile Include="..\..\dlls\agwallhack.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\common\const.h" />
     <ClInclude Include="..\..\common\Platform.h" />
     <ClInclude Include="..\..\dlls\activity.h" />
     <ClInclude Include="..\..\dlls\activitymap.h" />
@@ -288,6 +290,7 @@
     <ClInclude Include="..\..\dlls\singleplay_gamerules.h" />
     <ClInclude Include="..\..\dlls\skill.h" />
     <ClInclude Include="..\..\dlls\soundent.h" />
+    <ClInclude Include="..\..\dlls\spawnchooser.h" />
     <ClInclude Include="..\..\dlls\spectator.h" />
     <ClInclude Include="..\..\dlls\squadmonster.h" />
     <ClInclude Include="..\..\dlls\talkmonster.h" />

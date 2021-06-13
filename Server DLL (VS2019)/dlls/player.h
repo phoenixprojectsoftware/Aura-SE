@@ -36,6 +36,8 @@ extern int gmsgSpectator;
 #define PLAYER_MIN_BOUNCE_SPEED		200
 #define PLAYER_FALL_PUNCH_THRESHHOLD (float)350 // won't punch player's screen/make scrape noise unless player falling at least this fast.
 
+constexpr float BARELY_AUDIBLE_DIST = 1280.0;
+
 //
 // Player PHYSICS FLAGS bits
 //
@@ -473,6 +475,11 @@ public:
 	void InitWeaponWeight();
 	*/
 	//-- Martin Webrant
+
+	void GetInventoryInfo();
+	bool IsTeammate(CBaseEntity* pPlayer);
+	std::vector<CBasePlayer*> GetPlayingEnemies();
+	float GetSpawnkillingPotential();
 };
 //++ BulliT
 inline void CBasePlayer::Init()
@@ -484,6 +491,9 @@ inline void CBasePlayer::Init()
 	m_bIngame = 1 > ag_match_running.value;
 	m_bDoneFirstSpawn = false;
 
+	// TODO: review this. There's a `ag_player_id cvar` defaulted to 5, but its value is not
+	// being used here. There's this `5.0` hardcoded here and then a `2` in CBasePlayer::Spawn(),
+	// and the check is done every 0.5 in CBasePlayer::UpdatePlayerId()
 	m_fPlayerIdCheck = gpGlobals->time + 5.0;
 
 	m_fDisplayGamemode = 0.0;
@@ -502,7 +512,7 @@ inline void CBasePlayer::Init()
 	m_fFloodLockTill = AgTime();
 	for (int i = 0; i < sizeof(m_afFloodWhen) / sizeof(m_afFloodWhen[0]); i++)
 	{
-		m_afFloodWhen[i] = AgTime();
+		m_afFloodWhen[i] = AgTime() - ag_floodpersecond.value;
 	}
 	m_iFloodWhenHead = 0;
 
@@ -651,6 +661,11 @@ inline bool CBasePlayer::GetSpawnFull()
 inline bool CBasePlayer::DisableSpecs()
 {
 	return 0 != m_iDisableSpecs;
+}
+
+inline bool CBasePlayer::IsTeammate(CBaseEntity* pTarget)
+{
+	return g_pGameRules->PlayerRelationship(this, pTarget) == GR_TEAMMATE;
 }
 
 // Spectator Movement modes (stored in pev->iuser1, so the physics code can get at them)
