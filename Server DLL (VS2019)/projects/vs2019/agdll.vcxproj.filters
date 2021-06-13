@@ -432,6 +432,9 @@
     <ClCompile Include="..\..\ministl\algo.cpp">
       <Filter>Source Files\ministl</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\dlls\zamn.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\dlls\doors.h">

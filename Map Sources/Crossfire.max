@@ -697,14 +697,6 @@
 ( 32 -2448 -1703.79 ) ( 32 -2448 -1696.09 ) ( 32 -2432 -1711.79 ) BABTECH_CEIL01 [ 0 0 1 0 ] [ 0 1 -0 -32 ] 270 1 1
 }
 {
-( 32 -2256 -1712 ) ( 32 -2256 -1704 ) ( 32 -2240 -1712 ) BABTECH_CEIL01 [ 0 1 0 -48 ] [ 0 0 -1 0 ] -0 1 1
-( -32 -2240 -1712 ) ( -32 -2240 -1704 ) ( -32 -2256 -1712 ) BABTECH_CEIL01 [ 0 1 0 -48 ] [ 0 0 -1 0 ] -0 1 1
-( 32 -2240 -1712 ) ( 32 -2240 -1704 ) ( -32 -2240 -1712 ) BABTECH_CEIL01 [ 1 0 0 0 ] [ 0 0 -1 0 ] -0 1 1
-( -32 -2256 -1712 ) ( -32 -2256 -1704 ) ( 32 -2256 -1712 ) +A~FIFTS_LGHT3 [ 0 0 1 0 ] [ 1 0 -0 32 ] 270 1 1
-( 32 -2240 -1704 ) ( 32 -2256 -1704 ) ( -32 -2240 -1704 ) BABTECH_CEIL01 [ 1 0 0 0 ] [ 0 -1 0 48 ] -0 1 1
-( 32 -2256 -1712 ) ( 32 -2240 -1712 ) ( -32 -2256 -1712 ) ~LIGHT3B [ 1 0 0 32 ] [ 0 -1 0 -0 ] -0 1 1
-}
-{
 ( 640 -2224 -1664 ) ( 640 -2224 -1632 ) ( 640 -2192 -1664 ) C1A4I_W1B [ 0 -1 0 0 ] [ 0 0 1 32 ] 180 1 1
 ( 608 -2192 -1664 ) ( 608 -2192 -1632 ) ( 608 -2224 -1664 ) C1A4I_W1B [ 0 1 0 -0 ] [ 0 0 -1 32 ] -0 1 1
 ( 640 -2192 -1664 ) ( 640 -2192 -1632 ) ( 608 -2192 -1664 ) C1A4I_W1B [ 1 0 0 0 ] [ 0 0 -1 32 ] -0 1 1
@@ -1228,36 +1220,12 @@
 ( 32 -2224 -1936 ) ( 32 -2216 -1936 ) ( -32 -2224 -1936 ) C1A1_FLR1 [ 1 0 0 32 ] [ 0 -1 0 32 ] -0 1 1
 }
 {
-( -96 -2272 -1712 ) ( -96 -2272 -1704 ) ( -96 -2256 -1712 ) BABTECH_CEIL01 [ 0 1 0 -48 ] [ 0 0 -1 0 ] -0 1 1
-( -160 -2256 -1712 ) ( -160 -2256 -1704 ) ( -160 -2272 -1712 ) BABTECH_CEIL01 [ 0 1 0 -48 ] [ 0 0 -1 0 ] -0 1 1
-( -96 -2256 -1712 ) ( -96 -2256 -1704 ) ( -160 -2256 -1712 ) BABTECH_CEIL01 [ 1 0 0 0 ] [ 0 0 -1 0 ] -0 1 1
-( -160 -2272 -1712 ) ( -160 -2272 -1704 ) ( -96 -2272 -1712 ) +A~FIFTS_LGHT3 [ 0 0 1 0 ] [ 1 0 -0 32 ] 270 1 1
-( -96 -2256 -1704 ) ( -96 -2272 -1704 ) ( -160 -2256 -1704 ) BABTECH_CEIL01 [ 1 0 0 0 ] [ 0 -1 0 48 ] -0 1 1
-( -96 -2272 -1712 ) ( -96 -2256 -1712 ) ( -160 -2272 -1712 ) ~LIGHT3B [ 1 0 0 32 ] [ 0 -1 0 -0 ] -0 1 1
-}
-{
-( -124 -2268 -1704 ) ( -124 -2268 -1644 ) ( -124 -2260 -1704 ) BABTECH_CEIL01 [ 0 1 0 -48 ] [ 0 0 -1 0 ] -0 1 1
-( -132 -2260 -1704 ) ( -132 -2260 -1644 ) ( -132 -2268 -1704 ) BABTECH_CEIL01 [ 0 1 0 -48 ] [ 0 0 -1 0 ] -0 1 1
-( -124 -2260 -1704 ) ( -124 -2260 -1644 ) ( -132 -2260 -1704 ) BABTECH_CEIL01 [ 1 0 0 0 ] [ 0 0 -1 0 ] -0 1 1
-( -132 -2268 -1704 ) ( -132 -2268 -1644 ) ( -124 -2268 -1704 ) BABTECH_CEIL01 [ 1 0 0 0 ] [ 0 0 -1 0 ] -0 1 1
-( -124 -2260 -1644 ) ( -124 -2268 -1644 ) ( -132 -2260 -1644 ) BABTECH_CEIL01 [ 1 0 0 0 ] [ 0 -1 0 48 ] -0 1 1
-( -124 -2268 -1704 ) ( -124 -2260 -1704 ) ( -132 -2268 -1704 ) BABTECH_CEIL01 [ 1 0 0 0 ] [ 0 -1 0 0 ] -0 1 1
-}
-{
 ( -32 -2224 -1856 ) ( -32 -2224 -1824 ) ( -32 -2208 -1856 ) LAB1_COMP10F [ 0 1 0 0 ] [ 0 0 -1 32 ] -0 1 1
 ( -96 -2208 -1856 ) ( -96 -2208 -1824 ) ( -96 -2224 -1856 ) +0LAB1_COMP10E [ 0 -1 0 32 ] [ 0 0 1 32 ] 180 1 1
 ( -32 -2208 -1856 ) ( -32 -2208 -1824 ) ( -96 -2208 -1856 ) +0LAB1_COMP10E [ 1 0 0 32 ] [ 0 0 -1 32 ] -0 1 1
 ( -96 -2224 -1856 ) ( -96 -2224 -1824 ) ( -32 -2224 -1856 ) +0LAB1_COMP10E [ 1 0 0 32 ] [ 0 0 -1 32 ] -0 1 1
 ( -32 -2208 -1824 ) ( -32 -2224 -1824 ) ( -96 -2208 -1824 ) +0LAB1_COMP10E [ -1 -0 -0 0 ] [ 0 -1 0 0 ] 0 1 1
 ( -32 -2224 -1856 ) ( -32 -2208 -1856 ) ( -96 -2224 -1856 ) +0LAB1_COMP10E [ -1 -0 -0 0 ] [ 0 -1 0 0 ] 0 1 1
-}
-{
-( 4 -2252 -1704 ) ( 4 -2252 -1680 ) ( 4 -2244 -1704 ) BABTECH_CEIL01 [ 0 1 0 -48 ] [ 0 0 -1 0 ] -0 1 1
-( -4 -2244 -1704 ) ( -4 -2244 -1680 ) ( -4 -2252 -1704 ) BABTECH_CEIL01 [ 0 1 0 -48 ] [ 0 0 -1 0 ] -0 1 1
-( 4 -2244 -1704 ) ( 4 -2244 -1680 ) ( -4 -2244 -1704 ) BABTECH_CEIL01 [ 1 0 0 0 ] [ 0 0 -1 0 ] -0 1 1
-( -4 -2252 -1704 ) ( -4 -2252 -1680 ) ( 4 -2252 -1704 ) BABTECH_CEIL01 [ 1 0 0 0 ] [ 0 0 -1 0 ] -0 1 1
-( 4 -2244 -1680 ) ( 4 -2252 -1680 ) ( -4 -2244 -1680 ) BABTECH_CEIL01 [ 0 1 0 -48 ] [ 1 -0 0 0 ] 270 1 1
-( 4 -2252 -1704 ) ( 4 -2244 -1704 ) ( -4 -2252 -1704 ) BABTECH_CEIL01 [ 0 1 0 -48 ] [ 1 -0 0 0 ] 270 1 1
 }
 {
 ( -512 -1936 -1760 ) ( -512 -1936 -1824 ) ( -512 -1984.66 -1760 ) -0CRETE2_FLR04 [ 0 -1 0 0 ] [ 0 0 1 0 ] 180 1 1
@@ -1849,22 +1817,6 @@
 ( 384 -2432 -1856 ) ( 384 -2432 -1680 ) ( 256 -2560 -1856 ) C1A4I_W1B [ 0 1 0 0 ] [ 0 0 -1 32 ] -0 1 1
 ( 384 -2432 -1680 ) ( 384 -2448 -1680 ) ( 256 -2560 -1680 ) C1A4I_W1B [ 0 1 0 0 ] [ 1 -0 0 32 ] 270 1 1
 ( 384 -2448 -1856 ) ( 384 -2432 -1856 ) ( 256 -2576 -1856 ) C1A4I_W1B [ 0 1 0 0 ] [ 1 -0 0 32 ] 270 1 1
-}
-{
-( 160 -2272 -1712 ) ( 160 -2272 -1704 ) ( 160 -2256 -1712 ) BABTECH_CEIL01 [ 0 1 0 -48 ] [ 0 0 -1 0 ] -0 1 1
-( 96 -2256 -1712 ) ( 96 -2256 -1704 ) ( 96 -2272 -1712 ) BABTECH_CEIL01 [ 0 1 0 -48 ] [ 0 0 -1 0 ] -0 1 1
-( 160 -2256 -1712 ) ( 160 -2256 -1704 ) ( 96 -2256 -1712 ) BABTECH_CEIL01 [ 1 0 0 0 ] [ 0 0 -1 0 ] -0 1 1
-( 96 -2272 -1712 ) ( 96 -2272 -1704 ) ( 160 -2272 -1712 ) +A~FIFTS_LGHT3 [ 0 0 1 0 ] [ 1 0 -0 32 ] 270 1 1
-( 160 -2256 -1704 ) ( 160 -2272 -1704 ) ( 96 -2256 -1704 ) BABTECH_CEIL01 [ 1 0 0 0 ] [ 0 -1 0 48 ] -0 1 1
-( 160 -2272 -1712 ) ( 160 -2256 -1712 ) ( 96 -2272 -1712 ) ~LIGHT3B [ 1 0 0 32 ] [ 0 -1 0 -0 ] -0 1 1
-}
-{
-( 132 -2268 -1704 ) ( 132 -2268 -1644 ) ( 132 -2260 -1704 ) BABTECH_CEIL01 [ 0 1 0 -48 ] [ 0 0 -1 0 ] -0 1 1
-( 124 -2260 -1704 ) ( 124 -2260 -1644 ) ( 124 -2268 -1704 ) BABTECH_CEIL01 [ 0 1 0 -48 ] [ 0 0 -1 0 ] -0 1 1
-( 132 -2260 -1704 ) ( 132 -2260 -1644 ) ( 124 -2260 -1704 ) BABTECH_CEIL01 [ 1 0 0 0 ] [ 0 0 -1 0 ] -0 1 1
-( 124 -2268 -1704 ) ( 124 -2268 -1644 ) ( 132 -2268 -1704 ) BABTECH_CEIL01 [ 1 0 0 0 ] [ 0 0 -1 0 ] -0 1 1
-( 132 -2260 -1644 ) ( 132 -2268 -1644 ) ( 124 -2260 -1644 ) BABTECH_CEIL01 [ 1 0 0 0 ] [ 0 -1 0 48 ] -0 1 1
-( 132 -2268 -1704 ) ( 132 -2260 -1704 ) ( 124 -2268 -1704 ) BABTECH_CEIL01 [ 1 0 0 0 ] [ 0 -1 0 0 ] -0 1 1
 }
 {
 ( 96 -2224 -1856 ) ( 96 -2224 -1824 ) ( 96 -2208 -1856 ) +0LAB1_COMP10E [ 0 -1 0 32 ] [ 0 0 1 32 ] 180 1 1
@@ -8999,9 +8951,9 @@
 "explodemagnitude" "0"
 "spawnobject" "1"
 "delay" "0"
-"explosion" "1"
+"explosion" "0"
 "material" "0"
-"health" "10"
+"health" "100"
 "renderamt" "155"
 "angles" "0 0 0"
 {
@@ -9023,9 +8975,9 @@
 "explodemagnitude" "0"
 "spawnobject" "1"
 "delay" "0"
-"explosion" "1"
+"explosion" "0"
 "material" "0"
-"health" "10"
+"health" "100"
 "angles" "0 0 0"
 {
 ( -768 896 -1416 ) ( -768 896 -1512 ) ( -768 736 -1416 ) GLASSBLUE2 [ 0 1 0 0 ] [ 0 0 -1 0 ] 0 1 1
@@ -9052,34 +9004,7 @@
 "style" "0"
 "_light" "255 255 127 255"
 "angles" "0 0 0"
-"origin" "-545 -2462 -1701"
-}
-{
-"classname" "light"
-"_falloff" "0"
-"_fade" "1.0"
-"style" "0"
-"_light" "255 255 255 255"
-"angles" "0 0 0"
-"origin" "130 -2256 -1744"
-}
-{
-"classname" "light"
-"_falloff" "0"
-"_fade" "1.0"
-"style" "0"
-"_light" "255 255 255 255"
-"angles" "0 0 0"
-"origin" "7 -2241 -1744"
-}
-{
-"classname" "light"
-"_falloff" "0"
-"_fade" "1.0"
-"style" "0"
-"_light" "255 255 255 255"
-"angles" "0 0 0"
-"origin" "-123 -2258 -1744"
+"origin" "-545 -2466 -1712"
 }
 {
 "classname" "light"
@@ -9087,8 +9012,8 @@
 "_fade" "1.0"
 "style" "0"
 "_light" "255 255 127 255"
-"angles" "0 0 0"
-"origin" "-222 -2440 -1708"
+"angles" "90 90 0"
+"origin" "-222 -2440 -1724"
 }
 {
 "classname" "light"
@@ -9096,8 +9021,8 @@
 "_fade" "1.0"
 "style" "0"
 "_light" "255 255 127 255"
-"angles" "0 0 0"
-"origin" "-4 -2441 -1707"
+"angles" "90 90 0"
+"origin" "-4 -2441 -1723"
 }
 {
 "classname" "light"
@@ -9105,8 +9030,8 @@
 "_fade" "1.0"
 "style" "0"
 "_light" "255 255 127 255"
-"angles" "0 0 0"
-"origin" "222 -2444 -1706"
+"angles" "90 90 0"
+"origin" "222 -2444 -1722"
 }
 {
 "classname" "light"
@@ -9133,7 +9058,7 @@
 "style" "0"
 "_light" "255 255 127 255"
 "angles" "0 0 0"
-"origin" "545 -2465 -1701"
+"origin" "545 -2465 -1713"
 }
 {
 "classname" "light"
@@ -9250,6 +9175,7 @@
 "style" "0"
 "_light" "255 255 255 200"
 "angles" "0 0 0"
+"targetname" "wesley"
 "origin" "864 188 -1400"
 }
 {
@@ -9259,6 +9185,7 @@
 "style" "0"
 "_light" "255 255 255 200"
 "angles" "0 0 0"
+"targetname" "wesley"
 "origin" "504 364 -1393"
 }
 {
@@ -9268,6 +9195,7 @@
 "style" "0"
 "_light" "255 255 255 200"
 "angles" "0 0 0"
+"targetname" "wesley"
 "origin" "651 475 -1393"
 }
 {
@@ -9284,7 +9212,7 @@
 "_falloff" "0"
 "_fade" "1.0"
 "style" "0"
-"_light" "255 255 127 255"
+"_light" "255 255 255 255"
 "angles" "0 0 0"
 "origin" "777 836 -1384"
 }
@@ -9331,6 +9259,7 @@
 "style" "0"
 "_light" "255 255 255 200"
 "angles" "0 0 0"
+"targetname" "wesley"
 "origin" "512 9 -1408"
 }
 {
@@ -9439,7 +9368,7 @@
 "style" "0"
 "_light" "255 255 255 200"
 "angles" "0 0 0"
-"origin" "-740 9 -1374"
+"origin" "-734 9 -1387"
 }
 {
 "classname" "func_door"
@@ -9650,9 +9579,9 @@
 "explodemagnitude" "0"
 "spawnobject" "1"
 "delay" "0"
-"explosion" "1"
+"explosion" "0"
 "material" "0"
-"health" "10"
+"health" "100"
 "renderamt" "155"
 "angles" "0 0 0"
 {
@@ -9673,9 +9602,9 @@
 "explodemagnitude" "0"
 "spawnobject" "1"
 "delay" "0"
-"explosion" "1"
+"explosion" "0"
 "material" "0"
-"health" "10"
+"health" "100"
 "renderamt" "155"
 "angles" "0 0 0"
 {
@@ -9696,11 +9625,12 @@
 "explodemagnitude" "0"
 "spawnobject" "1"
 "delay" "0"
-"explosion" "1"
+"explosion" "0"
 "material" "0"
-"health" "10"
+"health" "100"
 "renderamt" "155"
 "angles" "0 0 0"
+"target" "wesley_is_dead"
 {
 ( 768 -48 -1416 ) ( 768 -48 -1512 ) ( 768 -64 -1416 ) WESLEY [ 0 -1 0 -0 ] [ 0 0 -1 -96 ] 0 0.125 0.75
 ( 576 -64 -1416 ) ( 576 -64 -1512 ) ( 576 -48 -1416 ) WESLEY [ 0 -1 0 -0 ] [ 0 0 -1 -96 ] 0 0.125 0.75
@@ -9719,9 +9649,9 @@
 "explodemagnitude" "0"
 "spawnobject" "1"
 "delay" "0"
-"explosion" "1"
+"explosion" "0"
 "material" "0"
-"health" "10"
+"health" "100"
 "renderamt" "155"
 "angles" "0 0 0"
 {
@@ -9742,9 +9672,9 @@
 "explodemagnitude" "0"
 "spawnobject" "1"
 "delay" "0"
-"explosion" "1"
+"explosion" "0"
 "material" "0"
-"health" "10"
+"health" "100"
 "renderamt" "155"
 "angles" "0 0 0"
 {
@@ -9761,7 +9691,7 @@
 "_falloff" "0"
 "_fade" "1.0"
 "style" "0"
-"_light" "255 255 128 200"
+"_light" "255 255 255 200"
 "angles" "0 0 0"
 "origin" "416 360 -1703"
 }
@@ -9772,7 +9702,7 @@
 "style" "0"
 "_light" "255 255 255 200"
 "angles" "0 0 0"
-"origin" "418 544 -1701"
+"origin" "424 544 -1715"
 }
 {
 "classname" "light"
@@ -9910,7 +9840,7 @@
 "classname" "light"
 "_falloff" "0"
 "_fade" "1.0"
-"style" "2"
+"style" "0"
 "_light" "255 255 255 200"
 "angles" "0 0 0"
 "origin" "-544 -77 -1728"
@@ -9919,7 +9849,7 @@
 "classname" "light"
 "_falloff" "0"
 "_fade" "1.0"
-"style" "2"
+"style" "0"
 "_light" "255 255 255 200"
 "angles" "0 0 0"
 "origin" "-738 -244 -1731"
@@ -9928,7 +9858,7 @@
 "classname" "light"
 "_falloff" "0"
 "_fade" "1.0"
-"style" "2"
+"style" "0"
 "_light" "255 255 255 200"
 "angles" "0 0 0"
 "origin" "737 -76 -1726"
@@ -9937,7 +9867,7 @@
 "classname" "light"
 "_falloff" "0"
 "_fade" "1.0"
-"style" "2"
+"style" "0"
 "_light" "255 255 255 200"
 "angles" "0 0 0"
 "origin" "456 -96 -1730"
@@ -10981,7 +10911,6 @@
 "classname" "multi_manager"
 "targetname" "strike_mm"
 "strike_siren" "0"
-"bunker_amb" "0"
 "towers_button_doors" "2"
 "strike_ready_door" "2"
 "bunker_maindoor" "20"
@@ -10994,9 +10923,255 @@
 "strike_pain#1" "52.1"
 "bunker_towerdoors#1" "54"
 "strike_timer_mmb" "55"
-"strike_siren#1" "0"
+"strike_siren#1" "55"
 "bunker_amb#1" "57"
 "bunker_maindoor#1" "64"
-"strike_siren#2" "55"
+"angles" "0 0 0"
 "origin" "95 -2285 -1888"
+}
+{
+"classname" "ambient_generic"
+"spawnflags" "17"
+"cspinup" "0"
+"lfomodvol" "0"
+"lfomodpitch" "0"
+"lforate" "0"
+"lfotype" "0"
+"spindown" "0"
+"spinup" "0"
+"pitchstart" "100"
+"pitch" "100"
+"fadeout" "0"
+"fadein" "0"
+"volstart" "0"
+"preset" "0"
+"health" "10"
+"targetname" "zamnhl_ost"
+"message" "music/michaelsoft.wav"
+"origin" "14 -160 -1216"
+}
+{
+"classname" "func_button"
+"unlocked_sentence" "2"
+"locked_sentence" "0"
+"unlocked_sound" "0"
+"locked_sound" "0"
+"delay" "2"
+"wait" "220"
+"sounds" "1"
+"speed" "5"
+"zhlt_lightflags" "0"
+"angles" "0 0 0"
+"rendercolor" "0 0 0"
+"rendermode" "0"
+"renderfx" "0"
+"target" "zamnhl_ost"
+{
+( 880 1397 -1782 ) ( 880 1397 -1819 ) ( 880 1360 -1782 ) +0BUTTON1 [ 0 1 0 0 ] [ 0 0 -1 0 ] 0 1 1
+( 866 1360 -1782 ) ( 866 1360 -1819 ) ( 866 1397 -1782 ) +0BUTTON1 [ 0 1 0 -24.2162 ] [ 0 0 -1 -5.18921 ] 0 1.15625 1.15625
+( 880 1360 -1782 ) ( 880 1360 -1819 ) ( 866 1360 -1782 ) -0FIFTIES_W12 [ 1 0 0 0 ] [ 0 0 -1 0 ] 0 1 1
+( 866 1397 -1782 ) ( 866 1397 -1819 ) ( 880 1397 -1782 ) -0FIFTIES_W12 [ 1 0 0 0 ] [ 0 0 -1 0 ] 0 1 1
+( 866 1397 -1819 ) ( 866 1360 -1819 ) ( 880 1397 -1819 ) -0FIFTIES_W12 [ 1 0 0 0 ] [ 0 -1 0 0 ] 0 1 1
+( 880 1360 -1782 ) ( 866 1360 -1782 ) ( 880 1397 -1782 ) -0FIFTIES_W12 [ 1 0 0 0 ] [ 0 -1 0 0 ] 0 1 1
+}
+}
+{
+"classname" "weapon_357"
+"delay" "0"
+"angles" "0 0 0"
+"origin" "-901 1360 -1696"
+}
+{
+"classname" "ammo_357"
+"delay" "0"
+"angles" "0 0 0"
+"origin" "-936 1362 -1696"
+}
+{
+"classname" "func_healthcharger"
+{
+( -1024 1458 -1666 ) ( -1024 1458 -1618 ) ( -1024 1426 -1666 ) -0FIFTIES_W12 [ -0 1 -0 27.9998 ] [ -0 0 1 45.3331 ] 180 0.5 0.75
+( -1016 1426 -1666 ) ( -1016 1426 -1618 ) ( -1016 1458 -1666 ) +0MEDKIT [ -0 1 0 28 ] [ 0 0 -1 -68 ] 0 0.5 0.5
+( -1016 1458 -1666 ) ( -1016 1458 -1618 ) ( -1024 1458 -1666 ) MEDKITEDGE1 [ -0 -0 -1 -45.3335 ] [ 1 0 -0 -0 ] 90 0.75 0.25
+( -1024 1426 -1666 ) ( -1024 1426 -1618 ) ( -1016 1426 -1666 ) MEDKITEDGE1 [ 0 0 -1 -45.3332 ] [ -1 -0 -0 -0.00843623 ] 90 0.75 0.25
+( -1024 1426 -1666 ) ( -1016 1426 -1666 ) ( -1024 1458 -1666 ) MEDKITEDGE1 [ -0 -1 0 -28.0001 ] [ 1 -0 0 31.9925 ] 180 0.5 0.25
+( -1016 1426 -1618 ) ( -1024 1426 -1618 ) ( -1016 1458 -1618 ) MEDKITEDGE1 [ -0 1 0 27.9997 ] [ 1 0 0 0 ] 180 0.5 0.25
+}
+}
+{
+"classname" "light"
+"_falloff" "0"
+"_fade" "1.0"
+"style" "0"
+"_light" "255 0 0 200"
+"origin" "-1013 1443 -1602"
+}
+{
+"classname" "env_message"
+"spawnflags" "2"
+"messageattenuation" "3"
+"messagevolume" "10"
+"targetname" "wesley_is_dead"
+"message" "SOMEONE KILLED WESLEY\nHE WAS MY ONLY FRIEND\nHE WAS TRENDY WITH HIS SPECTACLES\nWHO WILL FEED HIS PET CROCODILE NOW!?!?!\nALL PLAYERS, KILL WELSEY'S MURDERER!!"
+"messagesound" "ambient/scripted/blood_stinger.wav"
+"origin" "761 -100 -1554"
+}
+{
+"classname" "infodecal"
+"texture" "{CAPSW"
+"targetname" "wesley"
+"origin" "607 -64 -1400"
+}
+{
+"classname" "infodecal"
+"texture" "{CAPSE"
+"targetname" "wesley"
+"origin" "623 -64 -1400"
+}
+{
+"classname" "infodecal"
+"texture" "{CAPSS"
+"targetname" "wesley"
+"origin" "637 -64 -1399"
+}
+{
+"classname" "infodecal"
+"texture" "{CAPSL"
+"targetname" "wesley"
+"origin" "651 -64 -1399"
+}
+{
+"classname" "infodecal"
+"texture" "{CAPSE"
+"targetname" "wesley"
+"origin" "665 -64 -1400"
+}
+{
+"classname" "infodecal"
+"texture" "{CAPSY"
+"targetname" "wesley"
+"origin" "676 -64 -1401"
+}
+{
+"classname" "multi_manager"
+"targetname" "wesley_is_dead"
+"die_bitch" "1"
+"wesley" ".001"
+"wesley_red" "1"
+"origin" "593 -78 -1523"
+}
+{
+"classname" "env_explosion"
+"iMagnitude" "150"
+"targetname" "die_bitch"
+"origin" "663 -80 -1520"
+}
+{
+"classname" "env_explosion"
+"iMagnitude" "150"
+"targetname" "die_bitch"
+"origin" "680 -8 -1512"
+}
+{
+"classname" "trigger_hurt"
+"damagetype" "32"
+"delay" "0"
+"dmg" "999"
+{
+( 974 1545 -9 ) ( 974 1545 -233 ) ( 974 -2922 -9 ) AAATRIGGER [ 0 1 0 0 ] [ 0 0 -1 0 ] 0 1 1
+( -1013 -2922 -9 ) ( -1013 -2922 -233 ) ( -1013 1545 -9 ) AAATRIGGER [ 0 1 0 0 ] [ 0 0 -1 0 ] 0 1 1
+( 974 -2922 -9 ) ( 974 -2922 -233 ) ( -1013 -2922 -9 ) AAATRIGGER [ 1 0 0 0 ] [ 0 0 -1 0 ] 0 1 1
+( -1013 1545 -9 ) ( -1013 1545 -233 ) ( 974 1545 -9 ) AAATRIGGER [ 1 0 0 0 ] [ 0 0 -1 0 ] 0 1 1
+( -1013 1545 -233 ) ( -1013 -2922 -233 ) ( 974 1545 -233 ) AAATRIGGER [ 1 0 0 0 ] [ 0 -1 0 0 ] 0 1 1
+( 974 -2922 -9 ) ( -1013 -2922 -9 ) ( 974 1545 -9 ) AAATRIGGER [ 1 0 0 0 ] [ 0 -1 0 0 ] 0 1 1
+}
+}
+{
+"classname" "light"
+"_falloff" "0"
+"_fade" "1.0"
+"style" "0"
+"_light" "255 255 255 200"
+"origin" "749 547 -1724"
+}
+{
+"classname" "light"
+"spawnflags" "1"
+"_falloff" "0"
+"_fade" "1.0"
+"style" "0"
+"_light" "255 0 0 200"
+"targetname" "wesley_red"
+"origin" "490 33 -1406"
+}
+{
+"classname" "light"
+"spawnflags" "1"
+"_falloff" "0"
+"_fade" "1.0"
+"style" "0"
+"_light" "255 0 0 200"
+"targetname" "wesley_red"
+"origin" "848 216 -1397"
+}
+{
+"classname" "light"
+"spawnflags" "1"
+"_falloff" "0"
+"_fade" "1.0"
+"style" "0"
+"_light" "255 0 0 200"
+"targetname" "wesley_red"
+"origin" "521 357 -1386"
+}
+{
+"classname" "light"
+"spawnflags" "1"
+"_falloff" "0"
+"_fade" "1.0"
+"style" "0"
+"_light" "255 0 0 200"
+"targetname" "wesley_red"
+"origin" "650 475 -1386"
+}
+{
+"classname" "light"
+"spawnflags" "1"
+"_falloff" "0"
+"_fade" "1.0"
+"style" "0"
+"_light" "255 0 0 200"
+"targetname" "wesley_red"
+"origin" "678 -11 -1400"
+}
+{
+"classname" "ambient_generic"
+"spawnflags" "18"
+"cspinup" "0"
+"lfomodvol" "0"
+"lfomodpitch" "0"
+"lforate" "0"
+"lfotype" "0"
+"spindown" "0"
+"spinup" "0"
+"pitchstart" "100"
+"pitch" "100"
+"fadeout" "0"
+"fadein" "0"
+"volstart" "0"
+"preset" "0"
+"health" "10"
+"message" "ambient/wesley_r.wav"
+"targetname" "wesley"
+"origin" "725 -48 -1494"
+}
+{
+"classname" "env_shake"
+"spawnflags" "1"
+"frequency" "2.5"
+"duration" "5"
+"radius" "500"
+"amplitude" "16"
+"targetname" "wesley"
+"origin" "712 19 -1501"
 }
