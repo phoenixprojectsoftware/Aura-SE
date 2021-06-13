@@ -26,150 +26,150 @@
 void AgInitTimer();
 
 #ifdef AG_NO_CLIENT_DLL
-DLL_GLOBAL cvar_t	ag_version = { "sv_ag_version","6.7mini", FCVAR_SERVER };
+DLL_GLOBAL cvar_t	ag_version = { "sv_aura_version","1.1", FCVAR_SERVER };
 #else
-DLL_GLOBAL cvar_t	ag_version = { "sv_ag_version","6.7", FCVAR_SERVER };
+DLL_GLOBAL cvar_t	ag_version = { "sv_aura_version","1,1", FCVAR_SERVER };
 #endif
 
-DLL_GLOBAL cvar_t	ag_gamemode = { "sv_ag_gamemode","ffa", FCVAR_SERVER }; //The current gamemode
-DLL_GLOBAL cvar_t	ag_allowed_gamemodes = { "sv_ag_allowed_gamemodes","" };
+DLL_GLOBAL cvar_t	ag_gamemode = { "sv_aura_gamemode","ffa", FCVAR_SERVER }; //The current gamemode
+DLL_GLOBAL cvar_t	ag_allowed_gamemodes = { "sv_aura_allowed_gamemodes","" };
 
-DLL_GLOBAL cvar_t	ag_pure = { "sv_ag_pure","0",FCVAR_SERVER };     //Default off.
+DLL_GLOBAL cvar_t	ag_pure = { "sv_aura_pure","0",FCVAR_SERVER };     //Default off.
 
-DLL_GLOBAL cvar_t	ag_match_running = { "sv_ag_match_running","0",FCVAR_SERVER | FCVAR_UNLOGGED };          //Default not match. Protects players from wondering into the server.
+DLL_GLOBAL cvar_t	ag_match_running = { "sv_aura_match_running","0",FCVAR_SERVER | FCVAR_UNLOGGED };          //Default not match. Protects players from wondering into the server.
 
-DLL_GLOBAL cvar_t	ag_oldphysics = { "sv_ag_oldphysics","1" };
+DLL_GLOBAL cvar_t	ag_oldphysics = { "sv_aura_oldphysics","1" };
 
-DLL_GLOBAL cvar_t	ag_allow_timeout = { "sv_ag_allow_timeout","1" };       //Allow timeout.
+DLL_GLOBAL cvar_t	ag_allow_timeout = { "sv_aura_allow_timeout","1" };       //Allow timeout.
 
 // TODO: review if these should really be unlogged, I think it has some interest to log them and shouldn't be spammy
-DLL_GLOBAL cvar_t	ag_allow_vote = { "sv_ag_allow_vote","1", FCVAR_SERVER | FCVAR_UNLOGGED };       //Voting is enabled by default.
-DLL_GLOBAL cvar_t	ag_vote_start = { "sv_ag_vote_start","1", FCVAR_SERVER | FCVAR_UNLOGGED };                    //Start voting enabled by default
-DLL_GLOBAL cvar_t	ag_vote_setting = { "sv_ag_vote_setting","1" };                  //Setting voting enabled by default
-DLL_GLOBAL cvar_t	ag_vote_gamemode = { "sv_ag_vote_gamemode","1", FCVAR_SERVER | FCVAR_UNLOGGED };                 //Gamemode voting is enabled by default.
-DLL_GLOBAL cvar_t	ag_vote_kick = { "sv_ag_vote_kick","0" };                     //Kick voting is disabled by default. // TODO: review if this should be defaulted to 1
-DLL_GLOBAL cvar_t	ag_vote_allow = { "sv_ag_vote_allow","1" };                    //All voting is enabled by default.
-DLL_GLOBAL cvar_t	ag_vote_admin = { "sv_ag_vote_admin","0" };                    //Admin voting is disabled by default.
-DLL_GLOBAL cvar_t	ag_vote_map = { "sv_ag_vote_map","1", FCVAR_SERVER | FCVAR_UNLOGGED };                      //Map voting is enabled by default.
-DLL_GLOBAL cvar_t	ag_vote_failed_time = { "sv_ag_vote_failed_time","30" };
+DLL_GLOBAL cvar_t	ag_allow_vote = { "sv_aura_allow_vote","1", FCVAR_SERVER | FCVAR_UNLOGGED };       //Voting is enabled by default.
+DLL_GLOBAL cvar_t	ag_vote_start = { "sv_aura_vote_start","1", FCVAR_SERVER | FCVAR_UNLOGGED };                    //Start voting enabled by default
+DLL_GLOBAL cvar_t	ag_vote_setting = { "sv_aura_vote_setting","1" };                  //Setting voting enabled by default
+DLL_GLOBAL cvar_t	ag_vote_gamemode = { "sv_aura_vote_gamemode","1", FCVAR_SERVER | FCVAR_UNLOGGED };                 //Gamemode voting is enabled by default.
+DLL_GLOBAL cvar_t	ag_vote_kick = { "sv_aura_vote_kick","0" };                     //Kick voting is disabled by default. // TODO: review if this should be defaulted to 1
+DLL_GLOBAL cvar_t	ag_vote_allow = { "sv_aura_vote_allow","1" };                    //All voting is enabled by default.
+DLL_GLOBAL cvar_t	ag_vote_admin = { "sv_aura_vote_admin","0" };                    //Admin voting is disabled by default.
+DLL_GLOBAL cvar_t	ag_vote_map = { "sv_aura_vote_map","1", FCVAR_SERVER | FCVAR_UNLOGGED };                      //Map voting is enabled by default.
+DLL_GLOBAL cvar_t	ag_vote_failed_time = { "sv_aura_vote_failed_time","30" };
 
-DLL_GLOBAL cvar_t	ag_start_minplayers = { "sv_ag_start_minplayers","2" };
+DLL_GLOBAL cvar_t	ag_start_minplayers = { "sv_aura_start_minplayers","2" };
 
-DLL_GLOBAL cvar_t	ag_vote_mp_timelimit_low = { "sv_ag_vote_mp_timelimit_low","10" };
-DLL_GLOBAL cvar_t	ag_vote_mp_timelimit_high = { "sv_ag_vote_mp_timelimit_high","40" };
-DLL_GLOBAL cvar_t	ag_vote_mp_fraglimit_low = { "sv_ag_vote_mp_fraglimit_low","0" };
-DLL_GLOBAL cvar_t	ag_vote_mp_fraglimit_high = { "sv_ag_vote_mp_fraglimit_high","100" };
+DLL_GLOBAL cvar_t	ag_vote_mp_timelimit_low = { "sv_aura_vote_mp_timelimit_low","10" };
+DLL_GLOBAL cvar_t	ag_vote_mp_timelimit_high = { "sv_aura_vote_mp_timelimit_high","40" };
+DLL_GLOBAL cvar_t	ag_vote_mp_fraglimit_low = { "sv_aura_vote_mp_fraglimit_low","0" };
+DLL_GLOBAL cvar_t	ag_vote_mp_fraglimit_high = { "sv_aura_vote_mp_fraglimit_high","100" };
 
-DLL_GLOBAL cvar_t	ag_floodmsgs = { "sv_ag_floodmsgs","4" };
-DLL_GLOBAL cvar_t	ag_floodpersecond = { "sv_ag_floodpersecond","4" };
-DLL_GLOBAL cvar_t	ag_floodwaitdelay = { "sv_ag_floodwaitdelay","10" };
+DLL_GLOBAL cvar_t	ag_floodmsgs = { "sv_aura_floodmsgs","4" };
+DLL_GLOBAL cvar_t	ag_floodpersecond = { "sv_aura_floodpersecond","4" };
+DLL_GLOBAL cvar_t	ag_floodwaitdelay = { "sv_aura_floodwaitdelay","10" };
 
-DLL_GLOBAL cvar_t	ag_player_id = { "sv_ag_player_id","5" };           //Default 5 seconds.
-DLL_GLOBAL cvar_t	ag_auto_admin = { "sv_ag_auto_admin","1" };          //Default 1 = Autoauthenticate admins based on won id.
+DLL_GLOBAL cvar_t	ag_player_id = { "sv_aura_player_id","5" };           //Default 5 seconds.
+DLL_GLOBAL cvar_t	ag_auto_admin = { "sv_aura_auto_admin","1" };          //Default 1 = Autoauthenticate admins based on won id.
 
-DLL_GLOBAL cvar_t	ag_lj_timer = { "sv_ag_lj_timer","0" };            //Default 0 = turned off.
+DLL_GLOBAL cvar_t	ag_lj_timer = { "sv_aura_lj_timer","0" };            //Default 0 = turned off.
 
-DLL_GLOBAL cvar_t	ag_wallgauss = { "sv_ag_wallgauss","1" };           //Default 1 = Lame wallgauss on.
-DLL_GLOBAL cvar_t	ag_headshot = { "sv_ag_headshot","3" };            //Default 3 = 3 times damage
-DLL_GLOBAL cvar_t	ag_blastradius = { "sv_ag_blastradius","1" };         //Default 1 = Standard radius
-
-
-DLL_GLOBAL cvar_t	ag_ban_crowbar = { "sv_ag_ban_crowbar","0" };
-DLL_GLOBAL cvar_t	ag_ban_glock = { "sv_ag_ban_glock","0" };
-DLL_GLOBAL cvar_t	ag_ban_357 = { "sv_ag_ban_357","0" };
-DLL_GLOBAL cvar_t	ag_ban_mp5 = { "sv_ag_ban_mp5","0" };
-DLL_GLOBAL cvar_t	ag_ban_shotgun = { "sv_ag_ban_shotgun", "0" };
-DLL_GLOBAL cvar_t	ag_ban_crossbow = { "sv_ag_ban_crossbow", "0" };
-DLL_GLOBAL cvar_t	ag_ban_rpg = { "sv_ag_ban_rpg","0" };
-DLL_GLOBAL cvar_t	ag_ban_gauss = { "sv_ag_ban_gauss","0" };
-DLL_GLOBAL cvar_t	ag_ban_egon = { "sv_ag_ban_egon","0" };
-DLL_GLOBAL cvar_t	ag_ban_hornet = { "sv_ag_ban_hornet","0" };
-
-DLL_GLOBAL cvar_t	ag_ban_hgrenade = { "sv_ag_ban_hgrenade","0" };
-DLL_GLOBAL cvar_t	ag_ban_satchel = { "sv_ag_ban_satchel","0" };
-DLL_GLOBAL cvar_t	ag_ban_tripmine = { "sv_ag_ban_tripmine","0" };
-DLL_GLOBAL cvar_t	ag_ban_snark = { "sv_ag_ban_snark","0" };
-DLL_GLOBAL cvar_t	ag_ban_longjump = { "sv_ag_ban_longjump","0" };
-DLL_GLOBAL cvar_t	ag_ban_m203 = { "sv_ag_ban_m203","0" };
-DLL_GLOBAL cvar_t	ag_ban_9mmar = { "sv_ag_ban_9mmar","0" };
-DLL_GLOBAL cvar_t	ag_ban_bockshot = { "sv_ag_ban_bockshot","0" };
-DLL_GLOBAL cvar_t	ag_ban_uranium = { "sv_ag_ban_uranium","0" };
-DLL_GLOBAL cvar_t	ag_ban_bolts = { "sv_ag_ban_bolts","0" };
-DLL_GLOBAL cvar_t	ag_ban_rockets = { "sv_ag_ban_rockets","0" };
-DLL_GLOBAL cvar_t	ag_ban_357ammo = { "sv_ag_ban_357ammo","0" };
-
-DLL_GLOBAL cvar_t	ag_ban_armour = { "sv_ag_ban_armour","0" };
-DLL_GLOBAL cvar_t	ag_ban_health = { "sv_ag_ban_health","0" };
-DLL_GLOBAL cvar_t	ag_ban_recharg = { "sv_ag_ban_recharg","0" };
-
-DLL_GLOBAL cvar_t	ag_start_crowbar = { "sv_ag_start_crowbar","1" };
-DLL_GLOBAL cvar_t	ag_start_glock = { "sv_ag_start_glock","1" };
-DLL_GLOBAL cvar_t	ag_start_357 = { "sv_ag_start_357","0" };
-DLL_GLOBAL cvar_t	ag_start_mp5 = { "sv_ag_start_mp5","0" };
-DLL_GLOBAL cvar_t	ag_start_shotgun = { "sv_ag_start_shotgun", "0" };
-DLL_GLOBAL cvar_t	ag_start_crossbow = { "sv_ag_start_crossbow", "0" };
-DLL_GLOBAL cvar_t	ag_start_rpg = { "sv_ag_start_rpg","0" };
-DLL_GLOBAL cvar_t	ag_start_gauss = { "sv_ag_start_gauss","0" };
-DLL_GLOBAL cvar_t	ag_start_egon = { "sv_ag_start_egon","0" };
-DLL_GLOBAL cvar_t	ag_start_hornet = { "sv_ag_start_hornet","0" };
-
-DLL_GLOBAL cvar_t	ag_start_hgrenade = { "sv_ag_start_hgrenade","0" };
-DLL_GLOBAL cvar_t	ag_start_satchel = { "sv_ag_start_satchel","0" };
-DLL_GLOBAL cvar_t	ag_start_tripmine = { "sv_ag_start_tripmine","0" };
-DLL_GLOBAL cvar_t	ag_start_snark = { "sv_ag_start_snark","0" };
-DLL_GLOBAL cvar_t	ag_start_longjump = { "sv_ag_start_longjump","0" };
-DLL_GLOBAL cvar_t	ag_start_m203 = { "sv_ag_start_m203","0" };
-DLL_GLOBAL cvar_t	ag_start_9mmar = { "sv_ag_start_9mmar","68" };
-DLL_GLOBAL cvar_t	ag_start_bockshot = { "sv_ag_start_bockshot","0" };
-DLL_GLOBAL cvar_t	ag_start_uranium = { "sv_ag_start_uranium","0" };
-DLL_GLOBAL cvar_t	ag_start_bolts = { "sv_ag_start_bolts","0" };
-DLL_GLOBAL cvar_t	ag_start_rockets = { "sv_ag_start_rockets","0" };
-DLL_GLOBAL cvar_t	ag_start_357ammo = { "sv_ag_start_357ammo","0" };
-DLL_GLOBAL cvar_t	ag_start_armour = { "sv_ag_start_armour","0" };
-DLL_GLOBAL cvar_t	ag_start_health = { "sv_ag_start_health","100" };
-
-DLL_GLOBAL cvar_t	ag_dmg_crowbar = { "sv_ag_dmg_crowbar","25" };
-DLL_GLOBAL cvar_t	ag_dmg_glock = { "sv_ag_dmg_glock","12" };
-DLL_GLOBAL cvar_t	ag_dmg_357 = { "sv_ag_dmg_357","40" };
-DLL_GLOBAL cvar_t	ag_dmg_mp5 = { "sv_ag_dmg_mp5","12" };
-DLL_GLOBAL cvar_t	ag_dmg_shotgun = { "sv_ag_dmg_shotgun", "20" };
-DLL_GLOBAL cvar_t	ag_dmg_crossbow = { "sv_ag_dmg_crossbow", "20" };
-DLL_GLOBAL cvar_t	ag_dmg_bolts = { "sv_ag_dmg_bolts","50" };
-DLL_GLOBAL cvar_t	ag_dmg_rpg = { "sv_ag_dmg_rpg","120" };
-DLL_GLOBAL cvar_t	ag_dmg_gauss = { "sv_ag_dmg_gauss","20" };
-DLL_GLOBAL cvar_t	ag_dmg_egon_wide = { "sv_ag_dmg_egon_wide","20" };
-DLL_GLOBAL cvar_t	ag_dmg_egon_narrow = { "sv_ag_dmg_egon_narrow","10" };
-DLL_GLOBAL cvar_t	ag_dmg_hornet = { "sv_ag_dmg_hornet","10" };
-DLL_GLOBAL cvar_t	ag_dmg_hgrenade = { "sv_ag_dmg_hgrenade","100" };
-DLL_GLOBAL cvar_t	ag_dmg_satchel = { "sv_ag_dmg_satchel","120" };
-DLL_GLOBAL cvar_t	ag_dmg_tripmine = { "sv_ag_dmg_tripmine","150" };
-DLL_GLOBAL cvar_t	ag_dmg_m203 = { "sv_ag_dmg_m203","100" };
+DLL_GLOBAL cvar_t	ag_wallgauss = { "sv_aura_wallgauss","1" };           //Default 1 = Lame wallgauss on.
+DLL_GLOBAL cvar_t	ag_headshot = { "sv_aura_headshot","3" };            //Default 3 = 3 times damage
+DLL_GLOBAL cvar_t	ag_blastradius = { "sv_aura_blastradius","1" };         //Default 1 = Standard radius
 
 
-DLL_GLOBAL cvar_t	ag_max_spectators = { "sv_ag_max_spectators","5" };
-DLL_GLOBAL cvar_t	ag_spec_enable_disable = { "sv_ag_spec_enable_disable","0" };
+DLL_GLOBAL cvar_t	ag_ban_crowbar = { "sv_aura_ban_crowbar","0" };
+DLL_GLOBAL cvar_t	ag_ban_glock = { "sv_aura_ban_glock","0" };
+DLL_GLOBAL cvar_t	ag_ban_357 = { "sv_aura_ban_357","0" };
+DLL_GLOBAL cvar_t	ag_ban_mp5 = { "sv_aura_ban_mp5","0" };
+DLL_GLOBAL cvar_t	ag_ban_shotgun = { "sv_aura_ban_shotgun", "0" };
+DLL_GLOBAL cvar_t	ag_ban_crossbow = { "sv_aura_ban_crossbow", "0" };
+DLL_GLOBAL cvar_t	ag_ban_rpg = { "sv_aura_ban_rpg","0" };
+DLL_GLOBAL cvar_t	ag_ban_gauss = { "sv_aura_ban_gauss","0" };
+DLL_GLOBAL cvar_t	ag_ban_egon = { "sv_aura_ban_egon","0" };
+DLL_GLOBAL cvar_t	ag_ban_hornet = { "sv_aura_ban_hornet","0" };
+
+DLL_GLOBAL cvar_t	ag_ban_hgrenade = { "sv_aura_ban_hgrenade","0" };
+DLL_GLOBAL cvar_t	ag_ban_satchel = { "sv_aura_ban_satchel","0" };
+DLL_GLOBAL cvar_t	ag_ban_tripmine = { "sv_aura_ban_tripmine","0" };
+DLL_GLOBAL cvar_t	ag_ban_snark = { "sv_aura_ban_snark","0" };
+DLL_GLOBAL cvar_t	ag_ban_longjump = { "sv_aura_ban_longjump","0" };
+DLL_GLOBAL cvar_t	ag_ban_m203 = { "sv_aura_ban_m203","0" };
+DLL_GLOBAL cvar_t	ag_ban_9mmar = { "sv_aura_ban_9mmar","0" };
+DLL_GLOBAL cvar_t	ag_ban_bockshot = { "sv_aura_ban_bockshot","0" };
+DLL_GLOBAL cvar_t	ag_ban_uranium = { "sv_aura_ban_uranium","0" };
+DLL_GLOBAL cvar_t	ag_ban_bolts = { "sv_aura_ban_bolts","0" };
+DLL_GLOBAL cvar_t	ag_ban_rockets = { "sv_aura_ban_rockets","0" };
+DLL_GLOBAL cvar_t	ag_ban_357ammo = { "sv_aura_ban_357ammo","0" };
+
+DLL_GLOBAL cvar_t	ag_ban_armour = { "sv_aura_ban_armour","0" };
+DLL_GLOBAL cvar_t	ag_ban_health = { "sv_aura_ban_health","0" };
+DLL_GLOBAL cvar_t	ag_ban_recharg = { "sv_aura_ban_recharg","0" };
+
+DLL_GLOBAL cvar_t	ag_start_crowbar = { "sv_aura_start_crowbar","1" };
+DLL_GLOBAL cvar_t	ag_start_glock = { "sv_aura_start_glock","1" };
+DLL_GLOBAL cvar_t	ag_start_357 = { "sv_aura_start_357","0" };
+DLL_GLOBAL cvar_t	ag_start_mp5 = { "sv_aura_start_mp5","0" };
+DLL_GLOBAL cvar_t	ag_start_shotgun = { "sv_aura_start_shotgun", "0" };
+DLL_GLOBAL cvar_t	ag_start_crossbow = { "sv_aura_start_crossbow", "0" };
+DLL_GLOBAL cvar_t	ag_start_rpg = { "sv_aura_start_rpg","0" };
+DLL_GLOBAL cvar_t	ag_start_gauss = { "sv_aura_start_gauss","0" };
+DLL_GLOBAL cvar_t	ag_start_egon = { "sv_aura_start_egon","0" };
+DLL_GLOBAL cvar_t	ag_start_hornet = { "sv_aura_start_hornet","0" };
+
+DLL_GLOBAL cvar_t	ag_start_hgrenade = { "sv_aura_start_hgrenade","0" };
+DLL_GLOBAL cvar_t	ag_start_satchel = { "sv_aura_start_satchel","0" };
+DLL_GLOBAL cvar_t	ag_start_tripmine = { "sv_aura_start_tripmine","0" };
+DLL_GLOBAL cvar_t	ag_start_snark = { "sv_aura_start_snark","0" };
+DLL_GLOBAL cvar_t	ag_start_longjump = { "sv_aura_start_longjump","0" };
+DLL_GLOBAL cvar_t	ag_start_m203 = { "sv_aura_start_m203","0" };
+DLL_GLOBAL cvar_t	ag_start_9mmar = { "sv_aura_start_9mmar","68" };
+DLL_GLOBAL cvar_t	ag_start_bockshot = { "sv_aura_start_bockshot","0" };
+DLL_GLOBAL cvar_t	ag_start_uranium = { "sv_aura_start_uranium","0" };
+DLL_GLOBAL cvar_t	ag_start_bolts = { "sv_aura_start_bolts","0" };
+DLL_GLOBAL cvar_t	ag_start_rockets = { "sv_aura_start_rockets","0" };
+DLL_GLOBAL cvar_t	ag_start_357ammo = { "sv_aura_start_357ammo","0" };
+DLL_GLOBAL cvar_t	ag_start_armour = { "sv_aura_start_armour","0" };
+DLL_GLOBAL cvar_t	ag_start_health = { "sv_aura_start_health","100" };
+
+DLL_GLOBAL cvar_t	ag_dmg_crowbar = { "sv_aura_dmg_crowbar","25" };
+DLL_GLOBAL cvar_t	ag_dmg_glock = { "sv_aura_dmg_glock","12" };
+DLL_GLOBAL cvar_t	ag_dmg_357 = { "sv_aura_dmg_357","40" };
+DLL_GLOBAL cvar_t	ag_dmg_mp5 = { "sv_aura_dmg_mp5","12" };
+DLL_GLOBAL cvar_t	ag_dmg_shotgun = { "sv_aura_dmg_shotgun", "20" };
+DLL_GLOBAL cvar_t	ag_dmg_crossbow = { "sv_aura_dmg_crossbow", "20" };
+DLL_GLOBAL cvar_t	ag_dmg_bolts = { "sv_aura_dmg_bolts","50" };
+DLL_GLOBAL cvar_t	ag_dmg_rpg = { "sv_aura_dmg_rpg","120" };
+DLL_GLOBAL cvar_t	ag_dmg_gauss = { "sv_aura_dmg_gauss","20" };
+DLL_GLOBAL cvar_t	ag_dmg_egon_wide = { "sv_aura_dmg_egon_wide","20" };
+DLL_GLOBAL cvar_t	ag_dmg_egon_narrow = { "sv_aura_dmg_egon_narrow","10" };
+DLL_GLOBAL cvar_t	ag_dmg_hornet = { "sv_aura_dmg_hornet","10" };
+DLL_GLOBAL cvar_t	ag_dmg_hgrenade = { "sv_aura_dmg_hgrenade","100" };
+DLL_GLOBAL cvar_t	ag_dmg_satchel = { "sv_aura_dmg_satchel","120" };
+DLL_GLOBAL cvar_t	ag_dmg_tripmine = { "sv_aura_dmg_tripmine","150" };
+DLL_GLOBAL cvar_t	ag_dmg_m203 = { "sv_aura_dmg_m203","100" };
+
+
+DLL_GLOBAL cvar_t	ag_max_spectators = { "sv_aura_max_spectators","5" };
+DLL_GLOBAL cvar_t	ag_spec_enable_disable = { "sv_aura_spec_enable_disable","0" };
 DLL_GLOBAL cvar_t	ag_spectalk = { "ag_spectalk","1" };
 
-DLL_GLOBAL cvar_t	ag_spawn_volume = { "sv_ag_spawn_volume","1" };
-DLL_GLOBAL cvar_t	ag_show_gibs = { "sv_ag_show_gibs","1" };
+DLL_GLOBAL cvar_t	ag_spawn_volume = { "sv_aura_spawn_volume","1" };
+DLL_GLOBAL cvar_t	ag_show_gibs = { "sv_aura_show_gibs","1" };
 
-DLL_GLOBAL cvar_t	ag_gametype = { "sv_ag_gametype","" };
+DLL_GLOBAL cvar_t	ag_gametype = { "sv_aura_gametype","" };
 
-DLL_GLOBAL cvar_t	ag_ctf_flag_resettime = { "sv_ag_ctf_flag_resettime","30" };  //the time that a dropped flag lays in the world before respawning
-DLL_GLOBAL cvar_t	ag_ctf_capture_limit = { "sv_ag_ctf_capturelimit","10", FCVAR_SERVER };  //the number of captures before map ends.
-DLL_GLOBAL cvar_t	ag_ctf_teamcapturepoints = { "sv_ag_ctf_teamcapturepoints","1" };  //the ammount of points his teammates get
-DLL_GLOBAL cvar_t	ag_ctf_capturepoints = { "sv_ag_ctf_capturepoints","4" };  //the amount of points the capturer gets
-DLL_GLOBAL cvar_t	ag_ctf_returnpoints = { "sv_ag_ctf_returnpoints","1" };  //the amount of points the returner gets.
-DLL_GLOBAL cvar_t	ag_ctf_carrierkillpoints = { "sv_ag_ctf_carrierkillpoints","1" };  //the amount of points the killer gets.
-DLL_GLOBAL cvar_t	ag_ctf_stealpoints = { "sv_ag_ctf_stealpoints","1" };  //the amount of points the stealer gets.
-DLL_GLOBAL cvar_t	ag_ctf_defendpoints = { "sv_ag_ctf_defendpoints","1" };  //the amount of points the defender gets.
-DLL_GLOBAL cvar_t	ag_ctf_roundbased = { "sv_ag_ctf_roundbased","0" };  //1 for roundbased CTF game.
+DLL_GLOBAL cvar_t	ag_ctf_flag_resettime = { "sv_aura_ctf_flag_resettime","30" };  //the time that a dropped flag lays in the world before respawning
+DLL_GLOBAL cvar_t	ag_ctf_capture_limit = { "sv_aura_ctf_capturelimit","10", FCVAR_SERVER };  //the number of captures before map ends.
+DLL_GLOBAL cvar_t	ag_ctf_teamcapturepoints = { "sv_aura_ctf_teamcapturepoints","1" };  //the ammount of points his teammates get
+DLL_GLOBAL cvar_t	ag_ctf_capturepoints = { "sv_aura_ctf_capturepoints","4" };  //the amount of points the capturer gets
+DLL_GLOBAL cvar_t	ag_ctf_returnpoints = { "sv_aura_ctf_returnpoints","1" };  //the amount of points the returner gets.
+DLL_GLOBAL cvar_t	ag_ctf_carrierkillpoints = { "sv_aura_ctf_carrierkillpoints","1" };  //the amount of points the killer gets.
+DLL_GLOBAL cvar_t	ag_ctf_stealpoints = { "sv_aura_ctf_stealpoints","1" };  //the amount of points the stealer gets.
+DLL_GLOBAL cvar_t	ag_ctf_defendpoints = { "sv_aura_ctf_defendpoints","1" };  //the amount of points the defender gets.
+DLL_GLOBAL cvar_t	ag_ctf_roundbased = { "sv_aura_ctf_roundbased","0" };  //1 for roundbased CTF game.
 
 //++ muphicks
-DLL_GLOBAL cvar_t	ag_dom_mincontroltime = { "sv_ag_dom_mincontroltime","5" }; // number of seconds team must control point to score
-DLL_GLOBAL cvar_t	ag_dom_controlpoints = { "sv_ag_dom_controlpoints", "1" }; // number of points scored when under teams control
-DLL_GLOBAL cvar_t	ag_dom_resetscorelimit = { "sv_ag_dom_resetscorelimit", "6" }; // max time under 1 teams control 5*6 = 30 seconds
-DLL_GLOBAL cvar_t	ag_dom_scorelimit = { "sv_ag_dom_scorelimit", "200" }; // max points a team needs to get to win the game
+DLL_GLOBAL cvar_t	ag_dom_mincontroltime = { "sv_aura_dom_mincontroltime","5" }; // number of seconds team must control point to score
+DLL_GLOBAL cvar_t	ag_dom_controlpoints = { "sv_aura_dom_controlpoints", "1" }; // number of points scored when under teams control
+DLL_GLOBAL cvar_t	ag_dom_resetscorelimit = { "sv_aura_dom_resetscorelimit", "6" }; // max time under 1 teams control 5*6 = 30 seconds
+DLL_GLOBAL cvar_t	ag_dom_scorelimit = { "sv_aura_dom_scorelimit", "200" }; // max points a team needs to get to win the game
 //-- muphicks
 
 DLL_GLOBAL cvar_t	ag_gauss_fix = { "ag_gauss_fix","0" };            //Default 0 - no fix.

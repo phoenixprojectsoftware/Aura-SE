@@ -1999,7 +1999,7 @@ void CBasePlayer::PreThink(void)
         (int)CVAR_GET_FLOAT("mp_fraglimit"),
         (int)CVAR_GET_FLOAT("mp_friendlyfire"),
         (int)CVAR_GET_FLOAT("mp_weaponstay"),
-        CVAR_GET_STRING("sv_ag_wallgauss"));
+        CVAR_GET_STRING("sv_aura_wallgauss"));
     
       AgSay(this,szSetting,NULL,6,0.75,0.15,4);
 #else
@@ -2012,10 +2012,10 @@ void CBasePlayer::PreThink(void)
       WRITE_BYTE((int)CVAR_GET_FLOAT("mp_fraglimit"));
       WRITE_BYTE((int)CVAR_GET_FLOAT("mp_friendlyfire"));
       WRITE_BYTE((int)CVAR_GET_FLOAT("mp_weaponstay"));
-      WRITE_STRING(CVAR_GET_STRING("sv_ag_version"));
-      WRITE_STRING(CVAR_GET_STRING("sv_ag_wallgauss"));
-      WRITE_STRING(CVAR_GET_STRING("sv_ag_headshot"));
-      WRITE_STRING(CVAR_GET_STRING("sv_ag_blastradius"));
+      WRITE_STRING(CVAR_GET_STRING("sv_aura_version"));
+      WRITE_STRING(CVAR_GET_STRING("sv_aura_wallgauss"));
+      WRITE_STRING(CVAR_GET_STRING("sv_aura_headshot"));
+      WRITE_STRING(CVAR_GET_STRING("sv_aura_blastradius"));
       WRITE_STRING(spawnSystem.c_str());
     MESSAGE_END();
 #endif  
@@ -3111,7 +3111,7 @@ void CBasePlayer::Spawn( void )
 	g_engfuncs.pfnSetPhysicsKeyValue( edict(), "slj", "0" );
 	g_engfuncs.pfnSetPhysicsKeyValue( edict(), "hl", "1" );
   //++ BulliT
-  g_engfuncs.pfnSetPhysicsKeyValue( edict(), "bj", CVAR_GET_STRING("sv_ag_oldphysics") );
+  g_engfuncs.pfnSetPhysicsKeyValue( edict(), "bj", CVAR_GET_STRING("sv_aura_oldphysics") );
   m_fPlayerIdCheck = gpGlobals->time + 2;
   m_fLongjumpTimer = gpGlobals->time;
   //-- Martin Webrant
