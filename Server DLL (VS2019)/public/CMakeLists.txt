@@ -1,0 +1,11 @@
+add_subdirectory(cl_dll)
+add_subdirectory(steam)
+add_sources(
+FileSystem.h
+interface.cpp
+interface.h
+keydefs.h
+particleman.h
+pman_particlemem.h
+pman_triangleffect.h
+)

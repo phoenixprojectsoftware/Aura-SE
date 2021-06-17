@@ -1,0 +1,11 @@
+add_sources(
+pm_debug.cpp
+pm_debug.h
+pm_defs.h
+pm_info.h
+pm_materials.h
+pm_math.cpp
+pm_movevars.h
+pm_shared.cpp
+pm_shared.h
+)
