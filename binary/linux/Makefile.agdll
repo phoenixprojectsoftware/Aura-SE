@@ -4,7 +4,7 @@
 # Feb 2001 by Leon Hartwig (hartwig@valvesoftware.com)
 #
 
-MODNAME=ag
+MODNAME=aura
 
 HLDLL_SRC_DIR=$(SOURCE_DIR)/dlls
 HLWPN_SRC_DIR=$(HLDLL_SRC_DIR)/wpn_shared
@@ -132,6 +132,7 @@ HLDLL_OBJS = \
 	$(HLDLL_OBJ_DIR)/weapons.o \
 	$(HLDLL_OBJ_DIR)/world.o \
 	$(HLDLL_OBJ_DIR)/xen.o \
+	$(HLDLL_OBJ_DIR)/zamn.o \
 	$(HLDLL_OBJ_DIR)/zombie.o \
 	$(HLDLL_OBJ_DIR)/agadmin.o \
 	$(HLDLL_OBJ_DIR)/agadmincache.o \
