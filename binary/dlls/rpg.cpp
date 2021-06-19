@@ -377,7 +377,6 @@ void CRpg::Precache( void )
 	UTIL_PrecacheOther( "rpg_rocket" );
 
 	PRECACHE_SOUND("weapons/rocketfire1.wav");
-	PRECACHE_SOUND("weapons/glauncher.wav"); // alternative fire sound
 
 	m_usRpg = PRECACHE_EVENT ( 1, "events/rpg.sc" );
 }
@@ -503,7 +502,6 @@ void CRpg::PrimaryAttack()
 
 #ifndef CLIENT_WEAPONS
 		EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_WEAPON, "weapons/rocketfire1.wav", 0.9, ATTN_NORM);
-		EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_ITEM, "weapons/glauncher.wav", 0.7, ATTN_NORM);
 		m_pPlayer->pev->punchangle.x -= 5;
 #else
 		PLAYBACK_EVENT(flags, m_pPlayer->edict(), m_usRpg);
