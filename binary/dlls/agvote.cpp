@@ -337,6 +337,20 @@ bool AgVote::HandleCommand(CBasePlayer* pPlayer)
                     return true;
                 }
 
+                return true;
+            }
+            else if (FStrEq(m_sVote.c_str(), "agmoretime"))
+            {
+                if (!ag_vote_setting.value)
+                {
+                    AgConsole("Voting settings is not allowed here.", pPlayer);
+                    return true;
+                }
+                if (!ag_vote_extra_timelimit.value)
+                {
+                    AgConsole("Voting for extra timelimit is not allowed here.", pPlayer);
+                    return true;
+                }
                 CallVote(pPlayer);
                 return true;
             }
