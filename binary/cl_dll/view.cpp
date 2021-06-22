@@ -43,6 +43,7 @@
 	extern float	vJumpAngles[3];
 
 
+void NewPunch(float* ev_punchangle, float frametime);
 void V_DropPunchAngle ( float frametime, float *ev_punchangle );
 void VectorAngles( const float *forward, float *angles );
 
@@ -1682,6 +1683,71 @@ void V_DropPunchAngle ( float frametime, float *ev_punchangle )
 	len = V_max( len, 0.0 );
 	VectorScale ( ev_punchangle, len, ev_punchangle );
 }
+
+
+/*
+
+=============
+
+PLut Client Punch From HL2
+
+=============
+
+*/
+
+#define PUNCH_DAMPING		9.0f		// bigger number makes the response more damped, smaller is less damped
+
+// currently the system will overshoot, with larger damping values it won't
+
+#define PUNCH_SPRING_CONSTANT	65.0f	// bigger number increases the speed at which the view corrects
+
+
+
+#define clamp( val, min, max ) ( ((val) > (max)) ? (max) : ( ((val) < (min)) ? (min) : (val) ) )
+
+
+
+vec3_t punch;
+
+
+void NewPunch(float* ev_punchangle, float frametime)
+{
+	float damping;
+	float springForceMagnitude;
+
+	if (Length(ev_punchangle) > 0.001 || Length(punch) > 0.001)
+	{
+		VectorMA(ev_punchangle, frametime, punch, ev_punchangle);
+
+		damping = 1 - (PUNCH_DAMPING * frametime);
+
+		if (damping < 0)
+		{
+			damping = 0;
+		}
+		VectorScale(punch, damping, punch);
+
+		// torsional spring
+		// UNDONE: Per-axis spring constant?
+		springForceMagnitude = PUNCH_SPRING_CONSTANT * frametime;
+		springForceMagnitude = clamp(springForceMagnitude, 0, 2);
+
+		VectorMA(punch, -springForceMagnitude, ev_punchangle, punch);
+
+		// don't wrap around
+		ev_punchangle[0] = clamp(ev_punchangle[0], -7, 7);
+		ev_punchangle[1] = clamp(ev_punchangle[1], -179, 179);
+		ev_punchangle[2] = clamp(ev_punchangle[2], -7, 7);
+	}
+}
+
+void Punch(float p, float y, float r)
+{
+	punch[0] -= p * 20;
+	punch[1] += y * 20;
+	punch[2] += r * 20;
+}
+
 
 /*
 =============

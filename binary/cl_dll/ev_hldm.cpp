@@ -41,6 +41,7 @@ static int tracerCount[ 32 ];
 
 #include "pm_shared.h"
 
+void Punch(float p, float y, float r);
 void V_PunchAxis( int axis, float punch );
 void VectorAngles( const float *forward, float *angles );
 
