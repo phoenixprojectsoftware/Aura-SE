@@ -3234,7 +3234,7 @@ void PM_PlayerMove ( qboolean server )
 
 			// See if we landed on the ground with enough force to play
 			//  a landing sound.
-			// PM_CheckFalling();
+			PM_CheckFalling();
 		}
 
 		// Did we enter or leave the water?
