@@ -30,22 +30,3 @@ jobs:
       # Add additional options to the MSBuild command line here (like platform or verbosity level).
       # See https://docs.microsoft.com/visualstudio/msbuild/msbuild-command-line-reference
       run: msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} ${{env.PROJECT_FILE_PATH}}
-
-    - name: Build release Windows tools
-      working-directory: ${{env.GITHUB_WORKSPACE}}
-      run: msbuild /m ${{env.UTIL_FILE_PATH}} /p:Configuration=${{env.RELEASE_CONFIGURATION}} /p:IncludePath=../../ext
-
-    - name: Package release Windows tools
-      working-directory: ${{env.GITHUB_WORKSPACE}}
-      run: |
-        New-Item -Force -ItemType Directory $env:TEMP\${{env.RELEASE_CONFIGURATION}}
-        Copy-Item -Force -Recurse -Filter *.exe -Path projects/vs2019/${{env.RELEASE_CONFIGURATION}} -Destination $env:TEMP/${{env.RELEASE_CONFIGURATION}}
-        Copy-Item -Force binary/projects/vs2019/${{env.RELEASE_CONFIGURATION}}/procinfo/procinfo.lib $env:TEMP/${{env.RELEASE_CONFIGURATION}}/Release/procinfo
-        Compress-Archive -LiteralPath $env:TEMP\${{env.RELEASE_CONFIGURATION}} -DestinationPath .\windows-release-tools.zip -Force
-
-      
-    - name: upload-artifact
-      uses: actions/upload-artifact@v2
-      with:
-        name: windows-release-tools
-        path: ./windows-release-tools.zip
