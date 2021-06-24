@@ -2719,7 +2719,7 @@ void PM_NewPunch(vec3_t ev_punchangle, float frametime)
 	}
 }
 
-void PM_CheckFalling( void )
+void PM_CheckFalling(void)
 {
 	if ( pmove->onground != -1 &&
 		 !pmove->dead &&
@@ -3234,7 +3234,7 @@ void PM_PlayerMove ( qboolean server )
 
 			// See if we landed on the ground with enough force to play
 			//  a landing sound.
-			PM_CheckFalling();
+			// PM_CheckFalling();
 		}
 
 		// Did we enter or leave the water?

@@ -227,9 +227,6 @@
     <ClCompile Include="..\..\dlls\zombie.cpp" />
     <ClCompile Include="..\..\game_shared\voice_gamemgr.cpp" />
     <ClCompile Include="..\..\ministl\algo.cpp" />
-    <ClCompile Include="..\..\pm_shared\pm_debug.cpp" />
-    <ClCompile Include="..\..\pm_shared\pm_math.cpp" />
-    <ClCompile Include="..\..\pm_shared\pm_shared.cpp" />
     <ClCompile Include="..\..\dlls\agadmin.cpp" />
     <ClCompile Include="..\..\dlls\agadmincache.cpp" />
     <ClCompile Include="..\..\dlls\agarena.cpp" />
@@ -255,6 +252,9 @@
     <ClCompile Include="..\..\dlls\agtimer.cpp" />
     <ClCompile Include="..\..\dlls\agvote.cpp" />
     <ClCompile Include="..\..\dlls\agwallhack.cpp" />
+    <ClCompile Include="..\..\pm_shared\pm_debug.cpp" />
+    <ClCompile Include="..\..\pm_shared\pm_math.cpp" />
+    <ClCompile Include="..\..\pm_shared\pm_shared.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\common\const.h" />
