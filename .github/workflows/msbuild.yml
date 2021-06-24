@@ -46,7 +46,7 @@ jobs:
       working-directory: ${{env.GITHUB_WORKSPACE}}
       run: |
         New-Item -Force -ItemType Directory @("$env:TEMP\release","$env:TEMP\release\aura")
-        Copy-Item -Force binary/projects/vs2019/${{env.RELEASE_CONFIGURATION}}/hldll/hl.dll $env:TEMP/release/aura
+        Copy-Item -Force binary/projects/vs2019/${{env.RELEASE_CONFIGURATION}}/auradll/aura.dll $env:TEMP/release/aura
         Compress-Archive -LiteralPath $env:TEMP\release -DestinationPath .\release-game-dlls.zip -Force
     - name: Upload release game libs
       uses: actions/upload-artifact@v2
