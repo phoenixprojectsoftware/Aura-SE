@@ -16,7 +16,7 @@ jobs:
     - name: configure
       run: ./configure
     - name: cd-to-build-folder
-    - run: cd binary/linux
+      run: cd binary/linux
     - name: make
       run: make
     - name: make check
