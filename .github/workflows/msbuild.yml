@@ -79,11 +79,11 @@ jobs:
       run: sudo apt-get install gcc-4.8-multilib g++-4.8-multilib -y
 
     - name: Build debug Linux so libs
-      run: cd linux && make all CFG=${{env.DEBUG_CONFIGURATION}}
+      run: cd binary/linux && make all CFG=${{env.DEBUG_CONFIGURATION}}
 
     - name: Package debug Linux so libs
       run: |
-        cd linux
+        cd binary/linux
         mkdir ${{env.DEBUG_CONFIGURATION}}/aura && mv ${{env.DEBUG_CONFIGURATION}}/aura.so ${{env.DEBUG_CONFIGURATION}}/aura  ${{env.DEBUG_CONFIGURATION}}/aura
         zip -r debug-game-linux-libs.zip ${{env.DEBUG_CONFIGURATION}}/aura
     - name: Upload debug Linux game libs
@@ -93,11 +93,11 @@ jobs:
         path: ./linux/debug-game-linux-libs.zip
 
     - name: Build release Linux so libs
-      run: cd linux && make all CFG=${{env.RELEASE_CONFIGURATION}}
+      run: cd binary/linux && make all CFG=${{env.RELEASE_CONFIGURATION}}
 
     - name: Package release Linux so libs
       run: |
-        cd linux
+        cd binary/linux
         mkdir ${{env.RELEASE_CONFIGURATION}}/aura && mv ${{env.RELEASE_CONFIGURATION}}/aura.so ${{env.RELEASE_CONFIGURATION}}/aura ${{env.RELEASE_CONFIGURATION}}/aura
         zip -r release-game-linux-libs.zip ${{env.RELEASE_CONFIGURATION}}/aura
     - name: Upload release Linux game libs
@@ -120,11 +120,11 @@ jobs:
         sudo ln -s /tmp/sdk/MacOSX10.8.sdk $(/usr/bin/xcode-select -print-path)/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk
         rm sdk.tar
     - name: Build debug macOS dylibs
-      run: cd linux && make all CFG=${{env.DEBUG_CONFIGURATION}}
+      run: cd binary/linux && make all CFG=${{env.DEBUG_CONFIGURATION}}
 
     - name: Package debug macOS dylibs
       run: |
-        cd linux
+        cd binary/linux
         mkdir ${{env.DEBUG_CONFIGURATION}}/hl && mv ${{env.DEBUG_CONFIGURATION}}/aura.dylib ${{env.DEBUG_CONFIGURATION}}/aura  ${{env.DEBUG_CONFIGURATION}}/aura
         zip -r debug-game-macos-dylibs.zip ${{env.DEBUG_CONFIGURATION}}/aura
     - name: Upload debug macOS game dylibs
@@ -134,11 +134,11 @@ jobs:
         path: ./linux/debug-game-macos-dylibs.zip
 
     - name: Build release macOS dylibs
-      run: cd linux && make all CFG=${{env.RELEASE_CONFIGURATION}}
+      run: cd binary/linux && make all CFG=${{env.RELEASE_CONFIGURATION}}
 
     - name: Package release macOS dylibs
       run: |
-        cd linux
+        cd binary/linux
         mkdir ${{env.RELEASE_CONFIGURATION}}/hl && mv ${{env.RELEASE_CONFIGURATION}}/aura.dylib ${{env.RELEASE_CONFIGURATION}}/aura  ${{env.RELEASE_CONFIGURATION}}/hl
         zip -r release-game-macos-dylibs.zip ${{env.RELEASE_CONFIGURATION}}/aura
     - name: Upload release macOS game dylibs
