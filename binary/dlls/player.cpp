@@ -123,7 +123,7 @@ TYPEDESCRIPTION	CBasePlayer::m_playerSaveData[] =
 	DEFINE_FIELD(CBasePlayer, m_iFOV, FIELD_INTEGER),
 
 	DEFINE_FIELD(CBasePlayer, m_flNextAttack, FIELD_FLOAT),
-	
+
 	DEFINE_FIELD(CBasePlayer, m_flStartCharge, FIELD_TIME),
 #if defined( CLIENT_WEAPONS )
 	DEFINE_FIELD(CBasePlayer, m_flAmmoStartCharge, FIELD_FLOAT),
@@ -132,6 +132,9 @@ TYPEDESCRIPTION	CBasePlayer::m_playerSaveData[] =
 #endif
 	DEFINE_FIELD(CBasePlayer, m_flPlayAftershock, FIELD_TIME),
 	DEFINE_FIELD(CBasePlayer, m_flNextAmmoBurn, FIELD_FLOAT),
+
+	// HL2 Punchangle
+	DEFINE_FIELD(CBasePlayer, m_vecPunchangle, FIELD_VECTOR),
 
 	//DEFINE_FIELD( CBasePlayer, m_fDeadTime, FIELD_FLOAT ), // only used in multiplayer games
 	//DEFINE_FIELD( CBasePlayer, m_fGameHUDInitialized, FIELD_INTEGER ), // only used in multiplayer games
@@ -1946,9 +1949,66 @@ void CBasePlayer::UpdateStatusBar()
 
 
 
+/*
+=============
+PLut Client Punch From HL2
+=============
+*/
+#define PUNCH_DAMPING        9.0f        // bigger number makes the response more damped, smaller is less damped
+// currently the system will overshoot, with larger damping values it won't
+#define PUNCH_SPRING_CONSTANT    65.0f    // bigger number increases the speed at which the view corrects
+#define clamp( val, min, max ) ( ((val) > (max)) ? (max) : ( ((val) < (min)) ? (min) : (val) ) )
+
+#define VectorMA(veca, scale, vecb, vecc) \
+{\
+	vecc[0] = veca[0] + scale * vecb[0];\
+	vecc[1] = veca[1] + scale * vecb[1];\
+	vecc[2] = veca[2] + scale * vecb[2];\
+}
 
 
+void CBasePlayer::NewPunch()
+{
+	// pmove->vuser1 is punch
+	float damping;
+	float springForceMagnitude;
 
+	if (pev->punchangle.Length() > 0.001 || m_vecPunchangle.Length() > 0.001)
+	{
+		VectorMA(pev->punchangle, gpGlobals->frametime, m_vecPunchangle, pev->punchangle);
+		damping = 1 - (PUNCH_DAMPING * gpGlobals->frametime);
+
+		if (damping < 0)
+		{
+			damping = 0;
+		}
+
+		m_vecPunchangle = m_vecPunchangle * damping;
+
+		// torsional spring
+		// UNDONE: Per-axis spring constant?
+		springForceMagnitude = PUNCH_SPRING_CONSTANT * gpGlobals->frametime;
+		springForceMagnitude = clamp(springForceMagnitude, 0, 2);
+
+		VectorMA(m_vecPunchangle, -springForceMagnitude, pev->punchangle, m_vecPunchangle);
+
+		// don't wrap around
+		pev->punchangle[0] = clamp(pev->punchangle[0], -7, 7);
+		pev->punchangle[1] = clamp(pev->punchangle[1], -179, 179);
+		pev->punchangle[2] = clamp(pev->punchangle[2], -7, 7);
+	}
+}
+
+// Used by pm_shared
+void SetPunchAngle(int index, int axis, float punch)
+{
+	CBasePlayer* pPlayer = (CBasePlayer *)GET_PRIVATE(INDEXENT(index + 1));
+
+	if (pPlayer && pPlayer->IsPlayer())
+	{
+		pPlayer->SetPunchAngle(axis, punch);
+	}
+}
 
 
 
@@ -1970,6 +2030,9 @@ void CBasePlayer::PreThink(void)
 	m_afButtonReleased = buttonsChanged & (~pev->button);	// The ones not down are "released"
 
 	g_pGameRules->PlayerThink( this );
+
+	// HL2 PUNCH
+	NewPunch();
 
 	if ( g_fGameOver )
 		return;         // intermission or finale
