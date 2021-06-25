@@ -7837,30 +7837,34 @@
 }
 {
 "classname" "light"
-"spawnflags" "0"
+"spawnflags" "1"
 "_light" "255 255 127 255"
 "angles" "0 0 0"
+"targetname" "day"
 "origin" "-592 -1728 -1712"
 }
 {
 "classname" "light"
-"spawnflags" "0"
+"spawnflags" "1"
 "_light" "255 255 127 255"
 "angles" "0 0 0"
+"targetname" "day"
 "origin" "-240 -1728 -1712"
 }
 {
 "classname" "light"
-"spawnflags" "0"
+"spawnflags" "1"
 "_light" "255 255 127 255"
 "angles" "0 0 0"
+"targetname" "day"
 "origin" "592 -1728 -1712"
 }
 {
 "classname" "light"
-"spawnflags" "0"
+"spawnflags" "1"
 "_light" "255 255 127 255"
 "angles" "0 0 0"
+"targetname" "day"
 "origin" "240 -1728 -1712"
 }
 {
@@ -9129,22 +9133,24 @@
 }
 {
 "classname" "light"
-"spawnflags" "0"
+"spawnflags" "1"
 "_falloff" "0"
 "_fade" "1.0"
 "style" "0"
 "_light" "255 255 127 255"
 "angles" "0 0 0"
+"targetname" "day"
 "origin" "379 -1639 -1664"
 }
 {
 "classname" "light"
-"spawnflags" "0"
+"spawnflags" "1"
 "_falloff" "0"
 "_fade" "1.0"
 "style" "0"
 "_light" "255 255 127 255"
 "angles" "0 0 0"
+"targetname" "day"
 "origin" "456 -1636 -1664"
 }
 {
@@ -9279,32 +9285,35 @@
 }
 {
 "classname" "light"
-"spawnflags" "0"
+"spawnflags" "1"
 "_falloff" "0"
 "_fade" "1.0"
 "style" "0"
 "_light" "255 255 255 200"
 "angles" "0 0 0"
+"targetname" "day"
 "origin" "3 -248 -1576"
 }
 {
 "classname" "light"
-"spawnflags" "0"
+"spawnflags" "1"
 "_falloff" "0"
 "_fade" "1.0"
 "style" "0"
 "_light" "255 255 255 200"
 "angles" "0 0 0"
+"targetname" "day"
 "origin" "-252 -248 -1574"
 }
 {
 "classname" "light"
-"spawnflags" "0"
+"spawnflags" "1"
 "_falloff" "0"
 "_fade" "1.0"
 "style" "0"
 "_light" "255 255 255 200"
 "angles" "0 0 0"
+"targetname" "day"
 "origin" "252 -248 -1576"
 }
 {
@@ -9500,12 +9509,13 @@
 }
 {
 "classname" "light"
-"spawnflags" "0"
+"spawnflags" "1"
 "_falloff" "0"
 "_fade" "1.0"
 "style" "0"
 "_light" "255 255 255 200"
 "angles" "0 0 0"
+"targetname" "day"
 "origin" "-280 80 -1504"
 }
 {
@@ -9839,12 +9849,13 @@
 }
 {
 "classname" "light"
-"spawnflags" "0"
+"spawnflags" "1"
 "_falloff" "0"
 "_fade" "1.0"
 "style" "0"
 "_light" "255 255 255 200"
 "angles" "0 0 0"
+"targetname" "day"
 "origin" "-104 80 -1507"
 }
 {
@@ -10306,42 +10317,46 @@
 }
 {
 "classname" "light"
-"spawnflags" "0"
+"spawnflags" "1"
 "_falloff" "0"
 "_fade" "1.0"
 "style" "0"
 "_light" "255 255 255 200"
 "angles" "0 0 0"
+"targetname" "day"
 "origin" "-162 -1885 -1648"
 }
 {
 "classname" "light"
-"spawnflags" "0"
+"spawnflags" "1"
 "_falloff" "0"
 "_fade" "1.0"
 "style" "0"
 "_light" "255 255 255 200"
 "angles" "0 0 0"
+"targetname" "day"
 "origin" "-98 -2072 -1625"
 }
 {
 "classname" "light"
-"spawnflags" "0"
+"spawnflags" "1"
 "_falloff" "0"
 "_fade" "1.0"
 "style" "0"
 "_light" "255 255 255 200"
 "angles" "0 0 0"
+"targetname" "day"
 "origin" "94 -2073 -1625"
 }
 {
 "classname" "light"
-"spawnflags" "0"
+"spawnflags" "1"
 "_falloff" "0"
 "_fade" "1.0"
 "style" "0"
 "_light" "255 255 255 200"
 "angles" "0 0 0"
+"targetname" "day"
 "origin" "160 -1888 -1648"
 }
 {

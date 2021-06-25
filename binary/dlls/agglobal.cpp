@@ -124,7 +124,8 @@ DLL_GLOBAL cvar_t	ag_start_bockshot = { "sv_aura_start_bockshot","0" };
 DLL_GLOBAL cvar_t	ag_start_uranium = { "sv_aura_start_uranium","0" };
 DLL_GLOBAL cvar_t	ag_start_bolts = { "sv_aura_start_bolts","0" };
 DLL_GLOBAL cvar_t	ag_start_rockets = { "sv_aura_start_rockets","0" };
-DLL_GLOBAL cvar_t	ag_start_357ammo = { "sv_aura_start_357ammo","0" };
+DLL_GLOBAL cvar_t ag_start_357ammo = { "sv_aura_start_357ammo","0" };
+DLL_GLOBAL cvar_t ag_start_penguin = { "sv_aura_start_penguin", "0" };
 DLL_GLOBAL cvar_t	ag_start_armour = { "sv_aura_start_armour","0" };
 DLL_GLOBAL cvar_t	ag_start_health = { "sv_aura_start_health","100" };
 
@@ -260,6 +261,7 @@ void AgInitGame()
     CVAR_REGISTER(&ag_start_gauss);
     CVAR_REGISTER(&ag_start_egon);
     CVAR_REGISTER(&ag_start_hornet);
+    CVAR_REGISTER(&ag_start_penguin);
 
     CVAR_REGISTER(&ag_start_hgrenade);
     CVAR_REGISTER(&ag_start_satchel);

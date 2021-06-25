@@ -86,6 +86,7 @@ extern cvar_t	ag_start_rpg;
 extern cvar_t	ag_start_gauss;
 extern cvar_t	ag_start_egon;
 extern cvar_t	ag_start_hornet;
+extern cvar_t ag_start_penguin;
 
 extern cvar_t	ag_start_hgrenade;
 extern cvar_t	ag_start_satchel;

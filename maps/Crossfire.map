@@ -6,7 +6,7 @@
 "angles" "0 0 0"
 "skyname" "night"
 "mapversion" "220"
-"wad" "\Program Files (x86)\Steam\steamapps\common\Half-Life\zamnhlmp\aw_agctf.wad;\Program Files (x86)\Steam\steamapps\common\Half-Life\zamnhlmp\cached.wad;\Program Files (x86)\Steam\steamapps\common\Half-Life\zamnhlmp\creative.wad;\Program Files (x86)\Steam\steamapps\common\Half-Life\zamnhlmp\cs_747.wad;\Program Files (x86)\Steam\steamapps\common\Half-Life\zamnhlmp\cs_assault.wad;\Program Files (x86)\Steam\steamapps\common\Half-Life\zamnhlmp\cs_bdog.wad;\Program Files (x86)\Steam\steamapps\common\Half-Life\zamnhlmp\cs_cbble.wad;\Program Files (x86)\Steam\steamapps\common\Half-Life\zamnhlmp\cs_dust.wad;\Program Files (x86)\Steam\steamapps\common\Half-Life\zamnhlmp\cs_havana.wad;\Program Files (x86)\Steam\steamapps\common\Half-Life\zamnhlmp\cs_office.wad;\Program Files (x86)\Steam\steamapps\common\Half-Life\zamnhlmp\cstrike.wad;\Program Files (x86)\Steam\steamapps\common\Half-Life\zamnhlmp\de_aztec.wad;\Program Files (x86)\Steam\steamapps\common\Half-Life\zamnhlmp\de_piranesi.wad;\Program Files (x86)\Steam\steamapps\common\Half-Life\zamnhlmp\decals.wad;\Program Files (x86)\Steam\steamapps\common\Half-Life\zamnhlmp\dmc.wad;\Program Files (x86)\Steam\steamapps\common\Half-Life\zamnhlmp\fof_32.wad;\Program Files (x86)\Steam\steamapps\common\Half-Life\zamnhlmp\fof_chillbhop_btm.wad;\Program Files (x86)\Steam\steamapps\common\Half-Life\zamnhlmp\fonts.wad;\Program Files (x86)\Steam\steamapps\common\Half-Life\zamnhlmp\gfx.wad;\Program Files (x86)\Steam\steamapps\common\Half-Life\zamnhlmp\halflife.wad;\Program Files (x86)\Steam\steamapps\common\Half-Life\zamnhlmp\liquids.wad;\Program Files (x86)\Steam\steamapps\common\Half-Life\zamnhlmp\n0th1ng.wad;\Program Files (x86)\Steam\steamapps\common\Half-Life\zamnhlmp\spraypaint.wad;\Program Files (x86)\Steam\steamapps\common\Half-Life\zamnhlmp\tempdecal.wad;\Program Files (x86)\Steam\steamapps\common\Half-Life\zamnhlmp\timecounter.wad;\Program Files (x86)\Steam\steamapps\common\Half-Life\zamnhlmp\xeno.wad;\Program Files (x86)\Steam\steamapps\common\Half-Life\zamnhlmp\zamn.wad;\Program Files (x86)\Steam\steamapps\common\Half-Life\zamnhlmp\zamnhlmp.wad"
+"wad" "\Program Files (x86)\Steam\steamapps\common\Half-Life\zamnhlmp\fof_32.wad;\Program Files (x86)\Steam\steamapps\common\Half-Life\zamnhlmp\halflife.wad;\Program Files (x86)\Steam\steamapps\common\Half-Life\zamnhlmp\zamn.wad;\Program Files (x86)\Steam\steamapps\common\Half-Life\zamnhlmp\aw_agctf.wad;\Program Files (x86)\Steam\steamapps\common\Half-Life\zamnhlmp\barney.wad;\Program Files (x86)\Steam\steamapps\common\Half-Life\zamnhlmp\cached.wad;\Program Files (x86)\Steam\steamapps\common\Half-Life\zamnhlmp\creative.wad;\Program Files (x86)\Steam\steamapps\common\Half-Life\zamnhlmp\cs_747.wad;\Program Files (x86)\Steam\steamapps\common\Half-Life\zamnhlmp\cs_assault.wad;\Program Files (x86)\Steam\steamapps\common\Half-Life\zamnhlmp\cs_bdog.wad;\Program Files (x86)\Steam\steamapps\common\Half-Life\zamnhlmp\cs_cbble.wad;\Program Files (x86)\Steam\steamapps\common\Half-Life\zamnhlmp\cs_dust.wad;\Program Files (x86)\Steam\steamapps\common\Half-Life\zamnhlmp\cs_havana.wad;\Program Files (x86)\Steam\steamapps\common\Half-Life\zamnhlmp\cs_office.wad;\Program Files (x86)\Steam\steamapps\common\Half-Life\zamnhlmp\cstrike.wad;\Program Files (x86)\Steam\steamapps\common\Half-Life\zamnhlmp\cute.wad;\Program Files (x86)\Steam\steamapps\common\Half-Life\zamnhlmp\de_aztec.wad;\Program Files (x86)\Steam\steamapps\common\Half-Life\zamnhlmp\de_piranesi.wad;\Program Files (x86)\Steam\steamapps\common\Half-Life\zamnhlmp\decals.wad;\Program Files (x86)\Steam\steamapps\common\Half-Life\zamnhlmp\decay.wad;\Program Files (x86)\Steam\steamapps\common\Half-Life\zamnhlmp\dmc.wad;\Program Files (x86)\Steam\steamapps\common\Half-Life\zamnhlmp\fof_chillbhop_btm.wad;\Program Files (x86)\Steam\steamapps\common\Half-Life\zamnhlmp\fonts.wad;\Program Files (x86)\Steam\steamapps\common\Half-Life\zamnhlmp\gfx.wad;\Program Files (x86)\Steam\steamapps\common\Half-Life\zamnhlmp\liquids.wad;\Program Files (x86)\Steam\steamapps\common\Half-Life\zamnhlmp\my_txt.wad;\Program Files (x86)\Steam\steamapps\common\Half-Life\zamnhlmp\n0th1ng.wad;\Program Files (x86)\Steam\steamapps\common\Half-Life\zamnhlmp\road.wad;\Program Files (x86)\Steam\steamapps\common\Half-Life\zamnhlmp\sinif.wad;\Program Files (x86)\Steam\steamapps\common\Half-Life\zamnhlmp\spraypaint.wad;\Program Files (x86)\Steam\steamapps\common\Half-Life\zamnhlmp\tempdecal.wad;\Program Files (x86)\Steam\steamapps\common\Half-Life\zamnhlmp\testchange.wad;\Program Files (x86)\Steam\steamapps\common\Half-Life\zamnhlmp\timecounter.wad;\Program Files (x86)\Steam\steamapps\common\Half-Life\zamnhlmp\xeno.wad;\Program Files (x86)\Steam\steamapps\common\Half-Life\zamnhlmp\zamnhlmp.wad"
 "_generator" "J.A.C.K. 1.1.1064 (vpHalfLife)"
 {
 ( -1712 3795 2093 ) ( -1712 3795 -2552 ) ( -1712 -3488 2093 ) SKY [ 0 1 0 0 ] [ 0 0 -1 0 ] 0 1 1
@@ -6889,12 +6889,12 @@
 {
 "classname" "func_wall"
 {
-( -968 768 -1584 ) ( -968 768 -1568 ) ( -968 832 -1584 ) FIFTIES_DR5D [ 0 1 0 0 ] [ 0 0 -1 -4 ] -0 1 1
-( -976 832 -1584 ) ( -976 832 -1568 ) ( -976 768 -1584 ) FIFTIES_DR5D [ 0 1 0 0 ] [ 0 0 -1 -4 ] -0 1 1
-( -968 832 -1584 ) ( -968 832 -1568 ) ( -976 832 -1584 ) FIFTIES_DR5D [ 1 0 0 -8 ] [ 0 0 -1 -4 ] -0 1 1
-( -976 768 -1584 ) ( -976 768 -1568 ) ( -968 768 -1584 ) FIFTIES_DR5D [ 1 0 0 -8 ] [ 0 0 -1 -4 ] -0 1 1
-( -968 832 -1568 ) ( -968 768 -1568 ) ( -976 832 -1568 ) FIFTIES_DR5D [ 1 0 0 0 ] [ 0 -1 0 8 ] -0 1 1
-( -968 768 -1584 ) ( -968 832 -1584 ) ( -976 768 -1584 ) ~LIGHT3C [ 0 -1 0 0 ] [ -1 -0 0 0 ] 90 1 1
+( -968 768 -1589 ) ( -968 768 -1583 ) ( -968 832 -1589 ) FIFTIES_DR5D [ 0 1 0 0 ] [ 0 0 -1 -19 ] -0 1 1
+( -976 832 -1589 ) ( -976 832 -1583 ) ( -976 768 -1589 ) FIFTIES_DR5D [ 0 1 0 0 ] [ 0 0 -1 -19 ] -0 1 1
+( -968 832 -1589 ) ( -968 832 -1583 ) ( -976 832 -1589 ) FIFTIES_DR5D [ 1 0 0 -8 ] [ 0 0 -1 -19 ] -0 1 1
+( -976 768 -1589 ) ( -976 768 -1583 ) ( -968 768 -1589 ) FIFTIES_DR5D [ 1 0 0 -8 ] [ 0 0 -1 -19 ] -0 1 1
+( -968 832 -1583 ) ( -968 768 -1583 ) ( -976 832 -1583 ) FIFTIES_DR5D [ 1 0 0 0 ] [ 0 -1 0 8 ] -0 1 1
+( -968 768 -1589 ) ( -968 832 -1589 ) ( -976 768 -1589 ) ~LIGHT3C [ 0 -1 0 0 ] [ -1 -0 0 0 ] 90 1 1
 }
 }
 {
@@ -9128,18 +9128,18 @@
 "_falloff" "0"
 "_fade" "1.0"
 "style" "0"
-"_light" "255 255 127 255"
+"_light" "255 255 255 255"
 "angles" "0 0 0"
-"origin" "379 -1639 -1664"
+"origin" "379 -1639 -1682"
 }
 {
 "classname" "light"
 "_falloff" "0"
 "_fade" "1.0"
 "style" "0"
-"_light" "255 255 127 255"
+"_light" "255 255 255 255"
 "angles" "0 0 0"
-"origin" "456 -1636 -1664"
+"origin" "456 -1636 -1682"
 }
 {
 "classname" "light"
@@ -10948,6 +10948,7 @@
 "health" "10"
 "targetname" "zamnhl_ost"
 "message" "music/michaelsoft.wav"
+"angles" "0 0 0"
 "origin" "14 -160 -1216"
 }
 {
@@ -11004,6 +11005,7 @@
 "_fade" "1.0"
 "style" "0"
 "_light" "255 0 0 200"
+"angles" "0 0 0"
 "origin" "-1013 1443 -1602"
 }
 {
@@ -11014,42 +11016,49 @@
 "targetname" "wesley_is_dead"
 "message" "SOMEONE KILLED WESLEY\nHE WAS MY ONLY FRIEND\nHE WAS TRENDY WITH HIS SPECTACLES\nWHO WILL FEED HIS PET CROCODILE NOW!?!?!\nALL PLAYERS, KILL WELSEY'S MURDERER!!"
 "messagesound" "ambient/scripted/blood_stinger.wav"
+"angles" "0 0 0"
 "origin" "761 -100 -1554"
 }
 {
 "classname" "infodecal"
 "texture" "{CAPSW"
 "targetname" "wesley"
+"angles" "0 0 0"
 "origin" "607 -64 -1400"
 }
 {
 "classname" "infodecal"
 "texture" "{CAPSE"
 "targetname" "wesley"
+"angles" "0 0 0"
 "origin" "623 -64 -1400"
 }
 {
 "classname" "infodecal"
 "texture" "{CAPSS"
 "targetname" "wesley"
+"angles" "0 0 0"
 "origin" "637 -64 -1399"
 }
 {
 "classname" "infodecal"
 "texture" "{CAPSL"
 "targetname" "wesley"
+"angles" "0 0 0"
 "origin" "651 -64 -1399"
 }
 {
 "classname" "infodecal"
 "texture" "{CAPSE"
 "targetname" "wesley"
+"angles" "0 0 0"
 "origin" "665 -64 -1400"
 }
 {
 "classname" "infodecal"
 "texture" "{CAPSY"
 "targetname" "wesley"
+"angles" "0 0 0"
 "origin" "676 -64 -1401"
 }
 {
@@ -11058,18 +11067,21 @@
 "die_bitch" "1"
 "wesley" ".001"
 "wesley_red" "1"
+"angles" "0 0 0"
 "origin" "593 -78 -1523"
 }
 {
 "classname" "env_explosion"
 "iMagnitude" "150"
 "targetname" "die_bitch"
+"angles" "0 0 0"
 "origin" "663 -80 -1520"
 }
 {
 "classname" "env_explosion"
 "iMagnitude" "150"
 "targetname" "die_bitch"
+"angles" "0 0 0"
 "origin" "680 -8 -1512"
 }
 {
@@ -11077,6 +11089,7 @@
 "damagetype" "32"
 "delay" "0"
 "dmg" "999"
+"angles" "0 0 0"
 {
 ( 974 1545 -9 ) ( 974 1545 -233 ) ( 974 -2922 -9 ) AAATRIGGER [ 0 1 0 0 ] [ 0 0 -1 0 ] 0 1 1
 ( -1013 -2922 -9 ) ( -1013 -2922 -233 ) ( -1013 1545 -9 ) AAATRIGGER [ 0 1 0 0 ] [ 0 0 -1 0 ] 0 1 1
@@ -11092,6 +11105,7 @@
 "_fade" "1.0"
 "style" "0"
 "_light" "255 255 255 200"
+"angles" "0 0 0"
 "origin" "749 547 -1724"
 }
 {
@@ -11102,6 +11116,7 @@
 "style" "0"
 "_light" "255 0 0 200"
 "targetname" "wesley_red"
+"angles" "0 0 0"
 "origin" "490 33 -1406"
 }
 {
@@ -11112,6 +11127,7 @@
 "style" "0"
 "_light" "255 0 0 200"
 "targetname" "wesley_red"
+"angles" "0 0 0"
 "origin" "848 216 -1397"
 }
 {
@@ -11122,6 +11138,7 @@
 "style" "0"
 "_light" "255 0 0 200"
 "targetname" "wesley_red"
+"angles" "0 0 0"
 "origin" "521 357 -1386"
 }
 {
@@ -11132,6 +11149,7 @@
 "style" "0"
 "_light" "255 0 0 200"
 "targetname" "wesley_red"
+"angles" "0 0 0"
 "origin" "650 475 -1386"
 }
 {
@@ -11142,6 +11160,7 @@
 "style" "0"
 "_light" "255 0 0 200"
 "targetname" "wesley_red"
+"angles" "0 0 0"
 "origin" "678 -11 -1400"
 }
 {
@@ -11163,6 +11182,7 @@
 "health" "10"
 "message" "ambient/wesley_r.wav"
 "targetname" "wesley"
+"angles" "0 0 0"
 "origin" "725 -48 -1494"
 }
 {
@@ -11173,113 +11193,166 @@
 "radius" "500"
 "amplitude" "16"
 "targetname" "wesley"
+"angles" "0 0 0"
 "origin" "712 19 -1501"
 }
 {
 "classname" "infodecal"
 "texture" "{BIGBLOOD1"
 "targetname" "wesley"
+"angles" "0 0 0"
 "origin" "643 15 -1536"
 }
 {
 "classname" "infodecal"
 "texture" "{BIGBLOOD1"
 "targetname" "wesley"
+"angles" "0 0 0"
 "origin" "581 80 -1536"
 }
 {
 "classname" "infodecal"
 "texture" "{BIGBLOOD1"
 "targetname" "wesley"
+"angles" "0 0 0"
 "origin" "705 54 -1536"
 }
 {
 "classname" "infodecal"
 "texture" "{BIGBLOOD1"
 "targetname" "wesley"
+"angles" "0 0 0"
 "origin" "767 80 -1536"
 }
 {
 "classname" "infodecal"
 "texture" "{BIGBLOOD1"
 "targetname" "wesley"
+"angles" "0 0 0"
 "origin" "880 94 -1432"
 }
 {
 "classname" "infodecal"
 "texture" "{BIGBLOOD1"
 "targetname" "wesley"
+"angles" "0 0 0"
 "origin" "880 199 -1437"
 }
 {
 "classname" "infodecal"
 "texture" "{BLOODHAND2"
 "targetname" "wesley"
+"angles" "0 0 0"
 "origin" "880 292 -1429"
 }
 {
 "classname" "infodecal"
 "texture" "{BLOODHAND2"
 "targetname" "wesley"
+"angles" "0 0 0"
 "origin" "785 384 -1436"
 }
 {
 "classname" "infodecal"
 "texture" "{BLOODHAND2"
 "targetname" "wesley"
+"angles" "0 0 0"
 "origin" "671 -108 -1558"
 }
 {
 "classname" "infodecal"
 "texture" "{BLOODHAND2"
 "targetname" "wesley"
+"angles" "0 0 0"
 "origin" "799 -64 -1463"
 }
 {
 "classname" "infodecal"
 "texture" "{BLOODHAND2"
 "targetname" "wesley"
+"angles" "0 0 0"
 "origin" "518 -64 -1450"
 }
 {
 "classname" "infodecal"
 "texture" "{BLOODHAND2"
 "targetname" "wesley"
+"angles" "0 0 0"
 "origin" "622 128 -1474"
 }
 {
 "classname" "infodecal"
 "texture" "{BLOODHAND2"
 "targetname" "wesley"
+"angles" "0 0 0"
 "origin" "574 128 -1431"
 }
 {
 "classname" "infodecal"
 "texture" "{BLOODHAND2"
 "targetname" "wesley"
+"angles" "0 0 0"
 "origin" "679 128 -1416"
 }
 {
 "classname" "infodecal"
 "texture" "{BLOODHAND2"
 "targetname" "wesley"
+"angles" "0 0 0"
 "origin" "713 128 -1495"
 }
 {
 "classname" "infodecal"
 "texture" "{BLOODHAND2"
 "targetname" "wesley"
+"angles" "0 0 0"
 "origin" "473 128 -1490"
 }
 {
 "classname" "infodecal"
 "texture" "{BLOODHAND2"
 "targetname" "wesley"
+"angles" "0 0 0"
 "origin" "461 128 -1422"
 }
 {
 "classname" "infodecal"
 "texture" "{BLOODHAND2"
 "targetname" "wesley"
+"angles" "0 0 0"
 "origin" "388 128 -1442"
+}
+{
+"classname" "light"
+"_falloff" "0"
+"_fade" "1.0"
+"style" "0"
+"_light" "255 255 255 200"
+"angles" "0 0 0"
+"origin" "-376 -1637 -1683"
+}
+{
+"classname" "light"
+"_falloff" "0"
+"_fade" "1.0"
+"style" "0"
+"_light" "255 255 255 200"
+"angles" "0 0 0"
+"origin" "-455 -1638 -1683"
+}
+{
+"classname" "light"
+"_falloff" "0"
+"_fade" "1.0"
+"style" "0"
+"_light" "255 255 128 200"
+"origin" "-972 803 -1599"
+}
+{
+"classname" "light"
+"_falloff" "0"
+"_fade" "1.0"
+"style" "0"
+"_light" "255 255 255 200"
+"origin" "-728 1023 -1573"
 }
