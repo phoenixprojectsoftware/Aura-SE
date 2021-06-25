@@ -480,6 +480,8 @@ public:
 	bool IsTeammate(CBaseEntity* pPlayer);
 	std::vector<CBasePlayer*> GetPlayingEnemies();
 	float GetSpawnkillingPotential();
+public:
+	void NewPunch();
 };
 //++ BulliT
 inline void CBasePlayer::Init()
