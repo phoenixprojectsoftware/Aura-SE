@@ -265,6 +265,8 @@ void AgInitGame()
     CVAR_REGISTER(&ag_start_egon);
     CVAR_REGISTER(&ag_start_hornet);
     CVAR_REGISTER(&ag_start_penguin);
+    CVAR_REGISTER(&ag_start_m249);
+    CVAR_REGISTER(&ag_start_eagle);
 
     CVAR_REGISTER(&ag_start_hgrenade);
     CVAR_REGISTER(&ag_start_satchel);

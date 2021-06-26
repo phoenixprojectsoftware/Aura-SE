@@ -379,6 +379,10 @@ void AgGameRules::PlayerSpawn(CBasePlayer* pPlayer)
                 pPlayer->GiveNamedItem("weapon_hornetgun");
             if (0 < ag_start_penguin.value)
                 pPlayer->GiveNamedItem("weapon_penguin");
+            if (0 < ag_start_m249.value)
+                pPlayer->GiveNamedItem("weapon_m249");
+            if (0 < ag_start_eagle.value)
+                pPlayer->GiveNamedItem("weapon_eagle");
 
             if (0 < ag_start_hgrenade.value)
                 pPlayer->GiveAmmo(ag_start_hgrenade.value, "Hand Grenade", HANDGRENADE_MAX_CARRY);
