@@ -17,8 +17,8 @@
 #include "cbase.h"
 #include "weapons.h"
 #include "player.h"
-
-#include "gamerules.h"
+#include "UserMessages.h"
+// #include "gamerules.h"
 
 #include "op4_weapons/CM249.h"
 
@@ -242,7 +242,7 @@ void CM249::PrimaryAttack()
 
 	PLAYBACK_EVENT_FULL(
 		flags, m_pPlayer->edict(), m_usFireM249, 0,
-		g_vecZero, g_vecZero,
+		(float*)&g_vecZero, (float*)&g_vecZero,
 		vecDir.x, vecDir.y,
 		pev->body, 0,
 		m_bAlternatingEject ? 1 : 0, 0);

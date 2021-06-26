@@ -17,6 +17,7 @@
 #include "cbase.h"
 #include "weapons.h"
 #include "player.h"
+#include "UserMessages.h"
 
 #include "op4_weapons/CEagleLaser.h"
 
@@ -220,7 +221,7 @@ void CEagle::PrimaryAttack()
 
 	PLAYBACK_EVENT_FULL(
 		flags, m_pPlayer->edict(), m_usFireEagle, 0,
-		g_vecZero, g_vecZero,
+		(float*)&g_vecZero, (float*)&g_vecZero,
 		vecSpread.x, vecSpread.y,
 		0, 0,
 		m_iClip == 0, 0);

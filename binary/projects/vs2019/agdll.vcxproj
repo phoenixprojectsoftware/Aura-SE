@@ -263,7 +263,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\common\const.h" />
+    <ClInclude Include="..\..\common\entity_state.h" />
+    <ClInclude Include="..\..\common\mathlib.h" />
     <ClInclude Include="..\..\common\Platform.h" />
+    <ClInclude Include="..\..\common\weaponinfo.h" />
     <ClInclude Include="..\..\dlls\activity.h" />
     <ClInclude Include="..\..\dlls\activitymap.h" />
     <ClInclude Include="..\..\dlls\animation.h" />
@@ -305,6 +308,7 @@
     <ClInclude Include="..\..\dlls\talkmonster.h" />
     <ClInclude Include="..\..\dlls\teamplay_gamerules.h" />
     <ClInclude Include="..\..\dlls\trains.h" />
+    <ClInclude Include="..\..\dlls\UserMessages.h" />
     <ClInclude Include="..\..\dlls\util.h" />
     <ClInclude Include="..\..\dlls\vector.h" />
     <ClInclude Include="..\..\dlls\weapons.h" />

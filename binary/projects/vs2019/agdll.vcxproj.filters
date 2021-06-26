@@ -698,5 +698,17 @@
     <ClInclude Include="..\..\common\const.h">
       <Filter>Header Files\common</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\common\mathlib.h">
+      <Filter>Header Files\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\UserMessages.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\entity_state.h">
+      <Filter>Header Files\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\weaponinfo.h">
+      <Filter>Header Files\common</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

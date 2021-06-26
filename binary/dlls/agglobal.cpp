@@ -84,6 +84,7 @@ DLL_GLOBAL cvar_t	ag_ban_rpg = { "sv_aura_ban_rpg","0" };
 DLL_GLOBAL cvar_t	ag_ban_gauss = { "sv_aura_ban_gauss","0" };
 DLL_GLOBAL cvar_t	ag_ban_egon = { "sv_aura_ban_egon","0" };
 DLL_GLOBAL cvar_t	ag_ban_hornet = { "sv_aura_ban_hornet","0" };
+DLL_GLOBAL cvar_t ag_ban_penguin = { "sv_aura_ban_penguin", "0" };
 
 DLL_GLOBAL cvar_t	ag_ban_hgrenade = { "sv_aura_ban_hgrenade","0" };
 DLL_GLOBAL cvar_t	ag_ban_satchel = { "sv_aura_ban_satchel","0" };
@@ -126,6 +127,8 @@ DLL_GLOBAL cvar_t	ag_start_bolts = { "sv_aura_start_bolts","0" };
 DLL_GLOBAL cvar_t	ag_start_rockets = { "sv_aura_start_rockets","0" };
 DLL_GLOBAL cvar_t ag_start_357ammo = { "sv_aura_start_357ammo","0" };
 DLL_GLOBAL cvar_t ag_start_penguin = { "sv_aura_start_penguin", "0" };
+DLL_GLOBAL cvar_t ag_start_m249 = { "sv_aura_start_m249", "0" };
+DLL_GLOBAL cvar_t ag_start_eagle = { "sv_aura_start_eagle", "0" };
 DLL_GLOBAL cvar_t	ag_start_armour = { "sv_aura_start_armour","0" };
 DLL_GLOBAL cvar_t	ag_start_health = { "sv_aura_start_health","100" };
 

@@ -233,27 +233,27 @@ AngleBetweenVectors
 
 ===================
 */
-float AngleBetweenVectors( const vec3_t v1, const vec3_t v2 )
+float AngleBetweenVectors(const Vector& v1, const Vector& v2)
 {
 	float angle;
-	float l1 = Length( v1 );
-	float l2 = Length( v2 );
+	float l1 = Length(v1);
+	float l2 = Length(v2);
 
-	if ( !l1 || !l2 )
+	if (!l1 || !l2)
 		return 0.0f;
 
-	angle = acos( DotProduct( v1, v2 ) ) / (l1*l2);
-	angle = ( angle  * 180.0f ) / M_PI;
+	angle = acos(DotProduct(v1, v2)) / (l1 * l2);
+	angle = (angle * 180.0f) / M_PI;
 
 	return angle;
 }
 
 #ifndef DISABLE_VEC_FUNCS
-void VectorTransform (const float* in1, float in2[3][4], float* out)
+void VectorTransform(const float* in1, float in2[3][4], float* out)
 {
-	out[0] = DotProduct(in1, in2[0]) + in2[0][3];
-	out[1] = DotProduct(in1, in2[1]) + in2[1][3];
-	out[2] = DotProduct(in1, in2[2]) + in2[2][3];
+	out[0] = DotProduct(*reinterpret_cast<const Vector*>(in1), *reinterpret_cast<const Vector*>(in2[0])) + in2[0][3];
+	out[1] = DotProduct(*reinterpret_cast<const Vector*>(in1), *reinterpret_cast<const Vector*>(in2[1])) + in2[1][3];
+	out[2] = DotProduct(*reinterpret_cast<const Vector*>(in1), *reinterpret_cast<const Vector*>(in2[2])) + in2[2][3];
 }
 
 int VectorCompare (const float* v1, const float* v2)

@@ -14,7 +14,16 @@
 ****/
 // mathlib.h
 
+#pragma once
+
+#include <cmath>
+
+
 typedef float vec_t;
+
+#include "vector.h"
+
+
 #ifndef DID_VEC3_T_DEFINE
 #define DID_VEC3_T_DEFINE
 typedef vec_t vec3_t[3];
@@ -35,6 +44,8 @@ typedef	int	fixed16_t;
 #endif
 
 struct mplane_s;
+
+constexpr Vector g_vecZero(0, 0, 0);
 
 extern vec3_t vec3_origin;
 extern	int nanmask;
