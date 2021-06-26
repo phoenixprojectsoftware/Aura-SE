@@ -17,10 +17,21 @@
 #include "cbase.h"
 #include "weapons.h"
 #include "player.h"
+#include "UserMessages.h"
 
 #include "CEagleLaser.h"
 
 #include "CEagle.h"
+
+#ifndef CLIENT_DLL
+TYPEDESCRIPTION	CEagle::m_SaveData[] =
+{
+	DEFINE_FIELD(CEagle, m_bSpotVisible, FIELD_INTEGER),
+	DEFINE_FIELD(CEagle, m_bLaserActive, FIELD_INTEGER),
+};
+
+IMPLEMENT_SAVERESTORE(CEagle, CEagle::BaseClass);
+#endif
 
 LINK_ENTITY_TO_CLASS(weapon_eagle, CEagle);
 
@@ -103,6 +114,9 @@ void CEagle::WeaponIdle()
 
 	ResetEmptySound();
 
+	//Update autoaim
+	m_pPlayer->GetAutoaimVector(AUTOAIM_10DEGREES);
+
 	if (m_flTimeWeaponIdle <= UTIL_WeaponTimeBase() && m_iClip)
 	{
 		const float flNextIdle = UTIL_SharedRandomFloat(m_pPlayer->random_seed, 0.0, 1.0);
@@ -114,12 +128,12 @@ void CEagle::WeaponIdle()
 			if (flNextIdle > 0.5)
 			{
 				iAnim = EAGLE_IDLE5;
-				m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + flNextIdle + 2.0;
+				m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 2.0;
 			}
 			else
 			{
 				iAnim = EAGLE_IDLE4;
-				m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + flNextIdle + 2.5;
+				m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 2.5;
 			}
 		}
 		else
@@ -127,19 +141,19 @@ void CEagle::WeaponIdle()
 			if (flNextIdle <= 0.3)
 			{
 				iAnim = EAGLE_IDLE1;
-				m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + flNextIdle + 2.5;
+				m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 2.5;
 			}
 			else
 			{
 				if (flNextIdle > 0.6)
 				{
 					iAnim = EAGLE_IDLE3;
-					m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + flNextIdle + 1.633;
+					m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 1.633;
 				}
 				else
 				{
 					iAnim = EAGLE_IDLE2;
-					m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + flNextIdle + 2.5;
+					m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 2.5;
 				}
 			}
 		}
@@ -168,10 +182,11 @@ void CEagle::PrimaryAttack()
 				PlayEmptySound();
 				m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 0.2;
 			}
-			else
-			{
-				Reload();
-			}
+			//Don't do this because it glitches the animation
+			//else
+			//{
+			//	Reload();
+			//}
 		}
 
 		return;
@@ -213,7 +228,7 @@ void CEagle::PrimaryAttack()
 
 	int flags;
 #if defined( CLIENT_WEAPONS )
-	flags = FEV_NOTHOST;
+	flags = UTIL_DefaultPlaybackFlags();
 #else
 	flags = 0;
 #endif
@@ -227,7 +242,7 @@ void CEagle::PrimaryAttack()
 
 	if (!m_iClip)
 	{
-		if (m_pPlayer->m_rgAmmo[PrimaryAmmoIndex()] <= 0)
+		if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0)
 			m_pPlayer->SetSuitUpdate("!HEV_AMO0", SUIT_SENTENCE, SUIT_REPEAT_OK);
 	}
 
@@ -261,12 +276,13 @@ void CEagle::SecondaryAttack()
 
 void CEagle::Reload()
 {
-	if (m_pPlayer->ammo_357 > 0)
+	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] > 0)
 	{
 		const bool bResult = DefaultReload(EAGLE_MAX_CLIP, m_iClip ? EAGLE_RELOAD : EAGLE_RELOAD_NOSHOT, 1.5, 1);
 
 #ifndef CLIENT_DLL
-		if (m_pLaser && m_bLaserActive)
+		//Only turn it off if we're actually reloading
+		if (bResult && m_pLaser && m_bLaserActive)
 		{
 			m_pLaser->pev->effects |= EF_NODRAW;
 			m_pLaser->SetThink(&CEagleLaser::Revive);
@@ -331,6 +347,14 @@ int CEagle::GetItemInfo(ItemInfo* p)
 	return true;
 }
 
+void CEagle::IncrementAmmo(CBasePlayer* pPlayer)
+{
+	if (pPlayer->GiveAmmo(1, "357", _357_MAX_CARRY))
+	{
+		EMIT_SOUND(pPlayer->edict(), CHAN_STATIC, "ctf/pow_backpack.wav", 0.5, ATTN_NORM);
+	}
+}
+
 void CEagle::GetWeaponData(weapon_data_t& data)
 {
 	BaseClass::GetWeaponData(data);
@@ -344,3 +368,32 @@ void CEagle::SetWeaponData(const weapon_data_t& data)
 
 	m_bLaserActive = data.iuser1 != 0;
 }
+
+class CEagleAmmo : public CBasePlayerAmmo
+{
+	void Spawn() override
+	{
+		Precache();
+		//TODO: could probably use a better model
+		SET_MODEL(ENT(pev), "models/w_9mmclip.mdl");
+		CBasePlayerAmmo::Spawn();
+	}
+
+	void Precache() override
+	{
+		PRECACHE_MODEL("models/w_9mmclip.mdl");
+		PRECACHE_SOUND("items/9mmclip1.wav");
+	}
+
+	BOOL AddAmmo(CBaseEntity* pOther) override
+	{
+		if (pOther->GiveAmmo(AMMO_EAGLE_GIVE, "357", _357_MAX_CARRY) != -1)
+		{
+			EMIT_SOUND(ENT(pev), CHAN_ITEM, "items/9mmclip1.wav", 1, ATTN_NORM);
+			return TRUE;
+		}
+		return FALSE;
+	}
+};
+
+LINK_ENTITY_TO_CLASS(ammo_eagleclip, CEagleAmmo);
