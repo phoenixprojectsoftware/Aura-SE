@@ -70,9 +70,9 @@ public:
 #endif
 	}
 
-	void GetWeaponData(weapon_data_t& data) override;
+	void GetWeaponData(weapon_data_t& data);
 
-	void SetWeaponData(const weapon_data_t& data) override;
+	void SetWeaponData(const weapon_data_t& data);
 
 private:
 	void UpdateLaser();

@@ -2548,6 +2548,11 @@ int	CRestore::BufferCheckZString( const char *string )
 	return 0;
 }
 
+bool UTIL_IsMultiplayer()
+{
+	return g_pGameRules->IsMultiplayer();
+}
+
 //++ BulliT
 void UTIL_SendDirectorMessage( edict_t *ent1, edict_t *ent2, int priority_and_flags )
 {

@@ -680,9 +680,6 @@
     <ClInclude Include="..\..\dlls\singleplay_gamerules.h">
       <Filter>Header Files\dlls</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\common\const.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\dlls\spawnchooser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -697,6 +694,9 @@
     </ClInclude>
     <ClInclude Include="..\..\dlls\op4_weapons\CPenguin.h">
       <Filter>Header Files\dlls\op4_weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\const.h">
+      <Filter>Header Files\common</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -25,6 +25,7 @@
 #include "nodes.h"
 #include "defaultai.h"
 #include "soundent.h"
+#include "basemonster.h"
 
 extern CGraph WorldGraph;
 
@@ -1550,24 +1551,24 @@ Schedule_t *CBaseMonster :: GetSchedule ( void )
 	}
 
 	return &slError[ 0 ];
+}
 
-	BOOL CBaseMonster::JumpToTarget(Activity movementAct, float waitTime)
-	{
-		m_movementGoal = MOVEGOAL_TARGETENT;
-		m_movementActivity = movementAct;
-		m_moveWaitTime = waitTime;
+BOOL CBaseMonster::JumpToTarget(Activity movementAct, float waitTime)
+{
+	m_movementGoal = MOVEGOAL_TARGETENT;
+	m_movementActivity = movementAct;
+	m_moveWaitTime = waitTime;
 
-		pev->origin.z += 1;
+	pev->origin.z += 1;
 
-		if (pev->flags & FL_ONGROUND)
-			pev->flags &= ~FL_ONGROUND;
+	if (pev->flags & FL_ONGROUND)
+		pev->flags &= ~FL_ONGROUND;
 
-		g_engfuncs.pfnCVarGetFloat("sv_gravity");
+	g_engfuncs.pfnCVarGetFloat("sv_gravity");
 
-		pev->velocity = m_hTargetEnt->pev->origin + Vector(0, 0, 160) - pev->origin;
+	pev->velocity = m_hTargetEnt->pev->origin + Vector(0, 0, 160) - pev->origin;
 
-		pev->velocity.z *= pev->origin.z * sqrt(160.0 / (pev->origin.z * 0.5)) / 160.0;
+	pev->velocity.z *= pev->origin.z * sqrt(160.0 / (pev->origin.z * 0.5)) / 160.0;
 
-		return true;
-	}
+	return true;
 }
