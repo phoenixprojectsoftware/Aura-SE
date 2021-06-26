@@ -139,6 +139,8 @@
     <ClCompile Include="..\..\dlls\bullsquid.cpp" />
     <ClCompile Include="..\..\dlls\buttons.cpp" />
     <ClCompile Include="..\..\dlls\cbase.cpp" />
+    <ClCompile Include="..\..\dlls\CEagle.cpp" />
+    <ClCompile Include="..\..\dlls\CEagleLaser.cpp" />
     <ClCompile Include="..\..\dlls\client.cpp" />
     <ClCompile Include="..\..\dlls\CM249.cpp" />
     <ClCompile Include="..\..\dlls\combat.cpp" />
@@ -268,6 +270,8 @@
     <ClInclude Include="..\..\dlls\basemonster.h" />
     <ClInclude Include="..\..\dlls\cbase.h" />
     <ClInclude Include="..\..\dlls\cdll_dll.h" />
+    <ClInclude Include="..\..\dlls\CEagle.h" />
+    <ClInclude Include="..\..\dlls\CEagleLaser.h" />
     <ClInclude Include="..\..\dlls\client.h" />
     <ClInclude Include="..\..\dlls\CM249.h" />
     <ClInclude Include="..\..\dlls\CPenguin.h" />

@@ -78,6 +78,7 @@ public:
 #define WEAPON_TRIPMINE			13
 #define	WEAPON_SATCHEL			14
 #define	WEAPON_SNARK			15
+#define WEAPON_EAGLE			17
 #define WEAPON_M249				19
 #define WEAPON_PENGUIN   26
 
@@ -106,6 +107,7 @@ public:
 #define SNARK_WEIGHT		5
 #define SATCHEL_WEIGHT		-10
 #define TRIPMINE_WEIGHT		-10
+#define EAGLE_WEIGHT				15
 #define M249_WEIGHT					20
 #define PENGUIN_WEIGHT		5
 
@@ -144,6 +146,7 @@ public:
 #define SATCHEL_MAX_CLIP		WEAPON_NOCLIP
 #define TRIPMINE_MAX_CLIP		WEAPON_NOCLIP
 #define SNARK_MAX_CLIP			WEAPON_NOCLIP
+#define EAGLE_MAX_CLIP			7
 #define M249_MAX_CLIP				60
 #define PENGUIN_MAX_CLIP 3
 
@@ -164,6 +167,7 @@ public:
 #define TRIPMINE_DEFAULT_GIVE		1
 #define SNARK_DEFAULT_GIVE			5
 #define HIVEHAND_DEFAULT_GIVE		8
+#define EAGLE_DEFAULT_GIVE				7
 #define M249_DEFAULT_GIVE					60
 
 // The amount of ammo given to a player by an ammo item.
@@ -684,12 +688,12 @@ private:
 
 class CLaserSpot : public CBaseEntity
 {
+public:
 	void Spawn( void );
 	void Precache( void );
 
 	int	ObjectCaps( void ) { return FCAP_DONT_SAVE; }
 
-public:
 	void Suspend( float flSuspendTime );
 	void EXPORT Revive( void );
 	
