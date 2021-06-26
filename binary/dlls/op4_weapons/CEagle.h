@@ -12,6 +12,7 @@
 *   without written permission from Valve LLC.
 *
 ****/
+#include <weaponinfo.h>
 #ifndef WEAPONS_CEAGLE_H
 #define WEAPONS_CEAGLE_H
 
