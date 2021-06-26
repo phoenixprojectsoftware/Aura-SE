@@ -78,6 +78,7 @@ public:
 #define WEAPON_TRIPMINE			13
 #define	WEAPON_SATCHEL			14
 #define	WEAPON_SNARK			15
+#define WEAPON_M249				19
 #define WEAPON_PENGUIN   26
 
 #define WEAPON_ALLWEAPONS		(~(1<<WEAPON_SUIT))
@@ -105,6 +106,7 @@ public:
 #define SNARK_WEIGHT		5
 #define SATCHEL_WEIGHT		-10
 #define TRIPMINE_WEIGHT		-10
+#define M249_WEIGHT					20
 #define PENGUIN_WEIGHT		5
 
 
@@ -121,6 +123,7 @@ public:
 #define SNARK_MAX_CARRY			15
 #define HORNET_MAX_CARRY		8
 #define M203_GRENADE_MAX_CARRY	20
+#define M249_MAX_CARRY			200
 #define PENGUIN_MAX_CARRY 9
 
 // the maximum amount of ammo each weapon's clip can hold
@@ -141,6 +144,7 @@ public:
 #define SATCHEL_MAX_CLIP		WEAPON_NOCLIP
 #define TRIPMINE_MAX_CLIP		WEAPON_NOCLIP
 #define SNARK_MAX_CLIP			WEAPON_NOCLIP
+#define M249_MAX_CLIP				60
 #define PENGUIN_MAX_CLIP 3
 
 
@@ -160,6 +164,7 @@ public:
 #define TRIPMINE_DEFAULT_GIVE		1
 #define SNARK_DEFAULT_GIVE			5
 #define HIVEHAND_DEFAULT_GIVE		8
+#define M249_DEFAULT_GIVE					60
 
 // The amount of ammo given to a player by an ammo item.
 #define AMMO_URANIUMBOX_GIVE	80
@@ -173,6 +178,7 @@ public:
 #define AMMO_RPGCLIP_GIVE		RPG_MAX_CLIP
 #define AMMO_URANIUMBOX_GIVE	80
 #define AMMO_SNARKBOX_GIVE		5
+#define AMMO_M249_GIVE					60
 
 // bullet types
 typedef	enum
