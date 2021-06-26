@@ -333,6 +333,8 @@ public:
 
 	CBaseEntity* DropItem ( char *pszItemName, const Vector &vecPos, const Vector &vecAng );// drop an item.
 
+	BOOL JumpToTarget(Activity movementAct, float waitTime);
+
 	inline BOOL HasConditionsRand(int iConditions, int chance) { return HasConditions(iConditions) && RANDOM_LONG(0, 99) < chance; }
 };
 
