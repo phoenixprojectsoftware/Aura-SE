@@ -194,6 +194,7 @@
     <ClCompile Include="..\..\dlls\op4_weapons\CGrappleTip.cpp" />
     <ClCompile Include="..\..\dlls\op4_weapons\CM249.cpp" />
     <ClCompile Include="..\..\dlls\op4_weapons\CPenguin.cpp" />
+    <ClCompile Include="..\..\dlls\op4_weapons\CSniperRifle.cpp" />
     <ClCompile Include="..\..\dlls\osprey.cpp" />
     <ClCompile Include="..\..\dlls\pathcorner.cpp" />
     <ClCompile Include="..\..\dlls\penguin_grenade.cpp" />
@@ -297,6 +298,7 @@
     <ClInclude Include="..\..\dlls\op4_weapons\CGrappleTip.h" />
     <ClInclude Include="..\..\dlls\op4_weapons\CM249.h" />
     <ClInclude Include="..\..\dlls\op4_weapons\CPenguin.h" />
+    <ClInclude Include="..\..\dlls\op4_weapons\CSniperRifle.h" />
     <ClInclude Include="..\..\dlls\plane.h" />
     <ClInclude Include="..\..\dlls\player.h" />
     <ClInclude Include="..\..\dlls\saverestore.h" />

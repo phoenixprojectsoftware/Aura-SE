@@ -84,6 +84,7 @@ public:
 #define WEAPON_GRAPPLE   16
 #define WEAPON_EAGLE			17
 #define WEAPON_M249				19
+#define WEAPON_SNIPERRIFLE 24
 #define WEAPON_PENGUIN   26
 
 #define WEAPON_ALLWEAPONS		(~(1<<WEAPON_SUIT))
@@ -112,6 +113,7 @@ public:
 #define SATCHEL_WEIGHT		-10
 #define TRIPMINE_WEIGHT		-10
 #define EAGLE_WEIGHT				15
+#define SNIPERRIFLE_WEIGHT 10
 #define M249_WEIGHT					20
 #define PENGUIN_WEIGHT		5
 
@@ -131,6 +133,7 @@ public:
 #define M203_GRENADE_MAX_CARRY	20
 #define M249_MAX_CARRY			200
 #define PENGUIN_MAX_CARRY 9
+#define SNIPERRIFLE_MAX_CARRY 15
 
 // the maximum amount of ammo each weapon's clip can hold
 #define WEAPON_NOCLIP			-1
@@ -153,6 +156,7 @@ public:
 #define EAGLE_MAX_CLIP			7
 #define M249_MAX_CLIP				60
 #define PENGUIN_MAX_CLIP 3
+#define SNIPERRIFLE_MAX_CLIP 5
 
 
 // the default amount of ammo that comes with each gun when it spawns
@@ -172,6 +176,7 @@ public:
 #define SNARK_DEFAULT_GIVE			5
 #define HIVEHAND_DEFAULT_GIVE		8
 #define EAGLE_DEFAULT_GIVE				7
+#define SNIPERRIFLE_DEFAULT_GIVE 5
 #define M249_DEFAULT_GIVE					60
 
 // The amount of ammo given to a player by an ammo item.
@@ -187,6 +192,7 @@ public:
 #define AMMO_URANIUMBOX_GIVE	80
 #define AMMO_SNARKBOX_GIVE		5
 #define AMMO_EAGLE_GIVE					7
+#define AMMO_SNIPERRIFLE_GIVE 5
 #define AMMO_M249_GIVE					60
 
 // bullet types
