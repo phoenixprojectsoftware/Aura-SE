@@ -18,9 +18,9 @@
 #include "weapons.h"
 #include "player.h"
 
-#include "CEagleLaser.h"
+#include "op4_weapons/CEagleLaser.h"
 
-#include "CEagle.h"
+#include "op4_weapons/CEagle.h"
 
 LINK_ENTITY_TO_CLASS(weapon_eagle, CEagle);
 

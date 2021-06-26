@@ -17,7 +17,7 @@
 #include "cbase.h"
 #include "weapons.h"
 
-#include "CEagleLaser.h"
+#include "op4_weapons/CEagleLaser.h"
 
 LINK_ENTITY_TO_CLASS(eagle_laser, CEagleLaser);
 

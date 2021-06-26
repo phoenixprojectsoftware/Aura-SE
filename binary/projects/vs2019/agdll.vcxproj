@@ -139,13 +139,9 @@
     <ClCompile Include="..\..\dlls\bullsquid.cpp" />
     <ClCompile Include="..\..\dlls\buttons.cpp" />
     <ClCompile Include="..\..\dlls\cbase.cpp" />
-    <ClCompile Include="..\..\dlls\CEagle.cpp" />
-    <ClCompile Include="..\..\dlls\CEagleLaser.cpp" />
     <ClCompile Include="..\..\dlls\client.cpp" />
-    <ClCompile Include="..\..\dlls\CM249.cpp" />
     <ClCompile Include="..\..\dlls\combat.cpp" />
     <ClCompile Include="..\..\dlls\controller.cpp" />
-    <ClCompile Include="..\..\dlls\CPenguin.cpp" />
     <ClCompile Include="..\..\dlls\crossbow.cpp" />
     <ClCompile Include="..\..\dlls\crowbar.cpp" />
     <ClCompile Include="..\..\dlls\defaultai.cpp" />
@@ -192,6 +188,10 @@
     <ClCompile Include="..\..\dlls\nihilanth.cpp" />
     <ClCompile Include="..\..\dlls\nodes.cpp" />
     <ClCompile Include="..\..\dlls\observer.cpp" />
+    <ClCompile Include="..\..\dlls\op4_weapons\CEagle.cpp" />
+    <ClCompile Include="..\..\dlls\op4_weapons\CEagleLaser.cpp" />
+    <ClCompile Include="..\..\dlls\op4_weapons\CM249.cpp" />
+    <ClCompile Include="..\..\dlls\op4_weapons\CPenguin.cpp" />
     <ClCompile Include="..\..\dlls\osprey.cpp" />
     <ClCompile Include="..\..\dlls\pathcorner.cpp" />
     <ClCompile Include="..\..\dlls\penguin_grenade.cpp" />
@@ -270,11 +270,7 @@
     <ClInclude Include="..\..\dlls\basemonster.h" />
     <ClInclude Include="..\..\dlls\cbase.h" />
     <ClInclude Include="..\..\dlls\cdll_dll.h" />
-    <ClInclude Include="..\..\dlls\CEagle.h" />
-    <ClInclude Include="..\..\dlls\CEagleLaser.h" />
     <ClInclude Include="..\..\dlls\client.h" />
-    <ClInclude Include="..\..\dlls\CM249.h" />
-    <ClInclude Include="..\..\dlls\CPenguin.h" />
     <ClInclude Include="..\..\dlls\decals.h" />
     <ClInclude Include="..\..\dlls\defaultai.h" />
     <ClInclude Include="..\..\dlls\doors.h" />
@@ -290,6 +286,10 @@
     <ClInclude Include="..\..\dlls\monsterevent.h" />
     <ClInclude Include="..\..\dlls\monsters.h" />
     <ClInclude Include="..\..\dlls\nodes.h" />
+    <ClInclude Include="..\..\dlls\op4_weapons\CEagle.h" />
+    <ClInclude Include="..\..\dlls\op4_weapons\CEagleLaser.h" />
+    <ClInclude Include="..\..\dlls\op4_weapons\CM249.h" />
+    <ClInclude Include="..\..\dlls\op4_weapons\CPenguin.h" />
     <ClInclude Include="..\..\dlls\plane.h" />
     <ClInclude Include="..\..\dlls\player.h" />
     <ClInclude Include="..\..\dlls\saverestore.h" />

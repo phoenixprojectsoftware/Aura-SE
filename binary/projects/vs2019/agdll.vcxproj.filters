@@ -46,6 +46,12 @@
     <Filter Include="Source Files\pm_shared">
       <UniqueIdentifier>{4e669e3b-5f1f-44c7-ac7a-2a887bdaf5a2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\dlls\op4_weapons">
+      <UniqueIdentifier>{fe6f89ab-8f5e-47da-8391-d946993e298a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\dlls\op4_weapons">
+      <UniqueIdentifier>{6b25a584-b2ab-42c9-b42a-f09c4cccef77}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\dlls\aflock.cpp">
@@ -441,17 +447,17 @@
     <ClCompile Include="..\..\dlls\penguin_grenade.cpp">
       <Filter>Source Files\dlls</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\dlls\CPenguin.cpp">
-      <Filter>Source Files\dlls</Filter>
+    <ClCompile Include="..\..\dlls\op4_weapons\CEagle.cpp">
+      <Filter>Source Files\dlls\op4_weapons</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\dlls\CM249.cpp">
-      <Filter>Source Files\dlls</Filter>
+    <ClCompile Include="..\..\dlls\op4_weapons\CEagleLaser.cpp">
+      <Filter>Source Files\dlls\op4_weapons</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\dlls\CEagle.cpp">
-      <Filter>Source Files\dlls</Filter>
+    <ClCompile Include="..\..\dlls\op4_weapons\CM249.cpp">
+      <Filter>Source Files\dlls\op4_weapons</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\dlls\CEagleLaser.cpp">
-      <Filter>Source Files\dlls</Filter>
+    <ClCompile Include="..\..\dlls\op4_weapons\CPenguin.cpp">
+      <Filter>Source Files\dlls\op4_weapons</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -680,17 +686,17 @@
     <ClInclude Include="..\..\dlls\spawnchooser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\dlls\CPenguin.h">
-      <Filter>Header Files\dlls</Filter>
+    <ClInclude Include="..\..\dlls\op4_weapons\CEagle.h">
+      <Filter>Header Files\dlls\op4_weapons</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\dlls\CM249.h">
-      <Filter>Header Files\dlls</Filter>
+    <ClInclude Include="..\..\dlls\op4_weapons\CEagleLaser.h">
+      <Filter>Header Files\dlls\op4_weapons</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\dlls\CEagle.h">
-      <Filter>Header Files\dlls</Filter>
+    <ClInclude Include="..\..\dlls\op4_weapons\CM249.h">
+      <Filter>Header Files\dlls\op4_weapons</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\dlls\CEagleLaser.h">
-      <Filter>Header Files\dlls</Filter>
+    <ClInclude Include="..\..\dlls\op4_weapons\CPenguin.h">
+      <Filter>Header Files\dlls\op4_weapons</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

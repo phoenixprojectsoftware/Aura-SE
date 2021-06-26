@@ -20,7 +20,7 @@
 
 #include "gamerules.h"
 
-#include "CM249.h"
+#include "op4_weapons/CM249.h"
 
 #ifndef CLIENT_DLL
 TYPEDESCRIPTION	CM249::m_SaveData[] =
