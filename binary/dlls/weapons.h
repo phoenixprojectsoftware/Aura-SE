@@ -14,16 +14,17 @@
 ****/
 #ifndef WEAPONS_H
 #define WEAPONS_H
-
+#ifndef WEAPONS_NO_CLASSES
 #include "effects.h"
 #include "weaponinfo.h"
-
+#endif
 class CBasePlayer;
 extern int gmsgWeapPickup;
 
 void DeactivateSatchels( CBasePlayer *pOwner );
 
 // Contact Grenade / Timed grenade / Satchel Charge
+#ifndef WEAPONS_NO_CLASSES
 class CGrenade : public CBaseMonster
 {
 public:
@@ -55,6 +56,7 @@ public:
 
 	BOOL m_fRegisteredSound;// whether or not this grenade has issued its DANGER sound to the world sound list yet.
 };
+#endif
 
 
 // constant items
@@ -79,6 +81,7 @@ public:
 #define WEAPON_TRIPMINE			13
 #define	WEAPON_SATCHEL			14
 #define	WEAPON_SNARK			15
+#define WEAPON_GRAPPLE   16
 #define WEAPON_EAGLE			17
 #define WEAPON_M249				19
 #define WEAPON_PENGUIN   26
@@ -213,6 +216,7 @@ typedef	enum
 
 #define WEAPON_IS_ONTARGET 0x40
 
+#ifndef WEAPONS_NO_CLASSES
 typedef struct
 {
 	int		iSlot;
@@ -426,6 +430,8 @@ typedef struct
 } MULTIDAMAGE;
 
 extern MULTIDAMAGE gMultiDamage;
+
+void FindHullIntersection(const Vector& vecSrc, TraceResult& tr, const Vector& mins, const Vector& maxs, edict_t* pEntity);
 
 
 #define LOUD_GUN_VOLUME			1000
@@ -1041,6 +1047,6 @@ public:
 private:
 	unsigned short m_usSnarkFire;
 };
-
+#endif
 
 #endif // WEAPONS_H
