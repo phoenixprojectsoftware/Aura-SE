@@ -78,7 +78,6 @@ public:
 #define WEAPON_TRIPMINE			13
 #define	WEAPON_SATCHEL			14
 #define	WEAPON_SNARK			15
-#define WEAPON_GRAPPLE	16
 #define WEAPON_PENGUIN   26
 
 #define WEAPON_ALLWEAPONS		(~(1<<WEAPON_SUIT))

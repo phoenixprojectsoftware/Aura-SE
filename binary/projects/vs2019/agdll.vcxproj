@@ -139,8 +139,6 @@
     <ClCompile Include="..\..\dlls\bullsquid.cpp" />
     <ClCompile Include="..\..\dlls\buttons.cpp" />
     <ClCompile Include="..\..\dlls\cbase.cpp" />
-    <ClCompile Include="..\..\dlls\CGrapple.cpp" />
-    <ClCompile Include="..\..\dlls\CGrappleTip.cpp" />
     <ClCompile Include="..\..\dlls\client.cpp" />
     <ClCompile Include="..\..\dlls\combat.cpp" />
     <ClCompile Include="..\..\dlls\controller.cpp" />
@@ -269,8 +267,6 @@
     <ClInclude Include="..\..\dlls\basemonster.h" />
     <ClInclude Include="..\..\dlls\cbase.h" />
     <ClInclude Include="..\..\dlls\cdll_dll.h" />
-    <ClInclude Include="..\..\dlls\CGrapple.h" />
-    <ClInclude Include="..\..\dlls\CGrappleTip.h" />
     <ClInclude Include="..\..\dlls\client.h" />
     <ClInclude Include="..\..\dlls\CPenguin.h" />
     <ClInclude Include="..\..\dlls\decals.h" />
