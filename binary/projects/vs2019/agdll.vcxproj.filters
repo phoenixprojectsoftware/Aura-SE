@@ -692,8 +692,5 @@
     <ClInclude Include="..\..\dlls\CEagleLaser.h">
       <Filter>Header Files\dlls</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\dlls\UserMessages.h">
-      <Filter>Header Files\dlls</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>
