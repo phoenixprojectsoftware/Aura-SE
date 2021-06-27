@@ -24,6 +24,8 @@ extern "C"
 
 #include "vgui_TeamFortressViewport.h"
 
+#include "discord_integration.h"
+
 
 extern int g_iAlive;
 
@@ -31,7 +33,7 @@ extern int g_weaponselect;
 extern cl_enginefunc_t gEngfuncs;
 
 // Defined in pm_math.c
-float anglemod( float a );
+extern "C" float anglemod( float a );
 
 void IN_Init (void);
 void IN_Move ( float frametime, usercmd_t *cmd);
@@ -64,6 +66,64 @@ cvar_t	*cl_yawspeed;
 cvar_t	*cl_pitchspeed;
 cvar_t	*cl_anglespeedkey;
 cvar_t	*cl_vsmoothing;
+
+namespace autofuncs
+{
+	static cvar_t* cl_autojump;
+
+	static struct {
+		bool onground = false;
+		bool inwater = false;
+		bool walking = true; // Movetype == MOVETYPE_WALK. Filters out noclip, being on ladder, etc.
+	} player;
+
+	static void handle_autojump(usercmd_t* cmd)
+	{
+		static bool s_jump_was_down_last_frame = false;
+
+		if (cl_autojump->value != 0.0f)
+		{
+			bool should_release_jump = (!player.onground && !player.inwater && player.walking);
+
+			/*
+			 * Spam pressing and releasing jump if we're stuck in a spot where jumping still results in
+			 * being onground in the end of the frame. Without this check, +jump would remain held and
+			 * when the player exits this spot they would have to release and press the jump button to
+			 * start jumping again. This also helps with exiting water or ladder right onto the ground.
+			 */
+			if (s_jump_was_down_last_frame && player.onground && !player.inwater && player.walking)
+				should_release_jump = true;
+
+			if (should_release_jump)
+				cmd->buttons &= ~IN_JUMP;
+		}
+
+		s_jump_was_down_last_frame = ((cmd->buttons & IN_JUMP) != 0);
+	}
+
+	static void handle_ducktap(usercmd_t* cmd)
+	{
+		static bool s_duck_was_down_last_frame = false;
+
+		bool should_release_duck = (!player.onground && !player.inwater && player.walking);
+
+		if (s_duck_was_down_last_frame && player.onground && !player.inwater && player.walking)
+				should_release_duck = true;
+
+		if (should_release_duck)
+				cmd->buttons &= ~IN_DUCK;
+
+		s_duck_was_down_last_frame = ((cmd->buttons & IN_DUCK) != 0);
+	}
+}
+
+extern "C" void update_player_info(int onground, int inwater, int walking)
+{
+	autofuncs::player.onground = (onground != 0);
+	autofuncs::player.inwater = (inwater != 0);
+	autofuncs::player.walking = (walking != 0);
+}
+
 /*
 ===============================================================================
 
@@ -111,6 +171,7 @@ kbutton_t	in_alt1;
 kbutton_t	in_score;
 kbutton_t	in_break;
 kbutton_t	in_graph;  // Display the netgraph
+kbutton_t	in_ducktap;
 
 typedef struct kblist_s
 {
@@ -206,7 +267,7 @@ KB_Find
 Allows the engine to get a kbutton_t directly ( so it can check +mlook state, etc ) for saving out to .cfg files
 ============
 */
-struct kbutton_s DLLEXPORT *KB_Find( const char *name )
+struct kbutton_s CL_DLLEXPORT *KB_Find( const char *name )
 {
 //	RecClFindKey(name);
 
@@ -365,7 +426,7 @@ HUD_Key_Event
 Return 1 to allow engine to process the key, otherwise, act on it as needed
 ============
 */
-int DLLEXPORT HUD_Key_Event( int down, int keynum, const char *pszCurrentBinding )
+int CL_DLLEXPORT HUD_Key_Event( int down, int keynum, const char *pszCurrentBinding )
 {
 //	RecClKeyEvent(down, keynum, pszCurrentBinding);
 
@@ -390,6 +451,8 @@ void IN_LeftDown(void) {KeyDown(&in_left);}
 void IN_LeftUp(void) {KeyUp(&in_left);}
 void IN_RightDown(void) {KeyDown(&in_right);}
 void IN_RightUp(void) {KeyUp(&in_right);}
+void IN_DucktapUp(void) {KeyUp(&in_ducktap);}
+void IN_DucktapDown(void) {KeyDown(&in_ducktap);}
 
 void IN_ForwardDown(void)
 {
@@ -657,7 +720,7 @@ if active == 1 then we are 1) not playing back demos ( where our commands are ig
 2 ) we have finished signing on to server
 ================
 */
-void DLLEXPORT CL_CreateMove ( float frametime, struct usercmd_s *cmd, int active )
+void CL_DLLEXPORT CL_CreateMove ( float frametime, struct usercmd_s *cmd, int active )
 {	
 //	RecClCL_CreateMove(frametime, cmd, active);
 
@@ -732,6 +795,13 @@ void DLLEXPORT CL_CreateMove ( float frametime, struct usercmd_s *cmd, int activ
 	// set button and flag bits
 	//
 	cmd->buttons = CL_ButtonBits( 1 );
+
+	if (in_ducktap.state & 1)
+	{
+		cmd->buttons |= IN_DUCK;
+		autofuncs::handle_ducktap(cmd); // Ducktap takes priority over autojump
+	} else 
+		autofuncs::handle_autojump(cmd);
 
 	// If they're in a modal dialog, ignore the attack button.
 	if(GetClientVoiceMgr()->IsInSquelchMode())
@@ -887,6 +957,7 @@ int CL_ButtonBits( int bResetState )
 		in_reload.state &= ~2;
 		in_alt1.state &= ~2;
 		in_score.state &= ~2;
+		in_ducktap.state &= ~2;
 	}
 
 	return bits;
@@ -978,6 +1049,8 @@ void InitInput (void)
 	gEngfuncs.pfnAddCommand ("-graph", IN_GraphUp);
 	gEngfuncs.pfnAddCommand ("+break",IN_BreakDown);
 	gEngfuncs.pfnAddCommand ("-break",IN_BreakUp);
+	gEngfuncs.pfnAddCommand ("+ducktap", IN_DucktapDown);
+	gEngfuncs.pfnAddCommand ("-ducktap", IN_DucktapUp);
 
 	lookstrafe			= gEngfuncs.pfnRegisterVariable ( "lookstrafe", "0", FCVAR_ARCHIVE );
 	lookspring			= gEngfuncs.pfnRegisterVariable ( "lookspring", "0", FCVAR_ARCHIVE );
@@ -993,6 +1066,8 @@ void InitInput (void)
 	cl_pitchdown		= gEngfuncs.pfnRegisterVariable ( "cl_pitchdown", "89", 0 );
 
 	cl_vsmoothing		= gEngfuncs.pfnRegisterVariable ( "cl_vsmoothing", "0.05", FCVAR_ARCHIVE );
+
+	autofuncs::cl_autojump = gEngfuncs.pfnRegisterVariable ( "cl_autojump", "1", FCVAR_ARCHIVE );
 
 	m_pitch			    = gEngfuncs.pfnRegisterVariable ( "m_pitch","0.022", FCVAR_ARCHIVE );
 	m_yaw				= gEngfuncs.pfnRegisterVariable ( "m_yaw","0.022", FCVAR_ARCHIVE );
@@ -1022,12 +1097,13 @@ void ShutdownInput (void)
 
 #include "interface.h"
 void CL_UnloadParticleMan( void );
+void CL_UnloadGameUI();
 
 #if defined( _TFC )
 void ClearEventList( void );
 #endif
 
-void DLLEXPORT HUD_Shutdown( void )
+void CL_DLLEXPORT HUD_Shutdown( void )
 {
 //	RecClShutdown();
 
@@ -1038,4 +1114,7 @@ void DLLEXPORT HUD_Shutdown( void )
 #endif
 	
 	CL_UnloadParticleMan();
+	CL_UnloadGameUI();
+
+	discord_integration::shutdown();
 }

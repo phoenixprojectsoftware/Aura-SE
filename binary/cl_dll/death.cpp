@@ -109,7 +109,7 @@ int CHudDeathNotice :: Draw( float flTime )
 			continue;
 		}
 
-		rgDeathNoticeList[i].flDisplayTime = V_min( rgDeathNoticeList[i].flDisplayTime, gHUD.m_flTime + DEATHNOTICE_DISPLAY_TIME );
+		rgDeathNoticeList[i].flDisplayTime = min( rgDeathNoticeList[i].flDisplayTime, gHUD.m_flTime + DEATHNOTICE_DISPLAY_TIME );
 
 		// Only draw if the viewport will let me
 		if ( gViewPort && gViewPort->AllowedToPrintText() )
@@ -126,8 +126,17 @@ int CHudDeathNotice :: Draw( float flTime )
 
 				// Draw killers name
 				if ( rgDeathNoticeList[i].KillerColor )
-					gEngfuncs.pfnDrawSetTextColor( rgDeathNoticeList[i].KillerColor[0], rgDeathNoticeList[i].KillerColor[1], rgDeathNoticeList[i].KillerColor[2] );
-				x = 5 + DrawConsoleString( x, y, rgDeathNoticeList[i].szKiller );
+					x = 5 + gHUD.DrawConsoleStringWithColorTags(
+						x,
+						y,
+						rgDeathNoticeList[i].szKiller,
+						true,
+						rgDeathNoticeList[i].KillerColor[0],
+						rgDeathNoticeList[i].KillerColor[1],
+						rgDeathNoticeList[i].KillerColor[2]
+					);
+				else
+					x = 5 + DrawConsoleString( x, y, rgDeathNoticeList[i].szKiller );
 			}
 
 			r = 255;  g = 80;	b = 0;
@@ -146,8 +155,17 @@ int CHudDeathNotice :: Draw( float flTime )
 			if (rgDeathNoticeList[i].iNonPlayerKill == FALSE)
 			{
 				if ( rgDeathNoticeList[i].VictimColor )
-					gEngfuncs.pfnDrawSetTextColor( rgDeathNoticeList[i].VictimColor[0], rgDeathNoticeList[i].VictimColor[1], rgDeathNoticeList[i].VictimColor[2] );
-				x = DrawConsoleString( x, y, rgDeathNoticeList[i].szVictim );
+					x = gHUD.DrawConsoleStringWithColorTags(
+						x,
+						y,
+						rgDeathNoticeList[i].szVictim,
+						true,
+						rgDeathNoticeList[i].VictimColor[0],
+						rgDeathNoticeList[i].VictimColor[1],
+						rgDeathNoticeList[i].VictimColor[2]
+					);
+				else
+					x = DrawConsoleString( x, y, rgDeathNoticeList[i].szVictim );
 			}
 		}
 	}
@@ -167,7 +185,7 @@ int CHudDeathNotice :: MsgFunc_DeathMsg( const char *pszName, int iSize, void *p
 
 	char killedwith[32];
 	strcpy( killedwith, "d_" );
-	strncat( killedwith, READ_STRING(), 32 );
+	strncat( killedwith, READ_STRING(), ARRAYSIZE(killedwith) - 3 );
 
 	if (gViewPort)
 		gViewPort->DeathMsg( killer, victim );
@@ -189,7 +207,7 @@ int CHudDeathNotice :: MsgFunc_DeathMsg( const char *pszName, int iSize, void *p
 		gViewPort->GetAllPlayersInfo();
 
 	// Get the Killer's name
-	char *killer_name = g_PlayerInfoList[ killer ].name;
+	const char *killer_name = g_PlayerInfoList[ killer ].name;
 	if ( !killer_name )
 	{
 		killer_name = "";
@@ -203,7 +221,7 @@ int CHudDeathNotice :: MsgFunc_DeathMsg( const char *pszName, int iSize, void *p
 	}
 
 	// Get the Victim's name
-	char *victim_name = NULL;
+	const char *victim_name = NULL;
 	// If victim is -1, the killer killed a specific, non-player object (like a sentrygun)
 	if ( ((char)victim) != -1 )
 		victim_name = g_PlayerInfoList[ victim ].name;
@@ -280,7 +298,7 @@ int CHudDeathNotice :: MsgFunc_DeathMsg( const char *pszName, int iSize, void *p
 			ConsolePrint( rgDeathNoticeList[i].szVictim );
 		}
 
-		if ( killedwith && *killedwith && (*killedwith > 13 ) && strcmp( killedwith, "d_world" ) && !rgDeathNoticeList[i].iTeamKill )
+		if ( *killedwith && (*killedwith > 13 ) && strcmp( killedwith, "d_world" ) && !rgDeathNoticeList[i].iTeamKill )
 		{
 			ConsolePrint( " with " );
 

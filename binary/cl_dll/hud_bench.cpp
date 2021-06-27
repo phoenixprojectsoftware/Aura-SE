@@ -27,6 +27,7 @@
 #include "net_api.h"
 
 #include "entity_types.h"
+#include "com_model.h"
 
 #ifndef M_PI
 #define M_PI		3.14159265358979323846	// matches value in gcc v2 math.h
@@ -100,7 +101,7 @@ int Bench_GetStage( void )
 
 float Bench_GetSwitchTime( void )
 {
-	return g_benchSwitchTimes[ V_min( Bench_GetStage(), LAST_STAGE ) ];
+	return g_benchSwitchTimes[ min( Bench_GetStage(), LAST_STAGE ) ];
 }
 
 int Bench_InStage( int stage )
@@ -146,8 +147,8 @@ int CHudBenchmark::MsgFunc_Bench(const char *pszName, int iSize, void *pbuf)
 	m_fReceiveTime = gHUD.m_flTime;
 	m_StoredLatency = ( m_fReceiveTime - m_fSendTime );
 
-	m_StoredLatency = V_min( 1.0, m_StoredLatency );
-	m_StoredLatency = V_max( 0.0, m_StoredLatency );
+	m_StoredLatency = min( 1.0, m_StoredLatency );
+	m_StoredLatency = max( 0.0, m_StoredLatency );
 
 	m_StoredPacketLoss = 0.0;
 
@@ -286,8 +287,8 @@ void CHudBenchmark::Think( void )
 			float switch_time;
 			float total_time;
 			
-			latency = V_max( 0.0, latency );
-			latency = V_min( 1.0, latency );
+			latency = max( 0.0, latency );
+			latency = min( 1.0, latency );
 
 			total_time = Bench_GetSwitchTime();
 			total_time -= 2.0;
@@ -341,8 +342,8 @@ void CHudBenchmark::Think( void )
 
 			// Only takes 1/2 time to get up to maximum speed
 			frac *= 2.0;
-			frac = V_max( 0.0, frac );
-			frac = V_min( 1.0, frac );
+			frac = max( 0.0, frac );
+			frac = min( 1.0, frac );
 
 			m_nObjects = (int)(NUM_BENCH_OBJ * frac);
 		}
@@ -420,8 +421,8 @@ int CHudBenchmark::Bench_ScoreForValue( int stage, float raw )
 	{
 	case 1:  // ping
 		score = 100.0 * ( m_StoredLatency );
-		score = V_max( score, 0 );
-		score = V_min( score, 100 );
+		score = max( score, 0 );
+		score = min( score, 100 );
 
 		// score is inverted
 		score = 100 - score;
@@ -429,8 +430,8 @@ int CHudBenchmark::Bench_ScoreForValue( int stage, float raw )
 		break;
 	case 2:  // framerate/performance
 		score = (int)( 100 * m_fAvgFrameRate ) / 72;
-		score = V_min( score, 100 );
-		score = V_max( score, 0 );
+		score = min( score, 100 );
+		score = max( score, 0 );
 
 		score *= BENCH_RANGE/100.0;
 		if ( power_play )
@@ -440,8 +441,8 @@ int CHudBenchmark::Bench_ScoreForValue( int stage, float raw )
 		break;
 	case 3:  // tracking
 		score = (100 * m_fAvgScore) / 40;
-		score = V_max( score, 0 );
-		score = V_min( score, 100 );
+		score = max( score, 0 );
+		score = min( score, 100 );
 
 		// score is inverted
 		score = 100 - score;
@@ -465,8 +466,8 @@ void CHudBenchmark::SetCompositeScore( void )
 
 	int composite = ( ping_score * weights[ 0 ] + frame_score * weights[ 1 ] + tracking_score * weights[ 2 ] );
 	
-	composite = V_min( 100, composite );
-	composite = V_max( 0, composite );
+	composite = min( 100, composite );
+	composite = max( 0, composite );
 
 	m_nCompositeScore = composite;
 }
@@ -506,7 +507,7 @@ int CHudBenchmark::Draw( float flTime )
 		}
 		else
 		{
-			sprintf( sz, g_stage1[0] );
+			sprintf( sz, "%s", g_stage1[0] );
 		}
 		gHUD.DrawHudString( x, y, 320, sz, 255, 255, 255 );
 
@@ -531,7 +532,7 @@ int CHudBenchmark::Draw( float flTime )
 		}
 		else
 		{
-			sprintf( sz, g_stage2[0] );
+			sprintf( sz, "%s", g_stage2[0] );
 		}
 		gHUD.DrawHudString( x, y, 320, sz, 255, 255, 255 );
 		y += 20;
@@ -546,7 +547,7 @@ int CHudBenchmark::Draw( float flTime )
 		}
 		else
 		{
-			sprintf( sz, g_stage3[0] );
+			sprintf( sz, "%s", g_stage3[0] );
 		}
 
 		gHUD.DrawHudString( x, y, 320, sz, 255, 255, 255 );
@@ -599,23 +600,6 @@ void Bench_SpotPosition( vec3_t dot, vec3_t target )
 	gHUD.m_Benchmark.SetScore( delta.Length() );
 }
 
-typedef struct model_s
-{
-	char		name[64];
-	qboolean	needload;		// bmodels and sprites don't cache normally
-
-	int			type;
-	int			numframes;
-	int			synctype;
-	
-	int			flags;
-
-//
-// volume occupied by the model
-//		
-	vec3_t		mins, maxs;
-} model_t;
-
 static vec3_t g_dotorg;
 vec3_t g_aimorg;
 float g_fZAdjust = 0.0;
@@ -652,8 +636,8 @@ void Bench_CheckEntity( int type, struct cl_entity_s *ent, const char *modelname
 			if ( dt > 0.0 && dt < 1.0 )
 			{
 				fZAdjust += gEngfuncs.pfnRandomFloat( -fRate, fRate );
-				fZAdjust = V_min( fBounds, fZAdjust );
-				fZAdjust = V_max( -fBounds, fZAdjust );
+				fZAdjust = min( fBounds, fZAdjust );
+				fZAdjust = max( -fBounds, fZAdjust );
 
 				ent->origin[2] += fZAdjust;
 
@@ -993,7 +977,7 @@ void HUD_CreateBenchObjects( vec3_t origin )
 			else
 			{
 				bench[i].curstate.renderamt += BLEND_IN_SPEED * frametime;
-				bench[i].curstate.renderamt = V_min( 255, bench[i].curstate.renderamt );
+				bench[i].curstate.renderamt = min( 255, bench[i].curstate.renderamt );
 				bench[i].curstate.rendermode = kRenderTransAlpha;
 			}
 
@@ -1055,8 +1039,8 @@ void Bench_SetViewAngles( int recalc_wander, float *viewangles, float frametime,
 			for ( i = 0; i < 2; i++ )
 			{
 				v_stochastic[ i ] += frametime * gEngfuncs.pfnRandomFloat( -fmag, fmag );
-				v_stochastic[ i ] = V_max( -15.0, v_stochastic[ i ] );
-				v_stochastic[ i ] = V_min( 15.0, v_stochastic[ i ] );
+				v_stochastic[ i ] = max( -15.0, v_stochastic[ i ] );
+				v_stochastic[ i ] = min( 15.0, v_stochastic[ i ] );
 			}
 
 			v_stochastic[ 2 ] = 0.0;

@@ -20,6 +20,7 @@
 
 #include "hud.h"
 #include "cl_util.h"
+#include <ctime>
 #include <string.h>
 #include <stdio.h>
 #include "parsemsg.h"
@@ -30,6 +31,11 @@
 #include "demo.h"
 #include "demo_api.h"
 #include "vgui_ScorePanel.h"
+
+#include "forcemodel.h"
+#include "steam_id.h"
+
+#include "versioninfo.h"
 
 hud_player_info_t	 g_PlayerInfoList[MAX_PLAYERS+1];	   // player info from the engine
 extra_player_info_t  g_PlayerExtraInfo[MAX_PLAYERS+1];   // additional player info sent directly to the client dll
@@ -83,6 +89,8 @@ extern client_sprite_t *GetSpriteList(client_sprite_t *pList, const char *psz, i
 
 extern cvar_t *sensitivity;
 cvar_t *cl_lw = NULL;
+cvar_t *cl_righthand = nullptr;
+cvar_t* cl_viewmodel_lag_enabled;
 
 void ShutdownInput (void);
 
@@ -125,6 +133,74 @@ int __MsgFunc_GameMode(const char *pszName, int iSize, void *pbuf )
 	return gHUD.MsgFunc_GameMode( pszName, iSize, pbuf );
 }
 
+int __MsgFunc_Gametype(const char *pszName, int iSize, void *pbuf)
+{
+	return gHUD.MsgFunc_Gametype( pszName, iSize, pbuf );
+}
+
+int __MsgFunc_AllowSpec(const char *pszName, int iSize, void *pbuf)
+{
+	if (gViewPort)
+		return gViewPort->MsgFunc_AllowSpec( pszName, iSize, pbuf );
+	return 0;
+}
+
+int __MsgFunc_CheatCheck(const char* name, int size, void* buf)
+{
+	BEGIN_READ(buf, size);
+	const auto pure = READ_BYTE();
+
+	// Stub: no cheat checks in OpenAG.
+
+	return 1;
+}
+
+int __MsgFunc_WhString(const char* name, int size, void* buf)
+{
+	BEGIN_READ(buf, size);
+	const auto string = READ_STRING();
+
+	// Stub: no cheat checks in OpenAG.
+
+	return 1;
+}
+
+int __MsgFunc_SpikeCheck(const char* name, int size, void* buf)
+{
+	BEGIN_READ(buf, size);
+	const auto model = READ_STRING();
+
+	// Stub: no cheat checks in OpenAG.
+
+	return 1;
+}
+
+int __MsgFunc_CRC32(const char* name, int size, void* buf)
+{
+	BEGIN_READ(buf, size);
+	const auto checksum = READ_LONG();
+	const auto filename = READ_STRING();
+
+	// Stub: no cheat checks in OpenAG.
+
+	return 1;
+}
+
+int __MsgFunc_PlaySound(const char* name, int size, void* buf)
+{
+	BEGIN_READ(buf, size);
+	const auto player = READ_BYTE();
+
+	vec3_t origin;
+	for (size_t i = 0; i < 3; ++i)
+		origin[i] = READ_COORD();
+
+	const auto sound = READ_STRING();
+	gEngfuncs.pfnPlaySoundByName(sound, 1);
+
+	return 1;
+}
+
 // TFFree Command Menu
 void __CmdFunc_OpenCommandMenu(void)
 {
@@ -164,6 +240,103 @@ void __CmdFunc_ToggleServerBrowser( void )
 	if ( gViewPort )
 	{
 		gViewPort->ToggleServerBrowser();
+	}
+}
+
+void __CmdFunc_Agrecord()
+{
+	/*
+	 * Yay overcomplicating stuff.
+	 * All this code makes sure we can fit as much as possible into cmd.
+	 */
+
+	char cmd[256];
+	cmd[ARRAYSIZE(cmd) - 1] = '\0';
+
+	std::time_t curtime = std::time(nullptr);
+
+	auto written = std::strftime(cmd, sizeof(cmd), "record %Y%m%d_%H%M%S_", std::localtime(&curtime));
+	if (written > 0) {
+		char mapname[256];
+		auto mapname_len = get_map_name(mapname, ARRAYSIZE(mapname));
+
+		/*
+		 * We want to leave at least one more byte for '\0'.
+		 * written does not include the '\0'.
+		 * written is strictly less than sizeof(cmd).
+		 * The maximal value for written is sizeof(cmd) - 1.
+		 * So if we wrote ARRAYSIZE(cmd) - 1 bytes, we have no extra bytes left.
+		 */
+		mapname_len = min(mapname_len, ARRAYSIZE(cmd) - written - 1);
+		strncpy(cmd + written, mapname, mapname_len);
+
+		cmd[written + mapname_len] = '\0';
+
+		if (gEngfuncs.Cmd_Argc() >= 2) {
+			size_t bytes_left = ARRAYSIZE(cmd) - written - 1 - mapname_len;
+			if (bytes_left >= 2) {
+				cmd[written + mapname_len] = '_';
+
+				auto arg_len = strlen(gEngfuncs.Cmd_Argv(1));
+				auto bytes_to_write = min(arg_len, bytes_left - 1);
+
+				strncpy(cmd + written + mapname_len + 1, gEngfuncs.Cmd_Argv(1), bytes_to_write);
+
+				cmd[written + mapname_len + 1 + bytes_to_write] = '\0';
+			}
+		}
+
+		gEngfuncs.pfnClientCmd(cmd);
+	}
+}
+
+void __CmdFunc_Append()
+{
+	if (gEngfuncs.Cmd_Argc() != 2) {
+		if (!gEngfuncs.pDemoAPI->IsPlayingback())
+			gEngfuncs.Con_Printf("append <command> - put the command into the end of the command buffer.\n");
+
+		return;
+	}
+
+	EngineClientCmd(gEngfuncs.Cmd_Argv(1));
+}
+
+void __CmdFunc_Writemap()
+{
+	FILE* saved_maps;
+	char map_name[64];
+	char map_name_to_check[64];
+
+	get_map_name(map_name, ARRAYSIZE(map_name));
+
+	if (map_name[0])
+	{
+		saved_maps = fopen("saved_maps.txt", "r+");
+
+		if (saved_maps)
+		{
+			while (fgets(map_name_to_check, ARRAYSIZE(map_name_to_check), saved_maps))
+			{
+				map_name_to_check[strlen(map_name_to_check) - 1] = '\0';
+
+				if (!strcmp(map_name, map_name_to_check))
+				{
+					gEngfuncs.Con_Printf("Current map is already in saved_maps.txt\n");
+					fclose(saved_maps);
+					return;
+				}
+			}
+		}
+		else
+		{           
+			saved_maps = fopen("saved_maps.txt", "a");
+			if(!saved_maps)
+				return;
+		}
+
+		fprintf(saved_maps, "%s\n", map_name);
+		fclose(saved_maps);
 	}
 }
 
@@ -273,11 +446,16 @@ int __MsgFunc_ResetFade(const char *pszName, int iSize, void *pbuf)
 	return 0;
 }
 
-int __MsgFunc_AllowSpec(const char *pszName, int iSize, void *pbuf)
+void PrintVersion()
 {
-	if (gViewPort)
-		return gViewPort->MsgFunc_AllowSpec( pszName, iSize, pbuf );
-	return 0;
+	gEngfuncs.Con_Printf("\n  Aura client build %s (%s)", clientDate);
+	gEngfuncs.Con_Printf("\n  Aura %s", auraVersion);
+	gEngfuncs.Con_Printf("\n  Half-Life: Zombies Ate My Neighbours Multiplayer %s", zamnhlmpVersion);
+	gEngfuncs.Con_Printf("\n  Author(s): %s", Authors "\n");
+	gEngfuncs.Con_Printf("\n  Aura SDK:");
+	gEngfuncs.Con_Printf("\n  Client binary SDK - %s", auraCL);
+	gEngfuncs.Con_Printf("\n  Server binary - %s", auraSE);
+	gEngfuncs.Con_Printf("\n  ZAMNHLMP Developer Repository - hosts public playtest builds - %s", zamnhlmpRepo "\n");
 }
 
 // This is called every time the DLL is loaded
@@ -291,12 +469,22 @@ void CHud :: Init( void )
 	HOOK_MESSAGE( SetFOV );
 	HOOK_MESSAGE( Concuss );
 
+	HOOK_MESSAGE( Gametype );
+
 	// TFFree CommandMenu
 	HOOK_COMMAND( "+commandmenu", OpenCommandMenu );
 	HOOK_COMMAND( "-commandmenu", CloseCommandMenu );
 	HOOK_COMMAND( "ForceCloseCommandMenu", ForceCloseCommandMenu );
 	HOOK_COMMAND( "special", InputPlayerSpecial );
 	HOOK_COMMAND( "togglebrowser", ToggleServerBrowser );
+
+	HOOK_COMMAND( "agrecord", Agrecord );
+	HOOK_COMMAND( "append", Append );
+	HOOK_COMMAND( "writemap", Writemap );
+	EngineClientCmd("alias zpecial \"append _zpecial\"");
+
+	force_model::hook_commands();
+	steam_id::hook_messages();
 
 	HOOK_MESSAGE( ValClass );
 	HOOK_MESSAGE( TeamNames );
@@ -319,20 +507,40 @@ void CHud :: Init( void )
 	// VGUI Menus
 	HOOK_MESSAGE( VGUIMenu );
 
+	HOOK_MESSAGE( CheatCheck );
+	HOOK_MESSAGE( WhString );
+	HOOK_MESSAGE( SpikeCheck );
+	HOOK_MESSAGE( CRC32 );
+	HOOK_MESSAGE( PlaySound );
+
 	CVAR_CREATE( "hud_classautokill", "1", FCVAR_ARCHIVE | FCVAR_USERINFO );		// controls whether or not to suicide immediately on TF class switch
 	CVAR_CREATE( "hud_takesshots", "0", FCVAR_ARCHIVE );		// controls whether or not to automatically take screenshots at the end of a round
 
+	// Implemented server-side, needs to be registered client-side.
+	CVAR_CREATE( "cl_autowepswitch", "1", FCVAR_ARCHIVE | FCVAR_USERINFO | FCVAR_CLIENTDLL );
+
+	// This has to be called cl_righthand (there's some stuff compiled into the engine),
+	// and also from my tests it has to be 0 for normal and 1 for left-handed.
+	cl_righthand = CVAR_CREATE( "cl_righthand", "0", FCVAR_ARCHIVE );
 
 	m_iLogo = 0;
 	m_iFOV = 0;
 
 	CVAR_CREATE( "zoom_sensitivity_ratio", "1.2", 0 );
-	default_fov = CVAR_CREATE( "default_fov", "90", 0 );
+	default_fov = CVAR_CREATE( "default_fov", "110", FCVAR_ARCHIVE ); // I have set the hard-coded default to 110. Why would you want to use 90 on a widescreen display?
 	m_pCvarStealMouse = CVAR_CREATE( "hud_capturemouse", "1", FCVAR_ARCHIVE );
 	m_pCvarDraw = CVAR_CREATE( "hud_draw", "1", FCVAR_ARCHIVE );
+	m_pCvarDrawDeathNoticesAlways = CVAR_CREATE( "cl_draw_deathnotices_always", "0", FCVAR_ARCHIVE );
+	m_pCvarAutostop = CVAR_CREATE("cl_autostop", "0", FCVAR_ARCHIVE);
+	m_pCvarViewheightMode = CVAR_CREATE("cl_viewheight_mode", "0", FCVAR_ARCHIVE);
+	m_pCvarHideCorpses = CVAR_CREATE("cl_hidecorpses", "0", FCVAR_ARCHIVE);
+	m_pCvarColor = CVAR_CREATE( "hud_color", "", FCVAR_ARCHIVE );
 	cl_lw = gEngfuncs.pfnGetCvarPointer( "cl_lw" );
 
 	m_pSpriteList = NULL;
+
+	// Version Info command. Runs PrintVersion() which reads info from versioninfo.h
+	gEngfuncs.pfnAddCommand("version_aura", PrintVersion);
 
 	// Clear any old HUD list
 	if ( m_pHudList )
@@ -350,6 +558,7 @@ void CHud :: Init( void )
 	// In case we get messages before the first update -- time will be valid
 	m_flTime = 1.0;
 
+	m_Rainbow.Init();
 	m_Ammo.Init();
 	m_Health.Init();
 	m_SayText.Init();
@@ -364,6 +573,23 @@ void CHud :: Init( void )
 	m_AmmoSecondary.Init();
 	m_TextMessage.Init();
 	m_StatusIcons.Init();
+	m_Countdown.Init();
+	m_Crosshairs.Init();
+	m_CTF.Init();
+	m_CustomTimer.Init();
+	m_Debug.Init();
+	m_Location.Init();
+	m_NextMap.Init();
+	m_PlayerId.Init();
+	m_Scores.Init();
+	m_Settings.Init();
+	m_Speedometer.Init();
+	m_SuddenDeath.Init();
+	m_Timeout.Init();
+	m_Timer.Init();
+	m_Vote.Init();
+	m_Watermark.Init();
+	m_OldScoreBoard.Init();
 	GetClientVoiceMgr()->Init(&g_VoiceStatusHelper, (vgui::Panel**)&gViewPort);
 
 	m_Menu.Init();
@@ -513,10 +739,27 @@ void CHud :: VidInit( void )
 	m_AmmoSecondary.VidInit();
 	m_TextMessage.VidInit();
 	m_StatusIcons.VidInit();
+	m_Countdown.VidInit();
+	m_Crosshairs.VidInit();
+	m_CTF.VidInit();
+	m_CustomTimer.VidInit();
+	m_Debug.VidInit();
+	m_Location.VidInit();
+	m_NextMap.VidInit();
+	m_PlayerId.VidInit();
+	m_Scores.VidInit();
+	m_Settings.VidInit();
+	m_Speedometer.VidInit();
+	m_SuddenDeath.VidInit();
+	m_Timeout.VidInit();
+	m_Timer.VidInit();
+	m_Vote.VidInit();
+	m_Watermark.VidInit();
+	m_OldScoreBoard.VidInit();
 	GetClientVoiceMgr()->VidInit();
 }
 
-int CHud::MsgFunc_Logo(const char *pszName,  int iSize, void *pbuf)
+int CHud::MsgFunc_Logo(const char *pszName, int iSize, void *pbuf)
 {
 	BEGIN_READ( pbuf, iSize );
 
@@ -694,5 +937,4 @@ float CHud::GetSensitivity( void )
 {
 	return m_flMouseSensitivity;
 }
-
 

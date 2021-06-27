@@ -21,8 +21,8 @@
 //
 
 
-#define RGB_YELLOWISH 0x00FFA000 //255,160,0
-#define RGB_REDISH 0x00FF1010 //255,160,0
+#define RGB_DEFAULT 0x001eff00 //OLD 2.5 AND BEFORE: 54, 146, 248; NEW 2.5.1+ 0, 98, 255, SEASON 6 HECU: 30, 255, 0
+#define RGB_GREY 0x008e8f91 //255,160,0
 #define RGB_GREENISH 0x0000A000 //0,160,0
 
 #ifndef _WIN32
@@ -92,6 +92,25 @@ struct HUDLIST {
 #include "voice_status.h" // base voice handling class
 #include "hud_spectator.h"
 
+#include "hud_countdown.h"
+#include "hud_crosshairs.h"
+#include "hud_customtimer.h"
+#include "hud_ctf.h"
+#include "hud_debug.h"
+#include "hud_location.h"
+#include "hud_nextmap.h"
+#include "hud_oldscoreboard.h"
+#include "hud_playerid.h"
+#include "hud_scores.h"
+#include "hud_settings.h"
+#include "hud_speedometer.h"
+#include "hud_suddendeath.h"
+#include "hud_timeout.h"
+#include "hud_timer.h"
+#include "hud_vote.h"
+#include "hud_watermark.h"
+#include "rainbow.h"
+
 
 //
 //-----------------------------------------------------
@@ -135,6 +154,7 @@ private:
 	int	m_HUD_bucket0;
 	int m_HUD_selection;
 
+	cvar_t* hud_weapon;
 };
 
 //
@@ -317,6 +337,7 @@ private:
 
 	struct cvar_s *	m_HUD_saytext;
 	struct cvar_s *	m_HUD_saytext_time;
+	struct cvar_s * m_HUD_saytext_sound;
 };
 
 //
@@ -400,7 +421,7 @@ public:
 	int Init( void );
 	static char *LocaliseTextString( const char *msg, char *dst_buffer, int buffer_size );
 	static char *BufferedLocaliseTextString( const char *msg );
-	char *LookupString( const char *msg_name, int *msg_dest = NULL );
+	const char *LookupString( const char *msg_name, int *msg_dest = NULL );
 	int MsgFunc_TextMsg(const char *pszName, int iSize, void *pbuf);
 };
 
@@ -462,8 +483,8 @@ public:
 	
 	//had to make these public so CHud could access them (to enable concussion icon)
 	//could use a friend declaration instead...
-	void EnableIcon( char *pszIconName, unsigned char red, unsigned char green, unsigned char blue );
-	void DisableIcon( char *pszIconName );
+	void EnableIcon( const char *pszIconName, unsigned char red, unsigned char green, unsigned char blue );
+	void DisableIcon( const char *pszIconName );
 
 private:
 
@@ -550,6 +571,8 @@ private:
 	float						m_flMouseSensitivity;
 	int							m_iConcussionEffect; 
 
+	int							m_iGameType;
+
 public:
 
 	HSPRITE						m_hsprCursor;
@@ -565,13 +588,43 @@ public:
 	int		m_iRes;
 	cvar_t  *m_pCvarStealMouse;
 	cvar_t	*m_pCvarDraw;
+	cvar_t	*m_pCvarDrawDeathNoticesAlways;
+	cvar_t	*m_pCvarAutostop;
+	cvar_t	*m_pCvarViewheightMode;
+	cvar_t	*m_pCvarHideCorpses;
 
 	int m_iFontHeight;
-	int DrawHudNumber(int x, int y, int iFlags, int iNumber, int r, int g, int b );
-	int DrawHudString(int x, int y, int iMaxX, char *szString, int r, int g, int b );
-	int DrawHudStringReverse( int xpos, int ypos, int iMinX, char *szString, int r, int g, int b );
+
+	cvar_t* m_pCvarColor;
+	unsigned long m_iDefaultHUDColor;
+
+	void UpdateDefaultHUDColor();
+
+	int DrawHudNumber(int x, int y, int iFlags, int iNumber, int r, int g, int b);
+	int DrawHudNumber(int x, int y, int number, int r, int g, int b);
+	int DrawHudNumberCentered(int x, int y, int number, int r, int g, int b);
+	int DrawHudString(int x, int y, int iMaxX, const char *szString, int r, int g, int b );
+	int DrawHudStringReverse( int xpos, int ypos, int iMinX, const char *szString, int r, int g, int b );
 	int DrawHudNumberString( int xpos, int ypos, int iMinX, int iNumber, int r, int g, int b );
+	int DrawHudNumberStringFixed( int xpos, int ypos, int iNumber, int r, int g, int b );
 	int GetNumWidth(int iNumber, int iFlags);
+
+	int DrawHudStringCentered(int x, int y, const char* string, int r, int g, int b);
+	int DrawHudStringRightAligned(int x, int y, const char* string, int r, int g, int b);
+	int GetHudStringWidth(const char* string);
+	int DrawHudStringWithColorTags(int x, int y, char* string, int r, int g, int b);
+	int DrawHudStringCenteredWithColorTags(int x, int y, char* string, int r, int g, int b);
+	int GetHudStringWidthWithColorTags(const char* string);
+	int DrawConsoleStringWithColorTags(
+		int x,
+		int y,
+		char* string,
+		bool use_default_color = false,
+		float default_r = 0.0f,
+		float default_g = 0.0f,
+		float default_b = 0.0f
+	);
+	void GetConsoleStringSizeWithColorTags(char* string, int& width, int& height);
 
 private:
 	// the memory for these arrays are allocated in the first call to CHud::VidInit(), when the hud.txt and associated sprites are loaded.
@@ -580,8 +633,9 @@ private:
 	wrect_t *m_rgrcRects;	/*[HUD_SPRITE_COUNT]*/
 	char *m_rgszSpriteNames; /*[HUD_SPRITE_COUNT][MAX_SPRITE_NAME_LENGTH]*/
 
-	struct cvar_s *default_fov;
 public:
+	struct cvar_s *default_fov;
+
 	HSPRITE GetSprite( int index ) 
 	{
 		return (index < 0) ? 0 : m_rghSprites[index];
@@ -590,6 +644,11 @@ public:
 	wrect_t& GetSpriteRect( int index )
 	{
 		return m_rgrcRects[index];
+	}
+
+	int GetGameType() const
+	{
+		return m_iGameType;
 	}
 
 	
@@ -612,13 +671,33 @@ public:
 	CHudStatusIcons m_StatusIcons;
 	CHudBenchmark	m_Benchmark;
 
+	CHudCountdown	m_Countdown;
+	CHudCrosshairs	m_Crosshairs;
+	CHudCTF			m_CTF;
+	CHudCustomTimer m_CustomTimer;
+	CHudDebug		m_Debug;
+	CHudLocation	m_Location;
+	CHudNextMap		m_NextMap;
+	CHudPlayerId		m_PlayerId;
+	CHudScores	m_Scores;
+	CHudSettings	m_Settings;
+	CHudSpeedometer	m_Speedometer;
+	CHudSuddenDeath		m_SuddenDeath;
+	CHudTimeout		m_Timeout;
+	CHudTimer		m_Timer;
+	CHudVote		m_Vote;
+	CHudWatermark	m_Watermark;
+	CHudOldScoreboard m_OldScoreBoard;
+
+	CRainbow m_Rainbow;
+
 	void Init( void );
 	void VidInit( void );
 	void Think(void);
 	int Redraw( float flTime, int intermission );
 	int UpdateClientData( client_data_t *cdata, float time );
 
-	CHud() : m_iSpriteCount(0), m_pHudList(NULL) {}  
+	CHud() : m_pHudList(NULL), m_iSpriteCount(0), m_iDefaultHUDColor(RGB_DEFAULT) {}
 	~CHud();			// destructor, frees allocated memory
 
 	// user messages
@@ -630,6 +709,8 @@ public:
 	void _cdecl MsgFunc_ViewMode( const char *pszName, int iSize, void *pbuf );
 	int _cdecl MsgFunc_SetFOV(const char *pszName,  int iSize, void *pbuf);
 	int  _cdecl MsgFunc_Concuss( const char *pszName, int iSize, void *pbuf );
+
+	int MsgFunc_Gametype(const char *pszName, int iSize, void *pbuf);
 
 	// Screen information
 	SCREENINFO	m_scrinfo;

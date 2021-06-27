@@ -1,5 +1,16 @@
 // studio_model.cpp
 // routines for setting up to draw 3DStudio models
+#ifdef _WIN32
+#include <winsani_in.h>
+#include <Windows.h>
+#include <winsani_out.h>
+#endif
+
+#ifdef __APPLE__
+#include <OpenGL/gl.h>
+#else
+#include <GL/gl.h>
+#endif
 
 #include "hud.h"
 #include "cl_util.h"
@@ -22,7 +33,14 @@
 #include "StudioModelRenderer.h"
 #include "GameStudioModelRenderer.h"
 
+#include "forcemodel.h"
+
 extern cvar_t *tfc_newmodels;
+extern float g_flRenderFOV;
+Vector g_vViewOrigin;
+Vector g_vViewForward;
+Vector g_vViewRight;
+Vector g_vViewUp;
 
 extern extra_player_info_t  g_PlayerExtraInfo[MAX_PLAYERS+1];
 
@@ -52,6 +70,7 @@ void CStudioModelRenderer::Init( void )
 	m_pCvarHiModels			= IEngineStudio.GetCvar( "cl_himodels" );
 	m_pCvarDeveloper		= IEngineStudio.GetCvar( "developer" );
 	m_pCvarDrawEntities		= IEngineStudio.GetCvar( "r_drawentities" );
+	m_pCvarViewmodelFov		= gEngfuncs.pfnRegisterVariable( "cl_viewmodel_fov","0", FCVAR_ARCHIVE );
 
 	m_pChromeSprite			= IEngineStudio.GetChromeSprite();
 
@@ -961,6 +980,15 @@ void CStudioModelRenderer::StudioSetupBones ( void )
 
 		if (pbones[i].parent == -1) 
 		{
+			extern cvar_t* cl_righthand;
+			if (m_pCurrentEntity == gEngfuncs.GetViewModel()
+				&& IEngineStudio.IsHardware()
+				&& cl_righthand->value != 0.0f)
+			{
+				for (size_t j = 0; j < 4; ++j)
+					bonematrix[1][j] *= -1.0;
+			}
+
 			if ( IEngineStudio.IsHardware() )
 			{
 				ConcatTransforms ((*m_protationmatrix), bonematrix, (*m_pbonetransform)[i]);
@@ -1646,6 +1674,15 @@ float g_flSpinUpTime[ 33 ];
 float g_flSpinDownTime[ 33 ];
 #endif
 
+model_t* CStudioModelRenderer::GetPlayerModel(int player_index)
+{
+	auto model = force_model::get_model_override(player_index);
+	if (model)
+		return model;
+
+	return IEngineStudio.SetupPlayerModel(player_index);
+}
+
 
 /*
 ====================
@@ -1689,7 +1726,7 @@ int CStudioModelRenderer::StudioDrawPlayer( int flags, entity_state_t *pplayer )
 
 #else
 
-	m_pRenderModel = IEngineStudio.SetupPlayerModel( m_nPlayerIndex );
+	m_pRenderModel = GetPlayerModel(m_nPlayerIndex);
 
 #endif
 
@@ -1957,7 +1994,40 @@ void CStudioModelRenderer::StudioCalcAttachments( void )
 	for (i = 0; i < m_pStudioHeader->numattachments; i++)
 	{
 		VectorTransform( pattachment[i].org, (*m_plighttransform)[pattachment[i].bone],  m_pCurrentEntity->attachment[i] );
+
+		if (IEngineStudio.IsHardware() && // OpenGL mode
+			m_pCurrentEntity == gEngfuncs.GetViewModel() && // attachments of viewmodel
+			m_pCvarViewmodelFov->value != 0.0f && // viewmodel FOV is changed
+			g_flRenderFOV == gHUD.default_fov->value) // weapon is not zoomed in
+		{
+			// Adjust attachment positions to account for different viewmodel FOV.
+			// Otherwise weapon effects (sprites, beams) will be drawn in incorrect position.
+			StudioAdjustViewmodelAttachments(m_pCurrentEntity->attachment[i]);
+		}
 	}
+}
+
+void CStudioModelRenderer::StudioAdjustViewmodelAttachments(Vector &vOrigin)
+{
+	float worldx = tan(g_flRenderFOV * M_PI / 360.0);
+	float viewx = tan(m_pCvarViewmodelFov->value * M_PI / 360.0);
+
+	// aspect ratio cancels out, so only need one factor
+	// the difference between the screen coordinates of the 2 systems is the ratio
+	// of the coefficients of the projection matrices (tan (fov/2) is that coefficient)
+	float factor = worldx / viewx;
+
+	// Get the coordinates in the viewer's space.
+	Vector tmp = vOrigin - g_vViewOrigin;
+	Vector vTransformed(DotProduct(g_vViewRight, tmp), DotProduct(g_vViewUp, tmp), DotProduct(g_vViewForward, tmp));
+
+	// Now squash X and Y.
+	vTransformed.x *= factor;
+	vTransformed.y *= factor;
+
+	// Transform back to world space.
+	Vector vOut = (g_vViewRight * vTransformed.x) + (g_vViewUp * vTransformed.y) + (g_vViewForward * vTransformed.z);
+	vOrigin = g_vViewOrigin + vOut;
 }
 
 /*
@@ -2043,6 +2113,37 @@ void CStudioModelRenderer::StudioRenderFinal_Software( void )
 	IEngineStudio.RestoreRenderer();
 }
 
+void CStudioModelRenderer::SetViewmodelFovProjection( void )
+{
+	if(m_pCvarViewmodelFov->value < 1 || m_pCvarViewmodelFov->value > 179)
+	{
+		gEngfuncs.Cvar_SetValue("cl_viewmodel_fov", 0);
+		gEngfuncs.Con_Printf("Invalid cl_viewmodel_fov value (minimum 1, maximum 179, 0 to disable). Resetting to 0 (disable).\n");
+		gEngfuncs.Con_Printf("Usage: cl_viewmodel_fov [1-179] or 0 to disable and use default_fov's FOV.\n");
+		return;
+	}
+
+	if (g_flRenderFOV != gHUD.default_fov->value) {
+		// Weapon is zoomed in - don't change the viewmodel FOV
+		return;
+	}
+
+	glMatrixMode (GL_PROJECTION);
+	glLoadIdentity();
+	GLfloat w, h;
+	GLfloat _near = 3.0f;
+	GLfloat _far = 4096.0f;
+	float fovY = m_pCvarViewmodelFov->value;
+	float aspect = (float)ScreenWidth / (float)ScreenHeight;
+
+	h = tan (fovY / 360 * M_PI) * _near * ((float)ScreenHeight / (float)ScreenWidth);
+	w = h * aspect;
+	glFrustum (-w, w, -h, h, _near, _far);
+	// shouldn't be needed, as the API's render funcs called after us probably just set it themselves
+	// but just to be sure
+	glMatrixMode (GL_MODELVIEW);
+}
+
 /*
 ====================
 StudioRenderFinal_Hardware
@@ -2078,6 +2179,11 @@ void CStudioModelRenderer::StudioRenderFinal_Hardware( void )
 			}
 
 			IEngineStudio.GL_SetRenderMode( rendermode );
+			// Warning: Order is IMPORANT here. I repeat, this has to be HERE.
+			if (m_pCurrentEntity == gEngfuncs.GetViewModel() && m_pCvarViewmodelFov->value != 0.0f)
+			{
+				SetViewmodelFovProjection();
+			}
 			IEngineStudio.StudioDrawPoints();
 			IEngineStudio.GL_StudioDrawShadow();
 		}
@@ -2099,7 +2205,7 @@ StudioRenderFinal
 
 ====================
 */
-void CStudioModelRenderer::StudioRenderFinal(void)
+void CStudioModelRenderer::StudioRenderFinal( void )
 {
 	if ( IEngineStudio.IsHardware() )
 	{

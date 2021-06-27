@@ -145,7 +145,8 @@ void CHudStatusBar :: ParseStatusString( int line_num )
 							gEngfuncs.pfnGetPlayerInfo( indexval, &g_PlayerInfoList[indexval] );
 							if ( g_PlayerInfoList[indexval].name != NULL )
 							{
-								strncpy( szRepString, g_PlayerInfoList[indexval].name, MAX_PLAYER_NAME_LENGTH );
+								strncpy( szRepString, g_PlayerInfoList[indexval].name, MAX_PLAYER_NAME_LENGTH - 1 );
+								szRepString[MAX_PLAYER_NAME_LENGTH - 1] = '\0';
 								m_pflNameColors[line_num] = GetClientColor( indexval );
 							}
 							else
@@ -202,14 +203,22 @@ int CHudStatusBar :: Draw( float fTime )
 		// let user set status ID bar centering
 		if ( (i == STATUSBAR_ID_LINE) && CVAR_GET_FLOAT("hud_centerid") )
 		{
-			x = V_max( 0, V_max(2, (ScreenWidth - TextWidth)) / 2 );
+			x = max( 0, max(2, (ScreenWidth - TextWidth)) / 2 );
 			y = (ScreenHeight / 2) + (TextHeight*CVAR_GET_FLOAT("hud_centerid"));
 		}
 
 		if ( m_pflNameColors[i] )
-			gEngfuncs.pfnDrawSetTextColor( m_pflNameColors[i][0], m_pflNameColors[i][1], m_pflNameColors[i][2] );
-
-		DrawConsoleString( x, y, m_szStatusBar[i] );
+			gHUD.DrawConsoleStringWithColorTags(
+				x,
+				y,
+				m_szStatusBar[i],
+				true,
+				m_pflNameColors[i][0],
+				m_pflNameColors[i][1],
+				m_pflNameColors[i][2]
+			);
+		else
+			DrawConsoleString(x, y, m_szStatusBar[i]);
 	}
 
 	return 1;

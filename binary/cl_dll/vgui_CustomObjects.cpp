@@ -35,7 +35,7 @@
 #include "vgui_loadtga.h"
 
 // Arrow filenames
-char *sArrowFilenames[] =
+const char *sArrowFilenames[] =
 {
 	"arrowup",
 	"arrowdn", 
@@ -53,8 +53,8 @@ char *GetTGANameForRes(const char *pszName)
 		i = 320;
 	else
 		i = 640;
-	sprintf(sz, pszName, i);
-	sprintf(gd, "gfx/vgui/%s.tga", sz);
+	snprintf(sz, sizeof(sz), pszName, i);
+	snprintf(gd, sizeof(gd), "gfx/vgui/%s.tga", sz);
 	return gd;
 }
 
@@ -66,7 +66,7 @@ BitmapTGA *LoadTGAForRes( const char* pImageName )
 	BitmapTGA	*pTGA;
 
 	char sz[256];
-	sprintf(sz, "%%d_%s", pImageName);
+	snprintf(sz, sizeof(sz), "%%d_%s", pImageName);
 	pTGA = vgui_LoadTGA(GetTGANameForRes(sz));
 
 	return pTGA;
@@ -148,7 +148,7 @@ void CommandButton::RecalculateText( void )
 		szBuf[MAX_BUTTON_SIZE-1] = 0;
 	}
 
-	Button::setText( szBuf );
+	Button::setText( "%s", szBuf );
 }
 
 void CommandButton::setText( const char *text )
@@ -374,8 +374,15 @@ int CImageLabel::getImageTall( void )
 
 void CImageLabel::LoadImage(const char * pImageName)
 {
+#ifdef POSIX
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdelete-non-virtual-dtor"
+#endif
 	if ( m_pTGA )
 		delete m_pTGA;
+#ifdef POSIX
+#pragma GCC diagnostic pop
+#endif
 
 	// Load the Image
 	m_pTGA = LoadTGAForRes(pImageName);
