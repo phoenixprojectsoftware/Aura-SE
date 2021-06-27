@@ -31,13 +31,6 @@
 #include "../com_weapons.h"
 #include "../demo.h"
 
-// Opposing Force weapons go here.
-#include "CPenguin.h"
-
-#ifndef min
-#define min(a,b)  (((a) < (b)) ? (a) : (b))
-#endif
-
 extern globalvars_t *gpGlobals;
 extern int g_iUser1;
 
@@ -73,7 +66,6 @@ CHandGrenade g_HandGren;
 CSatchel g_Satchel;
 CTripmine g_Tripmine;
 CSqueak g_Snark;
-CPenguin g_Penguin;
 
 
 /*
@@ -83,7 +75,7 @@ AlertMessage
 Print debug messages to console
 ======================
 */
-void AlertMessage( ALERT_TYPE atype, const char *szFmt, ... )
+void AlertMessage( ALERT_TYPE atype, char *szFmt, ... )
 {
 	va_list		argptr;
 	static char	string[1024];
@@ -103,7 +95,7 @@ bool bIsMultiplayer ( void )
 	return gEngfuncs.GetMaxClients() == 1 ? 0 : 1;
 }
 //Just loads a v_ model.
-void LoadVModel ( const char *szViewModel, CBasePlayer *m_pPlayer )
+void LoadVModel ( char *szViewModel, CBasePlayer *m_pPlayer )
 {
 	gEngfuncs.CL_LoadModel( szViewModel, &m_pPlayer->pev->viewmodel );
 }
@@ -159,7 +151,7 @@ BOOL CBasePlayerWeapon :: DefaultReload( int iClipSize, int iAnim, float fDelay,
 	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0)
 		return FALSE;
 
-	int j = min(iClipSize - m_iClip, m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType]);	
+	int j = V_min(iClipSize - m_iClip, m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType]);	
 
 	if (j == 0)
 		return FALSE;
@@ -216,7 +208,7 @@ CBasePlayerWeapon :: DefaultDeploy
 
 =====================
 */
-BOOL CBasePlayerWeapon :: DefaultDeploy( const char *szViewModel, const char *szWeaponModel, int iAnim, const char *szAnimExt, int skiplocal, int	body )
+BOOL CBasePlayerWeapon :: DefaultDeploy( char *szViewModel, char *szWeaponModel, int iAnim, char *szAnimExt, int skiplocal, int	body )
 {
 	if ( !CanDeploy() )
 		return FALSE;
@@ -296,7 +288,7 @@ Only produces random numbers to match the server ones.
 */
 Vector CBaseEntity::FireBulletsPlayer ( ULONG cShots, Vector vecSrc, Vector vecDirShooting, Vector vecSpread, float flDistance, int iBulletType, int iTracerFreq, int iDamage, entvars_t *pevAttacker, int shared_rand )
 {
-	float x = 0.0f, y = 0.0f, z;
+	float x, y, z;
 
 	for ( ULONG iShot = 1; iShot <= cShots; iShot++ )
 	{
@@ -336,7 +328,7 @@ void CBasePlayerWeapon::ItemPostFrame( void )
 	{
 #if 0 // FIXME, need ammo on client to make this work right
 		// complete the reload. 
-		int j = min( iMaxClip() - m_iClip, m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType]);	
+		int j = V_min( iMaxClip() - m_iClip, m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType]);	
 
 		// Add them to the clip
 		m_iClip += j;
@@ -627,7 +619,6 @@ void HUD_InitClientWeapons( void )
 	HUD_PrepEntity( &g_Satchel	, &player );
 	HUD_PrepEntity( &g_Tripmine	, &player );
 	HUD_PrepEntity( &g_Snark	, &player );
-	HUD_PrepEntity(&g_Penguin, &player);
 }
 
 /*
@@ -663,41 +654,6 @@ void HUD_SetLastOrg( void )
 	for ( i = 0; i < 3; i++ )
 	{
 		previousorigin[i] = g_finalstate->playerstate.origin[i] + g_finalstate->client.view_ofs[ i ];
-	}
-}
-
-CBasePlayerWeapon* GetLocalWeapon(int id)
-{
-	switch (id)
-	{
-	case WEAPON_CROWBAR: return &g_Crowbar;
-	case WEAPON_GLOCK: return &g_Glock;
-	case WEAPON_EAGLE: return &g_Eagle;
-	case WEAPON_PYTHON: return &g_Python;
-	case WEAPON_MP5: return &g_Mp5;
-	case WEAPON_CROSSBOW: return &g_Crossbow;
-	case WEAPON_SHOTGUN: return &g_Shotgun;
-	case WEAPON_RPG: return &g_Rpg;
-	case WEAPON_GAUSS: return &g_Gauss;
-	case WEAPON_EGON: return &g_Egon;
-	case WEAPON_HORNETGUN: return &g_HGun;
-	case WEAPON_HANDGRENADE: return &g_HandGren;
-	case WEAPON_SATCHEL: return &g_Satchel;
-	case WEAPON_TRIPMINE: return &g_Tripmine;
-	case WEAPON_SNARK: return &g_Snark;
-	case WEAPON_PENGUIN: return &g_Penguin;
-
-	default: return nullptr;
-	}
-}
-
-void SetLocalBody(int id, int body)
-{
-	auto pWeapon = GetLocalWeapon(id);
-
-	if (pWeapon)
-	{
-		pWeapon->pev->body = body;
 	}
 }
 
@@ -900,7 +856,6 @@ void HUD_WeaponsPostThink( local_state_s *from, local_state_s *to, usercmd_t *cm
 	if ( ( player.pev->deadflag != ( DEAD_DISCARDBODY + 1 ) ) && 
 		 !CL_IsDead() && player.pev->viewmodel && !g_iUser1 )
 	{
-		player.NewPunch();
 		if ( player.m_flNextAttack <= 0 )
 		{
 			pWeapon->ItemPostFrame();
@@ -1086,63 +1041,6 @@ void HUD_WeaponsPostThink( local_state_s *from, local_state_s *to, usercmd_t *cm
 }
 
 /*
-=============
-PLut Client Punch From HL2
-=============
-*/
-#define PUNCH_DAMPING        9.0f        // bigger number makes the response more damped, smaller is less damped
-// currently the system will overshoot, with larger damping values it won't
-#define PUNCH_SPRING_CONSTANT    65.0f    // bigger number increases the speed at which the view corrects
-#define clamp( val, min, max ) ( ((val) > (max)) ? (max) : ( ((val) < (min)) ? (min) : (val) ) )
-
-#define VectorMA(veca, scale, vecb, vecc) \
-{\
-	vecc[0] = veca[0] + scale * vecb[0];\
-	vecc[1] = veca[1] + scale * vecb[1];\
-	vecc[2] = veca[2] + scale * vecb[2];\
-}
-
-// No need to calculate this client side, but just in case
-void CBasePlayer::NewPunch()
-{
-	// pmove->vuser1 is punch
-	float damping;
-	float springForceMagnitude;
-
-	if (pev->punchangle.Length() > 0.001 || m_vecPunchangle.Length() > 0.001)
-	{
-		VectorMA(pev->punchangle, gpGlobals->frametime, m_vecPunchangle, pev->punchangle);
-		damping = 1 - (PUNCH_DAMPING * gpGlobals->frametime);
-
-		if (damping < 0)
-		{
-			damping = 0;
-		}
-
-		m_vecPunchangle = m_vecPunchangle * damping;
-
-		// torsional spring
-		// UNDONE: Per-axis spring constant?
-		springForceMagnitude = PUNCH_SPRING_CONSTANT * gpGlobals->frametime;
-		springForceMagnitude = clamp(springForceMagnitude, 0, 2);
-
-		VectorMA(m_vecPunchangle, -springForceMagnitude, pev->punchangle, m_vecPunchangle);
-
-		// don't wrap around
-		pev->punchangle[0] = clamp(pev->punchangle[0], -7, 7);
-		pev->punchangle[1] = clamp(pev->punchangle[1], -179, 179);
-		pev->punchangle[2] = clamp(pev->punchangle[2], -7, 7);
-	}
-}
-
-// Used by pm_shared
-extern "C" void SetPunchAngle(int index, int axis, float punch);
-void SetPunchAngle(int index, int axis, float punch)
-{
-	player.m_vecPunchangle[axis] = punch * 20;
-}
-
-/*
 =====================
 HUD_PostRunCmd
 
@@ -1153,7 +1051,7 @@ runfuncs is 1 if this is the first time we've predicted this command.  If so, so
 be ignored
 =====================
 */
-void CL_DLLEXPORT HUD_PostRunCmd( struct local_state_s *from, struct local_state_s *to, struct usercmd_s *cmd, int runfuncs, double time, unsigned int random_seed )
+void DLLEXPORT HUD_PostRunCmd( struct local_state_s *from, struct local_state_s *to, struct usercmd_s *cmd, int runfuncs, double time, unsigned int random_seed )
 {
 //	RecClPostRunCmd(from, to, cmd, runfuncs, time, random_seed);
 

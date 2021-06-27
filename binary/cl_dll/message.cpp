@@ -23,14 +23,13 @@
 #include <string.h>
 #include <stdio.h>
 #include "parsemsg.h"
-#include <memory>
 
 DECLARE_MESSAGE( m_Message, HudText )
 DECLARE_MESSAGE( m_Message, GameTitle )
 
 // 1 Global client_textmessage_t for custom messages that aren't in the titles.txt
 client_textmessage_t	g_pCustomMessage;
-const char *g_pCustomName = "Custom";
+char *g_pCustomName = "Custom";
 char g_pCustomText[1024];
 
 int CHudMessage::Init(void)
@@ -150,9 +149,6 @@ void CHudMessage::MessageScanNextChar( void )
 	blend = 0;	// Pure source
 	destRed = destGreen = destBlue = 0;
 
-	if (gHUD.m_Rainbow.IsEnabled())
-		gHUD.m_Rainbow.GetRainbowColor(m_parms.x, m_parms.y, srcRed, srcGreen, srcBlue);
-
 	switch( m_parms.pMessage->effect )
 	{
 	// Fade-in / Fade-out
@@ -250,6 +246,7 @@ void CHudMessage::MessageDrawScan( client_textmessage_t *pMessage, float time )
 {
 	int i, j, length, width;
 	const char *pText;
+	unsigned char line[80];
 
 	pText = pMessage->pMessage;
 	// Count lines
@@ -259,9 +256,6 @@ void CHudMessage::MessageDrawScan( client_textmessage_t *pMessage, float time )
 	length = 0;
 	width = 0;
 	m_parms.totalWidth = 0;
-
-	size_t max_line_length = 0;
-	size_t line_length = 0;
 	while ( *pText )
 	{
 		if ( *pText == '\n' )
@@ -270,21 +264,15 @@ void CHudMessage::MessageDrawScan( client_textmessage_t *pMessage, float time )
 			if ( width > m_parms.totalWidth )
 				m_parms.totalWidth = width;
 			width = 0;
-
-			max_line_length = max(line_length, max_line_length);
-			line_length = 0;
 		}
 		else
-		{
-			width += gHUD.m_scrinfo.charWidths[static_cast<unsigned char>(*pText)];
-			++line_length;
-		}
+			width += gHUD.m_scrinfo.charWidths[*pText];
 		pText++;
 		length++;
 	}
-	max_line_length = max(line_length, max_line_length);
 	m_parms.length = length;
 	m_parms.totalHeight = (m_parms.lines * gHUD.m_scrinfo.iCharHeight);
+
 
 	m_parms.y = YPosition( pMessage->y, m_parms.totalHeight );
 	pText = pMessage->pMessage;
@@ -293,7 +281,6 @@ void CHudMessage::MessageDrawScan( client_textmessage_t *pMessage, float time )
 
 	MessageScanStart();
 
-	auto line = std::make_unique<unsigned char[]>(max_line_length + 1);
 	for ( i = 0; i < m_parms.lines; i++ )
 	{
 		m_parms.lineLength = 0;
@@ -331,7 +318,7 @@ int CHudMessage::Draw( float fTime )
 {
 	int i, drawn;
 	client_textmessage_t *pMessage;
-	float endTime = 0.0f;
+	float endTime;
 
 	drawn = 0;
 

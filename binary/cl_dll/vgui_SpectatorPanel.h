@@ -27,13 +27,8 @@ using namespace vgui;
 #define BANNER_WIDTH	256
 #define BANNER_HEIGHT	64
 
-#define MAIN_LABEL_X (640 / 3.0f)
-#define MAIN_LABEL_WIDTH (640 / 3.0f)
-#define PREVNEXT_BUTTON_WIDTH 24
-#define PREV_BUTTON_X (MAIN_LABEL_X - PREVNEXT_BUTTON_WIDTH - 7)
-#define NEXT_BUTTON_X (MAIN_LABEL_X + MAIN_LABEL_WIDTH + 7)
-#define OPTIONS_BUTTON_X 15
-#define OPTIONS_BUTTON_WIDTH (PREV_BUTTON_X - 14 - OPTIONS_BUTTON_X)
+#define OPTIONS_BUTTON_X 96
+#define CAMOPTIONS_BUTTON_X 200
 
 
 #define SEPERATOR_WIDTH 15
@@ -71,22 +66,21 @@ public:
 	CImageButton	  *	m_NextPlayerButton;
 	DropDownButton     *	m_CamButton;	
 
-	//CTransparentPanel *			m_TopBorder;
+	CTransparentPanel *			m_TopBorder;
 	CTransparentPanel *			m_BottomBorder;
 
 	ColorButton		*m_InsetViewButton;
 	
 	DropDownButton	*m_BottomMainButton;
-	//CImageLabel		*m_TimerImage;
+	CImageLabel		*m_TimerImage;
 	Label			*m_BottomMainLabel;
-	CTransparentPanel *m_BottomMainLabelBackground;
-	//Label			*m_CurrentTime;
-	//Label			*m_ExtraInfo;
-	//Panel			*m_Separator;
+	Label			*m_CurrentTime;
+	Label			*m_ExtraInfo;
+	Panel			*m_Separator;
 
-	//Label			*m_TeamScores[TEAM_NUMBER];
+	Label			*m_TeamScores[TEAM_NUMBER];
 	
-	//CImageLabel		*m_TopBanner;
+	CImageLabel		*m_TopBanner;
 
 	bool			m_menuVisible;
 	bool			m_insetVisible;

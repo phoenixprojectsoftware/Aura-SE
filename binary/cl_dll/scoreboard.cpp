@@ -26,8 +26,6 @@
 #include <stdio.h>
 #include "vgui_TeamFortressViewport.h"
 
-#include "forcemodel.h"
-
 DECLARE_COMMAND( m_Scoreboard, ShowScores );
 DECLARE_COMMAND( m_Scoreboard, HideScores );
 
@@ -65,7 +63,6 @@ int CHudScoreboard :: VidInit( void )
 void CHudScoreboard :: InitHUDData( void )
 {
 	memset( g_PlayerExtraInfo, 0, sizeof g_PlayerExtraInfo );
-	force_model::update_player_teams();
 	m_iLastKilledBy = 0;
 	m_fLastKillTime = 0;
 	m_iPlayerNum = 0;
@@ -282,7 +279,7 @@ int CHudScoreboard :: Draw( float fTime )
 		static char buf[64];
 		sprintf( buf, "%d", team_info->ping );
 		xpos = ((PING_RANGE_MAX - PING_RANGE_MIN) / 2) + PING_RANGE_MIN + xpos_rel + 25;
-		UnpackRGB( r, g, b, gHUD.m_iDefaultHUDColor );
+		UnpackRGB( r, g, b, RGB_YELLOWISH );
 		gHUD.DrawHudStringReverse( xpos, ypos, xpos - 50, buf, r, g, b );
 
 	//  Packetloss removed on Kelly 'shipping nazi' Bailey's orders
@@ -409,7 +406,7 @@ int CHudScoreboard :: DrawPlayers( int xpos_rel, float list_slot, int nameoffset
 		{
 			if ( g_PlayerInfoList[best_player].packetloss >= 63 )
 			{
-				UnpackRGB( r, g, b, RGB_GREY );
+				UnpackRGB( r, g, b, RGB_REDISH );
 				sprintf( buf, " !!!!" );
 			}
 			else
@@ -477,8 +474,6 @@ int CHudScoreboard :: MsgFunc_TeamInfo( const char *pszName, int iSize, void *pb
 	if ( cl > 0 && cl <= MAX_PLAYERS )
 	{  // set the players team
 		strncpy( g_PlayerExtraInfo[cl].teamname, READ_STRING(), MAX_TEAM_NAME );
-
-		force_model::update_player_team(cl - 1);
 	}
 
 	// rebuild the list of teams
@@ -518,7 +513,7 @@ int CHudScoreboard :: MsgFunc_TeamInfo( const char *pszName, int iSize, void *pb
 				if ( g_TeamInfo[j].name[0] == '\0' )
 					break;
 			}
-			m_iNumTeams = max( j, m_iNumTeams );
+			m_iNumTeams = V_max( j, m_iNumTeams );
 
 			strncpy( g_TeamInfo[j].name, g_PlayerExtraInfo[i].teamname, MAX_TEAM_NAME );
 			g_TeamInfo[j].players = 0;

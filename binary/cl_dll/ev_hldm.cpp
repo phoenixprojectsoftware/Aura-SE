@@ -35,24 +35,17 @@
 #include "r_studioint.h"
 #include "com_model.h"
 
-// Opposing Force weapons go here.
-// #include "CPenguin.h"
-
 extern engine_studio_api_t IEngineStudio;
 
 static int tracerCount[ 32 ];
 
-extern "C"
-{
 #include "pm_shared.h"
-}
 
 void Punch(float p, float y, float r);
 void V_PunchAxis( int axis, float punch );
 void VectorAngles( const float *forward, float *angles );
 
 extern cvar_t *cl_lw;
-extern cvar_t *cl_righthand;
 
 extern "C"
 {
@@ -76,7 +69,6 @@ void EV_EgonStop( struct event_args_s *args  );
 void EV_HornetGunFire( struct event_args_s *args  );
 void EV_TripmineFire( struct event_args_s *args  );
 void EV_SnarkFire( struct event_args_s *args  );
-void EV_PenguinFire(event_args_t* args);
 
 
 void EV_TrainPitchAdjust( struct event_args_s *args );
@@ -105,7 +97,7 @@ float EV_HLDM_PlayTextureSound( int idx, pmtrace_t *ptr, float *vecSrc, float *v
 	char chTextureType = CHAR_TEX_CONCRETE;
 	float fvol;
 	float fvolbar;
-	const char *rgsz[4];
+	char *rgsz[4];
 	int cnt;
 	float fattn = ATTN_NORM;
 	int entity;
@@ -200,11 +192,10 @@ float EV_HLDM_PlayTextureSound( int idx, pmtrace_t *ptr, float *vecSrc, float *v
 		cnt = 4;
 		break;
 	case CHAR_TEX_WOOD: fvol = 0.9; fvolbar = 0.2;
-		rgsz[0] = "player/pl_wood1.wav";
-		rgsz[1] = "player/pl_wood2.wav";
-		rgsz[2] = "player/pl_wood3.wav";
-		rgsz[3] = "player/pl_wood4.wav";
-		cnt = 4;
+		rgsz[0] = "debris/wood1.wav";
+		rgsz[1] = "debris/wood2.wav";
+		rgsz[2] = "debris/wood3.wav";
+		cnt = 3;
 		break;
 	case CHAR_TEX_GLASS:
 	case CHAR_TEX_COMPUTER:
@@ -482,10 +473,10 @@ void EV_FireGlock1( event_args_t *args )
 		EV_MuzzleFlash();
 		gEngfuncs.pEventAPI->EV_WeaponAnimation( empty ? GLOCK_SHOOT_EMPTY : GLOCK_SHOOT, 2 );
 
-		Punch(2, 0, 0);
+		V_PunchAxis( 0, -2.0 );
 	}
 
-	EV_GetDefaultShellInfo( args, origin, velocity, ShellVelocity, ShellOrigin, forward, right, up, 20, -12, (cl_righthand->value != 0.0f ? -1 : 1) * 4 );
+	EV_GetDefaultShellInfo( args, origin, velocity, ShellVelocity, ShellOrigin, forward, right, up, 20, -12, 4 );
 
 	EV_EjectBrass ( ShellOrigin, ShellVelocity, angles[ YAW ], shell, TE_BOUNCE_SHELL ); 
 
@@ -527,10 +518,10 @@ void EV_FireGlock2( event_args_t *args )
 		EV_MuzzleFlash();
 		gEngfuncs.pEventAPI->EV_WeaponAnimation( GLOCK_SHOOT, 2 );
 
-		Punch( 2, 0, 0 );
+		V_PunchAxis( 0, -2.0 );
 	}
 
-	EV_GetDefaultShellInfo( args, origin, velocity, ShellVelocity, ShellOrigin, forward, right, up, 20, -12, (cl_righthand->value != 0.0f ? -1 : 1) * 4 );
+	EV_GetDefaultShellInfo( args, origin, velocity, ShellVelocity, ShellOrigin, forward, right, up, 20, -12, 4 );
 
 	EV_EjectBrass ( ShellOrigin, ShellVelocity, angles[ YAW ], shell, TE_BOUNCE_SHELL ); 
 
@@ -580,12 +571,12 @@ void EV_FireShotGunDouble( event_args_t *args )
 		// Add muzzle flash to current weapon model
 		EV_MuzzleFlash();
 		gEngfuncs.pEventAPI->EV_WeaponAnimation( SHOTGUN_FIRE2, 2 );
-		Punch( 10, 0, 0 );
+		V_PunchAxis( 0, -10.0 );
 	}
 
 	for ( j = 0; j < 2; j++ )
 	{
-		EV_GetDefaultShellInfo( args, origin, velocity, ShellVelocity, ShellOrigin, forward, right, up, 32, -12, (cl_righthand->value != 0.0f ? -1 : 1) * 6 );
+		EV_GetDefaultShellInfo( args, origin, velocity, ShellVelocity, ShellOrigin, forward, right, up, 32, -12, 6 );
 
 		EV_EjectBrass ( ShellOrigin, ShellVelocity, angles[ YAW ], shell, TE_BOUNCE_SHOTSHELL ); 
 	}
@@ -635,10 +626,10 @@ void EV_FireShotGunSingle( event_args_t *args )
 		EV_MuzzleFlash();
 		gEngfuncs.pEventAPI->EV_WeaponAnimation( SHOTGUN_FIRE, 2 );
 
-		Punch( 5, 0, 0 );
+		V_PunchAxis( 0, -5.0 );
 	}
 
-	EV_GetDefaultShellInfo( args, origin, velocity, ShellVelocity, ShellOrigin, forward, right, up, 32, -12, (cl_righthand->value != 0.0f ? -1 : 1) * 6 );
+	EV_GetDefaultShellInfo( args, origin, velocity, ShellVelocity, ShellOrigin, forward, right, up, 32, -12, 6 );
 
 	EV_EjectBrass ( ShellOrigin, ShellVelocity, angles[ YAW ], shell, TE_BOUNCE_SHOTSHELL ); 
 
@@ -692,12 +683,10 @@ void EV_FireMP5( event_args_t *args )
 		EV_MuzzleFlash();
 		gEngfuncs.pEventAPI->EV_WeaponAnimation( MP5_FIRE1 + gEngfuncs.pfnRandomLong(0,2), 2 );
 
-		V_PunchAxis(0, gEngfuncs.pfnRandomFloat(-2, 2));
-		V_PunchAxis(1, gEngfuncs.pfnRandomFloat(-2, 2));
-		// V_PunchAxis(2, gEngfuncs.pfnRandomFloat(-10, 10)); I did this for https://www.youtube.com/watch?v=MmivmiwH53E
+		V_PunchAxis( 0, gEngfuncs.pfnRandomFloat( -2, 2 ) );
 	}
 
-	EV_GetDefaultShellInfo( args, origin, velocity, ShellVelocity, ShellOrigin, forward, right, up, 20, -12, (cl_righthand->value != 0.0f ? -1 : 1) * 4 );
+	EV_GetDefaultShellInfo( args, origin, velocity, ShellVelocity, ShellOrigin, forward, right, up, 20, -12, 4 );
 
 	EV_EjectBrass ( ShellOrigin, ShellVelocity, angles[ YAW ], shell, TE_BOUNCE_SHELL ); 
 
@@ -737,7 +726,7 @@ void EV_FireMP52( event_args_t *args )
 	if ( EV_IsLocal( idx ) )
 	{
 		gEngfuncs.pEventAPI->EV_WeaponAnimation( MP5_LAUNCH, 2 );
-		Punch( 10, 0, 0 );
+		V_PunchAxis( 0, -10 );
 	}
 	
 	switch( gEngfuncs.pfnRandomLong( 0, 1 ) )
@@ -785,7 +774,7 @@ void EV_FirePython( event_args_t *args )
 		EV_MuzzleFlash();
 		gEngfuncs.pEventAPI->EV_WeaponAnimation( PYTHON_FIRE1, multiplayer ? 1 : 0 );
 
-		Punch( 10, 0, 0 );
+		V_PunchAxis( 0, -10.0 );
 	}
 
 	switch( gEngfuncs.pfnRandomLong( 0, 1 ) )
@@ -898,7 +887,7 @@ void EV_FireGauss( event_args_t *args )
 
 	if ( EV_IsLocal( idx ) )
 	{
-		Punch( 2, 0, 0 );
+		V_PunchAxis( 0, -2.0 );
 		gEngfuncs.pEventAPI->EV_WeaponAnimation( GAUSS_FIRE2, 2 );
 
 		if ( m_fPrimaryFire == false )
@@ -1315,7 +1304,7 @@ void EV_FireCrossbow( event_args_t *args )
 		else if ( args->iparam2 )
 			gEngfuncs.pEventAPI->EV_WeaponAnimation( CROSSBOW_FIRE3, 1 );
 
-		Punch( 2, 0, 0 );
+		V_PunchAxis( 0, -2.0 );
 	}
 }
 //======================
@@ -1347,14 +1336,14 @@ void EV_FireRpg( event_args_t *args )
 	VectorCopy( args->origin, origin );
 	
 	gEngfuncs.pEventAPI->EV_PlaySound( idx, origin, CHAN_WEAPON, "weapons/rocketfire1.wav", 0.9, ATTN_NORM, 0, PITCH_NORM );
-	// gEngfuncs.pEventAPI->EV_PlaySound( idx, origin, CHAN_ITEM, "weapons/glauncher.wav", 0.7, ATTN_NORM, 0, PITCH_NORM );
+	gEngfuncs.pEventAPI->EV_PlaySound( idx, origin, CHAN_ITEM, "weapons/glauncher.wav", 0.7, ATTN_NORM, 0, PITCH_NORM );
 
 	//Only play the weapon anims if I shot it. 
 	if ( EV_IsLocal( idx ) )
 	{
 		gEngfuncs.pEventAPI->EV_WeaponAnimation( RPG_FIRE2, 1 );
 	
-		Punch( 5, 0, 0 );
+		V_PunchAxis( 0, -5.0 );
 	}
 }
 //======================
@@ -1391,7 +1380,7 @@ enum EGON_FIREMODE { FIRE_NARROW, FIRE_WIDE};
 #define EGON_SOUND_RUN			"weapons/egon_run3.wav"
 #define EGON_SOUND_STARTUP		"weapons/egon_windup2.wav"
 
-//#define ARRAYSIZE(p)		(sizeof(p)/sizeof(p[0]))
+#define ARRAYSIZE(p)		(sizeof(p)/sizeof(p[0]))
 
 BEAM *pBeam;
 BEAM *pBeam2;
@@ -1538,7 +1527,7 @@ void EV_HornetGunFire( event_args_t *args )
 	//Only play the weapon anims if I shot it.
 	if ( EV_IsLocal( idx ) )
 	{
-		Punch(2, 0, 0);
+		V_PunchAxis( 0, gEngfuncs.pfnRandomLong ( 0, 2 ) );
 		gEngfuncs.pEventAPI->EV_WeaponAnimation ( HGUN_SHOOT, 1 );
 	}
 
@@ -1658,48 +1647,6 @@ void EV_SnarkFire( event_args_t *args )
 //======================
 //	   SQUEAK END
 //======================
-
-//======================
-//		PENGUIN START
-//======================
-enum PenguinAnim
-{
-	PENGUIN_IDLE1 = 0,
-	PENGUIN_FIDGETFIT,
-	PENGUIN_FIDGETNIP,
-	PENGUIN_DOWN,
-	PENGUIN_UP,
-	PENGUIN_THROW,
-};
-
-void EV_PenguinFire(event_args_t* args)
-{
-	Vector origin = args->origin;
-	Vector angles = args->angles;
-	Vector forward;
-	gEngfuncs.pfnAngleVectors(angles, forward, nullptr, nullptr);
-
-	if (EV_IsLocal(args->entindex))
-	{
-		if (args->ducking)
-			origin.z += 18;
-
-		gEngfuncs.pEventAPI->EV_PushPMStates();
-		gEngfuncs.pEventAPI->EV_SetSolidPlayers(args->entindex - 1);
-		gEngfuncs.pEventAPI->EV_SetTraceHull(2);
-
-		Vector start = origin + (forward * 20);
-		Vector end = origin + (forward * 64);
-
-		pmtrace_t tr;
-		gEngfuncs.pEventAPI->EV_PlayerTrace(start, end, PM_NORMAL, -1, &tr);
-
-		if (!tr.allsolid && !tr.startsolid && tr.fraction > 0.25)
-			gEngfuncs.pEventAPI->EV_WeaponAnimation(PENGUIN_THROW, 0);
-
-		gEngfuncs.pEventAPI->EV_PopPMStates();
-	}
-}
 
 void EV_TrainPitchAdjust( event_args_t *args )
 {

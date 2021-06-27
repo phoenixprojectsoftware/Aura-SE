@@ -1,4 +1,4 @@
-﻿//========= Copyright © 1996-2002, Valve LLC, All rights reserved. ============
+//========= Copyright � 1996-2002, Valve LLC, All rights reserved. ============
 //
 // Purpose: 
 //
@@ -9,7 +9,7 @@
 #define VIEWH 
 #pragma once
 
-void V_StartPitchDrift(void);
-void V_StopPitchDrift(void);
+void V_StartPitchDrift( void );
+void V_StopPitchDrift( void );
 
 #endif // !VIEWH

@@ -25,24 +25,17 @@
 #include "../public/interface.h"
 //#include "vgui_schememanager.h"
 
-extern "C"
-{
 #include "pm_shared.h"
-}
 
 #include <string.h>
 #include "hud_servers.h"
 #include "vgui_int.h"
 #include "interface.h"
 
-#ifdef _WIN32
-#include "winsani_in.h"
-#include <windows.h>
-#include "winsani_out.h"
-#endif
+#include "Platform.h"
 #include "Exports.h"
-#include "tri.h"
 
+#include "tri.h"
 #include "vgui_TeamFortressViewport.h"
 #include "../public/interface.h"
 
@@ -55,17 +48,8 @@ TeamFortressViewport *gViewPort = NULL;
 CSysModule *g_hParticleManModule = NULL;
 IParticleMan *g_pParticleMan = NULL;
 
-#include "gameui.h"
-CSysModule *g_hGameUIModule = nullptr;
-IGameUI *g_pGameUI = nullptr;
-
-#include "discord_integration.h"
-#include "update_checker.h"
-
 void CL_LoadParticleMan( void );
 void CL_UnloadParticleMan( void );
-void CL_LoadGameUI();
-void CL_UnloadGameUI();
 
 void InitInput (void);
 void EV_HookEvents( void );
@@ -78,7 +62,7 @@ HUD_GetHullBounds
   Engine calls this to enumerate player collision hulls, for prediction.  Return 0 if the hullnumber doesn't exist.
 ================================
 */
-int CL_DLLEXPORT HUD_GetHullBounds( int hullnumber, float *mins, float *maxs )
+int DLLEXPORT HUD_GetHullBounds( int hullnumber, float *mins, float *maxs )
 {
 //	RecClGetHullBounds(hullnumber, mins, maxs);
 
@@ -114,7 +98,7 @@ HUD_ConnectionlessPacket
   size of the response_buffer, so you must zero it out if you choose not to respond.
 ================================
 */
-int	CL_DLLEXPORT HUD_ConnectionlessPacket( const struct netadr_s *net_from, const char *args, char *response_buffer, int *response_buffer_size )
+int	DLLEXPORT HUD_ConnectionlessPacket( const struct netadr_s *net_from, const char *args, char *response_buffer, int *response_buffer_size )
 {
 //	RecClConnectionlessPacket(net_from, args, response_buffer, response_buffer_size);
 
@@ -130,28 +114,28 @@ int	CL_DLLEXPORT HUD_ConnectionlessPacket( const struct netadr_s *net_from, cons
 	return 0;
 }
 
-void CL_DLLEXPORT HUD_PlayerMoveInit( struct playermove_s *ppmove )
+void DLLEXPORT HUD_PlayerMoveInit( struct playermove_s *ppmove )
 {
 //	RecClClientMoveInit(ppmove);
 
 	PM_Init( ppmove );
 }
 
-char CL_DLLEXPORT HUD_PlayerMoveTexture( char *name )
+char DLLEXPORT HUD_PlayerMoveTexture( char *name )
 {
 //	RecClClientTextureType(name);
 
 	return PM_FindTextureType( name );
 }
 
-void CL_DLLEXPORT HUD_PlayerMove( struct playermove_s *ppmove, int server )
+void DLLEXPORT HUD_PlayerMove( struct playermove_s *ppmove, int server )
 {
 //	RecClClientMove(ppmove, server);
 
 	PM_Move( ppmove, server );
 }
 
-int CL_DLLEXPORT Initialize( cl_enginefunc_t *pEnginefuncs, int iVersion )
+int DLLEXPORT Initialize( cl_enginefunc_t *pEnginefuncs, int iVersion )
 {
 	gEngfuncs = *pEnginefuncs;
 
@@ -162,12 +146,8 @@ int CL_DLLEXPORT Initialize( cl_enginefunc_t *pEnginefuncs, int iVersion )
 
 	memcpy(&gEngfuncs, pEnginefuncs, sizeof(cl_enginefunc_t));
 
-	update_checker::check_for_updates();
-	discord_integration::initialize();
-
 	EV_HookEvents();
 	CL_LoadParticleMan();
-	CL_LoadGameUI();
 
 	// get tracker interface, if any
 	return 1;
@@ -184,7 +164,7 @@ so the HUD can reinitialize itself.
 ==========================
 */
 
-int CL_DLLEXPORT HUD_VidInit( void )
+int DLLEXPORT HUD_VidInit( void )
 {
 //	RecClHudVidInit();
 	gHUD.VidInit();
@@ -204,7 +184,7 @@ the hud variables.
 ==========================
 */
 
-void CL_DLLEXPORT HUD_Init( void )
+void DLLEXPORT HUD_Init( void )
 {
 //	RecClHudInit();
 	InitInput();
@@ -222,7 +202,7 @@ redraw the HUD.
 ===========================
 */
 
-int CL_DLLEXPORT HUD_Redraw( float time, int intermission )
+int DLLEXPORT HUD_Redraw( float time, int intermission )
 {
 //	RecClHudRedraw(time, intermission);
 
@@ -245,13 +225,11 @@ returns 1 if anything has been changed, 0 otherwise.
 ==========================
 */
 
-int CL_DLLEXPORT HUD_UpdateClientData(client_data_t *pcldata, float flTime )
+int DLLEXPORT HUD_UpdateClientData(client_data_t *pcldata, float flTime )
 {
 //	RecClHudUpdateClientData(pcldata, flTime);
 
 	IN_Commands();
-
-	discord_integration::on_update_client_data();
 
 	return gHUD.UpdateClientData(pcldata, flTime );
 }
@@ -264,7 +242,7 @@ Called at start and end of demos to restore to "non"HUD state.
 ==========================
 */
 
-void CL_DLLEXPORT HUD_Reset( void )
+void DLLEXPORT HUD_Reset( void )
 {
 //	RecClHudReset();
 
@@ -279,15 +257,13 @@ Called by engine every frame that client .dll is loaded
 ==========================
 */
 
-void CL_DLLEXPORT HUD_Frame( double time )
+void DLLEXPORT HUD_Frame( double time )
 {
 //	RecClHudFrame(time);
 
 	ServersThink( time );
 
 	GetClientVoiceMgr()->Frame(time);
-
-	discord_integration::on_frame();
 }
 
 
@@ -299,7 +275,7 @@ Called when a player starts or stops talking.
 ==========================
 */
 
-void CL_DLLEXPORT HUD_VoiceStatus(int entindex, qboolean bTalking)
+void DLLEXPORT HUD_VoiceStatus(int entindex, qboolean bTalking)
 {
 ////	RecClVoiceStatus(entindex, bTalking);
 
@@ -314,7 +290,7 @@ Called when a director event message was received
 ==========================
 */
 
-void CL_DLLEXPORT HUD_DirectorMessage( int iSize, void *pbuf )
+void DLLEXPORT HUD_DirectorMessage( int iSize, void *pbuf )
 {
 //	RecClDirectorMessage(iSize, pbuf);
 
@@ -361,42 +337,9 @@ void CL_LoadParticleMan( void )
 	}
 }
 
-void CL_UnloadGameUI(void)
-{
-	Sys_UnloadModule(g_hGameUIModule);
-
-	g_pGameUI = nullptr;
-	g_hGameUIModule = nullptr;
-}
-
-void CL_LoadGameUI(void)
-{
-	char dir[512];
-
-	if (gEngfuncs.COM_ExpandFilename(GAMEUI_DLLNAME, dir, ARRAYSIZE(dir)) == FALSE)
-	{
-		g_pGameUI = nullptr;
-		g_hGameUIModule = nullptr;
-		return;
-	}
-
-	g_hGameUIModule = Sys_LoadModule(dir);
-	CreateInterfaceFn gameUIFactory = Sys_GetFactory(g_hGameUIModule);
-
-	if (gameUIFactory == nullptr)
-	{
-		g_pGameUI = nullptr;
-		g_hGameUIModule = nullptr;
-		return;
-	}
-
-	g_pGameUI = static_cast<IGameUI*>(gameUIFactory(GAMEUI_INTERFACE, nullptr));
-	// printf("g_pGameUI: %p\n", g_pGameUI);
-}
-
 cldll_func_dst_t *g_pcldstAddrs;
 
-extern "C" void CL_DLLEXPORT F(void *pv)
+extern "C" void DLLEXPORT F(void *pv)
 {
 	cldll_func_t *pcldll_func = (cldll_func_t *)pv;
 

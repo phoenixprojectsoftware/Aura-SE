@@ -19,7 +19,6 @@
 
 #include<VGUI_LineBorder.h>
 
-#include <cmath>
 #include "hud.h"
 #include "cl_util.h"
 #include "const.h"
@@ -31,9 +30,6 @@
 #include "vgui_loadtga.h"
 #include "voice_status.h"
 #include "vgui_SpectatorPanel.h"
-
-#include "forcemodel.h"
-#include "steam_id.h"
 
 extern hud_player_info_t	 g_PlayerInfoList[MAX_PLAYERS+1];	   // player info from the engine
 extern extra_player_info_t  g_PlayerExtraInfo[MAX_PLAYERS+1];   // additional player info sent directly to the client dll
@@ -52,7 +48,7 @@ int EV_TFC_IsAllyTeam( int iTeam1, int iTeam2 );
 class SBColumnInfo
 {
 public:
-	const char				*m_pTitle;		// If null, ignore, if starts with #, it's localized, otherwise use the string directly.
+	char				*m_pTitle;		// If null, ignore, if starts with #, it's localized, otherwise use the string directly.
 	int					m_Width;		// Based on 640 width. Scaled to fit other resolutions.
 	Label::Alignment	m_Alignment;	
 };
@@ -62,8 +58,8 @@ public:
 SBColumnInfo g_ColumnInfo[NUM_COLUMNS] =
 {
 	{NULL,			24,			Label::a_east},		// tracker column
-	{NULL,			136,		Label::a_east},		// name
-	{"SteamID",		60,			Label::a_east},		// class
+	{NULL,			140,		Label::a_east},		// name
+	{NULL,			56,			Label::a_east},		// class
 	{"#SCORE",		40,			Label::a_east},
 	{"#DEATHS",		46,			Label::a_east},
 	{"#LATENCY",	46,			Label::a_east},
@@ -98,27 +94,10 @@ void ScorePanel::HitTestPanel::internalMousePressed(MouseCode code)
 ScorePanel::ScorePanel(int x,int y,int wide,int tall) : Panel(x,y,wide,tall)
 {
 	CSchemeManager *pSchemes = gViewPort->GetSchemeManager();
-	SchemeHandle_t hScheme = pSchemes->getSchemeHandle("Scoreboard Text");
 	SchemeHandle_t hTitleScheme = pSchemes->getSchemeHandle("Scoreboard Title Text");
 	SchemeHandle_t hSmallScheme = pSchemes->getSchemeHandle("Scoreboard Small Text");
-	Font *sfont = pSchemes->getFont(hScheme);
 	Font *tfont = pSchemes->getFont(hTitleScheme);
 	Font *smallfont = pSchemes->getFont(hSmallScheme);
-
-	if (ScreenHeight > 768)
-	{
-		// Scale fonts for high-resolutions screens
-		m_UFont = UnicodeTextImage::createFont(pSchemes->getFontName(hScheme), std::round(YRES(10)), 300);
-		m_UTitleFont = UnicodeTextImage::createFont(pSchemes->getFontName(hTitleScheme), std::round(YRES(16)), 700);
-		m_USmallFont = UnicodeTextImage::createFont(pSchemes->getFontName(hSmallScheme), std::round(YRES(8)), 400);
-	}
-	else
-	{
-		// Use font sizes from the scheme for low resolutions (640x480, 800x600, 1024x768)
-		m_UFont = UnicodeTextImage::createFont(pSchemes->getFontName(hScheme), sfont->getTall(), 300);
-		m_UTitleFont = UnicodeTextImage::createFont(pSchemes->getFontName(hTitleScheme), tfont->getTall(), 700);
-		m_USmallFont = UnicodeTextImage::createFont(pSchemes->getFontName(hSmallScheme), smallfont->getTall(), 400);
-	}
 
 	setBgColor(0, 0, 0, 96);
 	m_pCurrentHighlightLabel = NULL;
@@ -126,23 +105,12 @@ ScorePanel::ScorePanel(int x,int y,int wide,int tall) : Panel(x,y,wide,tall)
 
 	//m_pTrackerIcon = vgui_LoadTGANoInvertAlpha("gfx/vgui/640_scoreboardtracker.tga");
 
-	if ((m_pFlagIcon = vgui_LoadTGANoInvertAlpha("gfx/vgui/640_ag_ctf_score.tga")))
-		m_pFlagIcon->setColor(vgui::Color(255, 255, 255, 1));
-
 	// Initialize the top title.
 	m_TitleLabel.setFont(tfont);
 	m_TitleLabel.setText("");
 	m_TitleLabel.setBgColor( 0, 0, 0, 255 );
 	m_TitleLabel.setFgColor( Scheme::sc_primary1 );
 	m_TitleLabel.setContentAlignment( vgui::Label::a_west );
-
-	if (!UnicodeTextImage::shouldFallback())
-	{
-		m_pTitleImage = new UnicodeTextImage();
-		m_pTitleImage->setFont(m_UTitleFont, tfont);
-		m_pTitleImage->setColor(Scheme::sc_primary1);
-		m_TitleLabel.setImage(m_pTitleImage);
-	}
 
 	LineBorder *border = new LineBorder(Color(60, 60, 60, 128));
 	setBorder(border);
@@ -194,7 +162,7 @@ ScorePanel::ScorePanel(int x,int y,int wide,int tall) : Panel(x,y,wide,tall)
 
 		m_HeaderLabels[i].setBgColor(0,0,0,255);
 		m_HeaderLabels[i].setFgColor(Scheme::sc_primary1);
-		m_HeaderLabels[i].setFont(m_USmallFont, smallfont);
+		m_HeaderLabels[i].setFont(smallfont);
 		m_HeaderLabels[i].setContentAlignment(g_ColumnInfo[i].m_Alignment);
 
 		int yres = 12;
@@ -267,22 +235,6 @@ ScorePanel::ScorePanel(int x,int y,int wide,int tall) : Panel(x,y,wide,tall)
 	Initialize();
 }
 
-ScorePanel::~ScorePanel()
-{
-#ifdef POSIX
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdelete-non-virtual-dtor"
-#endif
-	if (m_pFlagIcon)
-		delete m_pFlagIcon;
-
-	m_TitleLabel.setImage(nullptr);
-	delete m_pTitleImage;
-#ifdef POSIX
-#pragma GCC diagnostic pop
-#endif
-}
-
 
 //-----------------------------------------------------------------------------
 // Purpose: Called each time a new level is started.
@@ -295,7 +247,6 @@ void ScorePanel::Initialize( void )
 	m_iPlayerNum = 0;
 	m_iNumTeams = 0;
 	memset( g_PlayerExtraInfo, 0, sizeof g_PlayerExtraInfo );
-	force_model::update_player_teams();
 	memset( g_TeamInfo, 0, sizeof g_TeamInfo );
 }
 
@@ -309,28 +260,26 @@ bool HACK_GetPlayerUniqueID( int iPlayer, char playerID[16] )
 //-----------------------------------------------------------------------------
 void ScorePanel::Update()
 {
+	int i;
+
 	// Set the title
-	// if (gViewPort->m_szServerName)
-	// {
+	if (gViewPort->m_szServerName)
+	{
 		char sz[MAX_SERVERNAME_LENGTH + 16];
 		sprintf(sz, "%s", gViewPort->m_szServerName );
-
-		if (!m_pTitleImage->shouldFallback())
-			m_pTitleImage->setText(sz);
-		else
-			m_TitleLabel.setText(sz);
-	// }
+		m_TitleLabel.setText(sz);
+	}
 
 	m_iRows = 0;
 	gViewPort->GetAllPlayersInfo();
 
 	// Clear out sorts
-	for (int i = 0; i < NUM_ROWS; i++)
+	for (i = 0; i < NUM_ROWS; i++)
 	{
 		m_iSortedRows[i] = 0;
 		m_iIsATeam[i] = TEAM_NO;
 	}
-	for (int i = 0; i < MAX_PLAYERS; i++)
+	for (i = 0; i < MAX_PLAYERS; i++)
 	{
 		m_bHasBeenSorted[i] = false;
 	}
@@ -362,7 +311,8 @@ void ScorePanel::Update()
 void ScorePanel::SortTeams()
 {
 	// clear out team scores
-	for (int i = 1; i <= m_iNumTeams; i++)
+	int i;
+	for ( i = 1; i <= m_iNumTeams; i++ )
 	{
 		if ( !g_TeamInfo[i].scores_overriden )
 			g_TeamInfo[i].frags = g_TeamInfo[i].deaths = 0;
@@ -370,12 +320,12 @@ void ScorePanel::SortTeams()
 	}
 
 	// recalc the team scores, then draw them
-	for (int i = 1; i < MAX_PLAYERS; i++)
+	for ( i = 1; i < MAX_PLAYERS; i++ )
 	{
 		if ( g_PlayerInfoList[i].name == NULL )
 			continue; // empty player slot, skip
 
-		if ( g_PlayerExtraInfo[i].teamname[0] == '\0' )
+		if ( g_PlayerExtraInfo[i].teamname[0] == 0 )
 			continue; // skip over players who are not in a team
 
 		// find what team this player is in
@@ -407,7 +357,7 @@ void ScorePanel::SortTeams()
 	}
 
 	// find team ping/packetloss averages
-	for (int i = 1; i <= m_iNumTeams; i++)
+	for ( i = 1; i <= m_iNumTeams; i++ )
 	{
 		g_TeamInfo[i].already_drawn = FALSE;
 
@@ -424,7 +374,7 @@ void ScorePanel::SortTeams()
 		int highest_frags = -99999; int lowest_deaths = 99999;
 		int best_team = 0;
 
-		for (int i = 1; i <= m_iNumTeams; i++)
+		for ( i = 1; i <= m_iNumTeams; i++ )
 		{
 			if ( g_TeamInfo[i].players < 1 )
 				continue;
@@ -521,32 +471,44 @@ void ScorePanel::SortPlayers( int iTeam, char *team )
 //-----------------------------------------------------------------------------
 void ScorePanel::RebuildTeams()
 {
-	// Clear the team info.
-	for (int i = 1; i <= m_iNumTeams; ++i)
+	// clear out player counts from teams
+	int i;
+	for ( i = 1; i <= m_iNumTeams; i++ )
+	{
 		g_TeamInfo[i].players = 0;
+	}
 
 	// rebuild the team list
 	gViewPort->GetAllPlayersInfo();
-
-	for (int i = 1; i < MAX_PLAYERS; i++)
+	m_iNumTeams = 0;
+	for ( i = 1; i < MAX_PLAYERS; i++ )
 	{
 		if ( g_PlayerInfoList[i].name == NULL )
 			continue;
 
-		if ( g_PlayerExtraInfo[i].teamname[0] == '\0' )
+		if ( g_PlayerExtraInfo[i].teamname[0] == 0 )
 			continue; // skip over players who are not in a team
 
 		// is this player in an existing team?
 		int j;
 		for ( j = 1; j <= m_iNumTeams; j++ )
 		{
+			if ( g_TeamInfo[j].name[0] == '\0' )
+				break;
+
 			if ( !stricmp( g_PlayerExtraInfo[i].teamname, g_TeamInfo[j].name ) )
 				break;
 		}
 
 		if ( j > m_iNumTeams )
 		{ // they aren't in a listed team, so make a new one
-			++m_iNumTeams;
+			// search through for an empty team slot
+			for ( int j = 1; j <= m_iNumTeams; j++ )
+			{
+				if ( g_TeamInfo[j].name[0] == '\0' )
+					break;
+			}
+			m_iNumTeams = V_max( j, m_iNumTeams );
 
 			strncpy( g_TeamInfo[j].name, g_PlayerExtraInfo[i].teamname, MAX_TEAM_NAME );
 			g_TeamInfo[j].players = 0;
@@ -555,31 +517,11 @@ void ScorePanel::RebuildTeams()
 		g_TeamInfo[j].players++;
 	}
 
-	// Clear out empty teams.
-	for (int i = 1; i <= m_iNumTeams; ++i) {
-		if (g_TeamInfo[i].players != 0)
-			continue;
-
-		// This team is empty, see if there are non-empty teams after this one.
-		// If so, move one into this spot.
-		int j;
-		for (j = i + 1; j <= m_iNumTeams; ++j) {
-			if (g_TeamInfo[j].players == 0)
-				continue;
-
-			// Found a non-empty team.
-			memcpy(&g_TeamInfo[i], &g_TeamInfo[j], sizeof(*g_TeamInfo));
-			memset(&g_TeamInfo[j], 0, sizeof(*g_TeamInfo));
-			break;
-		}
-
-		if (j > m_iNumTeams) {
-			// All teams starting from this one are empty. Clear them out.
-			for (j = i; j <= m_iNumTeams; ++j)
-				memset(&g_TeamInfo[j], 0, sizeof(*g_TeamInfo));
-
-			break;
-		}
+	// clear out any empty teams
+	for ( i = 1; i <= m_iNumTeams; i++ )
+	{
+		if ( g_TeamInfo[i].players < 1 )
+			memset( &g_TeamInfo[i], 0, sizeof(team_info_t) );
 	}
 
 	// Update the scoreboard
@@ -608,13 +550,6 @@ void ScorePanel::FillGrid()
 	{
 		m_iHighlightRow = -1;
 	}
-
-	/*
-	 * This is still needed together with g_IsSpectator
-	 * because the former is not always up to date,
-	 * for example right after a map start.
-	 */
-	bool started_drawing_spectators = false;
 
 	bool bNextRowIsGap = false;
 	int row;
@@ -645,7 +580,7 @@ void ScorePanel::FillGrid()
 			pLabel->setVisible(true);
 			pLabel->setText2("");
 			pLabel->setImage(NULL);
-			pLabel->setFont(m_UFont, sfont);
+			pLabel->setFont(sfont);
 			pLabel->setTextOffset(0, 0);
 			
 			int rowheight = 13;
@@ -688,7 +623,7 @@ void ScorePanel::FillGrid()
 					rowheight = YRES(rowheight);
 				}
 				pLabel->setSize(pLabel->getWide(), rowheight);
-				pLabel->setFont(m_UTitleFont, tfont);
+				pLabel->setFont(tfont);
 
 				pGridRow->SetRowUnderline(	0,
 											true,
@@ -710,23 +645,17 @@ void ScorePanel::FillGrid()
 					rowheight = YRES(rowheight);
 				}
 				pLabel->setSize(pLabel->getWide(), rowheight);
-				pLabel->setFont(m_UTitleFont, tfont);
+				pLabel->setFont(tfont);
 
 				pGridRow->SetRowUnderline(0, true, YRES(3), 100, 100, 100, 0);
-
-				started_drawing_spectators = true;
 			}
 			else
 			{
 				// team color text for player names
-				if (g_IsSpectator[m_iSortedRows[row]] || started_drawing_spectators) {
-					pLabel->setFgColor(100, 100, 100, 0);
-				} else {
-					pLabel->setFgColor(	iTeamColors[ g_PlayerExtraInfo[ m_iSortedRows[row] ].teamnumber % iNumberOfTeamColors ][0],
-										iTeamColors[ g_PlayerExtraInfo[ m_iSortedRows[row] ].teamnumber % iNumberOfTeamColors ][1],
-										iTeamColors[ g_PlayerExtraInfo[ m_iSortedRows[row] ].teamnumber % iNumberOfTeamColors ][2],
-										0 );
-				}
+				pLabel->setFgColor(	iTeamColors[ g_PlayerExtraInfo[ m_iSortedRows[row] ].teamnumber % iNumberOfTeamColors ][0],
+									iTeamColors[ g_PlayerExtraInfo[ m_iSortedRows[row] ].teamnumber % iNumberOfTeamColors ][1],
+									iTeamColors[ g_PlayerExtraInfo[ m_iSortedRows[row] ].teamnumber % iNumberOfTeamColors ][2],
+									0 );
 
 				// Get the player's data
 				pl_info = &g_PlayerInfoList[ m_iSortedRows[row] ];
@@ -736,15 +665,10 @@ void ScorePanel::FillGrid()
 				{
 					// Highlight this player
 					pLabel->setFgColor(Scheme::sc_white);
-
-					if (g_IsSpectator[m_iSortedRows[row]] || started_drawing_spectators) {
-						pLabel->setBgColor(100, 100, 100, 196);
-					} else {
-						pLabel->setBgColor(	iTeamColors[ g_PlayerExtraInfo[ m_iSortedRows[row] ].teamnumber % iNumberOfTeamColors ][0],
-											iTeamColors[ g_PlayerExtraInfo[ m_iSortedRows[row] ].teamnumber % iNumberOfTeamColors ][1],
-											iTeamColors[ g_PlayerExtraInfo[ m_iSortedRows[row] ].teamnumber % iNumberOfTeamColors ][2],
-											196 );
-					}
+					pLabel->setBgColor(	iTeamColors[ g_PlayerExtraInfo[ m_iSortedRows[row] ].teamnumber % iNumberOfTeamColors ][0],
+										iTeamColors[ g_PlayerExtraInfo[ m_iSortedRows[row] ].teamnumber % iNumberOfTeamColors ][1],
+										iTeamColors[ g_PlayerExtraInfo[ m_iSortedRows[row] ].teamnumber % iNumberOfTeamColors ][2],
+										196 );
 				}
 				else if ( m_iSortedRows[row] == m_iLastKilledBy && m_fLastKillTime && m_fLastKillTime > gHUD.m_flTime )
 				{
@@ -754,7 +678,7 @@ void ScorePanel::FillGrid()
 			}				
 
 			// Align 
-			if (col == COLUMN_NAME)
+			if (col == COLUMN_NAME || col == COLUMN_CLASS)
 			{
 				pLabel->setContentAlignment( vgui::Label::a_west );
 			}
@@ -778,12 +702,11 @@ void ScorePanel::FillGrid()
 				case COLUMN_NAME:
 					if ( m_iIsATeam[row] == TEAM_SPECTATORS )
 					{
-						sprintf( sz2, "%s", CHudTextMessage::BufferedLocaliseTextString( "#Spectators" ) );
+						sprintf( sz2, CHudTextMessage::BufferedLocaliseTextString( "#Spectators" ) );
 					}
 					else
 					{
-						strncpy( sz2, team_info->name, ARRAYSIZE(sz2) - 1 );
-						sz2[ARRAYSIZE(sz2) - 1] = '\0';
+						sprintf( sz2, gViewPort->GetTeamName(team_info->teamnumber) );
 					}
 
 					strcpy(sz, sz2);
@@ -801,7 +724,7 @@ void ScorePanel::FillGrid()
 						}
 
 						pLabel->setText2(sz2);
-						pLabel->setFont2(m_USmallFont, smallfont);
+						pLabel->setFont2(smallfont);
 					}
 					break;
 				case COLUMN_VOICE:
@@ -818,7 +741,7 @@ void ScorePanel::FillGrid()
 					break;
 				case COLUMN_LATENCY:
 					if ( m_iIsATeam[row] == TEAM_YES )
-						sprintf(sz, "%d/%d", team_info->ping, team_info->packetloss );
+						sprintf(sz, "%d", team_info->ping );
 					break;
 				default:
 					break;
@@ -844,18 +767,7 @@ void ScorePanel::FillGrid()
 						}
 					}
 					*/
-					
-					{
-						const char* name = nullptr;
-
-						if (steam_id::is_showing_real_names())
-							name = steam_id::get_real_name(m_iSortedRows[row] - 1).c_str();
-						if (!name || name[0] == '\0')
-							name = pl_info->name;
-
-						sprintf(sz, "%s", color_tags::strip_color_tags_thread_unsafe(name));
-					}
-
+					sprintf(sz, "%s  ", pl_info->name);
 					break;
 				case COLUMN_VOICE:
 					sz[0] = 0;
@@ -885,13 +797,13 @@ void ScorePanel::FillGrid()
 						}
 
 						if (bNoClass)
-							sz[0] = '\0';
+							sprintf(sz, "");
 						else
 							sprintf( sz, "%s", CHudTextMessage::BufferedLocaliseTextString( sLocalisedClasses[ g_PlayerExtraInfo[ m_iSortedRows[row] ].playerclass ] ) );
 					}
 					else
 					{
-						snprintf(sz, ARRAYSIZE(sz), "%s", steam_id::get_steam_id(m_iSortedRows[row] - 1).c_str());
+						strcpy(sz, "");
 					}
 					break;
 
@@ -910,13 +822,6 @@ void ScorePanel::FillGrid()
 						}
 					}
 					*/
-
-					if (m_pFlagIcon
-						&& (gHUD.m_CTF.GetBlueFlagPlayerIndex() == m_iSortedRows[row]
-							|| gHUD.m_CTF.GetRedFlagPlayerIndex() == m_iSortedRows[row])) {
-						pLabel->setImage(m_pFlagIcon);
-					}
-
 					break;
 
 #ifdef _TFC
@@ -940,7 +845,7 @@ void ScorePanel::FillGrid()
 					sprintf(sz, "%d",  g_PlayerExtraInfo[ m_iSortedRows[row] ].deaths );
 					break;
 				case COLUMN_LATENCY:
-					sprintf(sz, "%d/%d", g_PlayerInfoList[ m_iSortedRows[row] ].ping, g_PlayerInfoList[m_iSortedRows[row]].packetloss );
+					sprintf(sz, "%d", g_PlayerInfoList[ m_iSortedRows[row] ].ping );
 					break;
 #endif
 				default:
@@ -1021,8 +926,8 @@ void ScorePanel::mousePressed(MouseCode code, Panel* panel)
 					// remove mute
 					GetClientVoiceMgr()->SetPlayerBlockedState(iPlayer, false);
 
-					snprintf( string1, sizeof(string1), CHudTextMessage::BufferedLocaliseTextString( "#Unmuted" ), pl_info->name );
-					snprintf( string, sizeof(string), "%c** %s\n", HUD_PRINTTALK, string1 );
+					sprintf( string1, CHudTextMessage::BufferedLocaliseTextString( "#Unmuted" ), pl_info->name );
+					sprintf( string, "%c** %s\n", HUD_PRINTTALK, string1 );
 
 					gHUD.m_TextMessage.MsgFunc_TextMsg(NULL, strlen(string)+1, string );
 				}
@@ -1034,9 +939,9 @@ void ScorePanel::mousePressed(MouseCode code, Panel* panel)
 					// mute the player
 					GetClientVoiceMgr()->SetPlayerBlockedState(iPlayer, true);
 
-					snprintf( string1, sizeof(string1), CHudTextMessage::BufferedLocaliseTextString( "#Muted" ), pl_info->name );
-					snprintf( string2, sizeof(string2), "%s", CHudTextMessage::BufferedLocaliseTextString( "#No_longer_hear_that_player" ) );
-					snprintf( string, sizeof(string), "%c** %s %s\n", HUD_PRINTTALK, string1, string2 );
+					sprintf( string1, CHudTextMessage::BufferedLocaliseTextString( "#Muted" ), pl_info->name );
+					sprintf( string2, CHudTextMessage::BufferedLocaliseTextString( "#No_longer_hear_that_player" ) );
+					sprintf( string, "%c** %s %s\n", HUD_PRINTTALK, string1, string2 );
 
 					gHUD.m_TextMessage.MsgFunc_TextMsg(NULL, strlen(string)+1, string );
 				}
