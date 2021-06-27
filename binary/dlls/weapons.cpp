@@ -388,6 +388,8 @@ void W_Precache(void)
 
 	UTIL_PrecacheOtherWeapon("weapon_eagle");
 
+	UTIL_PrecacheOtherWeapon("weapon_pipewrench");
+
 	UTIL_PrecacheOtherWeapon("weapon_sniperrifle");
 	UTIL_PrecacheOther("ammo_762");
 
@@ -1014,7 +1016,7 @@ BOOL CBasePlayerWeapon :: CanDeploy( void )
 	return TRUE;
 }
 
-BOOL CBasePlayerWeapon :: DefaultDeploy( char *szViewModel, char *szWeaponModel, int iAnim, char *szAnimExt, int skiplocal /* = 0 */, int body )
+BOOL CBasePlayerWeapon::DefaultDeploy(char* szViewModel, char* szWeaponModel, int iAnim, char* szAnimExt, int skiplocal /* = 0 */, int body)
 {
 	if (!CanDeploy( ))
 		return FALSE;
