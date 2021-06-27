@@ -1,0 +1,558 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\hl\hl_baseentity.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\hl\hl_events.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\hl\hl_objects.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\hl\hl_weapons.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\op4_weapons\CPenguin.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\ammo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\ammo_secondary.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\ammohistory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\battery.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\cdll_int.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\color_tags.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\com_weapons.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\death.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\demo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\discord_integration.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\entity.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\ev_common.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\ev_hldm.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\events.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\flashlight.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\forcemodel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\GameStudioModelRenderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\geiger.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\health.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\hud.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\hud_bench.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\hud_benchtrace.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\hud_countdown.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\hud_crosshairs.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\hud_ctf.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\hud_customtimer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\hud_debug.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\hud_location.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\hud_msg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\hud_nextmap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\hud_playerid.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\hud_redraw.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\hud_scores.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\hud_servers.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\hud_settings.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\hud_spectator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\hud_speedometer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\hud_suddendeath.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\hud_timeout.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\hud_timer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\hud_update.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\hud_vote.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\hud_watermark.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\hud_oldscoreboard.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\hudgl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\in_camera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\input.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\inputw32.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\interpolation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\menu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\message.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\rainbow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\saytext.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\status_icons.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\statusbar.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\steam_id.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\studio_util.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\StudioModelRenderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\text_message.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\train.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\tri.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\update_checker.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\util.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\vgui_ClassMenu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\vgui_ControlConfigPanel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\vgui_CustomObjects.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\vgui_int.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\vgui_MOTDWindow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\vgui_SchemeManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\vgui_ScorePanel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\vgui_ServerBrowser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\vgui_SpectatorPanel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\vgui_TeamFortressViewport.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\vgui_teammenu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\vgui_UnicodeTextImage.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\view.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\voice_status.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\common\parsemsg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\dlls\wpn_shared\hl_wpn_glock.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\dlls\crossbow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\dlls\crowbar.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\dlls\egon.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\dlls\gauss.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\dlls\handgrenade.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\dlls\hornetgun.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\dlls\mp5.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\dlls\python.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\dlls\rpg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\dlls\satchel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\dlls\shotgun.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\dlls\squeakgrenade.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\dlls\tripmine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\game_shared\vgui_checkbutton2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\game_shared\vgui_grid.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\game_shared\vgui_helpers.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\game_shared\vgui_listbox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\game_shared\vgui_loadtga.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\game_shared\vgui_scrollbar2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\game_shared\vgui_slider2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\game_shared\voice_banmgr.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\pm_shared\pm_debug.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\pm_shared\pm_math.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\pm_shared\pm_shared.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\repos\C-DRIVE\Aura-SE\binary\client\public\interface.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\op4_weapons\CPenguin.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\ammo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\ammohistory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\camera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\cl_dll.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\cl_util.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\color_tags.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\com_weapons.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\demo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\discord_integration.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\ev_hldm.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\eventscripts.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\forcemodel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\GameStudioModelRenderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\health.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\hud.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\hud_countdown.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\hud_crosshairs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\hud_ctf.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\hud_customtimer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\hud_debug.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\hud_location.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\hud_nextmap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\hud_playerid.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\hud_scores.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\hud_servers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\hud_servers_priv.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\hud_settings.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\hud_spectator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\hud_speedometer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\hud_suddendeath.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\hud_timeout.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\hud_timer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\hud_vote.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\hud_watermark.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\hud_oldscoreboard.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\hudgl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\in_defs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\interpolation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\kbutton.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\rainbow.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\steam_id.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\StudioModelRenderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\tri.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\update_checker.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\util_vector.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\versioninfo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\vgui_ControlConfigPanel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\vgui_int.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\vgui_SchemeManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\vgui_ScorePanel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\vgui_ServerBrowser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\vgui_SpectatorPanel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\vgui_UnicodeTextImage.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\view.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\repos\C-DRIVE\Aura-SE\binary\client\cl_dll\wrect.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\repos\C-DRIVE\Aura-SE\binary\client\common\Platform.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\repos\C-DRIVE\Aura-SE\binary\client\common\parsemsg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\repos\C-DRIVE\Aura-SE\binary\client\dlls\CPenguin.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\repos\C-DRIVE\Aura-SE\binary\client\dlls\cdll_dll.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\repos\C-DRIVE\Aura-SE\binary\client\game_shared\vgui_scrollbar2.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\repos\C-DRIVE\Aura-SE\binary\client\game_shared\vgui_slider2.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\repos\C-DRIVE\Aura-SE\binary\client\game_shared\voice_banmgr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\repos\C-DRIVE\Aura-SE\binary\client\game_shared\voice_status.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\repos\C-DRIVE\Aura-SE\binary\client\pm_shared\pm_debug.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\repos\C-DRIVE\Aura-SE\binary\client\pm_shared\pm_defs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\repos\C-DRIVE\Aura-SE\binary\client\pm_shared\pm_info.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\repos\C-DRIVE\Aura-SE\binary\client\pm_shared\pm_materials.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\repos\C-DRIVE\Aura-SE\binary\client\pm_shared\pm_movevars.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\repos\C-DRIVE\Aura-SE\binary\client\pm_shared\pm_shared.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\repos\C-DRIVE\Aura-SE\binary\client\build\current_version.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="D:\repos\C-DRIVE\Aura-SE\binary\client\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{41B77F2B-A60B-308B-8CAA-429BC3CD7A31}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{62A15A68-2362-37F7-A2BE-23281E1A8D36}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

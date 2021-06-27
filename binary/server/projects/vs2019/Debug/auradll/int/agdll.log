@@ -1,0 +1,265 @@
+﻿  aflock.cpp
+  agrunt.cpp
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(170,1): warning C4005: 'AMMO_URANIUMBOX_GIVE': macro redefinition
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(161): message : see previous definition of 'AMMO_URANIUMBOX_GIVE'
+  airtank.cpp
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(170,1): warning C4005: 'AMMO_URANIUMBOX_GIVE': macro redefinition
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(161): message : see previous definition of 'AMMO_URANIUMBOX_GIVE'
+  animating.cpp
+  animation.cpp
+  apache.cpp
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(170,1): warning C4005: 'AMMO_URANIUMBOX_GIVE': macro redefinition
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(161): message : see previous definition of 'AMMO_URANIUMBOX_GIVE'
+  barnacle.cpp
+  barney.cpp
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(170,1): warning C4005: 'AMMO_URANIUMBOX_GIVE': macro redefinition
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(161): message : see previous definition of 'AMMO_URANIUMBOX_GIVE'
+  bigmomma.cpp
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(170,1): warning C4005: 'AMMO_URANIUMBOX_GIVE': macro redefinition
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(161): message : see previous definition of 'AMMO_URANIUMBOX_GIVE'
+  bloater.cpp
+  bmodels.cpp
+  bullsquid.cpp
+  buttons.cpp
+  cbase.cpp
+  client.cpp
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(170,1): warning C4005: 'AMMO_URANIUMBOX_GIVE': macro redefinition
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(161): message : see previous definition of 'AMMO_URANIUMBOX_GIVE'
+  combat.cpp
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(170,1): warning C4005: 'AMMO_URANIUMBOX_GIVE': macro redefinition
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(161): message : see previous definition of 'AMMO_URANIUMBOX_GIVE'
+  controller.cpp
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(170,1): warning C4005: 'AMMO_URANIUMBOX_GIVE': macro redefinition
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(161): message : see previous definition of 'AMMO_URANIUMBOX_GIVE'
+  crossbow.cpp
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(170,1): warning C4005: 'AMMO_URANIUMBOX_GIVE': macro redefinition
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(161): message : see previous definition of 'AMMO_URANIUMBOX_GIVE'
+  crowbar.cpp
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(170,1): warning C4005: 'AMMO_URANIUMBOX_GIVE': macro redefinition
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(161): message : see previous definition of 'AMMO_URANIUMBOX_GIVE'
+  defaultai.cpp
+  Generating Code...
+  Compiling...
+  doors.cpp
+  effects.cpp
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(170,1): warning C4005: 'AMMO_URANIUMBOX_GIVE': macro redefinition
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(161): message : see previous definition of 'AMMO_URANIUMBOX_GIVE'
+  egon.cpp
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(170,1): warning C4005: 'AMMO_URANIUMBOX_GIVE': macro redefinition
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(161): message : see previous definition of 'AMMO_URANIUMBOX_GIVE'
+  explode.cpp
+  flyingmonster.cpp
+  func_break.cpp
+  func_tank.cpp
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(170,1): warning C4005: 'AMMO_URANIUMBOX_GIVE': macro redefinition
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(161): message : see previous definition of 'AMMO_URANIUMBOX_GIVE'
+  game.cpp
+  gamerules.cpp
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(170,1): warning C4005: 'AMMO_URANIUMBOX_GIVE': macro redefinition
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(161): message : see previous definition of 'AMMO_URANIUMBOX_GIVE'
+  gargantua.cpp
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(170,1): warning C4005: 'AMMO_URANIUMBOX_GIVE': macro redefinition
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(161): message : see previous definition of 'AMMO_URANIUMBOX_GIVE'
+  gauss.cpp
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(170,1): warning C4005: 'AMMO_URANIUMBOX_GIVE': macro redefinition
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(161): message : see previous definition of 'AMMO_URANIUMBOX_GIVE'
+  genericmonster.cpp
+  ggrenade.cpp
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(170,1): warning C4005: 'AMMO_URANIUMBOX_GIVE': macro redefinition
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(161): message : see previous definition of 'AMMO_URANIUMBOX_GIVE'
+  globals.cpp
+  gman.cpp
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(170,1): warning C4005: 'AMMO_URANIUMBOX_GIVE': macro redefinition
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(161): message : see previous definition of 'AMMO_URANIUMBOX_GIVE'
+  handgrenade.cpp
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(170,1): warning C4005: 'AMMO_URANIUMBOX_GIVE': macro redefinition
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(161): message : see previous definition of 'AMMO_URANIUMBOX_GIVE'
+  hassassin.cpp
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(170,1): warning C4005: 'AMMO_URANIUMBOX_GIVE': macro redefinition
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(161): message : see previous definition of 'AMMO_URANIUMBOX_GIVE'
+  headcrab.cpp
+  healthkit.cpp
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(170,1): warning C4005: 'AMMO_URANIUMBOX_GIVE': macro redefinition
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(161): message : see previous definition of 'AMMO_URANIUMBOX_GIVE'
+  hgrunt.cpp
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(170,1): warning C4005: 'AMMO_URANIUMBOX_GIVE': macro redefinition
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(161): message : see previous definition of 'AMMO_URANIUMBOX_GIVE'
+  Generating Code...
+  Compiling...
+  hornet.cpp
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(170,1): warning C4005: 'AMMO_URANIUMBOX_GIVE': macro redefinition
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(161): message : see previous definition of 'AMMO_URANIUMBOX_GIVE'
+  hornetgun.cpp
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(170,1): warning C4005: 'AMMO_URANIUMBOX_GIVE': macro redefinition
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(161): message : see previous definition of 'AMMO_URANIUMBOX_GIVE'
+  houndeye.cpp
+  h_ai.cpp
+  h_battery.cpp
+  h_cine.cpp
+  h_cycler.cpp
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(170,1): warning C4005: 'AMMO_URANIUMBOX_GIVE': macro redefinition
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(161): message : see previous definition of 'AMMO_URANIUMBOX_GIVE'
+  h_export.cpp
+  ichthyosaur.cpp
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(170,1): warning C4005: 'AMMO_URANIUMBOX_GIVE': macro redefinition
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(161): message : see previous definition of 'AMMO_URANIUMBOX_GIVE'
+  islave.cpp
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(170,1): warning C4005: 'AMMO_URANIUMBOX_GIVE': macro redefinition
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(161): message : see previous definition of 'AMMO_URANIUMBOX_GIVE'
+  items.cpp
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(170,1): warning C4005: 'AMMO_URANIUMBOX_GIVE': macro redefinition
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(161): message : see previous definition of 'AMMO_URANIUMBOX_GIVE'
+  leech.cpp
+  lights.cpp
+  maprules.cpp
+  monstermaker.cpp
+  monsters.cpp
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(170,1): warning C4005: 'AMMO_URANIUMBOX_GIVE': macro redefinition
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(161): message : see previous definition of 'AMMO_URANIUMBOX_GIVE'
+  monsterstate.cpp
+  mortar.cpp
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(170,1): warning C4005: 'AMMO_URANIUMBOX_GIVE': macro redefinition
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(161): message : see previous definition of 'AMMO_URANIUMBOX_GIVE'
+  mp5.cpp
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(170,1): warning C4005: 'AMMO_URANIUMBOX_GIVE': macro redefinition
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(161): message : see previous definition of 'AMMO_URANIUMBOX_GIVE'
+  multiplay_gamerules.cpp
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(170,1): warning C4005: 'AMMO_URANIUMBOX_GIVE': macro redefinition
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(161): message : see previous definition of 'AMMO_URANIUMBOX_GIVE'
+  Generating Code...
+  Compiling...
+  nihilanth.cpp
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(170,1): warning C4005: 'AMMO_URANIUMBOX_GIVE': macro redefinition
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(161): message : see previous definition of 'AMMO_URANIUMBOX_GIVE'
+  nodes.cpp
+  observer.cpp
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(170,1): warning C4005: 'AMMO_URANIUMBOX_GIVE': macro redefinition
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(161): message : see previous definition of 'AMMO_URANIUMBOX_GIVE'
+  osprey.cpp
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(170,1): warning C4005: 'AMMO_URANIUMBOX_GIVE': macro redefinition
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(161): message : see previous definition of 'AMMO_URANIUMBOX_GIVE'
+  pathcorner.cpp
+  plane.cpp
+  plats.cpp
+  player.cpp
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(170,1): warning C4005: 'AMMO_URANIUMBOX_GIVE': macro redefinition
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(161): message : see previous definition of 'AMMO_URANIUMBOX_GIVE'
+  python.cpp
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(170,1): warning C4005: 'AMMO_URANIUMBOX_GIVE': macro redefinition
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(161): message : see previous definition of 'AMMO_URANIUMBOX_GIVE'
+  rat.cpp
+  roach.cpp
+  rpg.cpp
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(170,1): warning C4005: 'AMMO_URANIUMBOX_GIVE': macro redefinition
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(161): message : see previous definition of 'AMMO_URANIUMBOX_GIVE'
+  satchel.cpp
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(170,1): warning C4005: 'AMMO_URANIUMBOX_GIVE': macro redefinition
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(161): message : see previous definition of 'AMMO_URANIUMBOX_GIVE'
+  schedule.cpp
+  scientist.cpp
+  scripted.cpp
+  shotgun.cpp
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(170,1): warning C4005: 'AMMO_URANIUMBOX_GIVE': macro redefinition
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(161): message : see previous definition of 'AMMO_URANIUMBOX_GIVE'
+  singleplay_gamerules.cpp
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(170,1): warning C4005: 'AMMO_URANIUMBOX_GIVE': macro redefinition
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(161): message : see previous definition of 'AMMO_URANIUMBOX_GIVE'
+  skill.cpp
+  sound.cpp
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(170,1): warning C4005: 'AMMO_URANIUMBOX_GIVE': macro redefinition
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(161): message : see previous definition of 'AMMO_URANIUMBOX_GIVE'
+  Generating Code...
+  Compiling...
+  soundent.cpp
+  spectator.cpp
+  squadmonster.cpp
+  squeakgrenade.cpp
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(170,1): warning C4005: 'AMMO_URANIUMBOX_GIVE': macro redefinition
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(161): message : see previous definition of 'AMMO_URANIUMBOX_GIVE'
+  subs.cpp
+  talkmonster.cpp
+  teamplay_gamerules.cpp
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(170,1): warning C4005: 'AMMO_URANIUMBOX_GIVE': macro redefinition
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(161): message : see previous definition of 'AMMO_URANIUMBOX_GIVE'
+  tempmonster.cpp
+  tentacle.cpp
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(170,1): warning C4005: 'AMMO_URANIUMBOX_GIVE': macro redefinition
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(161): message : see previous definition of 'AMMO_URANIUMBOX_GIVE'
+  triggers.cpp
+  tripmine.cpp
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(170,1): warning C4005: 'AMMO_URANIUMBOX_GIVE': macro redefinition
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(161): message : see previous definition of 'AMMO_URANIUMBOX_GIVE'
+  turret.cpp
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(170,1): warning C4005: 'AMMO_URANIUMBOX_GIVE': macro redefinition
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(161): message : see previous definition of 'AMMO_URANIUMBOX_GIVE'
+  util.cpp
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(170,1): warning C4005: 'AMMO_URANIUMBOX_GIVE': macro redefinition
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(161): message : see previous definition of 'AMMO_URANIUMBOX_GIVE'
+  weapons.cpp
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(170,1): warning C4005: 'AMMO_URANIUMBOX_GIVE': macro redefinition
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(161): message : see previous definition of 'AMMO_URANIUMBOX_GIVE'
+  world.cpp
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(170,1): warning C4005: 'AMMO_URANIUMBOX_GIVE': macro redefinition
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(161): message : see previous definition of 'AMMO_URANIUMBOX_GIVE'
+  hl_wpn_glock.cpp
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(170,1): warning C4005: 'AMMO_URANIUMBOX_GIVE': macro redefinition
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(161): message : see previous definition of 'AMMO_URANIUMBOX_GIVE'
+  xen.cpp
+  zombie.cpp
+  voice_gamemgr.cpp
+  algo.cpp
+  Generating Code...
+  Compiling...
+  pm_debug.cpp
+  pm_math.cpp
+  pm_shared.cpp
+  agadmin.cpp
+  agadmincache.cpp
+  agarena.cpp
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(170,1): warning C4005: 'AMMO_URANIUMBOX_GIVE': macro redefinition
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(161): message : see previous definition of 'AMMO_URANIUMBOX_GIVE'
+  agclient.cpp
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(170,1): warning C4005: 'AMMO_URANIUMBOX_GIVE': macro redefinition
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(161): message : see previous definition of 'AMMO_URANIUMBOX_GIVE'
+  agcommand.cpp
+  agctf.cpp
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(170,1): warning C4005: 'AMMO_URANIUMBOX_GIVE': macro redefinition
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(161): message : see previous definition of 'AMMO_URANIUMBOX_GIVE'
+  agdom.cpp
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(170,1): warning C4005: 'AMMO_URANIUMBOX_GIVE': macro redefinition
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(161): message : see previous definition of 'AMMO_URANIUMBOX_GIVE'
+  aggame.cpp
+  aggamemode.cpp
+  aggamerules.cpp
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(170,1): warning C4005: 'AMMO_URANIUMBOX_GIVE': macro redefinition
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(161): message : see previous definition of 'AMMO_URANIUMBOX_GIVE'
+  agglobal.cpp
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(170,1): warning C4005: 'AMMO_URANIUMBOX_GIVE': macro redefinition
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(161): message : see previous definition of 'AMMO_URANIUMBOX_GIVE'
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\agglobal.cpp(745,9): warning C4996: 'GetVersionExA': was declared deprecated
+  aginfointermission.cpp
+  aglms.cpp
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(170,1): warning C4005: 'AMMO_URANIUMBOX_GIVE': macro redefinition
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(161): message : see previous definition of 'AMMO_URANIUMBOX_GIVE'
+  agmatch.cpp
+  agscore.cpp
+  agscorecache.cpp
+  agscorelog.cpp
+  Generating Code...
+  Compiling...
+  agsettings.cpp
+  agspectator.cpp
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(170,1): warning C4005: 'AMMO_URANIUMBOX_GIVE': macro redefinition
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(161): message : see previous definition of 'AMMO_URANIUMBOX_GIVE'
+  agstats.cpp
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(170,1): warning C4005: 'AMMO_URANIUMBOX_GIVE': macro redefinition
+C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\dlls\weapons.h(161): message : see previous definition of 'AMMO_URANIUMBOX_GIVE'
+  agsuddendeath.cpp
+  agtimeout.cpp
+  agtimer.cpp
+  agvote.cpp
+  agwallhack.cpp
+  Generating Code...
+     Creating library Debug\auradll\aura.lib and object Debug\auradll\aura.exp
+aura.exp : warning LNK4070: /OUT:ag.dll directive in .EXP differs from output filename 'Debug\auradll\aura.dll'; ignoring directive
+  agdll.vcxproj -> C:\Users\djdis\source\repos\Aura-SE\Server DLL (VS2019)\projects\vs2019\Debug\auradll\aura.dll
