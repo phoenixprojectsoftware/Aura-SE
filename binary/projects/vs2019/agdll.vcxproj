@@ -92,8 +92,8 @@
       <ModuleDefinitionFile>$(ProjectDir)..\..\dlls\ag.def</ModuleDefinitionFile>
     </Link>
     <PostBuildEvent>
-      <Command>
-      </Command>
+      <Command>copy "$(TargetPath)" "E:\Steam\steamapps\common\Half-Life\zamnhlmp\dlls\$(TargetFileName)"
+</Command>
     </PostBuildEvent>
     <PostBuildEvent />
   </ItemDefinitionGroup>
