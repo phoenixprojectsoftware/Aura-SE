@@ -184,7 +184,7 @@ void CSniperRifle::Reload()
 {
 	if (m_pPlayer->ammo_762 > 0)
 	{
-		if (m_bInZoom)
+		if (m_pPlayer->m_iFOV != 0)
 		{
 			ToggleZoom();
 		}
