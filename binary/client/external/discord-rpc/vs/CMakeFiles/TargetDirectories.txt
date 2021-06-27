@@ -1,7 +1,0 @@
-D:/repos/C-DRIVE/Aura-SE/binary/client/external/discord-rpc/vs/CMakeFiles/INSTALL.dir
-D:/repos/C-DRIVE/Aura-SE/binary/client/external/discord-rpc/vs/CMakeFiles/ALL_BUILD.dir
-D:/repos/C-DRIVE/Aura-SE/binary/client/external/discord-rpc/vs/CMakeFiles/ZERO_CHECK.dir
-D:/repos/C-DRIVE/Aura-SE/binary/client/external/discord-rpc/vs/src/CMakeFiles/discord-rpc.dir
-D:/repos/C-DRIVE/Aura-SE/binary/client/external/discord-rpc/vs/src/CMakeFiles/INSTALL.dir
-D:/repos/C-DRIVE/Aura-SE/binary/client/external/discord-rpc/vs/examples/send-presence/CMakeFiles/send-presence.dir
-D:/repos/C-DRIVE/Aura-SE/binary/client/external/discord-rpc/vs/examples/send-presence/CMakeFiles/INSTALL.dir

@@ -1,9 +1,0 @@
-.vscode
-linux/hl_cdll_map.txt
-linux/release
-build
-compile_commands.json
-thirdparty
-.vs/
-Linux-Build/
-out/
