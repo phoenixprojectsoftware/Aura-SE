@@ -1,0 +1,154 @@
+﻿  pm_debug.c
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(85,1): error C4235: nonstandard extension used: '__asm' keyword not supported on this architecture
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(87,4): error C2065: 'wait': undeclared identifier
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(87,4): error C2146: syntax error: missing ';' before identifier 'fnstcw'
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(87,11): error C2065: 'fnstcw': undeclared identifier
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(87,11): error C2146: syntax error: missing ';' before identifier 'old_cw'
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(88,4): error C2146: syntax error: missing ';' before identifier 'wait'
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(89,4): error C2065: 'wait': undeclared identifier
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(89,4): error C2146: syntax error: missing ';' before identifier 'mov'
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(89,9): error C2065: 'mov': undeclared identifier
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(89,9): error C2146: syntax error: missing ';' before identifier 'ax'
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(89,11): error C2065: 'ax': undeclared identifier
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(89,18): error C2065: 'word': undeclared identifier
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(89,18): error C2146: syntax error: missing ';' before identifier 'ptr'
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(89,22): error C2065: 'ptr': undeclared identifier
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(89,22): error C2146: syntax error: missing ';' before identifier 'old_cw'
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(90,4): error C2146: syntax error: missing ';' before identifier 'or'
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(90,8): error C2065: 'or': undeclared identifier
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(90,8): error C2146: syntax error: missing ';' before identifier 'ah'
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(90,10): error C2065: 'ah': undeclared identifier
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(91,4): error C2146: syntax error: missing ';' before identifier 'mov'
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(91,9): error C2065: 'mov': undeclared identifier
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(91,9): error C2146: syntax error: missing ';' before identifier 'word'
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(91,14): error C2065: 'word': undeclared identifier
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(91,14): error C2146: syntax error: missing ';' before identifier 'ptr'
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(91,18): error C2065: 'ptr': undeclared identifier
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(91,18): error C2146: syntax error: missing ';' before identifier 'new_cw'
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(92,4): error C2065: 'ax': undeclared identifier
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(92,4): error C2146: syntax error: missing ';' before identifier 'fldcw'
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(92,10): error C2065: 'fldcw': undeclared identifier
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(92,10): error C2146: syntax error: missing ';' before identifier 'new_cw'
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(93,2): error C2143: syntax error: missing ';' before '}'
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(98,2): error C4235: nonstandard extension used: '__asm' keyword not supported on this architecture
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(100,8): error C2065: 'fld': undeclared identifier
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(100,8): error C2146: syntax error: missing ';' before identifier 'DWORD'
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(100,14): error C2065: 'DWORD': undeclared identifier
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(100,14): error C2146: syntax error: missing ';' before identifier 'PTR'
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(100,18): error C2065: 'PTR': undeclared identifier
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(100,18): error C2146: syntax error: missing ';' before identifier 'f'
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(101,3): error C2146: syntax error: missing ';' before identifier 'fistp'
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(101,9): error C2065: 'fistp': undeclared identifier
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(101,9): error C2146: syntax error: missing ';' before identifier 'DWORD'
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(101,15): error C2065: 'DWORD': undeclared identifier
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(101,15): error C2146: syntax error: missing ';' before identifier 'PTR'
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(101,19): error C2065: 'PTR': undeclared identifier
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(101,19): error C2146: syntax error: missing ';' before identifier 'dlong'
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(102,2): error C2143: syntax error: missing ';' before '}'
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(108,2): error C4235: nonstandard extension used: '__asm' keyword not supported on this architecture
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(108,13): error C2065: 'fldcw': undeclared identifier
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(108,13): error C2146: syntax error: missing ';' before identifier 'old_cw'
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(109,1): error C2143: syntax error: missing ';' before '}'
+  pm_math.c
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(85,1): error C4235: nonstandard extension used: '__asm' keyword not supported on this architecture
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(87,4): error C2065: 'wait': undeclared identifier
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(87,4): error C2146: syntax error: missing ';' before identifier 'fnstcw'
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(87,11): error C2065: 'fnstcw': undeclared identifier
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(87,11): error C2146: syntax error: missing ';' before identifier 'old_cw'
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(88,4): error C2146: syntax error: missing ';' before identifier 'wait'
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(89,4): error C2065: 'wait': undeclared identifier
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(89,4): error C2146: syntax error: missing ';' before identifier 'mov'
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(89,9): error C2065: 'mov': undeclared identifier
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(89,9): error C2146: syntax error: missing ';' before identifier 'ax'
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(89,11): error C2065: 'ax': undeclared identifier
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(89,18): error C2065: 'word': undeclared identifier
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(89,18): error C2146: syntax error: missing ';' before identifier 'ptr'
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(89,22): error C2065: 'ptr': undeclared identifier
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(89,22): error C2146: syntax error: missing ';' before identifier 'old_cw'
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(90,4): error C2146: syntax error: missing ';' before identifier 'or'
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(90,8): error C2065: 'or': undeclared identifier
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(90,8): error C2146: syntax error: missing ';' before identifier 'ah'
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(90,10): error C2065: 'ah': undeclared identifier
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(91,4): error C2146: syntax error: missing ';' before identifier 'mov'
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(91,9): error C2065: 'mov': undeclared identifier
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(91,9): error C2146: syntax error: missing ';' before identifier 'word'
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(91,14): error C2065: 'word': undeclared identifier
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(91,14): error C2146: syntax error: missing ';' before identifier 'ptr'
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(91,18): error C2065: 'ptr': undeclared identifier
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(91,18): error C2146: syntax error: missing ';' before identifier 'new_cw'
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(92,4): error C2065: 'ax': undeclared identifier
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(92,4): error C2146: syntax error: missing ';' before identifier 'fldcw'
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(92,10): error C2065: 'fldcw': undeclared identifier
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(92,10): error C2146: syntax error: missing ';' before identifier 'new_cw'
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(93,2): error C2143: syntax error: missing ';' before '}'
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(98,2): error C4235: nonstandard extension used: '__asm' keyword not supported on this architecture
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(100,8): error C2065: 'fld': undeclared identifier
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(100,8): error C2146: syntax error: missing ';' before identifier 'DWORD'
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(100,14): error C2065: 'DWORD': undeclared identifier
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(100,14): error C2146: syntax error: missing ';' before identifier 'PTR'
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(100,18): error C2065: 'PTR': undeclared identifier
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(100,18): error C2146: syntax error: missing ';' before identifier 'f'
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(101,3): error C2146: syntax error: missing ';' before identifier 'fistp'
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(101,9): error C2065: 'fistp': undeclared identifier
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(101,9): error C2146: syntax error: missing ';' before identifier 'DWORD'
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(101,15): error C2065: 'DWORD': undeclared identifier
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(101,15): error C2146: syntax error: missing ';' before identifier 'PTR'
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(101,19): error C2065: 'PTR': undeclared identifier
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(101,19): error C2146: syntax error: missing ';' before identifier 'dlong'
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(102,2): error C2143: syntax error: missing ';' before '}'
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(108,2): error C4235: nonstandard extension used: '__asm' keyword not supported on this architecture
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(108,13): error C2065: 'fldcw': undeclared identifier
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(108,13): error C2146: syntax error: missing ';' before identifier 'old_cw'
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(109,1): error C2143: syntax error: missing ';' before '}'
+  pm_shared.c
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(85,1): error C4235: nonstandard extension used: '__asm' keyword not supported on this architecture
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(87,4): error C2065: 'wait': undeclared identifier
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(87,4): error C2146: syntax error: missing ';' before identifier 'fnstcw'
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(87,11): error C2065: 'fnstcw': undeclared identifier
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(87,11): error C2146: syntax error: missing ';' before identifier 'old_cw'
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(88,4): error C2146: syntax error: missing ';' before identifier 'wait'
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(89,4): error C2065: 'wait': undeclared identifier
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(89,4): error C2146: syntax error: missing ';' before identifier 'mov'
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(89,9): error C2065: 'mov': undeclared identifier
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(89,9): error C2146: syntax error: missing ';' before identifier 'ax'
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(89,11): error C2065: 'ax': undeclared identifier
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(89,18): error C2065: 'word': undeclared identifier
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(89,18): error C2146: syntax error: missing ';' before identifier 'ptr'
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(89,22): error C2065: 'ptr': undeclared identifier
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(89,22): error C2146: syntax error: missing ';' before identifier 'old_cw'
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(90,4): error C2146: syntax error: missing ';' before identifier 'or'
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(90,8): error C2065: 'or': undeclared identifier
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(90,8): error C2146: syntax error: missing ';' before identifier 'ah'
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(90,10): error C2065: 'ah': undeclared identifier
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(91,4): error C2146: syntax error: missing ';' before identifier 'mov'
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(91,9): error C2065: 'mov': undeclared identifier
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(91,9): error C2146: syntax error: missing ';' before identifier 'word'
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(91,14): error C2065: 'word': undeclared identifier
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(91,14): error C2146: syntax error: missing ';' before identifier 'ptr'
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(91,18): error C2065: 'ptr': undeclared identifier
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(91,18): error C2146: syntax error: missing ';' before identifier 'new_cw'
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(92,4): error C2065: 'ax': undeclared identifier
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(92,4): error C2146: syntax error: missing ';' before identifier 'fldcw'
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(92,10): error C2065: 'fldcw': undeclared identifier
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(92,10): error C2146: syntax error: missing ';' before identifier 'new_cw'
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(93,2): error C2143: syntax error: missing ';' before '}'
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(98,2): error C4235: nonstandard extension used: '__asm' keyword not supported on this architecture
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(100,8): error C2065: 'fld': undeclared identifier
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(100,8): error C2146: syntax error: missing ';' before identifier 'DWORD'
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(100,14): error C2065: 'DWORD': undeclared identifier
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(100,14): error C2146: syntax error: missing ';' before identifier 'PTR'
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(100,18): error C2065: 'PTR': undeclared identifier
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(100,18): error C2146: syntax error: missing ';' before identifier 'f'
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(101,3): error C2146: syntax error: missing ';' before identifier 'fistp'
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(101,9): error C2065: 'fistp': undeclared identifier
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(101,9): error C2146: syntax error: missing ';' before identifier 'DWORD'
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(101,15): error C2065: 'DWORD': undeclared identifier
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(101,15): error C2146: syntax error: missing ';' before identifier 'PTR'
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(101,19): error C2065: 'PTR': undeclared identifier
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(101,19): error C2146: syntax error: missing ';' before identifier 'dlong'
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(102,2): error C2143: syntax error: missing ';' before '}'
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(108,2): error C4235: nonstandard extension used: '__asm' keyword not supported on this architecture
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(108,13): error C2065: 'fldcw': undeclared identifier
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(108,13): error C2146: syntax error: missing ';' before identifier 'old_cw'
+D:\repos\C-DRIVE\Aura-SE\binary\client\common\mathlib.h(109,1): error C2143: syntax error: missing ';' before '}'
+  Generating Code...

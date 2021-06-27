@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="D:\repos\C-DRIVE\Aura-SE\binary\client\external\discord-rpc\vs\CMakeFiles\ac729db9e43602d37d6391bd32876cb0\INSTALL_force.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{4608B117-1170-35F3-9FE4-FAC1F1C2414B}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

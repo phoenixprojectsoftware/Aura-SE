@@ -1,0 +1,67 @@
+﻿  Building Custom Rule D:/repos/C-DRIVE/Aura-SE/binary/client/external/discord-rpc/src/CMakeLists.txt
+  discord_rpc.cpp
+  rpc_connection.cpp
+  serialization.cpp
+  connection_win.cpp
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winbase.h(7679,48): warning C5039: 'TpSetCallbackCleanupGroup': pointer or reference to potentially throwing function passed to 'extern "C"' function under -EHc. Undefined behavior may occur if this function throws an exception.
+  discord_register_win.cpp
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winbase.h(7679,48): warning C5039: 'TpSetCallbackCleanupGroup': pointer or reference to potentially throwing function passed to 'extern "C"' function under -EHc. Undefined behavior may occur if this function throws an exception.
+  Generating Code...
+D:\repos\C-DRIVE\Aura-SE\binary\client\external\discord-rpc\thirdparty\rapidjson-1.1.0\include\rapidjson\internal\stack.h(118): warning C5045: Compiler will insert Spectre mitigation for memory load if /Qspectre switch specified
+D:\repos\C-DRIVE\Aura-SE\binary\client\external\discord-rpc\thirdparty\rapidjson-1.1.0\include\rapidjson\internal\stack.h(117): message : index '' range checked by comparison on this line
+D:\repos\C-DRIVE\Aura-SE\binary\client\external\discord-rpc\thirdparty\rapidjson-1.1.0\include\rapidjson\internal\stack.h(118): message : feeds call on this line
+D:\repos\C-DRIVE\Aura-SE\binary\client\external\discord-rpc\thirdparty\rapidjson-1.1.0\include\rapidjson\internal\ieee754.h(57): warning C5045: Compiler will insert Spectre mitigation for memory load if /Qspectre switch specified
+D:\repos\C-DRIVE\Aura-SE\binary\client\external\discord-rpc\thirdparty\rapidjson-1.1.0\include\rapidjson\internal\ieee754.h(54): message : index 'order' range checked by comparison on this line
+D:\repos\C-DRIVE\Aura-SE\binary\client\external\discord-rpc\thirdparty\rapidjson-1.1.0\include\rapidjson\internal\ieee754.h(57): message : feeds call on this line
+D:\repos\C-DRIVE\Aura-SE\binary\client\external\discord-rpc\thirdparty\rapidjson-1.1.0\include\rapidjson\internal\strtod.h(32): warning C5045: Compiler will insert Spectre mitigation for memory load if /Qspectre switch specified
+D:\repos\C-DRIVE\Aura-SE\binary\client\external\discord-rpc\thirdparty\rapidjson-1.1.0\include\rapidjson\internal\strtod.h(29): message : index 'exp' range checked by comparison on this line
+D:\repos\C-DRIVE\Aura-SE\binary\client\external\discord-rpc\thirdparty\rapidjson-1.1.0\include\rapidjson\internal\strtod.h(32): message : feeds call on this line
+D:\repos\C-DRIVE\Aura-SE\binary\client\external\discord-rpc\thirdparty\rapidjson-1.1.0\include\rapidjson\internal\strtod.h(30): warning C5045: Compiler will insert Spectre mitigation for memory load if /Qspectre switch specified
+D:\repos\C-DRIVE\Aura-SE\binary\client\external\discord-rpc\thirdparty\rapidjson-1.1.0\include\rapidjson\internal\strtod.h(29): message : index 'exp' range checked by comparison on this line
+D:\repos\C-DRIVE\Aura-SE\binary\client\external\discord-rpc\thirdparty\rapidjson-1.1.0\include\rapidjson\internal\strtod.h(30): message : feeds call on this line
+D:\repos\C-DRIVE\Aura-SE\binary\client\external\discord-rpc\thirdparty\rapidjson-1.1.0\include\rapidjson\internal\strtod.h(32): warning C5045: Compiler will insert Spectre mitigation for memory load if /Qspectre switch specified
+D:\repos\C-DRIVE\Aura-SE\binary\client\external\discord-rpc\thirdparty\rapidjson-1.1.0\include\rapidjson\internal\strtod.h(29): message : index 'p' range checked by comparison on this line
+D:\repos\C-DRIVE\Aura-SE\binary\client\external\discord-rpc\thirdparty\rapidjson-1.1.0\include\rapidjson\internal\strtod.h(43): message : feeds call on this line
+D:\repos\C-DRIVE\Aura-SE\binary\client\external\discord-rpc\thirdparty\rapidjson-1.1.0\include\rapidjson\internal\strtod.h(32): warning C5045: Compiler will insert Spectre mitigation for memory load if /Qspectre switch specified
+D:\repos\C-DRIVE\Aura-SE\binary\client\external\discord-rpc\thirdparty\rapidjson-1.1.0\include\rapidjson\internal\strtod.h(29): message : index 'exp' range checked by comparison on this line
+D:\repos\C-DRIVE\Aura-SE\binary\client\external\discord-rpc\thirdparty\rapidjson-1.1.0\include\rapidjson\internal\strtod.h(43): message : feeds call on this line
+D:\repos\C-DRIVE\Aura-SE\binary\client\external\discord-rpc\thirdparty\rapidjson-1.1.0\include\rapidjson\internal\strtod.h(30): warning C5045: Compiler will insert Spectre mitigation for memory load if /Qspectre switch specified
+D:\repos\C-DRIVE\Aura-SE\binary\client\external\discord-rpc\thirdparty\rapidjson-1.1.0\include\rapidjson\internal\strtod.h(29): message : index 'exp' range checked by comparison on this line
+D:\repos\C-DRIVE\Aura-SE\binary\client\external\discord-rpc\thirdparty\rapidjson-1.1.0\include\rapidjson\internal\strtod.h(43): message : feeds call on this line
+D:\repos\C-DRIVE\Aura-SE\binary\client\external\discord-rpc\thirdparty\rapidjson-1.1.0\include\rapidjson\internal\strtod.h(30): warning C5045: Compiler will insert Spectre mitigation for memory load if /Qspectre switch specified
+D:\repos\C-DRIVE\Aura-SE\binary\client\external\discord-rpc\thirdparty\rapidjson-1.1.0\include\rapidjson\internal\strtod.h(29): message : index 'p' range checked by comparison on this line
+D:\repos\C-DRIVE\Aura-SE\binary\client\external\discord-rpc\thirdparty\rapidjson-1.1.0\include\rapidjson\internal\strtod.h(43): message : feeds call on this line
+D:\repos\C-DRIVE\Aura-SE\binary\client\external\discord-rpc\thirdparty\rapidjson-1.1.0\include\rapidjson\internal\stack.h(118): warning C5045: Compiler will insert Spectre mitigation for memory load if /Qspectre switch specified
+D:\repos\C-DRIVE\Aura-SE\binary\client\external\discord-rpc\thirdparty\rapidjson-1.1.0\include\rapidjson\internal\stack.h(117): message : index '' range checked by comparison on this line
+D:\repos\C-DRIVE\Aura-SE\binary\client\external\discord-rpc\thirdparty\rapidjson-1.1.0\include\rapidjson\internal\stack.h(118): message : feeds call on this line
+D:\repos\C-DRIVE\Aura-SE\binary\client\external\discord-rpc\thirdparty\rapidjson-1.1.0\include\rapidjson\internal\biginteger.h(52): warning C5045: Compiler will insert Spectre mitigation for memory load if /Qspectre switch specified
+D:\repos\C-DRIVE\Aura-SE\binary\client\external\discord-rpc\thirdparty\rapidjson-1.1.0\include\rapidjson\internal\biginteger.h(51): message : index 'length' range checked by comparison on this line
+D:\repos\C-DRIVE\Aura-SE\binary\client\external\discord-rpc\thirdparty\rapidjson-1.1.0\include\rapidjson\internal\biginteger.h(52): message : feeds call on this line
+D:\repos\C-DRIVE\Aura-SE\binary\client\external\discord-rpc\thirdparty\rapidjson-1.1.0\include\rapidjson\internal\strtod.h(263): warning C5045: Compiler will insert Spectre mitigation for memory load if /Qspectre switch specified
+D:\repos\C-DRIVE\Aura-SE\binary\client\external\discord-rpc\thirdparty\rapidjson-1.1.0\include\rapidjson\internal\strtod.h(256): message : index '' range checked by comparison on this line
+D:\repos\C-DRIVE\Aura-SE\binary\client\external\discord-rpc\thirdparty\rapidjson-1.1.0\include\rapidjson\internal\strtod.h(263): message : feeds call on this line
+D:\repos\C-DRIVE\Aura-SE\binary\client\external\discord-rpc\thirdparty\rapidjson-1.1.0\include\rapidjson\internal\strtod.h(259): warning C5045: Compiler will insert Spectre mitigation for memory load if /Qspectre switch specified
+D:\repos\C-DRIVE\Aura-SE\binary\client\external\discord-rpc\thirdparty\rapidjson-1.1.0\include\rapidjson\internal\strtod.h(256): message : index '' range checked by comparison on this line
+D:\repos\C-DRIVE\Aura-SE\binary\client\external\discord-rpc\thirdparty\rapidjson-1.1.0\include\rapidjson\internal\strtod.h(259): message : feeds call on this line
+D:\repos\C-DRIVE\Aura-SE\binary\client\external\discord-rpc\thirdparty\rapidjson-1.1.0\include\rapidjson\reader.h(1716): warning C5045: Compiler will insert Spectre mitigation for memory load if /Qspectre switch specified
+D:\repos\C-DRIVE\Aura-SE\binary\client\external\discord-rpc\thirdparty\rapidjson-1.1.0\include\rapidjson\reader.h(1652): message : index '' range checked by comparison on this line
+D:\repos\C-DRIVE\Aura-SE\binary\client\external\discord-rpc\thirdparty\rapidjson-1.1.0\include\rapidjson\reader.h(1716): message : feeds call on this line
+D:\repos\C-DRIVE\Aura-SE\binary\client\external\discord-rpc\thirdparty\rapidjson-1.1.0\include\rapidjson\reader.h(1709): warning C5045: Compiler will insert Spectre mitigation for memory load if /Qspectre switch specified
+D:\repos\C-DRIVE\Aura-SE\binary\client\external\discord-rpc\thirdparty\rapidjson-1.1.0\include\rapidjson\reader.h(1652): message : index '' range checked by comparison on this line
+D:\repos\C-DRIVE\Aura-SE\binary\client\external\discord-rpc\thirdparty\rapidjson-1.1.0\include\rapidjson\reader.h(1709): message : feeds call on this line
+D:\repos\C-DRIVE\Aura-SE\binary\client\external\discord-rpc\thirdparty\rapidjson-1.1.0\include\rapidjson\reader.h(1701): warning C5045: Compiler will insert Spectre mitigation for memory load if /Qspectre switch specified
+D:\repos\C-DRIVE\Aura-SE\binary\client\external\discord-rpc\thirdparty\rapidjson-1.1.0\include\rapidjson\reader.h(1652): message : index '' range checked by comparison on this line
+D:\repos\C-DRIVE\Aura-SE\binary\client\external\discord-rpc\thirdparty\rapidjson-1.1.0\include\rapidjson\reader.h(1701): message : feeds call on this line
+D:\repos\C-DRIVE\Aura-SE\binary\client\external\discord-rpc\thirdparty\rapidjson-1.1.0\include\rapidjson\reader.h(1693): warning C5045: Compiler will insert Spectre mitigation for memory load if /Qspectre switch specified
+D:\repos\C-DRIVE\Aura-SE\binary\client\external\discord-rpc\thirdparty\rapidjson-1.1.0\include\rapidjson\reader.h(1652): message : index '' range checked by comparison on this line
+D:\repos\C-DRIVE\Aura-SE\binary\client\external\discord-rpc\thirdparty\rapidjson-1.1.0\include\rapidjson\reader.h(1693): message : feeds call on this line
+D:\repos\C-DRIVE\Aura-SE\binary\client\external\discord-rpc\thirdparty\rapidjson-1.1.0\include\rapidjson\reader.h(1688): warning C5045: Compiler will insert Spectre mitigation for memory load if /Qspectre switch specified
+D:\repos\C-DRIVE\Aura-SE\binary\client\external\discord-rpc\thirdparty\rapidjson-1.1.0\include\rapidjson\reader.h(1652): message : index '' range checked by comparison on this line
+D:\repos\C-DRIVE\Aura-SE\binary\client\external\discord-rpc\thirdparty\rapidjson-1.1.0\include\rapidjson\reader.h(1688): message : feeds call on this line
+D:\repos\C-DRIVE\Aura-SE\binary\client\external\discord-rpc\thirdparty\rapidjson-1.1.0\include\rapidjson\reader.h(1679): warning C5045: Compiler will insert Spectre mitigation for memory load if /Qspectre switch specified
+D:\repos\C-DRIVE\Aura-SE\binary\client\external\discord-rpc\thirdparty\rapidjson-1.1.0\include\rapidjson\reader.h(1652): message : index '' range checked by comparison on this line
+D:\repos\C-DRIVE\Aura-SE\binary\client\external\discord-rpc\thirdparty\rapidjson-1.1.0\include\rapidjson\reader.h(1679): message : feeds call on this line
+D:\repos\C-DRIVE\Aura-SE\binary\client\external\discord-rpc\thirdparty\rapidjson-1.1.0\include\rapidjson\reader.h(1654): warning C5045: Compiler will insert Spectre mitigation for memory load if /Qspectre switch specified
+D:\repos\C-DRIVE\Aura-SE\binary\client\external\discord-rpc\thirdparty\rapidjson-1.1.0\include\rapidjson\reader.h(1652): message : index '' range checked by comparison on this line
+D:\repos\C-DRIVE\Aura-SE\binary\client\external\discord-rpc\thirdparty\rapidjson-1.1.0\include\rapidjson\reader.h(1654): message : feeds call on this line
+  discord-rpc.vcxproj -> D:\repos\C-DRIVE\Aura-SE\binary\client\external\discord-rpc\vs\src\Release\discord-rpc.lib
