@@ -9,7 +9,7 @@ on:
 jobs:
   build:
 
-    runs-on: osx-10.12
+    runs-on: macos-10.15
 
     steps:
     - uses: actions/checkout@v2
