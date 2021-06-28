@@ -16,7 +16,7 @@ jobs:
     - name: cd-to-mac-build
       run: cd binary/linux
     - name: make
-      run: make
+      run: make -f Makefile
     - name: make check
       run: make check
     - name: make distcheck
