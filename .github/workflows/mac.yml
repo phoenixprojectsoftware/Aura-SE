@@ -18,7 +18,11 @@ jobs:
     - name: Turn analytics off
       run:
        brew analytics off
+    - name: Update Brew
+      run:
        brew update
+    - name: Install Ninja
+      run:
        brew install ninja
     - name: Compile
       run: make
