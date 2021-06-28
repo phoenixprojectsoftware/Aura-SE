@@ -13,10 +13,12 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: cd-to-mac-build
+    - name: Install GCC
+      run: brew install gcc
+    - name: Go to Linux folder
       run: cd binary/linux
-    - name: make
-      run: make -f Makefile
+    - name: Compile
+      run: make
     - name: make check
       run: make check
     - name: make distcheck
