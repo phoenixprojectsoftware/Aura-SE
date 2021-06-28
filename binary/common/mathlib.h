@@ -21,7 +21,7 @@
 
 typedef float vec_t;
 
-#include "vector.h"
+#include "../dlls/vector.h"
 
 
 #ifndef DID_VEC3_T_DEFINE
