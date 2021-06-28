@@ -1,4 +1,4 @@
-name: C/C++ CI
+name: Apple Mac Build
 
 on:
   push:
@@ -9,10 +9,12 @@ on:
 jobs:
   build:
 
-    runs-on: macos-10.15
+    runs-on: macos # Specified version isn't needed for GH Actions
 
     steps:
     - uses: actions/checkout@v2
+    env:
+       HOMEBREW_NO_ANALYTICS: 1
     - name: Go to Linux folder
       run: cd binary/linux
     - name: Run configure
