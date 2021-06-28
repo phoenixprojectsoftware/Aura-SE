@@ -13,12 +13,13 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    env:
-       HOMEBREW_NO_ANALYTICS: 1
     - name: Go to Linux folder
       run: cd binary/linux
-    - name: Run configure
-      run: ./configure
+    - name: Turn analytics off
+      run:
+       brew analytics off
+       brew update
+       brew install ninja
     - name: Compile
       run: make
     - name: make check
