@@ -13,10 +13,10 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Install GCC
-      run: brew install gcc
     - name: Go to Linux folder
       run: cd binary/linux
+    - name: Run configure
+      run: ./configure
     - name: Compile
       run: make
     - name: make check
