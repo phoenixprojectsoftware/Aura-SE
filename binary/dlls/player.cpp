@@ -234,6 +234,8 @@ int gmsgMapList = 0;
 int gmsgCTFFlag = 0;
 int gmsgCRC32 = 0;
 
+int gmsgLaserSpot = 0;
+
 extern int g_teamplay;
 #ifdef AGSTATS
 #include "agstats.h"
@@ -285,34 +287,36 @@ void LinkUserMessages( void )
 	gmsgAmmoX = REG_USER_MSG("AmmoX", 2);
 	gmsgTeamNames = REG_USER_MSG( "TeamNames", -1 );
   //++ BulliT
-	gmsgScoreInfo   = REG_USER_MSG("ScoreInfo", 9 );
-  gmsgAllowSpec	  = REG_USER_MSG("AllowSpec",	1);   //Allow spectator button message.
-  gmsgSpectator	  = REG_USER_MSG("Spectator",	2);   //Spectator message.
-  gmsgVGUIMenu    = REG_USER_MSG("VGUIMenu", 1);    //VGUI menu.
-  gmsgCheatCheck  = REG_USER_MSG("CheatCheck", 1);  //Spike check.
-  gmsgSplash      = REG_USER_MSG("Splash", 1);      //Splash screen.
-  gmsgCountdown   = REG_USER_MSG("Countdown", -1);   //Show countdown timer and play sound.
-  gmsgTimer       = REG_USER_MSG("Timer", 8);       //Timer. Sends timelimit, effective time.
-  gmsgPlayerId    = REG_USER_MSG("PlayerId", 6);    //Sends playerid,team,health,armour.
-  gmsgSettings    = REG_USER_MSG("Settings", -1);   //Sends settings.
-  gmsgSuddenDeath = REG_USER_MSG("SuddenDeath", 1); //Display sudden death if 1.
-  gmsgLongjump    = REG_USER_MSG("Longjump", 1);    //Longjump timer.
-  gmsgTimeout     = REG_USER_MSG("Timeout", 2);     //Timeout is called.
-  gmsgPlaySound   = REG_USER_MSG("PlaySound", -1);  //Play a sound.
-  gmsgNextmap     = REG_USER_MSG("Nextmap", -1);    //Send next map.
-  gmsgVote        = REG_USER_MSG("Vote", -1);       //Vote is running.
-  gmsgInitLoc     = REG_USER_MSG("InitLoc", -1);    //Init location files for this map.
-  gmsgLocation    = REG_USER_MSG("Location", 7);    //Send a players position.
-  gmsgWallhack    = REG_USER_MSG("WhString", -1);   //Init wallhack data.
-  gmsgSpikeCheck  = REG_USER_MSG("SpikeCheck", -1); //Check a model for spikes.
-  gmsgGametype    = REG_USER_MSG("Gametype", 1);   //The gametype.
-	gmsgStatusIcon  = REG_USER_MSG("StatusIcon", -1); //Generic status icon
-  gmsgCTF         = REG_USER_MSG("CTF", 2);         //CTF status
-  gmsgAuthID      = REG_USER_MSG("AuthID", -1);     //Auth ID
-  gmsgCTFSound    = REG_USER_MSG("CTFSound", 1);    //CTF Sound
-  gmsgMapList     = REG_USER_MSG("MapList", -1);    //MapList
-  gmsgCTFFlag			= REG_USER_MSG("CTFFlag",2);		  //Who is carrying the flags.
-	gmsgCRC32				= REG_USER_MSG("CRC32", -1);		  //Checksum, file
+	gmsgScoreInfo = REG_USER_MSG("ScoreInfo", 9);
+	gmsgAllowSpec = REG_USER_MSG("AllowSpec", 1);   //Allow spectator button message.
+	gmsgSpectator = REG_USER_MSG("Spectator", 2);   //Spectator message.
+	gmsgVGUIMenu = REG_USER_MSG("VGUIMenu", 1);    //VGUI menu.
+	gmsgCheatCheck = REG_USER_MSG("CheatCheck", 1);  //Spike check.
+	gmsgSplash = REG_USER_MSG("Splash", 1);      //Splash screen.
+	gmsgCountdown = REG_USER_MSG("Countdown", -1);   //Show countdown timer and play sound.
+	gmsgTimer = REG_USER_MSG("Timer", 8);       //Timer. Sends timelimit, effective time.
+	gmsgPlayerId = REG_USER_MSG("PlayerId", 6);    //Sends playerid,team,health,armour.
+	gmsgSettings = REG_USER_MSG("Settings", -1);   //Sends settings.
+	gmsgSuddenDeath = REG_USER_MSG("SuddenDeath", 1); //Display sudden death if 1.
+	gmsgLongjump = REG_USER_MSG("Longjump", 1);    //Longjump timer.
+	gmsgTimeout = REG_USER_MSG("Timeout", 2);     //Timeout is called.
+	gmsgPlaySound = REG_USER_MSG("PlaySound", -1);  //Play a sound.
+	gmsgNextmap = REG_USER_MSG("Nextmap", -1);    //Send next map.
+	gmsgVote = REG_USER_MSG("Vote", -1);       //Vote is running.
+	gmsgInitLoc = REG_USER_MSG("InitLoc", -1);    //Init location files for this map.
+	gmsgLocation = REG_USER_MSG("Location", 7);    //Send a players position.
+	gmsgWallhack = REG_USER_MSG("WhString", -1);   //Init wallhack data.
+	gmsgSpikeCheck = REG_USER_MSG("SpikeCheck", -1); //Check a model for spikes.
+	gmsgGametype = REG_USER_MSG("Gametype", 1);   //The gametype.
+	gmsgStatusIcon = REG_USER_MSG("StatusIcon", -1); //Generic status icon
+	gmsgCTF = REG_USER_MSG("CTF", 2);         //CTF status
+	gmsgAuthID = REG_USER_MSG("AuthID", -1);     //Auth ID
+	gmsgCTFSound = REG_USER_MSG("CTFSound", 1);    //CTF Sound
+	gmsgMapList = REG_USER_MSG("MapList", -1);    //MapList
+	gmsgCTFFlag = REG_USER_MSG("CTFFlag", 2);		  //Who is carrying the flags.
+	gmsgCRC32 = REG_USER_MSG("CRC32", -1);		  //Checksum, file
+
+	gmsgLaserSpot = REG_USER_MSG("LaserSpot", -1);
   //-- Martin Webrant
 #ifdef AG_NO_CLIENT_DLL
 	gmsgStatusText = REG_USER_MSG("StatusText", -1);

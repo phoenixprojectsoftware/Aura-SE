@@ -475,6 +475,14 @@ TYPEDESCRIPTION	CBasePlayerWeapon::m_SaveData[] =
 
 IMPLEMENT_SAVERESTORE( CBasePlayerWeapon, CBasePlayerItem );
 
+// BlueNightHawk : Predicted Rpg LaserSpot
+void CBasePlayerItem::SetClientLaserState(int state)
+{
+	extern int gmsgLaserSpot;
+	MESSAGE_BEGIN(MSG_ONE, gmsgLaserSpot, nullptr, m_pPlayer->pev);
+		WRITE_SHORT(state);
+	MESSAGE_END();
+}
 
 void CBasePlayerItem :: SetObjectCollisionBox( void )
 {
