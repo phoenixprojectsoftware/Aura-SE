@@ -314,6 +314,10 @@ public:
 	int			iWeight( void )		{ return ItemInfoArray[ m_iId ].iWeight; }
 	int			iFlags( void )		{ return ItemInfoArray[ m_iId ].iFlags; }
 
+	// BlueNightHawk : Predicted Rpg LaserSpot
+	void SetClientLaserState(int state);
+	int m_iCL_LWState;
+
 	// int		m_iIdPrimary;										// Unique Id for primary ammo
 	// int		m_iIdSecondary;										// Unique Id for secondary ammo
 };

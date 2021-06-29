@@ -330,6 +330,7 @@ void CRpg::Reload( void )
 	if ( m_pSpot && m_fSpotActive )
 	{
 		m_pSpot->Suspend( 2.1 );
+		SetClientLaserState(3);
 		m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 2.1;
 	}
 #endif
@@ -444,6 +445,8 @@ void CRpg::Holster( int skiplocal /* = 0 */ )
 #ifndef CLIENT_DLL
 	if (m_pSpot)
 	{
+		SetClientLaserState(0);
+
 		m_pSpot->Killed( NULL, GIB_NEVER );
 		m_pSpot = NULL;
 	}
@@ -532,13 +535,22 @@ void CRpg::PrimaryAttack()
 
 void CRpg::SecondaryAttack()
 {
-	m_fSpotActive = ! m_fSpotActive;
+	m_fSpotActive = !m_fSpotActive;
 
 #ifndef CLIENT_DLL
 	if (!m_fSpotActive && m_pSpot)
 	{
-		m_pSpot->Killed( NULL, GIB_NORMAL );
+		m_pSpot->Killed(NULL, GIB_NORMAL);
 		m_pSpot = NULL;
+	}
+
+	if (m_fSpotActive)
+	{
+		SetClientLaserState(1);
+	}
+	else
+	{
+		SetClientLaserState(0);
 	}
 #endif
 
@@ -597,6 +609,20 @@ void CRpg::UpdateSpot( void )
 		if (!m_pSpot)
 		{
 			m_pSpot = CLaserSpot::CreateSpot();
+			SetClientLaserState(1);
+		}
+
+		m_pSpot->pev->owner = m_pPlayer->edict();
+		m_pSpot->pev->flags |= FL_SKIPLOCALHOST;
+
+		if (m_iCL_LWState == 0 && ENGINE_CANSKIP(m_pPlayer->edict()))
+		{
+			SetClientLaserState(1);
+			m_iCL_LWState = 1;
+		}
+		else if (!ENGINE_CANSKIP(m_pPlayer->edict()))
+		{
+			m_iCL_LWState = 0;
 		}
 
 		UTIL_MakeVectors( m_pPlayer->pev->v_angle );

@@ -87,6 +87,8 @@ void CEagle::Holster(int skiplocal)
 		m_pLaser = nullptr;
 		m_bSpotVisible = false;
 	}
+
+	SetClientLaserState(0);
 #endif
 
 	m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + 0.5;
@@ -193,6 +195,8 @@ void CEagle::PrimaryAttack()
 		m_pLaser->pev->effects |= EF_NODRAW;
 		m_pLaser->SetThink(&CEagleLaser::Revive);
 		m_pLaser->pev->nextthink = gpGlobals->time + 0.6;
+
+		SetClientLaserState(5);
 	}
 #endif
 
@@ -254,7 +258,10 @@ void CEagle::SecondaryAttack()
 
 			EMIT_SOUND_DYN(edict(), CHAN_WEAPON, "weapons/desert_eagle_sight2.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
 		}
+		SetClientLaserState(0);
 	}
+	else
+		SetClientLaserState(2);
 #endif
 
 	m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 0.5;
@@ -272,6 +279,8 @@ void CEagle::Reload()
 			m_pLaser->pev->effects |= EF_NODRAW;
 			m_pLaser->SetThink(&CEagleLaser::Revive);
 			m_pLaser->pev->nextthink = gpGlobals->time + 1.6;
+
+			SetClientLaserState(4);
 
 			m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 1.5;
 		}
@@ -292,9 +301,21 @@ void CEagle::UpdateLaser()
 		if (!m_pLaser)
 		{
 			m_pLaser = CEagleLaser::CreateSpot();
-
+			SetClientLaserState(2);
 			EMIT_SOUND_DYN(edict(), CHAN_WEAPON, "weapons/desert_eagle_sight.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
 		}
+
+		if (m_iCL_LWState == 0 && ENGINE_CANSKIP(m_pPlayer->edict()))
+		{
+			SetClientLaserState(2);
+			m_iCL_LWState = 1;
+		}
+		else if (!ENGINE_CANSKIP(m_pPlayer->edict()))
+		{
+			m_iCL_LWState = 0;
+		}
+		m_pLaser->pev->owner = m_pPlayer->edict();
+		m_pLaser->pev->flags |= FL_SKIPLOCALHOST;
 
 		UTIL_MakeVectors(m_pPlayer->pev->v_angle);
 
