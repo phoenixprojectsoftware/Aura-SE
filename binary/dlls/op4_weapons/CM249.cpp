@@ -115,7 +115,7 @@ void CM249::WeaponIdle()
 	//Update auto-aim
 	m_pPlayer->GetAutoaimVector(AUTOAIM_5DEGREES);
 
-	if (m_bReloading && gpGlobals->time >= m_flReloadStart + 1.33)
+	if (m_bReloading && gpGlobals->time >= m_flReloadStart + 1.36)
 	{
 		m_bReloading = false;
 
@@ -310,9 +310,10 @@ void CM249::Reload()
 	{
 		m_bReloading = true;
 
-		m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 3.78;
+		// Match model sequence length
+		m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + (1.36 + 2.41);
 
-		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 3.78;
+		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + (1.36 + 2.41);
 
 		m_flReloadStart = gpGlobals->time;
 	}
