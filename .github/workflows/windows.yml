@@ -37,4 +37,4 @@ jobs:
       with:
        # Artifact name
        name: aura.dll
-       path: ${{env.VS_FILE_PATH}}/Release/auradll
+       path: ${{env.VS_FILE_PATH}}/Release/agdll
