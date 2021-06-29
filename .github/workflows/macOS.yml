@@ -25,5 +25,5 @@ jobs:
         rm sdk.tar
 
     - name: Build aura.dylib
-      working-directory: ./linux
+      working-directory: ./binary/linux
       run: make agdll CFG=${{env.BUILD_CONFIGURATION}}
