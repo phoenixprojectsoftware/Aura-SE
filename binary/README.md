@@ -1,3 +1,5 @@
+![Aura logo](../aura.png "aura logo")
+
 # Adrenaline Gamer
 This is the source code and distribution files for Adrenaline Gamer Mod for Half-Life, developed by Martin Webrant aka BulliT between 2000 and 2003. This fork is focused on the serverside part. For the clientside part, it's recommended to use [OpenAG](https://openag.pro), which has the source code [here](https://github.com/YaLTeR/OpenAG).
 AG 6.7 is not released yet, but you can download it in its current state (for testing) [here](https://drive.google.com/open?id=1QuSQ2GV8hfti3ZVOoUPkjNTzulqLRRc0).
