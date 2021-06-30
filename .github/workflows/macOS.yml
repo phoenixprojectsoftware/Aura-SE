@@ -26,4 +26,4 @@ jobs:
 
     - name: Build aura.dylib
       working-directory: ./binary/linux
-      run: make agdll CFG=${{env.BUILD_CONFIGURATION}}
+      run: make aura CFG=${{env.BUILD_CONFIGURATION}}
