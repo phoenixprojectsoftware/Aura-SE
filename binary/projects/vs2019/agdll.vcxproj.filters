@@ -471,6 +471,9 @@
     <ClCompile Include="..\..\dlls\op4_weapons\CPipewrench.cpp">
       <Filter>Source Files\dlls\op4_weapons</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\dlls\op4_weapons\CKnife.cpp">
+      <Filter>Source Files\dlls\op4_weapons</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\dlls\doors.h">
@@ -732,6 +735,9 @@
       <Filter>Header Files\dlls\op4_weapons</Filter>
     </ClInclude>
     <ClInclude Include="..\..\dlls\op4_weapons\CPipewrench.h">
+      <Filter>Header Files\dlls\op4_weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\op4_weapons\CKnife.h">
       <Filter>Header Files\dlls\op4_weapons</Filter>
     </ClInclude>
   </ItemGroup>
