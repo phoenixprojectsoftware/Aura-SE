@@ -69,7 +69,7 @@ public:
 
     virtual void RefreshSkillData(void);
 
-    virtual const char* GetGameDescription(void) { return AgGamename().c_str(); }  // this is the game name that gets seen in the server browser  
+    virtual const char* GetGameDescription(void) { return AgGamenameChar(); }  // this is the game name that gets seen in the server browser
     //New
     bool    AgThink();
     void    Start(const AgString& sSpawn);
