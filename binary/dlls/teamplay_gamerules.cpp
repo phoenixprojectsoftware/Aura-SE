@@ -21,12 +21,12 @@
 #include	"player.h"
 #include	"weapons.h"
 #include	"gamerules.h"
+#include	"teamplay_gamerules.h"
 //++ BulliT
 #include	"multiplay_gamerules.h"
 #include	"aggamerules.h"
 extern int g_teamplay;
 //-- Martin Webrant
-#include	"teamplay_gamerules.h"
 #include	"game.h"
 
 static char team_names[MAX_TEAMS][MAX_TEAMNAME_LENGTH];
@@ -454,11 +454,13 @@ void CHalfLifeTeamplay::ClientUserInfoChanged( CBasePlayer *pPlayer, char *infob
 		return;
 	}
 	// notify everyone of the team change
-	sprintf( text, "* %s has changed to team \'%s\'\n", STRING(pPlayer->pev->netname), mdls );
+	// TODO: investigate why this only gets executed sometimes when a player joins,
+	// between the "... connected, address ..." and "... STEAM USERID validated" log messages
+	sprintf( text, "* %s has changed to team \'%s\'\n", pPlayer->GetName(), mdls );
 	UTIL_SayTextAll( text, pPlayer );
 
 	UTIL_LogPrintf( "\"%s<%i><%s><%s>\" joined team \"%s\"\n", 
-		STRING(pPlayer->pev->netname),
+		pPlayer->GetName(),
 		GETPLAYERUSERID( pPlayer->edict() ),
 		GETPLAYERAUTHID( pPlayer->edict() ),
 		pPlayer->m_szTeamName,
