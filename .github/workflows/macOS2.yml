@@ -1,0 +1,55 @@
+name: macOS 2
+
+on: [push]
+
+env:
+  BUILD_CONFIGURATION: Release
+
+jobs:
+    game-dylibs:
+    runs-on: macOS-10.15
+
+    steps:
+     - uses: actions/checkout@v2
+
+     - name: Install MacOSX10.8.sdk
+       run: |
+        mkdir /tmp/sdk && cd /tmp/sdk
+        curl -sSL https://github.com/phracker/MacOSX-SDKs/releases/download/11.3/MacOSX10.8.sdk.tar.xz > sdk.tar
+        tar -xvf sdk.tar
+        sudo ln -s /tmp/sdk/MacOSX10.8.sdk $(/usr/bin/xcode-select -print-path)/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk
+        rm sdk.tar
+
+    - name: Build debug macOS dylibs
+      run: cd linux && make all CFG=${{env.DEBUG_CONFIGURATION}}
+
+    - name: Package debug macOS dylibs
+      run: |
+        cd linux
+        mkdir ${{env.DEBUG_CONFIGURATION}}/hl && mv ${{env.DEBUG_CONFIGURATION}}/hl.dylib ${{env.DEBUG_CONFIGURATION}}/hl && mv ${{env.DEBUG_CONFIGURATION}}/client.dylib ${{env.DEBUG_CONFIGURATION}}/hl
+        mkdir ${{env.DEBUG_CONFIGURATION}}/dmc && mv ${{env.DEBUG_CONFIGURATION}}/dmc.dylib ${{env.DEBUG_CONFIGURATION}}/dmc && mv ${{env.DEBUG_CONFIGURATION}}/client_dmc.dylib ${{env.DEBUG_CONFIGURATION}}/dmc
+        mkdir ${{env.DEBUG_CONFIGURATION}}/ricochet && mv ${{env.DEBUG_CONFIGURATION}}/ricochet.dylib ${{env.DEBUG_CONFIGURATION}}/ricochet && mv ${{env.DEBUG_CONFIGURATION}}/client_ricochet.dylib ${{env.DEBUG_CONFIGURATION}}/ricochet
+        zip -r debug-game-macos-dylibs.zip ${{env.DEBUG_CONFIGURATION}}/hl ${{env.DEBUG_CONFIGURATION}}/dmc ${{env.DEBUG_CONFIGURATION}}/ricochet
+
+    - name: Upload debug macOS game dylibs
+      uses: actions/upload-artifact@v2
+      with:
+        name: debug-game-macos-dylibs
+        path: ./linux/debug-game-macos-dylibs.zip
+
+    - name: Build release macOS dylibs
+      run: cd linux && make all CFG=${{env.RELEASE_CONFIGURATION}}
+
+    - name: Package release macOS dylibs
+      run: |
+        cd linux
+        mkdir ${{env.RELEASE_CONFIGURATION}}/hl && mv ${{env.RELEASE_CONFIGURATION}}/hl.dylib ${{env.RELEASE_CONFIGURATION}}/hl && mv ${{env.RELEASE_CONFIGURATION}}/client.dylib ${{env.RELEASE_CONFIGURATION}}/hl
+        mkdir ${{env.RELEASE_CONFIGURATION}}/dmc && mv ${{env.RELEASE_CONFIGURATION}}/dmc.dylib ${{env.RELEASE_CONFIGURATION}}/dmc && mv ${{env.RELEASE_CONFIGURATION}}/client_dmc.dylib ${{env.RELEASE_CONFIGURATION}}/dmc
+        mkdir ${{env.RELEASE_CONFIGURATION}}/ricochet && mv ${{env.RELEASE_CONFIGURATION}}/ricochet.dylib ${{env.RELEASE_CONFIGURATION}}/ricochet && mv ${{env.RELEASE_CONFIGURATION}}/client_ricochet.dylib ${{env.RELEASE_CONFIGURATION}}/ricochet
+        zip -r release-game-macos-dylibs.zip ${{env.RELEASE_CONFIGURATION}}/hl ${{env.RELEASE_CONFIGURATION}}/dmc ${{env.RELEASE_CONFIGURATION}}/ricochet
+
+    - name: Upload release macOS game dylibs
+      uses: actions/upload-artifact@v2
+      with:
+        name: release-game-macos-dylibs
+        path: ./linux/release-game-macos-dylibs.zip
