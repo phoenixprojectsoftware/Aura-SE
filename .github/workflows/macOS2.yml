@@ -9,28 +9,29 @@ jobs:
  game-dylibs:
   runs-on: macos-10.15
 
- steps:
- - uses: actions/checkout@v2
+  steps:
+  - uses: actions/checkout@v2
 
- - name: Install MacOSX10.8.sdk
-   run: |
+
+  - name: Install MacOSX10.8.sdk
+    run: |
      mkdir /tmp/sdk && cd /tmp/sdk
      curl -sSL https://github.com/phracker/MacOSX-SDKs/releases/download/11.3/MacOSX10.8.sdk.tar.xz > sdk.tar
      tar -xvf sdk.tar
      sudo ln -s /tmp/sdk/MacOSX10.8.sdk $(/usr/bin/xcode-select -print-path)/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk
      rm sdk.tar
 
- - name: Build Release macOS dylibs
-   run: cd binary/linux && make all CFG=${{env.RELEASE_CONFIGURATION}}
+  - name: Build Release macOS dylibs
+    run: cd binary/linux && make all CFG=${{env.RELEASE_CONFIGURATION}}
 
- - name: Package dylibs
-   run: |
+  - name: Package dylibs
+    run: |
      cd binary/linux
      mkdir ${{env.RELEASE_CONFIGURATION}}/aura && mv ${{env.RELEASE_CONFIGURATION}}/aura.dylib
      zip -r macos-dylibs.zip ${{env.RELEASE_CONFIGURATION}}/aura
 
- - name: Upload dylibs
-   uses: actions/upload-artifact@v2
-   with:
+  - name: Upload dylibs
+    uses: actions/upload-artifact@v2
+    with:
      name: macos-dylibs
      path: ./binary/linux/macos-dylibs.zip
