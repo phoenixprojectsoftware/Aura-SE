@@ -12,9 +12,6 @@
 *   without written permission from Valve LLC.
 *
 ****/
-#include <cbase.h>
-#include <vector.h>
-#include <eiface.h>
 #ifndef ROPE_CROPESEGMENT_H
 #define ROPE_CROPESEGMENT_H
 
