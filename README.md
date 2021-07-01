@@ -39,4 +39,4 @@ these commands were broken.
 
 #### 2.0
 Aura 2.0 is coming soon. It will be included with ZAMNHLMP 2.6. Phoenix will announce the changes
-to not only Aura 2.0 but also ZAMNHLMP 2.6 soon.
+to not only Aura 2.0 but also ZAMNHLMP 2.6 in the near future.
