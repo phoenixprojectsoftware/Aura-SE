@@ -495,6 +495,9 @@
     <ClCompile Include="..\..\dlls\rope\CRopeSegment.cpp">
       <Filter>Source Files\dlls\rope</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\dlls\op4_weapons\CDisplacerBall.cpp">
+      <Filter>Source Files\dlls\op4_weapons</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\dlls\doors.h">
@@ -761,9 +764,6 @@
     <ClInclude Include="..\..\dlls\op4_weapons\CKnife.h">
       <Filter>Header Files\dlls\op4_weapons</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\dlls\op4_weapons\CDisplacer.h">
-      <Filter>Source Files\dlls\op4_weapons</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\dlls\rope\CElectrifiedWire.h">
       <Filter>Header Files\dlls\rope</Filter>
     </ClInclude>
@@ -775,6 +775,12 @@
     </ClInclude>
     <ClInclude Include="..\..\dlls\rope\CRopeSegment.h">
       <Filter>Header Files\dlls\rope</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\op4_weapons\CDisplacer.h">
+      <Filter>Header Files\dlls\op4_weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\op4_weapons\CDisplacerBall.h">
+      <Filter>Header Files\dlls\op4_weapons</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
