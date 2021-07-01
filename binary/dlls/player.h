@@ -17,6 +17,8 @@
 
 
 #include "pm_materials.h"
+
+class CRope;
 //++ BulliT
 #include "items.h"
 #include "gamerules.h"
@@ -48,6 +50,7 @@ constexpr float BARELY_AUDIBLE_DIST = 1280.0;
 #define		PFLAG_DUCKING		( 1<<3 )		// In the process of ducking, but totally squatted yet
 #define		PFLAG_USING			( 1<<4 )		// Using a continuous entity
 #define		PFLAG_OBSERVER		( 1<<5 )		// player is locked in stationary cam mode. Spectators can move, observers can't.
+#define		PFLAG_ONROPE		( 1<<6 )
 
 //
 // generic player
@@ -483,6 +486,35 @@ public:
 	float GetSpawnkillingPotential();
 public:
 	void NewPunch();
+
+	bool IsOnRope() { return (m_afPhysicsFlags & PFLAG_ONROPE) != 0; }
+
+	void SetOnRopeState(bool bOnRope)
+	{
+		if (bOnRope)
+			m_afPhysicsFlags |= PFLAG_ONROPE;
+		else
+			m_afPhysicsFlags &= ~PFLAG_ONROPE;
+	}
+
+	CRope* GetRope() { return m_pRope; }
+
+	void SetRope(CRope* pRope)
+	{
+		m_pRope = pRope;
+	}
+
+	void SetIsClimbing(const bool bIsClimbing)
+	{
+		m_bIsClimbing = bIsClimbing;
+	}
+
+private:
+	CRope* m_pRope;
+	float m_flLastClimbTime = 0;
+	bool m_bIsClimbing = false;
+
+	bool m_bRestored;
 };
 //++ BulliT
 inline void CBasePlayer::Init()
@@ -690,5 +722,139 @@ inline bool CBasePlayer::IsTeammate(CBaseEntity* pTarget)
 
 extern int	gmsgHudText;
 extern BOOL gInitHUD;
+
+class CPlayerIterator
+{
+public:
+	static const int FirstPlayerIndex = 1;
+
+public:
+	CPlayerIterator()
+		: m_pPlayer(nullptr)
+		, m_iNextIndex(gpGlobals->maxClients + 1)
+	{
+	}
+
+	CPlayerIterator(const CPlayerIterator&) = default;
+
+	CPlayerIterator(CBasePlayer* pPlayer)
+		: m_pPlayer(pPlayer)
+		, m_iNextIndex(pPlayer ? pPlayer->entindex() + 1 : FirstPlayerIndex)
+	{
+	}
+
+	CPlayerIterator& operator=(const CPlayerIterator&) = default;
+
+	const CBasePlayer* operator*() const { return m_pPlayer; }
+
+	CBasePlayer* operator*() { return m_pPlayer; }
+
+	CBasePlayer* operator->() { return m_pPlayer; }
+
+	void operator++()
+	{
+		m_pPlayer = static_cast<CBasePlayer*>(FindNextPlayer(m_iNextIndex, &m_iNextIndex));
+	}
+
+	void operator++(int)
+	{
+		++* this;
+	}
+
+	bool operator==(const CPlayerIterator& other) const
+	{
+		return m_pPlayer == other.m_pPlayer;
+	}
+
+	bool operator!=(const CPlayerIterator& other) const
+	{
+		return !(*this == other);
+	}
+
+	static CBasePlayer* FindNextPlayer(int index, int* pOutNextIndex = nullptr)
+	{
+		while (index <= gpGlobals->maxClients)
+		{
+			auto pPlayer = UTIL_PlayerByIndex(index);
+
+			if (pPlayer)
+			{
+				if (pOutNextIndex)
+				{
+					*pOutNextIndex = index + 1;
+				}
+
+				return static_cast<CBasePlayer*>(pPlayer);
+			}
+
+			++index;
+		}
+
+		if (pOutNextIndex)
+		{
+			*pOutNextIndex = gpGlobals->maxClients;
+		}
+
+		return nullptr;
+	}
+
+private:
+	int m_iNextIndex = 1;
+	CBasePlayer* m_pPlayer;
+};
+
+class CPlayerEnumerator
+{
+public:
+	using iterator = CPlayerIterator;
+
+public:
+	CPlayerEnumerator() = default;
+
+	iterator begin()
+	{
+		return { static_cast<CBasePlayer*>(CPlayerIterator::FindNextPlayer(CPlayerIterator::FirstPlayerIndex)) };
+	}
+
+	iterator end()
+	{
+		return {};
+	}
+};
+
+class CPlayerEnumeratorWithStart
+{
+public:
+	using iterator = CPlayerIterator;
+
+public:
+	CPlayerEnumeratorWithStart(CBasePlayer* pStartEntity)
+		: m_pStartEntity(pStartEntity)
+	{
+	}
+
+	iterator begin()
+	{
+		return { m_pStartEntity };
+	}
+
+	iterator end()
+	{
+		return {};
+	}
+
+private:
+	CBasePlayer* m_pStartEntity = nullptr;
+};
+
+inline CPlayerEnumerator UTIL_FindPlayers()
+{
+	return {};
+}
+
+inline CPlayerEnumeratorWithStart UTIL_FindPlayers(CBasePlayer* pStartEntity)
+{
+	return { pStartEntity };
+}
 
 #endif // PLAYER_H

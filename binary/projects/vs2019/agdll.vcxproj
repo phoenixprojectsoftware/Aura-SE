@@ -188,6 +188,7 @@
     <ClCompile Include="..\..\dlls\nihilanth.cpp" />
     <ClCompile Include="..\..\dlls\nodes.cpp" />
     <ClCompile Include="..\..\dlls\observer.cpp" />
+    <ClCompile Include="..\..\dlls\op4_weapons\CDisplacer.cpp" />
     <ClCompile Include="..\..\dlls\op4_weapons\CEagle.cpp" />
     <ClCompile Include="..\..\dlls\op4_weapons\CEagleLaser.cpp" />
     <ClCompile Include="..\..\dlls\op4_weapons\CGrapple.cpp" />
@@ -206,6 +207,10 @@
     <ClCompile Include="..\..\dlls\python.cpp" />
     <ClCompile Include="..\..\dlls\rat.cpp" />
     <ClCompile Include="..\..\dlls\roach.cpp" />
+    <ClCompile Include="..\..\dlls\rope\CElectrifiedWire.cpp" />
+    <ClCompile Include="..\..\dlls\rope\CRope.cpp" />
+    <ClCompile Include="..\..\dlls\rope\CRopeSample.cpp" />
+    <ClCompile Include="..\..\dlls\rope\CRopeSegment.cpp" />
     <ClCompile Include="..\..\dlls\rpg.cpp" />
     <ClCompile Include="..\..\dlls\satchel.cpp" />
     <ClCompile Include="..\..\dlls\schedule.cpp" />
@@ -294,6 +299,7 @@
     <ClInclude Include="..\..\dlls\monsterevent.h" />
     <ClInclude Include="..\..\dlls\monsters.h" />
     <ClInclude Include="..\..\dlls\nodes.h" />
+    <ClInclude Include="..\..\dlls\op4_weapons\CDisplacer.h" />
     <ClInclude Include="..\..\dlls\op4_weapons\CEagle.h" />
     <ClInclude Include="..\..\dlls\op4_weapons\CEagleLaser.h" />
     <ClInclude Include="..\..\dlls\op4_weapons\CGrapple.h" />
@@ -305,6 +311,10 @@
     <ClInclude Include="..\..\dlls\op4_weapons\CSniperRifle.h" />
     <ClInclude Include="..\..\dlls\plane.h" />
     <ClInclude Include="..\..\dlls\player.h" />
+    <ClInclude Include="..\..\dlls\rope\CElectrifiedWire.h" />
+    <ClInclude Include="..\..\dlls\rope\CRope.h" />
+    <ClInclude Include="..\..\dlls\rope\CRopeSample.h" />
+    <ClInclude Include="..\..\dlls\rope\CRopeSegment.h" />
     <ClInclude Include="..\..\dlls\saverestore.h" />
     <ClInclude Include="..\..\dlls\schedule.h" />
     <ClInclude Include="..\..\dlls\scripted.h" />
