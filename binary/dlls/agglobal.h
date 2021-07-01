@@ -31,6 +31,7 @@ extern cvar_t	timelimit;
 
 
 extern cvar_t	ag_gamemode;
+extern cvar_t	ag_gamemode_auto;
 
 extern cvar_t	ag_spectalk;
 extern cvar_t	ag_max_spectators;
