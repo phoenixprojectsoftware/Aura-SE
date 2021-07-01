@@ -35,7 +35,7 @@ jobs:
     - name: Package aura.dll
       run: |
         New-Item -Force -ItemType Directory @("$env:TEMP\release","$env:TEMP\release\valve")
-        Copy-Item -Force binary/projects/vs2019/${{env.RELEASE_CONFIGURATION}}/auradll/aura.dll $env:TEMP/release/valve
+        Copy-Item -Force binary/projects/vs2019/Release/auradll/aura.dll $env:TEMP/release/valve
         Compress-Archive -LiteralPath $env:TEMP\release -DestinationPath .\aura-dll.zip -Force
     - name: Upload aura.dll
       uses: actions/upload-artifact@v2.2.4
