@@ -3204,6 +3204,26 @@ std::vector<CBaseEntity*> g_spawnHistory;
 
 inline int FNullEnt( CBaseEntity *ent ) { return (ent == NULL) || FNullEnt( ent->edict() ); }
 
+// checks if the spot is clear of players
+BOOL IsSpawnPointValid(CBaseEntity* pPlayer, CBaseEntity* pSpot)
+{
+	CBaseEntity* ent = NULL;
+
+	if (!pSpot->IsTriggered(pPlayer))
+	{
+		return FALSE;
+	}
+
+	while ((ent = UTIL_FindEntityInSphere(ent, pSpot->pev->origin, 128)) != NULL)
+	{
+		// if ent is a client, don't spawn on 'em
+		if (ent->IsPlayer() && ent != pPlayer)
+			return FALSE;
+	}
+
+	return TRUE;
+}
+
 
 /*
 ============
@@ -5047,34 +5067,38 @@ void CBasePlayer :: EnableControl(BOOL fControl)
 // Autoaim
 // set crosshair position to point to enemey
 //=========================================================
-Vector CBasePlayer :: GetAutoaimVector( float flDelta )
+Vector CBasePlayer::GetAutoaimVector(float flDelta)
+{
+	return GetAutoaimVectorFromPoint(GetGunPosition(), flDelta);
+}
+
+Vector CBasePlayer::GetAutoaimVectorFromPoint(const Vector& vecSrc, float flDelta)
 {
 	if (g_iSkillLevel == SKILL_HARD)
 	{
-		UTIL_MakeVectors( pev->v_angle + pev->punchangle );
+		UTIL_MakeVectors(pev->v_angle + pev->punchangle);
 		return gpGlobals->v_forward;
 	}
 
-	Vector vecSrc = GetGunPosition( );
 	float flDist = 8192;
 
 	// always use non-sticky autoaim
 	// UNDONE: use sever variable to chose!
 	if (1 || g_iSkillLevel == SKILL_MEDIUM)
 	{
-		m_vecAutoAim = Vector( 0, 0, 0 );
+		m_vecAutoAim = Vector(0, 0, 0);
 		// flDelta *= 0.5;
 	}
 
 	BOOL m_fOldTargeting = m_fOnTarget;
-	Vector angles = AutoaimDeflection(vecSrc, flDist, flDelta );
+	Vector angles = AutoaimDeflection((Vector)vecSrc, flDist, flDelta);
 
 	// update ontarget if changed
-	if ( !g_pGameRules->AllowAutoTargetCrosshair() )
+	if (!g_pGameRules->AllowAutoTargetCrosshair())
 		m_fOnTarget = 0;
 	else if (m_fOldTargeting != m_fOnTarget)
 	{
-		m_pActiveItem->UpdateItemInfo( );
+		m_pActiveItem->UpdateItemInfo();
 	}
 
 	if (angles.x > 180)
@@ -5110,21 +5134,25 @@ Vector CBasePlayer :: GetAutoaimVector( float flDelta )
 	// m_vecAutoAim = m_vecAutoAim * 0.99;
 
 	// Don't send across network if sv_aim is 0
-	if ( g_psv_aim->value != 0 )
+	if (g_psv_aim->value != 0)
 	{
-		if ( m_vecAutoAim.x != m_lastx ||
-			 m_vecAutoAim.y != m_lasty )
+		if (m_vecAutoAim.x != m_lastx ||
+			m_vecAutoAim.y != m_lasty)
 		{
-			SET_CROSSHAIRANGLE( edict(), -m_vecAutoAim.x, m_vecAutoAim.y );
-			
+			SET_CROSSHAIRANGLE(edict(), -m_vecAutoAim.x, m_vecAutoAim.y);
+
 			m_lastx = m_vecAutoAim.x;
 			m_lasty = m_vecAutoAim.y;
 		}
 	}
+	else
+	{
+		ResetAutoaim();
+	}
 
 	// ALERT( at_console, "%f %f\n", angles.x, angles.y );
 
-	UTIL_MakeVectors( pev->v_angle + pev->punchangle + m_vecAutoAim );
+	UTIL_MakeVectors(pev->v_angle + pev->punchangle + m_vecAutoAim);
 	return gpGlobals->v_forward;
 }
 

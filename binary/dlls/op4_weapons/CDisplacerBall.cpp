@@ -24,8 +24,6 @@
 
 #include "CDisplacerBall.h"
 
-extern CBaseEntity* g_pLastSpawn;
-
 namespace
 {
 	//TODO: can probably be smarter - Solokiller

@@ -509,6 +509,11 @@ public:
 		m_bIsClimbing = bIsClimbing;
 	}
 
+	Vector GetAutoaimVectorFromPoint(const Vector& vecSrc, float flDelta);
+
+	Vector m_DisplacerReturn;
+	float m_flDisplacerSndRoomtype;
+
 private:
 	CRope* m_pRope;
 	float m_flLastClimbTime = 0;
