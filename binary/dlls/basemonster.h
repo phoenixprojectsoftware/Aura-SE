@@ -335,6 +335,19 @@ public:
 
 	BOOL JumpToTarget(Activity movementAct, float waitTime);
 
+	//Shock rifle shock effect
+	float m_flShockDuration;
+	float m_flShockTime;
+	int m_iOldRenderMode;
+	int m_iOldRenderFX;
+	Vector m_OldRenderColor;
+	float m_flOldRenderAmt;
+	BOOL m_fShockEffect;
+
+	void AddShockEffect(float r, float g, float b, float size, float flShockDuration);
+	void UpdateShockEffect();
+	void ClearShockEffect();
+
 	inline BOOL HasConditionsRand(int iConditions, int chance) { return HasConditions(iConditions) && RANDOM_LONG(0, 99) < chance; }
 };
 

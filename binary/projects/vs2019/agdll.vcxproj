@@ -201,6 +201,7 @@
     <ClCompile Include="..\..\dlls\op4_weapons\CM249.cpp" />
     <ClCompile Include="..\..\dlls\op4_weapons\CPenguin.cpp" />
     <ClCompile Include="..\..\dlls\op4_weapons\CPipewrench.cpp" />
+    <ClCompile Include="..\..\dlls\op4_weapons\CShockBeam.cpp" />
     <ClCompile Include="..\..\dlls\op4_weapons\CShockRifle.cpp" />
     <ClCompile Include="..\..\dlls\op4_weapons\CSniperRifle.cpp" />
     <ClCompile Include="..\..\dlls\op4_weapons\CKnife.cpp" />
@@ -315,6 +316,7 @@
     <ClInclude Include="..\..\dlls\op4_weapons\CM249.h" />
     <ClInclude Include="..\..\dlls\op4_weapons\CPenguin.h" />
     <ClInclude Include="..\..\dlls\op4_weapons\CPipewrench.h" />
+    <ClInclude Include="..\..\dlls\op4_weapons\CShockBeam.h" />
     <ClInclude Include="..\..\dlls\op4_weapons\CShockRifle.h" />
     <ClInclude Include="..\..\dlls\op4_weapons\CSniperRifle.h" />
     <ClInclude Include="..\..\dlls\plane.h" />
