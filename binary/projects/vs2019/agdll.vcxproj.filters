@@ -52,6 +52,12 @@
     <Filter Include="Header Files\dlls\op4_weapons">
       <UniqueIdentifier>{6b25a584-b2ab-42c9-b42a-f09c4cccef77}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\dlls\rope">
+      <UniqueIdentifier>{bc6f879d-5c78-4fbc-87f2-019db5ec0f8a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\dlls\rope">
+      <UniqueIdentifier>{c1b5db1d-3fee-417a-8723-c1afb6770ee6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\dlls\aflock.cpp">
@@ -471,6 +477,27 @@
     <ClCompile Include="..\..\dlls\op4_weapons\CPipewrench.cpp">
       <Filter>Source Files\dlls\op4_weapons</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\dlls\op4_weapons\CKnife.cpp">
+      <Filter>Source Files\dlls\op4_weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\op4_weapons\CDisplacer.cpp">
+      <Filter>Source Files\dlls\op4_weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\rope\CElectrifiedWire.cpp">
+      <Filter>Source Files\dlls\rope</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\rope\CRope.cpp">
+      <Filter>Source Files\dlls\rope</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\rope\CRopeSample.cpp">
+      <Filter>Source Files\dlls\rope</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\rope\CRopeSegment.cpp">
+      <Filter>Source Files\dlls\rope</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\op4_weapons\CDisplacerBall.cpp">
+      <Filter>Source Files\dlls\op4_weapons</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\dlls\doors.h">
@@ -732,6 +759,27 @@
       <Filter>Header Files\dlls\op4_weapons</Filter>
     </ClInclude>
     <ClInclude Include="..\..\dlls\op4_weapons\CPipewrench.h">
+      <Filter>Header Files\dlls\op4_weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\op4_weapons\CKnife.h">
+      <Filter>Header Files\dlls\op4_weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\rope\CElectrifiedWire.h">
+      <Filter>Header Files\dlls\rope</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\rope\CRope.h">
+      <Filter>Header Files\dlls\rope</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\rope\CRopeSample.h">
+      <Filter>Header Files\dlls\rope</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\rope\CRopeSegment.h">
+      <Filter>Header Files\dlls\rope</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\op4_weapons\CDisplacer.h">
+      <Filter>Header Files\dlls\op4_weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\op4_weapons\CDisplacerBall.h">
       <Filter>Header Files\dlls\op4_weapons</Filter>
     </ClInclude>
   </ItemGroup>

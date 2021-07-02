@@ -16,7 +16,12 @@ PM_OBJ_DIR=$(HLDLL_OBJ_DIR)/pm_shared
 GAME_SHARED_OBJ_DIR=$(HLDLL_OBJ_DIR)/game_shared
 MINISTL_OBJ_DIR=$(HLDLL_OBJ_DIR)/ministl
 
-#CFLAGS=$(BASE_CFLAGS) $(ARCH_CFLAGS) $(SHLIBCFLAGS) -DCLIENT_WEAPONS
+DEBUG_CFLAGS=
+ifeq "$(CFG)" "debug"
+	DEBUG_CFLAGS=-D_DEBUG
+endif
+
+#CFLAGS=$(BASE_CFLAGS) $(ARCH_CFLAGS) $(DEBUG_CFLAGS) $(SHLIBCFLAGS) -DCLIENT_WEAPONS
 CFLAGS=$(BASE_CFLAGS)  $(ARCH_CFLAGS)  -DCLIENT_WEAPONS -I/usr/include/x86_64-linux-gnu
 #-O3 -ffast-math -fno-strength-reduce
 
@@ -158,7 +163,16 @@ HLDLL_OBJS = \
 	$(HLDLL_OBJ_DIR)/agctf.o \
 	$(HLDLL_OBJ_DIR)/aglms.o \
 	$(HLDLL_OBJ_DIR)/agdom.o \
-	$(HLDLL_OBJ_DIR)/spawnchooser.o
+	$(HLDLL_OBJ_DIR)/spawnchooser.o \
+	$(HLDLL_OBJ_DIR)/op4_weapons/CEagle.o \
+	$(HLDLL_OBJ_DIR)/op4_weapons/CEagleLaser.o \
+	$(HLDLL_OBJ_DIR)/op4_weapons/CGrapple.o \
+	$(HLDLL_OBJ_DIR)/op4_weapons/CGrappleTip.o \
+	$(HLDLL_OBJ_DIR)/op4_weapons/CKnife.o \
+	$(HLDLL_OBJ_DIR)/op4_weapons/CM249.o \
+	$(HLDLL_OBJ_DIR)/op4_weapons/CPenguin.o \
+	$(HLDLL_OBJ_DIR)/op4_weapons/CPipewrench.o \
+	$(HLDLL_OBJ_DIR)/op4_weapons/CSniperRifle.o \
 
 HLWPN_OBJS = \
 	$(HLWPN_OBJ_DIR)/hl_wpn_glock.o

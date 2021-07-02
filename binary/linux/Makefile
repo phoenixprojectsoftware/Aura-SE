@@ -29,20 +29,19 @@ ARCH=i386
 ELF-GC-DYNSTR=./elf-gc-dynstr
 
 ifeq ($(OS),Linux)
-	CC="gcc -m32"
-	CPLUS="g++ -m32"
-	CPP_LIB:=-L$(shell g++ -m32 -print-file-name=libstdc++.so | xargs dirname) -lstdc++ -ldl -lpthread
+	CC="gcc-4.8 -m32"
+	CPLUS="g++-4.8 -m32"
+	CPP_LIB:=-L$(shell g++-4.8 -m32 -print-file-name=libstdc++.so | xargs dirname) -lstdc++ -ldl -lpthread
 endif
 
 ifeq ($(OS),Darwin)
     OSXVER := $(shell sw_vers -productVersion)
 	DEVELOPER_DIR := $(shell /usr/bin/xcode-select -print-path)
-	ifeq (,$(findstring 10.7, $(OSXVER))) 
+	ifneq (,$(findstring CommandLineTools,$(DEVELOPER_DIR)))
 		BUILDING_ON_LION := 0
 		COMPILER_BIN_DIR := $(DEVELOPER_DIR)/usr/bin
 		SDK_DIR := $(DEVELOPER_DIR)/SDKs
 	else
-		BUILDING_ON_LION := 1
 		COMPILER_BIN_DIR := $(DEVELOPER_DIR)/Toolchains/XcodeDefault.xctoolchain/usr/bin
 		SDK_DIR := $(DEVELOPER_DIR)/Platforms/MacOSX.platform/Developer/SDKs
 	endif
@@ -87,9 +86,9 @@ endif
 
 ifeq ($(OS),Darwin)
 # force 387 for FP math so the precision between win32 and linux and osx match
-ARCH_CFLAGS_I486+=-march=pentium-m -mfpmath=387
-ARCH_CFLAGS_I686+=-march=pentium-m -mfpmath=387
-ARCH_CFLAGS_AMD+=-mfpmath=387
+ARCH_CFLAGS_I486+=-march=pentium-m -mfpmath=387 -mno-sse
+ARCH_CFLAGS_I686+=-march=pentium-m -mfpmath=387 -mno-sse
+ARCH_CFLAGS_AMD+=-mfpmath=387 -mno-sse
 endif
 
 
