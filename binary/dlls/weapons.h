@@ -85,6 +85,7 @@ public:
 #define WEAPON_EAGLE			17
 #define WEAPON_PIPEWRENCH 18
 #define WEAPON_M249				19
+#define WEAPON_DISPLACER		20
 #define WEAPON_SNIPERRIFLE 24
 #define WEAPON_KNIFE 25
 #define WEAPON_PENGUIN   26
@@ -118,6 +119,7 @@ public:
 #define PIPEWRENCH_WEIGHT 2
 #define SNIPERRIFLE_WEIGHT 10
 #define M249_WEIGHT					20
+#define DISPLACER_WEIGHT	10
 #define PENGUIN_WEIGHT		5
 
 
@@ -181,6 +183,7 @@ public:
 #define EAGLE_DEFAULT_GIVE				7
 #define SNIPERRIFLE_DEFAULT_GIVE 5
 #define M249_DEFAULT_GIVE					60
+#define DISPLACER_DEFAULT_GIVE		40
 
 // The amount of ammo given to a player by an ammo item.
 #define AMMO_URANIUMBOX_GIVE	80
