@@ -205,6 +205,8 @@
     <ClCompile Include="..\..\dlls\op4_weapons\CShockRifle.cpp" />
     <ClCompile Include="..\..\dlls\op4_weapons\CSniperRifle.cpp" />
     <ClCompile Include="..\..\dlls\op4_weapons\CKnife.cpp" />
+    <ClCompile Include="..\..\dlls\op4_weapons\CSpore.cpp" />
+    <ClCompile Include="..\..\dlls\op4_weapons\CSporeLauncher.cpp" />
     <ClCompile Include="..\..\dlls\osprey.cpp" />
     <ClCompile Include="..\..\dlls\pathcorner.cpp" />
     <ClCompile Include="..\..\dlls\penguin_grenade.cpp" />
@@ -319,6 +321,8 @@
     <ClInclude Include="..\..\dlls\op4_weapons\CShockBeam.h" />
     <ClInclude Include="..\..\dlls\op4_weapons\CShockRifle.h" />
     <ClInclude Include="..\..\dlls\op4_weapons\CSniperRifle.h" />
+    <ClInclude Include="..\..\dlls\op4_weapons\CSpore.h" />
+    <ClInclude Include="..\..\dlls\op4_weapons\CSporeLauncher.h" />
     <ClInclude Include="..\..\dlls\plane.h" />
     <ClInclude Include="..\..\dlls\player.h" />
     <ClInclude Include="..\..\dlls\rope\CElectrifiedWire.h" />
