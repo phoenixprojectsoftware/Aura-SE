@@ -5082,7 +5082,7 @@ Vector CBasePlayer::GetAutoaimVectorFromPoint(const Vector& vecSrc, float flDelt
 		UTIL_MakeVectors(pev->v_angle + pev->punchangle);
 		return gpGlobals->v_forward;
 	}
-
+	// Vector vecSrc = GetGunPosition();
 	float flDist = 8192;
 
 	// always use non-sticky autoaim
@@ -5094,7 +5094,7 @@ Vector CBasePlayer::GetAutoaimVectorFromPoint(const Vector& vecSrc, float flDelt
 	}
 
 	BOOL m_fOldTargeting = m_fOnTarget;
-	Vector angles = AutoaimDeflection((Vector)vecSrc, flDist, flDelta);
+	Vector angles = AutoaimDeflection(vecSrc, flDist, flDelta);
 
 	// update ontarget if changed
 	if (!g_pGameRules->AllowAutoTargetCrosshair())
