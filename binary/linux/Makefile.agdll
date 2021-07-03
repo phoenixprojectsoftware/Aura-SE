@@ -164,23 +164,23 @@ HLDLL_OBJS = \
 	$(HLDLL_OBJ_DIR)/aglms.o \
 	$(HLDLL_OBJ_DIR)/agdom.o \
 	$(HLDLL_OBJ_DIR)/spawnchooser.o \
-	# $(HLDLL_OBJ_DIR)/op4_weapons/CEagle.o \
-	# $(HLDLL_OBJ_DIR)/op4_weapons/CEagleLaser.o \
-	# $(HLDLL_OBJ_DIR)/op4_weapons/CGrapple.o \
-	# $(HLDLL_OBJ_DIR)/op4_weapons/CGrappleTip.o \
-	# $(HLDLL_OBJ_DIR)/op4_weapons/CKnife.o \
-	# $(HLDLL_OBJ_DIR)/op4_weapons/CM249.o \
-	# $(HLDLL_OBJ_DIR)/op4_weapons/CPenguin.o \
-	# $(HLDLL_OBJ_DIR)/op4_weapons/CPipewrench.o \
-	# $(HLDLL_OBJ_DIR)/op4_weapons/CSniperRifle.o \
-	# $(HLDLL_OBJ_DIR)/op4_weapons/CShockBeam.o \
-	# $(HLDLL_OBJ_DIR)/op4_weapons/CShockRifle.o \
-	# $(HLDLL_OBJ_DIR)/op4_weapons/CSpore.o \
-	# $(HLDLL_OBJ_DIR)/op4_weapons/CSporeLauncher.o \
-	# $(HLDLL_OBJ_DIR)/rope/CElectrifiedWire.o \
-	# $(HLDLL_OBJ_DIR)/rope/CRope.o \
-	# $(HLDLL_OBJ_DIR)/rope/CRopeSample.o \
-	# $(HLDLL_OBJ_DIR)/rope/CRopeSegment.o \
+	$(HLDLL_OBJ_DIR)/op4_weapons/CEagle.o \
+	$(HLDLL_OBJ_DIR)/op4_weapons/CEagleLaser.o \
+	$(HLDLL_OBJ_DIR)/op4_weapons/CGrapple.o \
+	$(HLDLL_OBJ_DIR)/op4_weapons/CGrappleTip.o \
+	$(HLDLL_OBJ_DIR)/op4_weapons/CKnife.o \
+	$(HLDLL_OBJ_DIR)/op4_weapons/CM249.o \
+	$(HLDLL_OBJ_DIR)/op4_weapons/CPenguin.o \
+	$(HLDLL_OBJ_DIR)/op4_weapons/CPipewrench.o \
+	$(HLDLL_OBJ_DIR)/op4_weapons/CSniperRifle.o \
+	$(HLDLL_OBJ_DIR)/op4_weapons/CShockBeam.o \
+	$(HLDLL_OBJ_DIR)/op4_weapons/CShockRifle.o \
+	$(HLDLL_OBJ_DIR)/op4_weapons/CSpore.o \
+	$(HLDLL_OBJ_DIR)/op4_weapons/CSporeLauncher.o \
+	$(HLDLL_OBJ_DIR)/rope/CElectrifiedWire.o \
+	$(HLDLL_OBJ_DIR)/rope/CRope.o \
+	$(HLDLL_OBJ_DIR)/rope/CRopeSample.o \
+	$(HLDLL_OBJ_DIR)/rope/CRopeSegment.o \
 
 HLWPN_OBJS = \
 	$(HLWPN_OBJ_DIR)/hl_wpn_glock.o
