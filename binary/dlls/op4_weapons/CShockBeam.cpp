@@ -12,14 +12,14 @@
 *   without written permission from Valve LLC.
 *
 ****/
-#include "extdll.h"
-#include "util.h"
-#include "cbase.h"
-#include "weapons.h"
+#include "../extdll.h"
+#include "../util.h"
+#include "../cbase.h"
+#include "../weapons.h"
 #include "customentity.h"
-#include "skill.h"
-#include "decals.h"
-#include "gamerules.h"
+#include "../skill.h"
+#include "../decals.h"
+#include "../gamerules.h"
 
 #include "CShockBeam.h"
 

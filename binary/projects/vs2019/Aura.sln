@@ -14,6 +14,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Makefile", "Makefile", "{8AE1E661-B5C7-4FC4-9803-966F8648C0C4}"
 	ProjectSection(SolutionItems) = preProject
+		..\..\linux\gendbg.sh = ..\..\linux\gendbg.sh
 		..\..\linux\Makefile = ..\..\linux\Makefile
 		..\..\linux\Makefile.agdll = ..\..\linux\Makefile.agdll
 	EndProjectSection

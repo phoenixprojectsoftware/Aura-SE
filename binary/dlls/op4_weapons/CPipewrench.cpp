@@ -13,15 +13,15 @@
 *
 ****/
 
-#include "extdll.h"
-#include "util.h"
-#include "cbase.h"
-#include "monsters.h"
-#include "weapons.h"
-#include "op4_weapons/CPipewrench.h"
-#include "nodes.h"
-#include "player.h"
-#include "gamerules.h"
+#include "../extdll.h"
+#include "../util.h"
+#include "../cbase.h"
+#include "../monsters.h"
+#include "../weapons.h"
+#include "CPipewrench.h"
+#include "../nodes.h"
+#include "../player.h"
+#include "../gamerules.h"
 
 #define	PIPEWRENCH_BODYHIT_VOLUME 128
 #define	PIPEWRENCH_WALLHIT_VOLUME 512

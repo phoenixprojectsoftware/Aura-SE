@@ -107,7 +107,6 @@ HLDLL_OBJS = \
 	$(HLDLL_OBJ_DIR)/pathcorner.o \
 	$(HLDLL_OBJ_DIR)/plane.o \
 	$(HLDLL_OBJ_DIR)/plats.o \
-	$(HLDLL_OBJ_DIR)/player.o \
 	$(HLDLL_OBJ_DIR)/python.o \
 	$(HLDLL_OBJ_DIR)/rat.o \
 	$(HLDLL_OBJ_DIR)/roach.o \
@@ -164,23 +163,23 @@ HLDLL_OBJS = \
 	$(HLDLL_OBJ_DIR)/aglms.o \
 	$(HLDLL_OBJ_DIR)/agdom.o \
 	$(HLDLL_OBJ_DIR)/spawnchooser.o \
-	$(HLDLL_OBJ_DIR)/op4_weapons/CEagle.o \
-	$(HLDLL_OBJ_DIR)/op4_weapons/CEagleLaser.o \
-	$(HLDLL_OBJ_DIR)/op4_weapons/CGrapple.o \
-	$(HLDLL_OBJ_DIR)/op4_weapons/CGrappleTip.o \
-	$(HLDLL_OBJ_DIR)/op4_weapons/CKnife.o \
-	$(HLDLL_OBJ_DIR)/op4_weapons/CM249.o \
-	$(HLDLL_OBJ_DIR)/op4_weapons/CPenguin.o \
-	$(HLDLL_OBJ_DIR)/op4_weapons/CPipewrench.o \
-	$(HLDLL_OBJ_DIR)/op4_weapons/CSniperRifle.o \
-	$(HLDLL_OBJ_DIR)/op4_weapons/CShockBeam.o \
-	$(HLDLL_OBJ_DIR)/op4_weapons/CShockRifle.o \
-	$(HLDLL_OBJ_DIR)/op4_weapons/CSpore.o \
-	$(HLDLL_OBJ_DIR)/op4_weapons/CSporeLauncher.o \
-	$(HLDLL_OBJ_DIR)/rope/CElectrifiedWire.o \
-	$(HLDLL_OBJ_DIR)/rope/CRope.o \
-	$(HLDLL_OBJ_DIR)/rope/CRopeSample.o \
-	$(HLDLL_OBJ_DIR)/rope/CRopeSegment.o \
+	# $(HLDLL_OBJ_DIR)/op4_weapons/CEagle.o \
+	# $(HLDLL_OBJ_DIR)/op4_weapons/CEagleLaser.o \
+	# $(HLDLL_OBJ_DIR)/op4_weapons/CGrapple.o \
+	# $(HLDLL_OBJ_DIR)/op4_weapons/CGrappleTip.o \
+	# $(HLDLL_OBJ_DIR)/op4_weapons/CKnife.o \
+	# $(HLDLL_OBJ_DIR)/op4_weapons/CM249.o \
+	# $(HLDLL_OBJ_DIR)/op4_weapons/CPenguin.o \
+	# $(HLDLL_OBJ_DIR)/op4_weapons/CPipewrench.o \
+	# $(HLDLL_OBJ_DIR)/op4_weapons/CSniperRifle.o \
+	# $(HLDLL_OBJ_DIR)/op4_weapons/CShockBeam.o \
+	# $(HLDLL_OBJ_DIR)/op4_weapons/CShockRifle.o \
+	# $(HLDLL_OBJ_DIR)/op4_weapons/CSpore.o \
+	# $(HLDLL_OBJ_DIR)/op4_weapons/CSporeLauncher.o \
+	# $(HLDLL_OBJ_DIR)/rope/CElectrifiedWire.o \
+	# $(HLDLL_OBJ_DIR)/rope/CRope.o \
+	# $(HLDLL_OBJ_DIR)/rope/CRopeSample.o \
+	# $(HLDLL_OBJ_DIR)/rope/CRopeSegment.o \
 
 HLWPN_OBJS = \
 	$(HLWPN_OBJ_DIR)/hl_wpn_glock.o
@@ -208,7 +207,7 @@ dirs:
 
 $(MODNAME).$(SHLIBEXT): $(HLDLL_OBJS) $(HLWPN_OBJS) $(PM_OBJS) $(GAME_SHARED_OBJS) $(MINISTL_OBJS)
 	$(CC) $(LDFLAGS) $(SHLIBLDFLAGS) -o $(BUILD_DIR)/$@ $(HLDLL_OBJS) $(HLWPN_OBJS) $(PM_OBJS) $(GAME_SHARED_OBJS)
-	./gendbg.sh $(BUILD_DIR)/$(MODNAME).$(SHLIBEXT)
+	bash gendbg.sh $(BUILD_DIR)/$(MODNAME).$(SHLIBEXT)
 	
 $(HLWPN_OBJ_DIR)/%.o : $(HLWPN_SRC_DIR)/%.cpp
 	$(DO_HLWPN_CC)

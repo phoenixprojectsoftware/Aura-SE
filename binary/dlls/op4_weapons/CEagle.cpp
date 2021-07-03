@@ -12,16 +12,16 @@
 *   without written permission from Valve LLC.
 *
 ****/
-#include "extdll.h"
-#include "util.h"
-#include "cbase.h"
-#include "weapons.h"
-#include "player.h"
-#include "UserMessages.h"
+#include "../extdll.h"
+#include "../util.h"
+#include "../cbase.h"
+#include "../weapons.h"
+#include "../player.h"
+#include "../UserMessages.h"
 
-#include "op4_weapons/CEagleLaser.h"
+#include "CEagleLaser.h"
 
-#include "op4_weapons/CEagle.h"
+#include "CEagle.h"
 
 LINK_ENTITY_TO_CLASS(weapon_eagle, CEagle);
 

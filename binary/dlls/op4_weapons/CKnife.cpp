@@ -12,16 +12,16 @@
 *   without written permission from Valve LLC.
 *
 ****/
-#include "extdll.h"
-#include "util.h"
-#include "cbase.h"
-#include "weapons.h"
-#include "player.h"
-#include "skill.h"
+#include "../extdll.h"
+#include "../util.h"
+#include "../cbase.h"
+#include "../weapons.h"
+#include "../player.h"
+#include "../skill.h"
 
-#include "gamerules.h"
+#include "../gamerules.h"
 
-#include "op4_weapons/CKnife.h"
+#include "CKnife.h"
 
 #define	KNIFE_BODYHIT_VOLUME 128
 #define	KNIFE_WALLHIT_VOLUME 512

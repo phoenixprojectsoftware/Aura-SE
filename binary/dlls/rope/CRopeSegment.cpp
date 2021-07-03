@@ -12,10 +12,10 @@
 *   without written permission from Valve LLC.
 *
 ****/
-#include "extdll.h"
-#include "util.h"
-#include "cbase.h"
-#include "player.h"
+#include "../extdll.h"
+#include "../util.h"
+#include "../cbase.h"
+#include "../player.h"
 
 #include "CRopeSample.h"
 #include "CRope.h"

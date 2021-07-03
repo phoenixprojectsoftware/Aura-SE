@@ -12,13 +12,13 @@
 *   use or distribution of this code by or to any unlicensed person is illegal.
 *
 ****/
-#include "extdll.h"
-#include "util.h"
-#include "cbase.h"
-#include "Weapons.h"
+#include "../extdll.h"
+#include "../util.h"
+#include "../cbase.h"
+#include "../weapons.h"
 
 #ifndef CLIENT_DLL
-#include "gamerules.h"
+#include "../gamerules.h"
 #endif
 
 #include "com_model.h"

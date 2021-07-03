@@ -12,13 +12,13 @@
 *   without written permission from Valve LLC.
 *
 ****/
-#include "extdll.h"
-#include "util.h"
-#include "cbase.h"
-#include "weapons.h"
-#include "skill.h"
-#include "soundent.h"
-#include "decals.h"
+#include "../extdll.h"
+#include "../util.h"
+#include "../cbase.h"
+#include "../weapons.h"
+#include "../skill.h"
+#include "../soundent.h"
+#include "../decals.h"
 
 #include "CSpore.h"
 

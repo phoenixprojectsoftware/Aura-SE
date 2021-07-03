@@ -12,13 +12,13 @@
 *   without written permission from Valve LLC.
 *
 ****/
-#include "extdll.h"
-#include "util.h"
-#include "cbase.h"
-#include "weapons.h"
-#include "player.h"
+#include "../extdll.h"
+#include "../util.h"
+#include "../cbase.h"
+#include "../weapons.h"
+#include "../player.h"
 
-#include "op4_weapons/CPenguin.h"
+#include "CPenguin.h"
 
 #ifndef CLIENT_DLL
 //TODO: this isn't in vanilla Op4 so it won't save properly there

@@ -12,20 +12,20 @@
 *   without written permission from Valve LLC.
 *
 ****/
-#include "extdll.h"
-#include "util.h"
-#include "cbase.h"
-#include "weapons.h"
-#include "player.h"
-#include "UserMessages.h"
+#include "../extdll.h"
+#include "../util.h"
+#include "../cbase.h"
+#include "../weapons.h"
+#include "../player.h"
+#include "../UserMessages.h"
 
 #include "CDisplacer.h"
 
 #ifndef CLIENT_DLL
-#include "rope/CRope.h"
+#include "../rope/CRope.h"
 #include "CDisplacerBall.h"
 
-#include "gamerules.h"
+#include "../gamerules.h"
 
 extern edict_t* EntSelectSpawnPoint(CBasePlayer* pPlayer);
 

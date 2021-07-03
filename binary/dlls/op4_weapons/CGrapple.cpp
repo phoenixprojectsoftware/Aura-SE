@@ -12,24 +12,24 @@
 *   use or distribution of this code by or to any unlicensed person is illegal.
 *
 ****/
-#include "extdll.h"
-#include "util.h"
-#include "cbase.h"
-#include "weapons.h"
-#include "player.h"
-#include "skill.h"
+#include "../extdll.h"
+#include "../util.h"
+#include "../cbase.h"
+#include "../weapons.h"
+#include "../player.h"
+#include "../skill.h"
 #include "customentity.h"
-#include "UserMessages.h"
+#include "../UserMessages.h"
 
-#include "op4_weapons/CGrappleTip.h"
+#include "CGrappleTip.h"
 
 #ifndef CLIENT_DLL
-#include "gamerules.h"
+#include "../gamerules.h"
 #else
-#include "cl_dll.h"
+#include "../cl_dll.h"
 #endif
 
-#include "op4_weapons/CGrapple.h"
+#include "CGrapple.h"
 
 #ifndef CLIENT_DLL
 extern cvar_t oldgrapple;
