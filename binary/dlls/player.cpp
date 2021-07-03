@@ -5094,7 +5094,7 @@ Vector CBasePlayer::GetAutoaimVectorFromPoint(const Vector& vecSrc, float flDelt
 	}
 
 	BOOL m_fOldTargeting = m_fOnTarget;
-	Vector angles = AutoaimDeflection((Vector)vecSrc, flDist, flDelta);
+	Vector angles = AutoaimDeflection(const Vector &vecSrc, flDist, flDelta);
 
 	// update ontarget if changed
 	if (!g_pGameRules->AllowAutoTargetCrosshair())
