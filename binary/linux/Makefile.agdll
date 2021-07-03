@@ -10,7 +10,7 @@ HLDLL_SRC_DIR=$(SOURCE_DIR)/dlls
 HLWPN_SRC_DIR=$(HLDLL_SRC_DIR)/wpn_shared
 MINISTL_SRC_DIR=$(SOURCE_DIR)/ministl
 
-HLDLL_OBJ_DIR=$(BUILD_OBJ_DIR)/hldll
+HLDLL_OBJ_DIR=$(BUILD_OBJ_DIR)/auradll
 HLWPN_OBJ_DIR=$(HLDLL_OBJ_DIR)/wpn_shared
 PM_OBJ_DIR=$(HLDLL_OBJ_DIR)/pm_shared
 GAME_SHARED_OBJ_DIR=$(HLDLL_OBJ_DIR)/game_shared
@@ -173,6 +173,14 @@ HLDLL_OBJS = \
 	$(HLDLL_OBJ_DIR)/op4_weapons/CPenguin.o \
 	$(HLDLL_OBJ_DIR)/op4_weapons/CPipewrench.o \
 	$(HLDLL_OBJ_DIR)/op4_weapons/CSniperRifle.o \
+	$(HLDLL_OBJ_DIR)/op4_weapons/CShockBeam.o \
+	$(HLDLL_OBJ_DIR)/op4_weapons/CShockRifle.o \
+	$(HLDLL_OBJ_DIR)/op4_weapons/CSpore.o \
+	$(HLDLL_OBJ_DIR)/op4_weapons/CSporeLauncher.o \
+	$(HLDLL_OBJ_DIR)/rope/CElectrifiedWire.o \
+	$(HLDLL_OBJ_DIR)/rope/CRope.o \
+	$(HLDLL_OBJ_DIR)/rope/CRopeSample.o \
+	$(HLDLL_OBJ_DIR)/rope/CRopeSegment.o \
 
 HLWPN_OBJS = \
 	$(HLWPN_OBJ_DIR)/hl_wpn_glock.o
