@@ -32,14 +32,14 @@ jobs:
       # See https://docs.microsoft.com/visualstudio/msbuild/msbuild-command-line-reference
       run: msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} ${{env.SOLUTION_FILE_PATH}}
 
-    - name: Package aura.dll
-      run: |
-        New-Item -Force -ItemType Directory @("$env:TEMP\release","$env:TEMP\release\valve")
-        Copy-Item -Force binary/projects/vs2019/Release/auradll/aura.dll $env:TEMP/release/valve
-        Compress-Archive -LiteralPath $env:TEMP\release -DestinationPath .\aura-dll.zip -Force
-    - name: Upload aura.dll
-      uses: actions/upload-artifact@v2.2.4
-      with:
+    #- name: Package aura.dll
+      #run: |
+        #New-Item -Force -ItemType Directory @("$env:TEMP\release","$env:TEMP\release\valve")
+        #Copy-Item -Force binary/projects/vs2019/Release/auradll/aura.dll $env:TEMP/release/valve
+        #Compress-Archive -LiteralPath $env:TEMP\release -DestinationPath .\aura-dll.zip -Force
+    #- name: Upload aura.dll
+      #uses: actions/upload-artifact@v2.2.4
+      #with:
        # Artifact name
-       name: aura dll
-       path: ./aura-dll.zip
+       #name: aura dll
+       #path: ./aura-dll.zip

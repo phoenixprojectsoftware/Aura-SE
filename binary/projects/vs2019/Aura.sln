@@ -9,7 +9,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{38F9
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{7382E391-7DAE-4D0A-A075-6E0226833961}"
 	ProjectSection(SolutionItems) = preProject
-		..\..\..\.github\workflows\macOS.yml = ..\..\..\.github\workflows\macOS.yml
 		..\..\..\.github\workflows\windows.yml = ..\..\..\.github\workflows\windows.yml
 	EndProjectSection
 EndProject
