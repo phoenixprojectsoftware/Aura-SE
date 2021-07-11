@@ -84,7 +84,16 @@ DLL_GLOBAL cvar_t	ag_ban_rpg = { "sv_aura_ban_rpg","0" };
 DLL_GLOBAL cvar_t	ag_ban_gauss = { "sv_aura_ban_gauss","0" };
 DLL_GLOBAL cvar_t	ag_ban_egon = { "sv_aura_ban_egon","0" };
 DLL_GLOBAL cvar_t	ag_ban_hornet = { "sv_aura_ban_hornet","0" };
-DLL_GLOBAL cvar_t ag_ban_penguin = { "sv_aura_ban_penguin", "0" };
+DLL_GLOBAL cvar_t   ag_ban_penguin = { "sv_aura_ban_penguin", "0" };
+DLL_GLOBAL cvar_t   ag_ban_m249 = { "sv_aura_ban_m249", "0" };
+DLL_GLOBAL cvar_t   ag_ban_eagle = { "sv_aura_ban_eagle", "0" };
+DLL_GLOBAL cvar_t   ag_ban_displacer = { "sv_aura_ban_displacer", "0" };
+DLL_GLOBAL cvar_t   ag_ban_grapple = { "sv_aura_ban_grapple", "0" };
+DLL_GLOBAL cvar_t   ag_ban_knife = { "sv_aura_ban_knife" ,"0" };
+DLL_GLOBAL cvar_t   ag_ban_pipewrench = { "sv_aura_ban_pipewrench", "0" };
+DLL_GLOBAL cvar_t   ag_ban_shockrifle = { "sv_aura_ban_shockrifle", "0" };
+DLL_GLOBAL cvar_t   ag_ban_sniperrifle = { "sv_aura_ban_sniper", "0" };
+DLL_GLOBAL cvar_t   ag_ban_spore = { "sv_aura_ban_sporelauncher", "0" };
 
 DLL_GLOBAL cvar_t	ag_ban_hgrenade = { "sv_aura_ban_hgrenade","0" };
 DLL_GLOBAL cvar_t	ag_ban_satchel = { "sv_aura_ban_satchel","0" };
@@ -125,13 +134,22 @@ DLL_GLOBAL cvar_t	ag_start_bockshot = { "sv_aura_start_bockshot","0" };
 DLL_GLOBAL cvar_t	ag_start_uranium = { "sv_aura_start_uranium","0" };
 DLL_GLOBAL cvar_t	ag_start_bolts = { "sv_aura_start_bolts","0" };
 DLL_GLOBAL cvar_t	ag_start_rockets = { "sv_aura_start_rockets","0" };
-DLL_GLOBAL cvar_t ag_start_357ammo = { "sv_aura_start_357ammo","0" };
-DLL_GLOBAL cvar_t ag_start_penguin = { "sv_aura_start_penguin", "0" };
-DLL_GLOBAL cvar_t ag_start_m249 = { "sv_aura_start_m249", "0" };
-DLL_GLOBAL cvar_t ag_start_eagle = { "sv_aura_start_eagle", "0" };
+DLL_GLOBAL cvar_t   ag_start_357ammo = { "sv_aura_start_357ammo","0" };
+DLL_GLOBAL cvar_t   ag_start_penguin = { "sv_aura_start_penguin", "0" };
+DLL_GLOBAL cvar_t   ag_start_m249 = { "sv_aura_start_m249", "0" };
+DLL_GLOBAL cvar_t   ag_start_eagle = { "sv_aura_start_eagle", "0" };
+DLL_GLOBAL cvar_t   ag_start_displacer = { "sv_aura_start_displacer", "0" };
+DLL_GLOBAL cvar_t   ag_start_grapple = { "sv_aura_start_grapple", "0" };
+DLL_GLOBAL cvar_t   ag_start_knife = { "sv_aura_start_knife" ,"0" };
+DLL_GLOBAL cvar_t   ag_start_pipewrench = { "sv_aura_start_pipewrench", "0" };
+DLL_GLOBAL cvar_t   ag_start_shockrifle = { "sv_aura_start_shockrifle", "0" };
+DLL_GLOBAL cvar_t   ag_start_sniperrifle = { "sv_aura_start_sniper", "0" };
+DLL_GLOBAL cvar_t   ag_start_spore = { "sv_aura_start_sporelauncher", "0" };
 DLL_GLOBAL cvar_t	ag_start_armour = { "sv_aura_start_armour","0" };
 DLL_GLOBAL cvar_t	ag_start_health = { "sv_aura_start_health","100" };
 
+// the default values can be taken from skill.cfg and skillopfor.cfg | opposing force weapons will NOT have customisable damage, will likely become a feature
+// in zamnhlmp 2.7 // season 7 // aura 2.1
 DLL_GLOBAL cvar_t	ag_dmg_crowbar = { "sv_aura_dmg_crowbar","25" };
 DLL_GLOBAL cvar_t	ag_dmg_glock = { "sv_aura_dmg_glock","12" };
 DLL_GLOBAL cvar_t	ag_dmg_357 = { "sv_aura_dmg_357","40" };
@@ -236,6 +254,16 @@ void AgInitGame()
     CVAR_REGISTER(&ag_ban_gauss);
     CVAR_REGISTER(&ag_ban_egon);
     CVAR_REGISTER(&ag_ban_hornet);
+    CVAR_REGISTER(&ag_ban_m249);
+    CVAR_REGISTER(&ag_ban_penguin);
+    CVAR_REGISTER(&ag_ban_eagle);
+    CVAR_REGISTER(&ag_ban_displacer);
+    CVAR_REGISTER(&ag_ban_grapple);
+    CVAR_REGISTER(&ag_ban_knife);
+    CVAR_REGISTER(&ag_ban_pipewrench);
+    CVAR_REGISTER(&ag_ban_shockrifle);
+    CVAR_REGISTER(&ag_ban_sniperrifle);
+    CVAR_REGISTER(&ag_ban_spore);
 
     CVAR_REGISTER(&ag_ban_hgrenade);
     CVAR_REGISTER(&ag_ban_satchel);
@@ -267,6 +295,13 @@ void AgInitGame()
     CVAR_REGISTER(&ag_start_penguin);
     CVAR_REGISTER(&ag_start_m249);
     CVAR_REGISTER(&ag_start_eagle);
+    CVAR_REGISTER(&ag_start_displacer);
+    CVAR_REGISTER(&ag_start_grapple);
+    CVAR_REGISTER(&ag_start_knife);
+    CVAR_REGISTER(&ag_start_pipewrench);
+    CVAR_REGISTER(&ag_start_shockrifle);
+    CVAR_REGISTER(&ag_start_sniperrifle);
+    CVAR_REGISTER(&ag_start_spore);
 
     CVAR_REGISTER(&ag_start_hgrenade);
     CVAR_REGISTER(&ag_start_satchel);

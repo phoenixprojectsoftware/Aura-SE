@@ -57,6 +57,17 @@ extern cvar_t	ag_ban_rpg;
 extern cvar_t	ag_ban_gauss;
 extern cvar_t	ag_ban_egon;
 extern cvar_t	ag_ban_hornet;
+extern cvar_t   ag_ban_penguin;
+extern cvar_t   ag_ban_m249;
+extern cvar_t   ag_ban_eagle;
+extern cvar_t   ag_ban_displacer;
+extern cvar_t   ag_ban_grapple;
+extern cvar_t   ag_ban_knife;
+extern cvar_t   ag_ban_pipewrench;
+extern cvar_t   ag_ban_shockrifle;
+extern cvar_t   ag_ban_sniperrifle;
+extern cvar_t   ag_ban_spore;
+
 
 extern cvar_t	ag_ban_hgrenade;
 extern cvar_t	ag_ban_satchel;
@@ -86,9 +97,16 @@ extern cvar_t	ag_start_rpg;
 extern cvar_t	ag_start_gauss;
 extern cvar_t	ag_start_egon;
 extern cvar_t	ag_start_hornet;
-extern cvar_t ag_start_penguin;
-extern cvar_t ag_start_m249;
-extern cvar_t ag_start_eagle;
+extern cvar_t   ag_start_penguin;
+extern cvar_t   ag_start_m249;
+extern cvar_t   ag_start_eagle;
+extern cvar_t   ag_start_displacer;
+extern cvar_t   ag_start_grapple;
+extern cvar_t   ag_start_knife;
+extern cvar_t   ag_start_pipewrench;
+extern cvar_t   ag_start_shockrifle;
+extern cvar_t   ag_start_sniperrifle;
+extern cvar_t   ag_start_spore;
 
 extern cvar_t	ag_start_hgrenade;
 extern cvar_t	ag_start_satchel;
