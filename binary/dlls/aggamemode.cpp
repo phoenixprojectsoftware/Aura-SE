@@ -51,6 +51,14 @@ AgString AgGamename()
     return "Half-Life";
 }
 
+const char* AgGamenameChar()
+{
+    if (g_pGame)
+        return g_pGame->m_sName.c_str();
+    else
+        return "Half-Life";
+}
+
 AgString AgGamedescription()
 {
     if (g_pGame)
