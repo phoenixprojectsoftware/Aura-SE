@@ -100,8 +100,6 @@ TYPEDESCRIPTION	CBasePlayer::m_playerSaveData[] =
 	DEFINE_ARRAY(CBasePlayer, m_rgflSuitNoRepeatTime, FIELD_TIME, CSUITNOREPEAT),
 	DEFINE_FIELD(CBasePlayer, m_lastDamageAmount, FIELD_INTEGER),
 
-	DEFINE_FIELD(CBasePlayer, m_flRegenTime, FIELD_FLOAT),
-
 	DEFINE_ARRAY(CBasePlayer, m_rgpPlayerItems, FIELD_CLASSPTR, MAX_ITEM_TYPES),
 	DEFINE_FIELD(CBasePlayer, m_pActiveItem, FIELD_CLASSPTR),
 	DEFINE_FIELD(CBasePlayer, m_pLastItem, FIELD_CLASSPTR),
@@ -734,8 +732,6 @@ int CBasePlayer :: TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, 
 			bitsDamage &= ~DMG_SHOCK;
 			ffound = TRUE;
 		}
-
-		m_flRegenTime = gpGlobals->time + 3; // sv_health_regen_wait.value;
 	}
 
 	pev->punchangle.x = -2;
@@ -2380,26 +2376,6 @@ void CBasePlayer::PreThink(void)
 	{
 		pev->velocity = g_vecZero;
 	}
-
-	if ((m_flRegenTime < gpGlobals->time) && (m_flRegenTime > 0))
-	{
-		int iHealthEstimated = ceil(pev->health / 10.0) * 10.0;
-
-		if (pev->health < iHealthEstimated)
-		{
-			TakeHealth(1.0, DMG_GENERIC);
-			m_flRegenTime = gpGlobals->time + 3;
-			ALERT(at_console, "Regeneration complete. \n");
-		}
-		else
-		{
-			m_flRegenTime = -1;
-			ALERT(at_console, "Regeneration complete. \n");
-		}
-
-		ALERT(at_console, "Health current: %f \n", pev->health);
-		ALERT(at_console, "Health estimated: %i \n", iHealthEstimated);
-	}
 }
 /* Time based Damage works as follows: 
 	1) There are several types of timebased damage:
@@ -3381,8 +3357,6 @@ void CBasePlayer::Spawn( void )
 	m_bitsDamageType	= 0;
 	m_afPhysicsFlags	= 0;
 	m_fLongJump			= FALSE;// no longjump module. 
-
-	m_flRegenTime = -1;
 
 	g_engfuncs.pfnSetPhysicsKeyValue( edict(), "slj", "0" );
 	g_engfuncs.pfnSetPhysicsKeyValue( edict(), "hl", "1" );
