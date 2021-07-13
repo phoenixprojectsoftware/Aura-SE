@@ -2266,3 +2266,31 @@ void CItemSoda::CanTouch ( CBaseEntity *pOther )
 	SetThink ( &CItemSoda::SUB_Remove );
 	pev->nextthink = gpGlobals->time;
 }
+
+// 3D Skybox
+class CEnvSky : public CBaseEntity
+{
+public:
+	void Activate(void);
+	void Think(void);
+};
+
+void CEnvSky::Activate(void)
+{
+	pev->effects = EF_NODRAW;
+	pev->nextthink = gpGlobals->time + 1.0;
+}
+
+extern int gmsgSetSky;
+
+void CEnvSky::Think()
+{
+	MESSAGE_BEGIN(MSG_BROADCAST, gmsgSetSky, NULL);
+	WRITE_BYTE(1);
+	WRITE_COORD(pev->origin.x); // position of 3D Skybox related to 2D
+	WRITE_COORD(pev->origin.y);
+	WRITE_COORD(pev->origin.z);
+	MESSAGE_END();
+}
+
+LINK_ENTITY_TO_CLASS(env_sky, CEnvSky);
