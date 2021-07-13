@@ -460,7 +460,7 @@ AgGameRules* InstallGameRules(void)
 	GameMode.ExecConfig();
 
 	//Execute per map basis settings.
-	SERVER_COMMAND(UTIL_VarArgs("exec %s.cfg\n", STRING(gpGlobals->mapname)));
+	SERVER_COMMAND(UTIL_VarArgs("exec cfg/%s.cfg\n", STRING(gpGlobals->mapname)));
 	SERVER_EXECUTE();
 
 	if ( singleplayer.value > 0.0f )
