@@ -1,0 +1,810 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Source Files\dlls">
+      <UniqueIdentifier>{a59f65b1-455f-459d-bc2a-75775255cd5c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\dlls\wpn_shared">
+      <UniqueIdentifier>{000b311c-d555-467e-b6cb-5e669fb8c45e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\game_shared">
+      <UniqueIdentifier>{9cd951c6-53c4-4c79-826f-13ac1af8a8b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\dlls">
+      <UniqueIdentifier>{e3b69fef-bfa6-4270-8280-f2b25793ac4e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\engine">
+      <UniqueIdentifier>{b85e935a-5cc8-482d-b85f-6cdaa3452ccb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\pm_shared">
+      <UniqueIdentifier>{37941113-16fa-4ce0-9bdd-a72a1ced8902}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\common">
+      <UniqueIdentifier>{d9b0bb75-7f25-443b-8899-6b1a9e1dd63c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\common">
+      <UniqueIdentifier>{477fba75-85bf-4341-ae1d-5840f1a0a44e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ministl">
+      <UniqueIdentifier>{458795e5-1ae4-4700-aaa0-c42aaee2f57c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ministl">
+      <UniqueIdentifier>{7ece64b8-1634-4c0a-9d5c-5ec81e9aaef0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\pm_shared">
+      <UniqueIdentifier>{4e669e3b-5f1f-44c7-ac7a-2a887bdaf5a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\dlls\op4_weapons">
+      <UniqueIdentifier>{fe6f89ab-8f5e-47da-8391-d946993e298a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\dlls\op4_weapons">
+      <UniqueIdentifier>{6b25a584-b2ab-42c9-b42a-f09c4cccef77}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\dlls\rope">
+      <UniqueIdentifier>{bc6f879d-5c78-4fbc-87f2-019db5ec0f8a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\dlls\rope">
+      <UniqueIdentifier>{c1b5db1d-3fee-417a-8723-c1afb6770ee6}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\dlls\aflock.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\agrunt.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\airtank.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\animating.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\animation.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\apache.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\barnacle.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\barney.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\bigmomma.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\bloater.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\bmodels.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\bullsquid.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\buttons.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\cbase.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\client.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\combat.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\controller.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\crossbow.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\crowbar.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\defaultai.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\gman.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\doors.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\effects.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\egon.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\explode.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\flyingmonster.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\func_break.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\func_tank.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\game.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\gamerules.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\gargantua.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\gauss.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\genericmonster.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\ggrenade.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\globals.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\h_ai.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\h_battery.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\h_cine.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\h_cycler.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\h_export.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\handgrenade.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\hassassin.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\headcrab.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\healthkit.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\hgrunt.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\wpn_shared\hl_wpn_glock.cpp">
+      <Filter>Source Files\dlls\wpn_shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\monstermaker.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\hornet.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\hornetgun.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\houndeye.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\ichthyosaur.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\islave.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\items.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\leech.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\lights.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\maprules.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\player.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\monsters.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\monsterstate.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\mortar.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\mp5.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\multiplay_gamerules.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\nihilanth.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\nodes.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\observer.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\osprey.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\pathcorner.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\plane.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\plats.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\python.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\rat.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\roach.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\rpg.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\satchel.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\schedule.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\scientist.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\scripted.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\shotgun.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\singleplay_gamerules.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\skill.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\sound.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\soundent.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\spectator.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\squadmonster.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\squeakgrenade.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\subs.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\talkmonster.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\teamplay_gamerules.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\tempmonster.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\tentacle.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\triggers.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\tripmine.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\turret.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\util.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\game_shared\voice_gamemgr.cpp">
+      <Filter>Source Files\game_shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\zombie.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\weapons.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\world.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\xen.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\agglobal.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\agadmin.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\agadmincache.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\agclient.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\agarena.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\agctf.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\agdom.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\aggamerules.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\aggamemode.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\aggame.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\agtimer.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\agsettings.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\agtimeout.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\agscorecache.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\agscore.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\aginfointermission.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\agscorelog.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\aglms.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\agsuddendeath.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\agvote.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\agcommand.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\agmatch.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\agwallhack.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\agstats.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\agspectator.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ministl\algo.cpp">
+      <Filter>Source Files\ministl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\zamn.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\spawnchooser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\pm_shared\pm_debug.cpp">
+      <Filter>Source Files\pm_shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\pm_shared\pm_math.cpp">
+      <Filter>Source Files\pm_shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\pm_shared\pm_shared.cpp">
+      <Filter>Source Files\pm_shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\penguin_grenade.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\op4_weapons\CEagle.cpp">
+      <Filter>Source Files\dlls\op4_weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\op4_weapons\CEagleLaser.cpp">
+      <Filter>Source Files\dlls\op4_weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\op4_weapons\CM249.cpp">
+      <Filter>Source Files\dlls\op4_weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\op4_weapons\CPenguin.cpp">
+      <Filter>Source Files\dlls\op4_weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\op4_weapons\CGrapple.cpp">
+      <Filter>Source Files\dlls\op4_weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\op4_weapons\CGrappleTip.cpp">
+      <Filter>Source Files\dlls\op4_weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\op4_weapons\CSniperRifle.cpp">
+      <Filter>Source Files\dlls\op4_weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\op4_weapons\CPipewrench.cpp">
+      <Filter>Source Files\dlls\op4_weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\op4_weapons\CKnife.cpp">
+      <Filter>Source Files\dlls\op4_weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\op4_weapons\CDisplacer.cpp">
+      <Filter>Source Files\dlls\op4_weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\rope\CElectrifiedWire.cpp">
+      <Filter>Source Files\dlls\rope</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\rope\CRope.cpp">
+      <Filter>Source Files\dlls\rope</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\rope\CRopeSample.cpp">
+      <Filter>Source Files\dlls\rope</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\rope\CRopeSegment.cpp">
+      <Filter>Source Files\dlls\rope</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\op4_weapons\CDisplacerBall.cpp">
+      <Filter>Source Files\dlls\op4_weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\op4_weapons\CShockRifle.cpp">
+      <Filter>Source Files\dlls\op4_weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\op4_weapons\CShockBeam.cpp">
+      <Filter>Source Files\dlls\op4_weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\op4_weapons\CSpore.cpp">
+      <Filter>Source Files\dlls\op4_weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\op4_weapons\CSporeLauncher.cpp">
+      <Filter>Source Files\dlls\op4_weapons</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\dlls\doors.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\activity.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\activitymap.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\animation.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\basemonster.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\cbase.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\cdll_dll.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\client.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\decals.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\defaultai.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\effects.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\engine\eiface.h">
+      <Filter>Header Files\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\hornet.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\enginecallback.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\explode.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\extdll.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\flyingmonster.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\func_break.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\gamerules.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\player.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\items.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\monsterevent.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\monsters.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\nodes.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\plane.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\pm_shared\pm_shared.h">
+      <Filter>Header Files\pm_shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\pm_shared\pm_debug.h">
+      <Filter>Header Files\pm_shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\pm_shared\pm_defs.h">
+      <Filter>Header Files\pm_shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\pm_shared\pm_info.h">
+      <Filter>Header Files\pm_shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\pm_shared\pm_materials.h">
+      <Filter>Header Files\pm_shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\pm_shared\pm_movevars.h">
+      <Filter>Header Files\pm_shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\weapons.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\saverestore.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\schedule.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\scripted.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\scriptevent.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\skill.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\soundent.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\spectator.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\squadmonster.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\talkmonster.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\teamplay_gamerules.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\trains.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\util.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\vector.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\Platform.h">
+      <Filter>Header Files\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\agglobal.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\agadmin.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\agadmincache.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\agclient.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\agarena.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\agctf.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\agdom.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\aggamerules.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\aggamemode.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\aggame.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\agtimer.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\agsettings.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\agtimeout.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\agscorecache.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\agscore.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\aginfointermission.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\agscorelog.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\aglms.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\agsuddendeath.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\agvote.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\agcommand.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\agmatch.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\agwallhack.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\agstats.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\multiplay_gamerules.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ministl\algo.h">
+      <Filter>Header Files\ministl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\singleplay_gamerules.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\spawnchooser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\op4_weapons\CEagle.h">
+      <Filter>Header Files\dlls\op4_weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\op4_weapons\CEagleLaser.h">
+      <Filter>Header Files\dlls\op4_weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\op4_weapons\CM249.h">
+      <Filter>Header Files\dlls\op4_weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\op4_weapons\CPenguin.h">
+      <Filter>Header Files\dlls\op4_weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\const.h">
+      <Filter>Header Files\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\mathlib.h">
+      <Filter>Header Files\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\UserMessages.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\entity_state.h">
+      <Filter>Header Files\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\weaponinfo.h">
+      <Filter>Header Files\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\op4_weapons\CGrapple.h">
+      <Filter>Header Files\dlls\op4_weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\op4_weapons\CGrappleTip.h">
+      <Filter>Header Files\dlls\op4_weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\op4_weapons\CSniperRifle.h">
+      <Filter>Header Files\dlls\op4_weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\op4_weapons\CPipewrench.h">
+      <Filter>Header Files\dlls\op4_weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\op4_weapons\CKnife.h">
+      <Filter>Header Files\dlls\op4_weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\rope\CElectrifiedWire.h">
+      <Filter>Header Files\dlls\rope</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\rope\CRope.h">
+      <Filter>Header Files\dlls\rope</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\rope\CRopeSample.h">
+      <Filter>Header Files\dlls\rope</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\rope\CRopeSegment.h">
+      <Filter>Header Files\dlls\rope</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\op4_weapons\CDisplacer.h">
+      <Filter>Header Files\dlls\op4_weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\op4_weapons\CDisplacerBall.h">
+      <Filter>Header Files\dlls\op4_weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\op4_weapons\CShockRifle.h">
+      <Filter>Header Files\dlls\op4_weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\op4_weapons\CShockBeam.h">
+      <Filter>Header Files\dlls\op4_weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\op4_weapons\CSpore.h">
+      <Filter>Header Files\dlls\op4_weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\op4_weapons\CSporeLauncher.h">
+      <Filter>Header Files\dlls\op4_weapons</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
