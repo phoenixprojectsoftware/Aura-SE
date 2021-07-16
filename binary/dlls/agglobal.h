@@ -106,7 +106,7 @@ extern cvar_t   ag_start_knife;
 extern cvar_t   ag_start_pipewrench;
 extern cvar_t   ag_start_shockrifle;
 extern cvar_t   ag_start_sniperrifle;
-extern cvar_t   ag_start_spore;
+extern cvar_t   ag_start_sporelauncher;
 
 extern cvar_t	ag_start_hgrenade;
 extern cvar_t	ag_start_satchel;
@@ -120,6 +120,10 @@ extern cvar_t	ag_start_uranium;
 extern cvar_t	ag_start_bolts;
 extern cvar_t	ag_start_rockets;
 extern cvar_t	ag_start_357ammo;
+
+extern cvar_t   ag_start_ammo556;
+extern cvar_t	ag_start_ammo762;
+extern cvar_t	ag_start_ammoSpore;
 
 extern cvar_t	ag_start_armour;
 extern cvar_t	ag_start_health;

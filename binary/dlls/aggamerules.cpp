@@ -395,7 +395,7 @@ void AgGameRules::PlayerSpawn(CBasePlayer* pPlayer)
                 pPlayer->GiveNamedItem("weapon_shockrifle");
             if (0 < ag_start_sniperrifle.value)
                 pPlayer->GiveNamedItem("weapon_sniperrifle");
-            if (0 < ag_start_spore.value)
+            if (0 < ag_start_sporelauncher.value)
                 pPlayer->GiveNamedItem("weapon_sporelauncher");
 
             if (0 < ag_start_hgrenade.value)
@@ -422,6 +422,12 @@ void AgGameRules::PlayerSpawn(CBasePlayer* pPlayer)
                 pPlayer->GiveAmmo(ag_start_bolts.value, "bolts", BOLT_MAX_CARRY);
             if (0 < ag_start_rockets.value)
                 pPlayer->GiveAmmo(ag_start_rockets.value, "rockets", ROCKET_MAX_CARRY);
+            if (0 < ag_start_ammo556.value)
+                pPlayer->GiveAmmo(ag_start_ammo556.value, "556", M249_MAX_CARRY);
+            if (0 < ag_start_ammo762.value)
+                pPlayer->GiveAmmo(ag_start_ammo762.value, "762", EAGLE_MAX_CLIP);
+            if (0 < ag_start_ammoSpore.value)
+                pPlayer->GiveAmmo(ag_start_ammoSpore.value, "spores", SPORELAUNCHER_MAX_CARRY);
         }
     }
     pPlayer->m_bInSpawn = false;

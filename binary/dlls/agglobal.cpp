@@ -144,9 +144,14 @@ DLL_GLOBAL cvar_t   ag_start_knife = { "sv_aura_start_knife" ,"0" };
 DLL_GLOBAL cvar_t   ag_start_pipewrench = { "sv_aura_start_pipewrench", "0" };
 DLL_GLOBAL cvar_t   ag_start_shockrifle = { "sv_aura_start_shockrifle", "0" };
 DLL_GLOBAL cvar_t   ag_start_sniperrifle = { "sv_aura_start_sniper", "0" };
-DLL_GLOBAL cvar_t   ag_start_spore = { "sv_aura_start_sporelauncher", "0" };
+DLL_GLOBAL cvar_t   ag_start_sporelauncher = { "sv_aura_start_sporelauncher", "0" };
 DLL_GLOBAL cvar_t	ag_start_armour = { "sv_aura_start_armour","0" };
 DLL_GLOBAL cvar_t	ag_start_health = { "sv_aura_start_health","100" };
+
+// Opposing Force ammo
+DLL_GLOBAL cvar_t   ag_start_ammo556 = { "sv_aura_start_ammo_556", "0" }; // this should be 200 in gamemodes
+DLL_GLOBAL cvar_t   ag_start_ammo762 = { "sv_aura_start_ammo_762", "0" }; // this should be 15 in gamemodes
+DLL_GLOBAL cvar_t   ag_start_ammoSpore = { "sv_aura_start_ammo_spore", "0" }; // this should be 20 in gamemodes
 
 // the default values can be taken from skill.cfg and skillopfor.cfg | opposing force weapons will NOT have customisable damage, will likely become a feature
 // in zamnhlmp 2.7 // season 7 // aura 2.1
@@ -301,7 +306,7 @@ void AgInitGame()
     CVAR_REGISTER(&ag_start_pipewrench);
     CVAR_REGISTER(&ag_start_shockrifle);
     CVAR_REGISTER(&ag_start_sniperrifle);
-    CVAR_REGISTER(&ag_start_spore);
+    CVAR_REGISTER(&ag_start_sporelauncher);
 
     CVAR_REGISTER(&ag_start_hgrenade);
     CVAR_REGISTER(&ag_start_satchel);
@@ -315,6 +320,11 @@ void AgInitGame()
     CVAR_REGISTER(&ag_start_bolts);
     CVAR_REGISTER(&ag_start_rockets);
     CVAR_REGISTER(&ag_start_357ammo);
+
+    // Opposing Force ammo
+    CVAR_REGISTER(&ag_start_ammo556);
+    CVAR_REGISTER(&ag_start_ammo762);
+    CVAR_REGISTER(&ag_start_ammoSpore);
 
     CVAR_REGISTER(&ag_start_armour);
     CVAR_REGISTER(&ag_start_health);
