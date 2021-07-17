@@ -432,7 +432,7 @@ void AgGameRules::PlayerSpawn(CBasePlayer* pPlayer)
     }
     pPlayer->m_bInSpawn = false;
 
-    /*
+    
     //Quake1 teleport splash around him.
     MESSAGE_BEGIN( MSG_BROADCAST, SVC_TEMPENTITY );
       WRITE_BYTE( TE_TELEPORT );
@@ -440,7 +440,7 @@ void AgGameRules::PlayerSpawn(CBasePlayer* pPlayer)
       WRITE_COORD(pPlayer->pev->origin.y);
       WRITE_COORD(pPlayer->pev->origin.z);
     MESSAGE_END();
-    */
+    
 }
 
 BOOL AgGameRules::FShouldSwitchWeapon(CBasePlayer* pPlayer, CBasePlayerItem* pWeapon)
