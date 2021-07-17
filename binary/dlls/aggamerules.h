@@ -47,6 +47,7 @@ public:
 
     virtual BOOL FPlayerCanRespawn(CBasePlayer* pPlayer);
     virtual void PlayerSpawn(CBasePlayer* pPlayer);
+
     virtual BOOL FShouldSwitchWeapon(CBasePlayer* pPlayer, CBasePlayerItem* pWeapon);// should the player switch to this weapon?
     virtual BOOL GetNextBestWeapon(CBasePlayer* pPlayer, CBasePlayerItem* pCurrentWeapon);
 

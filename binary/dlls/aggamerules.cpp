@@ -176,6 +176,8 @@ BOOL AgGameRules::FPlayerCanRespawn(CBasePlayer* pPlayer)
 
 void AgGameRules::PlayerSpawn(CBasePlayer* pPlayer)
 {
+    PRECACHE_SOUND("player/friend_online.wav");
+
     ASSERT(NULL != pPlayer);
     if (!pPlayer)
         return;
@@ -431,15 +433,15 @@ void AgGameRules::PlayerSpawn(CBasePlayer* pPlayer)
         }
     }
     pPlayer->m_bInSpawn = false;
-
     
-    //Quake1 teleport splash around him.
-    MESSAGE_BEGIN( MSG_BROADCAST, SVC_TEMPENTITY );
-      WRITE_BYTE( TE_TELEPORT );
-      WRITE_COORD(pPlayer->pev->origin.x);
-      WRITE_COORD(pPlayer->pev->origin.y);
-      WRITE_COORD(pPlayer->pev->origin.z);
-    MESSAGE_END();
+        //Quake1 teleport splash around him.
+        MESSAGE_BEGIN(MSG_BROADCAST, SVC_TEMPENTITY);
+        WRITE_BYTE(TE_TELEPORT);
+        WRITE_COORD(pPlayer->pev->origin.x);
+        WRITE_COORD(pPlayer->pev->origin.y);
+        WRITE_COORD(pPlayer->pev->origin.z);
+        MESSAGE_END();
+        EMIT_SOUND_DYN(ENT(pPlayer->pev), CHAN_ITEM, "player/friend_online.wav", 1, ATTN_NORM, 0, PITCH_HIGH);
     
 }
 
