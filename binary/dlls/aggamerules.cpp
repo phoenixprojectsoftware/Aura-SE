@@ -759,7 +759,7 @@ void AgGameRules::PlayerKilled(CBasePlayer* pVictim, entvars_t* pKiller, entvars
 
 struct BANWEAPON
 {
-    char szWeapon[20];
+    char szWeapon[40];
     cvar_t* pBan;
 };
 FILE_GLOBAL BANWEAPON s_Bans[] =
