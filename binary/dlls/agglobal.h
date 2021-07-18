@@ -66,7 +66,7 @@ extern cvar_t   ag_ban_knife;
 extern cvar_t   ag_ban_pipewrench;
 extern cvar_t   ag_ban_shockrifle;
 extern cvar_t   ag_ban_sniperrifle;
-extern cvar_t   ag_ban_spore;
+extern cvar_t   ag_ban_sporelauncher;
 
 
 extern cvar_t	ag_ban_hgrenade;

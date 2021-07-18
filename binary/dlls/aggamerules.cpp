@@ -313,6 +313,27 @@ void AgGameRules::PlayerSpawn(CBasePlayer* pPlayer)
                 pPlayer->GiveNamedItem("weapon_snark");
             if (1 > ag_ban_hornet.value)
                 pPlayer->GiveNamedItem("weapon_hornetgun");
+            if (1 > ag_ban_penguin.value)
+                pPlayer->GiveNamedItem("weapon_penguin");
+            if (1 > ag_ban_m249.value)
+                pPlayer->GiveNamedItem("weapon_m249");
+            if (1 > ag_ban_eagle.value)
+                pPlayer->GiveNamedItem("weapon_eagle");
+            if (1 > ag_ban_displacer.value)
+                pPlayer->GiveNamedItem("weapon_displacer");
+            if (0 < ag_ban_grapple.value)
+                pPlayer->GiveNamedItem("weapon_grapple");
+            if (1 > ag_ban_knife.value)
+                pPlayer->GiveNamedItem("weapon_knife");
+            if (0 < ag_ban_pipewrench.value)
+                pPlayer->GiveNamedItem("weapon_pipewrench");
+            if (1 > ag_ban_shockrifle.value)
+                pPlayer->GiveNamedItem("weapon_shockrifle");
+            if (0 < ag_ban_sniperrifle.value)
+                pPlayer->GiveNamedItem("weapon_sniperrifle");
+            if (1 > ag_ban_sporelauncher.value)
+                pPlayer->GiveNamedItem("weapon_sporelauncher");
+
 
             if (1 > ag_ban_hgrenade.value)
                 pPlayer->GiveAmmo(HANDGRENADE_MAX_CARRY, "Hand Grenade", HANDGRENADE_MAX_CARRY);
@@ -702,6 +723,12 @@ int AgGameRules::IPointsForKill(CBasePlayer* pAttacker, CBasePlayer* pKilled)
                 pAttacker->GiveAmmo(ag_start_bolts.value, "bolts", BOLT_MAX_CARRY);
             if (0 < ag_start_rockets.value)
                 pAttacker->GiveAmmo(ag_start_rockets.value, "rockets", ROCKET_MAX_CARRY);
+            if (0 < ag_start_ammo556.value)
+                pAttacker->GiveAmmo(ag_start_ammo556.value, "556", M249_MAX_CARRY);
+            if (0 < ag_start_ammo762.value)
+                pAttacker->GiveAmmo(ag_start_ammo762.value, "762", EAGLE_MAX_CLIP);
+            if (0 < ag_start_ammoSpore.value)
+                pAttacker->GiveAmmo(ag_start_ammoSpore.value, "spores", SPORELAUNCHER_MAX_CARRY);
         }
     }
 
@@ -752,6 +779,16 @@ FILE_GLOBAL BANWEAPON s_Bans[] =
   "weapon_satchel",&ag_ban_satchel,
   "weapon_tripmine",&ag_ban_tripmine,
   "weapon_snark",&ag_ban_snark,
+  "weapon_penguin", &ag_ban_penguin,
+  "weapon_m249", &ag_ban_m249,
+  "weapon_eagle", &ag_ban_eagle,
+  "weapon_displacer", &ag_ban_displacer,
+  "weapon_grapple", &ag_ban_grapple,
+  "weapon_knife", &ag_ban_knife,
+  "weapon_pipewrench", &ag_ban_pipewrench,
+  "weapon_shockrifle", &ag_ban_shockrifle,
+  "weapon_sniperrifle", &ag_ban_sniperrifle,
+  "weapon_sporelauncher", &ag_ban_sporelauncher,
   "item_longjump",&ag_ban_longjump,
   "ammo_ARgrenades",&ag_ban_m203,
   "ammo_9mmclip",&ag_ban_9mmar,

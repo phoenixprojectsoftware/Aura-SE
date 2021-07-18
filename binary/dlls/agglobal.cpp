@@ -93,7 +93,7 @@ DLL_GLOBAL cvar_t   ag_ban_knife = { "sv_aura_ban_knife" ,"0" };
 DLL_GLOBAL cvar_t   ag_ban_pipewrench = { "sv_aura_ban_pipewrench", "0" };
 DLL_GLOBAL cvar_t   ag_ban_shockrifle = { "sv_aura_ban_shockrifle", "0" };
 DLL_GLOBAL cvar_t   ag_ban_sniperrifle = { "sv_aura_ban_sniper", "0" };
-DLL_GLOBAL cvar_t   ag_ban_spore = { "sv_aura_ban_sporelauncher", "0" };
+DLL_GLOBAL cvar_t   ag_ban_sporelauncher = { "sv_aura_ban_sporelauncher", "0" };
 
 DLL_GLOBAL cvar_t	ag_ban_hgrenade = { "sv_aura_ban_hgrenade","0" };
 DLL_GLOBAL cvar_t	ag_ban_satchel = { "sv_aura_ban_satchel","0" };
@@ -268,7 +268,7 @@ void AgInitGame()
     CVAR_REGISTER(&ag_ban_pipewrench);
     CVAR_REGISTER(&ag_ban_shockrifle);
     CVAR_REGISTER(&ag_ban_sniperrifle);
-    CVAR_REGISTER(&ag_ban_spore);
+    CVAR_REGISTER(&ag_ban_sporelauncher);
 
     CVAR_REGISTER(&ag_ban_hgrenade);
     CVAR_REGISTER(&ag_ban_satchel);
