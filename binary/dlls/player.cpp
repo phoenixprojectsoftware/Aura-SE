@@ -2032,9 +2032,9 @@ void CBasePlayer::NewPunch()
 		VectorMA(m_vecPunchangle, -springForceMagnitude, pev->punchangle, m_vecPunchangle);
 
 		// don't wrap around
-		pev->punchangle[0] = clamp(pev->punchangle[0], -7, 7);
-		pev->punchangle[1] = clamp(pev->punchangle[1], -179, 179);
-		pev->punchangle[2] = clamp(pev->punchangle[2], -7, 7);
+		//pev->punchangle[0] = clamp(pev->punchangle[0], -7, 7);
+		//pev->punchangle[1] = clamp(pev->punchangle[1], -179, 179);
+		//pev->punchangle[2] = clamp(pev->punchangle[2], -7, 7);
 	}
 }
 
