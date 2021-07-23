@@ -104,6 +104,7 @@ void CMP5::Precache( void )
 	PRECACHE_SOUND ("weapons/hks1.wav");// H to the K
 	PRECACHE_SOUND ("weapons/hks2.wav");// H to the K
 	PRECACHE_SOUND ("weapons/hks3.wav");// H to the K
+	PRECACHE_SOUND ("weapons/hks4.wav");// H to the K
 
 	PRECACHE_SOUND( "weapons/glauncher.wav" );
 	PRECACHE_SOUND( "weapons/glauncher2.wav" );
