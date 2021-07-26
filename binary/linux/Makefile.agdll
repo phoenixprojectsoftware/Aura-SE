@@ -8,10 +8,14 @@ MODNAME=aura
 
 HLDLL_SRC_DIR=$(SOURCE_DIR)/dlls
 HLWPN_SRC_DIR=$(HLDLL_SRC_DIR)/wpn_shared
+OP4_SRC_DIR=$(HLDLL_SRC_DIR)/op4_weapons
+ROPE_SRC_DIR=$(HLDLL_SRC_DIR)/rope
 MINISTL_SRC_DIR=$(SOURCE_DIR)/ministl
 
 HLDLL_OBJ_DIR=$(BUILD_OBJ_DIR)/auradll
 HLWPN_OBJ_DIR=$(HLDLL_OBJ_DIR)/wpn_shared
+OP4_OBJ_DIR=$(HLDLL_OBJ_DIR)/op4_weapons
+ROPE_OBJ_DIR=$(HLDLL_OBJ_DIR)/rope
 PM_OBJ_DIR=$(HLDLL_OBJ_DIR)/pm_shared
 GAME_SHARED_OBJ_DIR=$(HLDLL_OBJ_DIR)/game_shared
 MINISTL_OBJ_DIR=$(HLDLL_OBJ_DIR)/ministl
@@ -27,6 +31,8 @@ CFLAGS=$(BASE_CFLAGS)  $(ARCH_CFLAGS)  -DCLIENT_WEAPONS -I/usr/include/x86_64-li
 
 HLDLL_INCLUDEDIRS=-I$(ENGINE_SRC_DIR) -I$(COMMON_SRC_DIR) -I$(PM_SRC_DIR) -I$(GAME_SHARED_SRC_DIR) -I$(MINISTL_SRC_DIR) -I$(PUBLIC_SRC_DIR)
 HLWPN_INCLUDEDIRS=-I$(HLDLL_SRC_DIR) -I$(ENGINE_SRC_DIR) -I$(COMMON_SRC_DIR) -I$(PM_SRC_DIR) -I$(PUBLIC_SRC_DIR)
+OP4_INCLUDEDIRS=-I$(HLDLL_SRC_DIR) -I$(ENGINE_SRC_DIR) -I$(COMMON_SRC_DIR) -I$(PM_SRC_DIR) -I$(PUBLIC_SRC_DIR)
+ROPE_INCLUDEDIRS=-I$(HLDLL_SRC_DIR) -I$(ENGINE_SRC_DIR) -I$(COMMON_SRC_DIR) -I$(PM_SRC_DIR) -I$(PUBLIC_SRC_DIR)
 PM_INCLUDEDIRS=-I$(COMMON_SRC_DIR)  -I$(PUBLIC_SRC_DIR)
 GAME_SHARED_INCLUDEDIRS=-I$(HLDLL_SRC_DIR) -I$(ENGINE_SRC_DIR) -I$(COMMON_SRC_DIR) -I$(PM_SRC_DIR) -I$(PUBLIC_SRC_DIR)
 
@@ -34,6 +40,8 @@ LDFLAGS= -lm -lstdc++
 
 DO_HLDLL_CC=$(CC) $(HLDLL_INCLUDEDIRS) $(CFLAGS) -o $@ -c $<
 DO_HLWPN_CC=$(CC) $(HLWPN_INCLUDEDIRS) $(CFLAGS) -o $@ -c $<
+DO_OP4_CC=$(CC) $(OP4_INCLUDEDIRS) $(CFLAGS) -o $@ -c $<
+DO_ROPRE_CC=$(CC) $(ROPE_INCLUDEDIRS) $(CFLAGS) -o $@ -c $<
 DO_PM_CC=$(CC) $(PM_INCLUDEDIRS) $(CFLAGS) -o $@ -c $<
 DO_GAME_SHARED_CC=$(CC) $(GAME_SHARED_INCLUDEDIRS) $(CFLAGS) -o $@ -c $<
 DO_MINISTL_CC=$(CC) $(CFLAGS) -o $@ -c $<
@@ -164,26 +172,30 @@ HLDLL_OBJS = \
 	$(HLDLL_OBJ_DIR)/aglms.o \
 	$(HLDLL_OBJ_DIR)/agdom.o \
 	$(HLDLL_OBJ_DIR)/spawnchooser.o \
-	$(HLDLL_OBJ_DIR)/op4_weapons/CEagle.o \
-	$(HLDLL_OBJ_DIR)/op4_weapons/CEagleLaser.o \
-	$(HLDLL_OBJ_DIR)/op4_weapons/CGrapple.o \
-	$(HLDLL_OBJ_DIR)/op4_weapons/CGrappleTip.o \
-	$(HLDLL_OBJ_DIR)/op4_weapons/CKnife.o \
-	$(HLDLL_OBJ_DIR)/op4_weapons/CM249.o \
-	$(HLDLL_OBJ_DIR)/op4_weapons/CPenguin.o \
-	$(HLDLL_OBJ_DIR)/op4_weapons/CPipewrench.o \
-	$(HLDLL_OBJ_DIR)/op4_weapons/CSniperRifle.o \
-	$(HLDLL_OBJ_DIR)/op4_weapons/CShockBeam.o \
-	$(HLDLL_OBJ_DIR)/op4_weapons/CShockRifle.o \
-	$(HLDLL_OBJ_DIR)/op4_weapons/CSpore.o \
-	$(HLDLL_OBJ_DIR)/op4_weapons/CSporeLauncher.o \
-	$(HLDLL_OBJ_DIR)/rope/CElectrifiedWire.o \
-	$(HLDLL_OBJ_DIR)/rope/CRope.o \
-	$(HLDLL_OBJ_DIR)/rope/CRopeSample.o \
-	$(HLDLL_OBJ_DIR)/rope/CRopeSegment.o \
 
 HLWPN_OBJS = \
 	$(HLWPN_OBJ_DIR)/hl_wpn_glock.o
+
+OP4_OBJS = \
+	$(OP4_OBJ_DIR)/CEagle.o \
+	$(OP4_OBJ_DIR)/CEagleLaser.o \
+	$(OP4_OBJ_DIR)/CGrapple.o \
+	$(OP4_OBJ_DIR)/CGrappleTip.o \
+	$(OP4_OBJ_DIR)/CKnife.o \
+	$(OP4_OBJ_DIR)/CM249.o \
+	$(OP4_OBJ_DIR)/CPenguin.o \
+	$(OP4_OBJ_DIR)/CPipewrench.o \
+	$(OP4_OBJ_DIR)/CSniperRifle.o \
+	$(OP4_OBJ_DIR)/CShockBeam.o \
+	$(OP4_OBJ_DIR)/CShockRifle.o \
+	$(OP4_OBJ_DIR)/CSpore.o \
+	$(OP4_OBJ_DIR)/CSporeLauncher.o
+
+ROPE_OBJS = \
+	$(ROPE_OBJ_DIR)/CElectrifiedWire.o \
+	$(ROPE_OBJ_DIR)/CRope.o \
+	$(ROPE_OBJ_DIR)/CRopeSample.o \
+	$(ROPE_OBJ_DIR)/CRopeSegment.o
 
 PM_OBJS = \
 	$(PM_OBJ_DIR)/pm_shared.o \
@@ -202,11 +214,13 @@ dirs:
 	-mkdir $(BUILD_OBJ_DIR)
 	-mkdir $(HLDLL_OBJ_DIR)
 	-mkdir $(HLWPN_OBJ_DIR)
+	-mkdir $(OP4_OBJ_DIR)
+	-mkdir $(ROPE_OBJ_DIR)
 	-mkdir $(PM_OBJ_DIR)
 	-mkdir $(GAME_SHARED_OBJ_DIR)
 	-mkdir $(MINISTL_OBJ_DIR)
 
-$(MODNAME).$(SHLIBEXT): $(HLDLL_OBJS) $(HLWPN_OBJS) $(PM_OBJS) $(GAME_SHARED_OBJS) $(MINISTL_OBJS)
+$(MODNAME).$(SHLIBEXT): $(HLDLL_OBJS) $(HLWPN_OBJS) $(OP4_OBJS) $(ROPE_OBJS) $(PM_OBJS) $(GAME_SHARED_OBJS) $(MINISTL_OBJS)
 	$(CC) $(LDFLAGS) $(SHLIBLDFLAGS) -o $(BUILD_DIR)/$@ $(HLDLL_OBJS) $(HLWPN_OBJS) $(PM_OBJS) $(GAME_SHARED_OBJS)
 	bash gendbg.sh $(BUILD_DIR)/$(MODNAME).$(SHLIBEXT)
 	
@@ -215,6 +229,12 @@ $(HLWPN_OBJ_DIR)/%.o : $(HLWPN_SRC_DIR)/%.cpp
 
 $(HLDLL_OBJ_DIR)/%.o : $(HLDLL_SRC_DIR)/%.cpp
 	$(DO_HLDLL_CC)
+
+$(OP4_OBJ_DIR)/%.o : $(OP4_SRC_DIR)/%.cpp
+	$(DO_OP4_CC)
+
+$(ROPE_OBJ_DIR)/%.o : $(ROPE_SRC_DIR)/%.cpp
+	$(DO_ROPE_CC)
 
 $(PM_OBJ_DIR)/%.o : $(PM_SRC_DIR)/%.cpp
 	$(DO_PM_CC)
