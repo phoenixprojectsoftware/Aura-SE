@@ -109,7 +109,7 @@ int CEgon::AddToPlayer(CBasePlayer* pPlayer)
 
 void CEgon::Holster(int skiplocal /* = 0 */)
 {
-	m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + 0.5;
+	m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + 0.05;
 	SendWeaponAnim(EGON_HOLSTER);
 
 	EndAttack();
@@ -195,7 +195,7 @@ void CEgon::Attack(void)
 	{
 		if (!HasAmmo())
 		{
-			m_flNextPrimaryAttack = m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 0.25;
+			m_flNextPrimaryAttack = m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 0.05;
 			PlayEmptySound();
 			return;
 		}
@@ -348,8 +348,8 @@ void CEgon::Fire(const Vector& vecOrigSrc, const Vector& vecDir)
 				//multiplayer uses 5 ammo/second
 				if (gpGlobals->time >= m_flAmmoUseTime)
 				{
-					UseAmmo(1);
-					m_flAmmoUseTime = gpGlobals->time + 0.01; // This is the actual Egon fire rate
+					UseAmmo(5);
+					m_flAmmoUseTime = gpGlobals->time + 0.001; // This is the actual Egon fire rate
 				}
 			}
 			else
@@ -357,8 +357,8 @@ void CEgon::Fire(const Vector& vecOrigSrc, const Vector& vecDir)
 				// Wide mode uses 10 charges per second in single player
 				if (gpGlobals->time >= m_flAmmoUseTime)
 				{
-					UseAmmo(1);
-					m_flAmmoUseTime = gpGlobals->time + 0.01;
+					UseAmmo(5);
+					m_flAmmoUseTime = gpGlobals->time + 0.001;
 				}
 			}
 
