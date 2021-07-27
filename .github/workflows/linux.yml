@@ -19,6 +19,7 @@ jobs:
        sudo apt install gcc
        sudo apt install clang
        sudo apt install libc6-dev-i386
+       sudo apt-get install gcc-multilib g++-multilib
     - name: Build aura.so
       working-directory: binary/linux
       run: make
