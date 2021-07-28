@@ -171,7 +171,7 @@ HLDLL_OBJS = \
 	$(HLDLL_OBJ_DIR)/agctf.o \
 	$(HLDLL_OBJ_DIR)/aglms.o \
 	$(HLDLL_OBJ_DIR)/agdom.o \
-	$(HLDLL_OBJ_DIR)/spawnchooser.o \
+	$(HLDLL_OBJ_DIR)/spawnchooser.o
 
 HLWPN_OBJS = \
 	$(HLWPN_OBJ_DIR)/hl_wpn_glock.o
@@ -221,7 +221,7 @@ dirs:
 	-mkdir $(MINISTL_OBJ_DIR)
 
 $(MODNAME).$(SHLIBEXT): $(HLDLL_OBJS) $(HLWPN_OBJS) $(OP4_OBJS) $(ROPE_OBJS) $(PM_OBJS) $(GAME_SHARED_OBJS) $(MINISTL_OBJS)
-	$(CC) $(LDFLAGS) $(SHLIBLDFLAGS) -o $(BUILD_DIR)/$@ $(HLDLL_OBJS) $(HLWPN_OBJS) $(PM_OBJS) $(GAME_SHARED_OBJS)
+	$(CC) $(LDFLAGS) $(SHLIBLDFLAGS) -o $(BUILD_DIR)/$@ $(HLDLL_OBJS) $(HLWPN_OBJS) $(OP4_OBJS) $(ROPE_OBJS) $(MINISTL_OBJS) $(PM_OBJS) $(GAME_SHARED_OBJS)
 	bash gendbg.sh $(BUILD_DIR)/$(MODNAME).$(SHLIBEXT)
 	
 $(HLWPN_OBJ_DIR)/%.o : $(HLWPN_SRC_DIR)/%.cpp
@@ -251,4 +251,6 @@ clean:
 	-rm -rf $(PM_OBJ_DIR)
 	-rm -rf $(HLWPN_OBJ_DIR)
 	-rm -rf $(HLDLL_OBJ_DIR)
+	-rm -rf $(OP4_OBJ_DIR)
+	-rm -rf $(ROPE_OBJ_DIR)
 	-rm -f hl_$(ARCH).$(SHLIBEXT)
