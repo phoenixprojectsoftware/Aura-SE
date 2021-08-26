@@ -38,5 +38,9 @@ these commands were broken.
 ![ZAMNHLMP 2.5.1 promo](zamnhlmp-2.5.1.png "ZAMNHLMP 2.5.1 promo")
 
 #### 2.0
-Aura 2.0 is coming soon. It will be included with ZAMNHLMP 2.6. Phoenix will announce the changes
-to not only Aura 2.0 but also ZAMNHLMP 2.6 in the near future.
+Aura 2.0 was released with ZAMNHLMP 2.6. This version of Aura introduced many new features and enhancements, including
+viewmodel bob and viewpunch backported from the Source engine, support for GNU/Linux,
+footstep sounds for wooden surfaces, a CVar to change the MP5's fire-rate, the Opposing Force weapons
+and much more. The full changelog for ZAMNHLMP 2.6 + Aura 2.0 can be seen [here.](https://phoenixprojectsoftware.github.io/zamnhlmp/changelogs/updates/2.6.md)
+
+![ZAMNHLMP 2.6 promo](zamnhlmp-2.6.png "ZAMNHLMP 2.6 promo")
