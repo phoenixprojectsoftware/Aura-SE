@@ -510,6 +510,9 @@
     <ClCompile Include="..\..\dlls\op4_weapons\CSporeLauncher.cpp">
       <Filter>Source Files\dlls\op4_weapons</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\dlls\wesley.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\dlls\doors.h">

@@ -147,6 +147,7 @@ HLDLL_OBJS = \
 	$(HLDLL_OBJ_DIR)/xen.o \
 	$(HLDLL_OBJ_DIR)/zamn.o \
 	$(HLDLL_OBJ_DIR)/zombie.o \
+	$(HLDLL_OBJ_DIR)/wesley.o \
 	$(HLDLL_OBJ_DIR)/agadmin.o \
 	$(HLDLL_OBJ_DIR)/agadmincache.o \
 	$(HLDLL_OBJ_DIR)/agarena.o \
