@@ -6337,6 +6337,29 @@ void CBasePlayer::GetInventoryInfo()
 	}
 }
 
+CBasePlayerItem* CBasePlayer::GetWeapon(std::string className)
+{
+	CBasePlayerItem* pWeapon = nullptr;
+
+	for (auto i = 0; i < MAX_ITEM_TYPES; i++)
+	{
+		pWeapon = m_rgpPlayerItems[i];
+
+		while (pWeapon)
+		{
+			if (FClassnameIs(pWeapon->pev, className.c_str()))
+			{
+				//CBasePlayerWeapon* weapon = dynamic_cast<CBasePlayerWeapon*>(pWeapon->GetWeaponPtr());
+				return pWeapon;
+			}
+
+			pWeapon = pWeapon->m_pNext;
+		}
+	}
+
+	return pWeapon;
+}
+
 float CBasePlayer::GetSpawnkillingPotential()
 {
 	// Some coefficient that we'll be building to determine

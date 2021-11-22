@@ -21,9 +21,6 @@
 #include	"gamerules.h"
 #include	"game.h"
 
-// How many units away from the center of the map will entities stop working
-#define WORLD_BOUNDARY_DIST 262144
-
 void EntvarsKeyvalue( entvars_t *pev, KeyValueData *pkvd );
 
 void PM_Move ( struct playermove_s *ppmove, int server );

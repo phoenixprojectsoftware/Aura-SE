@@ -107,6 +107,9 @@ class CSquadMonster;
 
 #define	SF_NORESPAWN	( 1 << 30 )// !!!set this bit on guns and stuff that should never respawn.
 
+// How many units away from the center of the map will entities stop working
+constexpr float WORLD_BOUNDARY_DIST = 262144.0f;
+
 //
 // EHANDLE. Safe way to point to CBaseEntities who may die between frames
 //

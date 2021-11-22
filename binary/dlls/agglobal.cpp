@@ -239,6 +239,10 @@ DLL_GLOBAL cvar_t	ag_fps_limit_punishment_slap_intensity = { "ag_fps_limit_punis
 DLL_GLOBAL cvar_t	ag_fps_limit_punishment_slap_interval = { "ag_fps_limit_punishment_slap_interval", "1.0", FCVAR_SERVER };  // Default: 1 second - Time between slaps
 DLL_GLOBAL cvar_t	ag_fps_limit_punishment_ban_time = { "ag_fps_limit_punishment_ban_time", "3", FCVAR_SERVER };  // Default: 3 minutes - How much time to ban them for
 
+DLL_GLOBAL cvar_t	ag_satchel_destroyable = { "sv_ag_satchel_destroyable", "0", FCVAR_SERVER }; // Default: 0 - Cannot destroy satchels (only with the detonator)
+DLL_GLOBAL cvar_t	ag_satchel_health      = { "sv_ag_satchel_health",     "15", FCVAR_SERVER }; // Default: 15 hp
+DLL_GLOBAL cvar_t	ag_satchel_solid       = { "sv_ag_satchel_solid",       "1", FCVAR_SERVER }; // Default: 1 - Solid, players can collide with them
+
 DLL_GLOBAL cvar_t	mm_agsay = { "mm_agsay","1", FCVAR_SERVER };
 
 
@@ -461,6 +465,10 @@ void AgInitGame()
     CVAR_REGISTER(&ag_fps_limit_punishment_slap_intensity);
     CVAR_REGISTER(&ag_fps_limit_punishment_slap_interval);
     CVAR_REGISTER(&ag_fps_limit_punishment_ban_time);
+
+    CVAR_REGISTER(&ag_satchel_destroyable);
+    CVAR_REGISTER(&ag_satchel_health);
+    CVAR_REGISTER(&ag_satchel_solid);
 
     CVAR_REGISTER(&mm_agsay);
 
