@@ -366,7 +366,10 @@ void CHalfLifeTeamplay::ChangePlayerTeam( CBasePlayer *pPlayer, const char *pTea
 	{
 		// kill the player,  remove a death,  and let them start on the new team
 		m_DisableDeathMessages = TRUE;
-		m_DisableDeathPenalty = TRUE;
+		if (!ag_match_running.value)
+		{
+			m_DisableDeathPenalty = TRUE;
+		}
 
 		entvars_t *pevWorld = VARS( INDEXENT(0) );
 		pPlayer->TakeDamage( pevWorld, pevWorld, 900, damageFlags );
