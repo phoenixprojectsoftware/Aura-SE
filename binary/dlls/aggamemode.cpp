@@ -156,7 +156,7 @@ void AgGameMode::Help(CBasePlayer* pPlayer)
 {
     for (AgGameMap::iterator itrGames = m_mapGames.begin(); itrGames != m_mapGames.end(); ++itrGames)
     {
-        AgConsole(UTIL_VarArgs("%s - %s", (*itrGames).second->m_sShortname.c_str(), (*itrGames).second->m_sDescription.c_str()), pPlayer);
+        AgConsole(UTIL_VarArgs("%s - %s", (*itrGames).second->m_sCommandName.c_str(), (*itrGames).second->m_sDescription.c_str()), pPlayer);
     }
 }
 
@@ -270,7 +270,7 @@ void AgGameMode::Init()
 
     for (AgGameMap::iterator itrGames = m_mapGames.begin(); itrGames != m_mapGames.end(); ++itrGames)
     {
-        ADD_SERVER_COMMAND((char*)(*itrGames).second->m_sShortname.c_str(), gamemode);
+        ADD_SERVER_COMMAND((char*)(*itrGames).second->m_sCommandName.c_str(), gamemode);
     }
     ADD_SERVER_COMMAND("agnextmode", nextmode);
 }
@@ -313,7 +313,7 @@ void AgGameMode::LoadGames()
         if (pszParse)
         {
             pGame->m_sCfg = *itrFiles;
-            pGame->m_sShortname = pGame->m_sCfg.substr(0, pGame->m_sCfg.size() - 4);
+            pGame->m_sCommandName = pGame->m_sCfg.substr(0, pGame->m_sCfg.size() - 4);
             pGame->m_sName = pszParse;
             pGame->m_sName = pGame->m_sName.substr(2);
 
@@ -326,12 +326,12 @@ void AgGameMode::LoadGames()
 
             if (pGame->IsValid())
             {
-                AgTrim(pGame->m_sShortname);
+                AgTrim(pGame->m_sCommandName);
                 AgTrim(pGame->m_sDescription);
                 AgTrim(pGame->m_sName);
                 AgTrim(pGame->m_sCfg);
-                m_mapGames.insert(AgGameMap::value_type(pGame->m_sShortname, pGame));
-                AgConsole(UTIL_VarArgs("Added gamemode %s", pGame->m_sShortname.c_str()));
+                m_mapGames.insert(AgGameMap::value_type(pGame->m_sCommandName, pGame));
+                AgConsole(UTIL_VarArgs("Added gamemode %s", pGame->m_sCommandName.c_str()));
             }
             else
                 delete pGame;

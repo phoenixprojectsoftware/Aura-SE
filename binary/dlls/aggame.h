@@ -16,7 +16,7 @@ public:
     AgGame();
     virtual ~AgGame();
 
-    AgString m_sShortname;
+    AgString m_sCommandName;
     AgString m_sName;
     AgString m_sCfg;
     AgString m_sDescription;

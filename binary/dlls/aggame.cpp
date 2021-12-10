@@ -24,8 +24,8 @@ AgGame::~AgGame()
 
 bool AgGame::IsValid()
 {
-    return (0 != m_sShortname.size() &&
-        10 > m_sShortname.size() &&
+    return (0 != m_sCommandName.size() &&
+        31 > m_sCommandName.size() &&
         0 != m_sName.size() &&
         0 != m_sCfg.size() &&
         0 != m_sDescription.size());
