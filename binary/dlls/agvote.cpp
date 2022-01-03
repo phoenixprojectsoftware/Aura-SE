@@ -175,7 +175,7 @@ bool AgVote::HandleCommand(CBasePlayer* pPlayer)
                 m_sValue = CMD_ARGS();
         }
 
-        if (m_sVote.size() && 32 > m_sVote.size() && 32 > m_sValue.size())
+        if (m_sVote.size() && 64 > m_sVote.size() && 32 > m_sValue.size())
         {
             //Check map
             if (FStrEq(m_sVote.c_str(), "agmap") ||
