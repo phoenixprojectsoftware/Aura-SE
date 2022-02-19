@@ -1,9 +1,0 @@
-WinBSPC v1.4
-loading D:\Program Files (x86)\Steam\steamapps\common\Half-Life\zamnhlmp\maps\ofboot1.bsp
-allocated 12 MB and 642 KB and 938 bytes of BSP memory
--- HL_LoadMapFromBSP --
-brush size: -3904,-3008,  -80 to  2080, 2624,  864
-freed 12 MB and 642 KB and 938 bytes of BSP memory
-writing C:\Users\djdis\Documents\ofboot1.map
-written 768 brushes
-map file written in     0 seconds
