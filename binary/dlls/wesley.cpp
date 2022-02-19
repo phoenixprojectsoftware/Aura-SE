@@ -464,7 +464,7 @@ void CWesley :: TalkInit()
 	m_szGrp[TLK_ANSWER]  =	"BA_ANSWER";
 	m_szGrp[TLK_QUESTION] =	"BA_QUESTION";
 	m_szGrp[TLK_IDLE] =		"BA_IDLE";
-	m_szGrp[TLK_STARE] =		"BA_STARE";
+	m_szGrp[TLK_STARE] =	"BA_STARE";
 	m_szGrp[TLK_USE] =		"BA_OK";
 	m_szGrp[TLK_UNUSE] =	"BA_WAIT";
 	m_szGrp[TLK_STOP] =		"BA_STOP";
