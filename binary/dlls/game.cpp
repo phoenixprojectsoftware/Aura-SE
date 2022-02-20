@@ -49,8 +49,11 @@ cvar_t  allow_spectators = { "allow_spectators", "1.0", FCVAR_SERVER };		// 0 pr
 // to have some time for saying gg, etc. before changing map, it's part of the intermission
 // mp_intermission_time is the maximum intermission time, so after that it will automatically
 // change map if no one in the server has skipped it before
+// mp_intermission_skip_auto is for skipping the whole intermission (includes chattime) when
+// appropriate, like when there's just 1 player (or none) in the serve
 cvar_t  mp_chattime = {"mp_chattime","6", FCVAR_SERVER };
 cvar_t  mp_intermission_time = {"mp_intermission_time","15", FCVAR_SERVER };
+cvar_t mp_intermission_skip_auto = { "mp_intermission_skip_auto", "1", FCVAR_SERVER };
 
 
 // sv_singleplayer 1: enables entities and stuff that allows playing singleplayer campaigns properly
@@ -630,6 +633,7 @@ void GameDLLInit( void )
 
 	CVAR_REGISTER (&mp_chattime);
 	CVAR_REGISTER (&mp_intermission_time);
+	CVAR_REGISTER(&mp_intermission_skip_auto);
 
 	CVAR_REGISTER (&singleplayer);
 	CVAR_REGISTER (&sploading);

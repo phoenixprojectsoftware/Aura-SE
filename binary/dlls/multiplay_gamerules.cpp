@@ -211,6 +211,7 @@ constexpr float MAX_INTERMISSION_TIME = 120.0;
 
 extern cvar_t mp_chattime;
 extern cvar_t mp_intermission_time;
+extern cvar_t mp_intermission_skip_auto;
 
 extern cvar_t timeleft, fragsleft;
 
@@ -233,15 +234,38 @@ void CHalfLifeMultiplay :: Think ( void )
 
 	if ( g_fGameOver )   // someone else quit the game already
 	{
-		// I'm not sure in what cases executing this would be necessary, having the same code
-		// in `GoToIntermission`. Anyways it was repeated in both places before I touched this
+		// I'm not sure in what cases executing this clamping code would be necessary, having the same code
+		// in `GoToIntermission()`. Anyways it was already repeated in both places before I touched this		
 		ClampIntermissionTime();
 
-		m_flIntermissionEndTime = g_flIntermissionStartTime + mp_chattime.value;
+		auto playerCount = 0;
+		for (auto i = 1; i <= gpGlobals->maxClients; i++)
+		{
+			CBasePlayer* player = AgPlayerByIndex(i);
+			if (!player)
+				continue;
+
+			if (player->pev->flags & FL_FAKECLIENT)
+				continue;
+
+			// So we count players, that might be playing, might be spectators or proxies, but we don't count bots
+			playerCount++;
+		}
+
+		if (mp_intermission_skip_auto.value > 0.0f && playerCount <= 1)
+			m_flIntermissionEndTime = g_flIntermissionStartTime + MIN_INTERMISSION_TIME;
+		else
+			m_flIntermissionEndTime = g_flIntermissionStartTime + mp_chattime.value;
 
 		// check to see if we should change levels now
 		if ( m_flIntermissionEndTime < gpGlobals->time )
 		{
+			if (mp_intermission_skip_auto.value == 2.0f && playerCount <= 1)
+			{
+				ChangeNextLevel();
+				return;
+			}
+
 			if ( m_iEndIntermissionButtonHit  // check that someone has pressed a key, or the max intermission time is over
 				|| ( ( g_flIntermissionStartTime + mp_intermission_time.value ) < gpGlobals->time) )
 					//				ChangeLevel(); // intermission is over
