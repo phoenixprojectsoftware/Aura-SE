@@ -370,11 +370,13 @@ bool AgClient::HandleCommand(CBasePlayer* pPlayer)
         pPlayer->ShowVGUI(MENU_TEAM);
         return true;
     }
+    /*
     else if (FStrEq(CMD_ARGV(0), "agosinfo"))
     {
         AgConsole(AgOSVersion(), pPlayer);
         return true;
     }
+    */
 #ifndef AG_NO_CLIENT_DLL
     else if (FStrEq(CMD_ARGV(0), "maplist"))
     {
