@@ -59,6 +59,7 @@ DLL_GLOBAL cvar_t	ag_vote_mp_timelimit_low = { "sv_aura_vote_mp_timelimit_low","
 DLL_GLOBAL cvar_t	ag_vote_mp_timelimit_high = { "sv_aura_vote_mp_timelimit_high","40" };
 DLL_GLOBAL cvar_t	ag_vote_mp_fraglimit_low = { "sv_aura_vote_mp_fraglimit_low","0" };
 DLL_GLOBAL cvar_t	ag_vote_mp_fraglimit_high = { "sv_aura_vote_mp_fraglimit_high","100" };
+DLL_GLOBAL cvar_t	ag_vote_extra_timelimit = { "sv_aura_vote_extra_timelimit","30" };
 
 DLL_GLOBAL cvar_t	ag_floodmsgs = { "sv_aura_floodmsgs","4" };
 DLL_GLOBAL cvar_t	ag_floodpersecond = { "sv_aura_floodpersecond","4" };
@@ -363,6 +364,7 @@ void AgInitGame()
     CVAR_REGISTER(&ag_vote_mp_timelimit_high);
     CVAR_REGISTER(&ag_vote_mp_fraglimit_low);
     CVAR_REGISTER(&ag_vote_mp_fraglimit_high);
+    CVAR_REGISTER(&ag_vote_extra_timelimit);
 
     CVAR_REGISTER(&ag_floodmsgs);
     CVAR_REGISTER(&ag_floodpersecond);

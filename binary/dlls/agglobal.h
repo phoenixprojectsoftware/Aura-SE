@@ -165,6 +165,7 @@ extern cvar_t	ag_vote_mp_timelimit_low;
 extern cvar_t	ag_vote_mp_timelimit_high;
 extern cvar_t	ag_vote_mp_fraglimit_low;
 extern cvar_t	ag_vote_mp_fraglimit_high;
+extern cvar_t	ag_vote_extra_timelimit;
 
 extern cvar_t	ag_floodmsgs;
 extern cvar_t	ag_floodpersecond;

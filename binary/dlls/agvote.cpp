@@ -34,6 +34,8 @@ FILE_GLOBAL char* s_szVotes[] =
   "agnextmap <mapname> - Change level after this is done.",
   "ag_spectalk <0/1> - Allow spectators to talk to all.",
   "agnextmode <mode> - Change mode after this level.",
+  "agmaxtime - Extends the timelimit to the max allowed by the server.",
+  "agmoretime - Extends the timelimit by a certain amount.",
   "ag_spawn_system <0-3> - Change the player spawn system. 0=classic, 1=random, 2=far, 3=position-aware.",
   "ag_spawn_history_entries <number> - How many of the last used spawnpoints have to be remembered",
   "ag_spawn_avoid_last_spots <fraction> - A fraction of total spawnpoints, that tells the PA and Far systems to avoid using that number of recently used spots. 0.3 is 30%, which is 5 spawns in crossfire, or 7 in boot_camp",
@@ -85,6 +87,33 @@ bool AgVote::HandleCommand(CBasePlayer* pPlayer)
             AgConsole(s_szVotes[i], pPlayer);
 
         GameMode.Help(pPlayer);
+
+        return true;
+    }
+    else if (FStrEq(m_sVote.c_str(), "agmaxtime"))
+    {
+        if (!ag_vote_setting.value)
+        {
+            AgConsole("Voting settings is not allowed here.", pPlayer);
+            return true;
+        }
+        CallVote(pPlayer);
+
+        return true;
+    }
+    else if (FStrEq(m_sVote.c_str(), "agmoretime"))
+    {
+        if (!ag_vote_setting.value)
+        {
+            AgConsole("Voting settings is not allowed here.", pPlayer);
+            return true;
+        }
+        if (!ag_vote_extra_timelimit.value)
+        {
+            AgConsole("Voting for extra timelimit is not allowed here.", pPlayer);
+            return true;
+        }
+        CallVote(pPlayer);
 
         return true;
     }
@@ -485,6 +514,14 @@ void AgVote::Think()
             else if (FStrEq(m_sVote.c_str(), "agkick"))
             {
                 Command.Kick(m_sValue);
+            }
+            else if (FStrEq(m_sVote.c_str(), "agmaxtime"))
+            {
+                Command.MaxTime();
+            }
+            else if (FStrEq(m_sVote.c_str(), "agmoretime"))
+            {
+                Command.MoreTime();
             }
             else
             {

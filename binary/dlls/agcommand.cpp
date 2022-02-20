@@ -83,7 +83,6 @@ void  agabort(void)
     agabort_client(NULL);
 }
 
-
 void  start_client(CBasePlayer* pPlayer)
 {
     if (1 == CMD_ARGC())
@@ -155,7 +154,6 @@ void  spectator(void)
     spectator_client(NULL);
 }
 
-
 void  teamup_client(CBasePlayer* pPlayer)
 {
     if (3 == CMD_ARGC())
@@ -178,7 +176,6 @@ void  variables(void)
     variables_client(NULL);
 }
 
-
 void  exec_client(CBasePlayer* pPlayer)
 {
     if (2 == CMD_ARGC())
@@ -188,6 +185,26 @@ void  exec_client(CBasePlayer* pPlayer)
 void  exec(void)
 {
     exec_client(NULL);
+}
+
+void  agmaxtime_client(CBasePlayer* pPlayer)
+{
+    Command.MaxTime();
+}
+
+void  agmaxtime(void)
+{
+    agmaxtime_client(NULL);
+}
+
+void  agmoretime_client(CBasePlayer* pPlayer)
+{
+    Command.MoreTime();
+}
+
+void  agmoretime(void)
+{
+    agmoretime_client(NULL);
 }
 
 FILE_GLOBAL COMMANDS s_Commands[] =
@@ -209,6 +226,9 @@ FILE_GLOBAL COMMANDS s_Commands[] =
   "agpause",agpause,pause_client,"agpause - Pause server.",
   "help",help,help_client,"help - List commands.",
   "variables",variables,variables_client,"variables - Server variable list.",
+
+  "agmaxtime",agmaxtime,agmaxtime_client,"agmaxtime - Set the time limit to the max allowed by the server",
+  "agmoretime",agmoretime,agmoretime_client,"agmoretime - Extend the time limit, ignoring the max limit",
 };
 
 
@@ -228,6 +248,7 @@ FILE_GLOBAL char* s_szVars[] =
   "sv_aura_vote_mp_timelimit_high <0-999> - Highest timelimit to vote on.",
   "sv_aura_vote_mp_fraglimit_low <0-999> - Lowest fraglimit to vote on.",
   "sv_aura_vote_mp_fraglimit_high <0-999> - Highest fraglimit to vote on.",
+  "sv_aura_vote_extra_timelimit <number> - How many minutes to allow extending the timelimit by.",
   "sv_aura_floodmsgs <4> - Flood messages to tolerate. 0 will deactive it.",
   "sv_aura_floodpersecond <4> - Flood messages per second.",
   "sv_aura_floodwaitdelay <10> - Flood penalty timer.",
@@ -556,6 +577,41 @@ void AgCommand::Exec(const AgString& sExec, CBasePlayer* pPlayer)
     sprintf(szCommand, "exec %s\n", sExec.c_str());
     SERVER_COMMAND(szCommand);
     SERVER_EXECUTE();
+}
+
+void AgCommand::MaxTime()
+{
+    ASSERT(NULL != g_pGameRules);
+    if (!g_pGameRules)
+        return;
+
+    auto maxLimit = ag_vote_mp_timelimit_high.value;
+
+    if (CVAR_GET_FLOAT("mp_timelimit") >= maxLimit)
+    {
+        // The limit is already maxed out
+        return;
+    }
+
+    CVAR_SET_FLOAT("mp_timelimit", maxLimit);
+}
+
+void AgCommand::MoreTime()
+{
+    ASSERT(NULL != g_pGameRules);
+    if (!g_pGameRules)
+        return;
+
+    auto timelimit = CVAR_GET_FLOAT("mp_timelimit");
+
+    if (timelimit == 0.0f)
+    {
+        // There's no time limit, so we can't really add
+        // extra time to the limit if there isn't one...
+        return;
+    }
+
+    CVAR_SET_FLOAT("mp_timelimit", timelimit + ag_vote_extra_timelimit.value);
 }
 
 //-- Martin Webrant
