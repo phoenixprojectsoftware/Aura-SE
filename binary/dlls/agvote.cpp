@@ -318,10 +318,17 @@ bool AgVote::HandleCommand(CBasePlayer* pPlayer)
                     AgConsole("Vote is not allowed by server admin.", pPlayer);
                     return true;
                 }
-                if (atoi(m_sValue.c_str()) < ag_vote_mp_timelimit_low.value || atoi(m_sValue.c_str()) > ag_vote_mp_timelimit_high.value)
+                if (atof(m_sValue.c_str()) > ag_vote_mp_timelimit_high.value)
                 {
-                    AgConsole("Vote is not allowed by server admin.", pPlayer);
+                    AgConsole(UTIL_VarArgs("Can't vote this. It's too high of a timelimit. Please, try a lower value. (max time: %d)",
+                        static_cast<int>(std::floor(ag_vote_mp_timelimit_high.value))), pPlayer);
+
                     return true;
+                }
+                if (atof(m_sValue.c_str()) < ag_vote_mp_timelimit_low.value)
+                {
+                    AgConsole(UTIL_VarArgs("Can't vote this. It's too low of a timelimit. Please, try a higher value. (min time: %d)",
+                        static_cast<int>(std::ceil(ag_vote_mp_timelimit_low.value))), pPlayer);                    return true;
                 }
                 CallVote(pPlayer);
                 return true;
