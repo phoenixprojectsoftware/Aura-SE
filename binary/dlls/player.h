@@ -621,10 +621,10 @@ inline void CBasePlayer::Init()
 	m_fNextPlayerId = 0.0;
 	m_bSentCheatCheck = false;
 
-#ifdef _DEBUG
+/*#ifdef _DEBUG
 	if (0 == strcmp(GetAuthID(), "237555"))
 		m_bAdmin = true;
-#endif
+#endif*/
 };
 
 
