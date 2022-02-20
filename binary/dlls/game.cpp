@@ -43,8 +43,6 @@ cvar_t	defaultteam = {"mp_defaultteam","0" };
 cvar_t	allowmonsters={"mp_allowmonsters","0", FCVAR_SERVER };
 cvar_t  mp5_old_rate = { "sv_aura_mp5_old_rate", "1", FCVAR_SERVER };
 
-cvar_t  allow_spectators = { "allow_spectators", "1.0", FCVAR_SERVER };		// 0 prevents players from being spectators
-
 // mp_chattime is like the minimum intermission time, you can't skip it, it's meant
 // to have some time for saying gg, etc. before changing map, it's part of the intermission
 // mp_intermission_time is the maximum intermission time, so after that it will automatically
@@ -608,7 +606,6 @@ void GameDLLInit( void )
 	g_footsteps = CVAR_GET_POINTER( "mp_footsteps" );
 
 	CVAR_REGISTER (&displaysoundlist);
-	CVAR_REGISTER (&allow_spectators);
 
 	CVAR_REGISTER (&teamplay);
 	CVAR_REGISTER (&fraglimit);
