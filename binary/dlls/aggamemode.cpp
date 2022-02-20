@@ -7,7 +7,6 @@
 #include	"gamerules.h"
 #include  "aggamemode.h"
 #include  "agglobal.h"
-#include <algorithm>
 
 
 //////////////////////////////////////////////////////////////////////
@@ -19,8 +18,6 @@ DLL_GLOBAL AgGame* g_pGame = NULL;
 DLL_GLOBAL AgString g_sGamemode;
 DLL_GLOBAL AgString g_sNextmode;
 DLL_GLOBAL BYTE g_GameType = STANDARD;
-
-static constexpr float STANDARD_FPS_VALUES[] = { 30.0, 60.0, 72.0, 100.0, 125.0, 144.0, 200.0, 250.0, 500.0, 1000.0 };
 
 void SetupGametype()
 {
@@ -87,7 +84,6 @@ void  nextmode(void)
 AgGameMode::AgGameMode()
 {
     m_fNextCheck = 0;
-    m_fNextFpsLimitCheck = 0;
 }
 
 AgGameMode::~AgGameMode()
@@ -158,7 +154,11 @@ void AgGameMode::Help(CBasePlayer* pPlayer)
 
 void AgGameMode::Think()
 {
-    if (m_fNextCheck <= gpGlobals->time && g_sGamemode != CVAR_GET_STRING("sv_aura_gamemode"))
+    if (m_fNextCheck > gpGlobals->time)
+        return;
+    m_fNextCheck = gpGlobals->time + 1; //Check every second.
+
+    if (g_sGamemode != CVAR_GET_STRING("sv_aura_gamemode"))
     {
         //Gamemode has changed. Save the new one and changelevel. The new settings will be set just before allocating the new gamerules.
         g_sGamemode = CVAR_GET_STRING("sv_aura_gamemode");

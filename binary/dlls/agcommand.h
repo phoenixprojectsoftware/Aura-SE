@@ -8,7 +8,7 @@
 #endif // _MSC_VER > 1000
 
 #include "agglobal.h"
-#include <algorithm>
+
 
 class AgCommand
 {

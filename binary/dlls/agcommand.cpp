@@ -316,10 +316,23 @@ bool AgCommand::HandleCommand(CBasePlayer* pPlayer)
             }
         }
 
-        // Other settings like ag_* and mp_*
-        if (0 < CMD_ARGC()
-            && std::find(std::begin(g_votableSettings), std::end(g_votableSettings), CMD_ARGV(0)) != std::end(g_votableSettings)
-            )
+        // TODO: Refactor this, it's getting huge and unmaintainable
+        if (0 < CMD_ARGC() &&
+            (0 == strnicmp(CMD_ARGV(0), "ag_spectalk", 11)
+                || 0 == strnicmp(CMD_ARGV(0), "mp_timelimit", 12)
+                || 0 == strnicmp(CMD_ARGV(0), "ag_gauss_fix", 12)
+                || 0 == strnicmp(CMD_ARGV(0), "ag_rpg_fix", 10)
+                || 0 == strnicmp(CMD_ARGV(0), "mp_fraglimit", 12)
+                || 0 == strnicmp(CMD_ARGV(0), "mp_friendlyfire", 15)
+                || 0 == strnicmp(CMD_ARGV(0), "mp_weaponstay", 13)
+                || 0 == strnicmp(CMD_ARGV(0), "ag_spawn_system", 15)
+                || 0 == strnicmp(CMD_ARGV(0), "ag_spawn_history_entries", 24)
+                || 0 == strnicmp(CMD_ARGV(0), "ag_spawn_avoid_last_spots", 25)
+                || 0 == strnicmp(CMD_ARGV(0), "ag_spawn_far_spots", 18)
+                || 0 == strnicmp(CMD_ARGV(0), "ag_spawn_pa_visible_chance", 26)
+                || 0 == strnicmp(CMD_ARGV(0), "ag_spawn_pa_audible_chance", 26)
+                || 0 == strnicmp(CMD_ARGV(0), "ag_spawn_pa_safe_chance", 23)
+                ))
         {
             if (1 == CMD_ARGC())
                 Setting(CMD_ARGV(0), "", pPlayer);
