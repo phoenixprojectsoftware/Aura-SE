@@ -10,7 +10,7 @@ echo JMX, LOG and MAP files from your SDK
 echo maps folder and its subdirectories.
 pause
 cls
-echo PLEASE NOTE: THIS ONLY removes
+echo PLEASE NOTE: THIS ONLY REMOVES
 echo FILES FROM THE MAPS FOLDER AND 
 echo SUBDIRECTORIES THAT ALREADY 
 echo CAME WITH THE AURA SERVER SDK.
