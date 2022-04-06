@@ -337,9 +337,19 @@
     <ClCompile Include="..\..\dlls\agtimer.cpp" />
     <ClCompile Include="..\..\dlls\agvote.cpp" />
     <ClCompile Include="..\..\dlls\agwallhack.cpp" />
+    <ClCompile Include="..\..\dlls\agflood.cpp" />
+    <ClCompile Include="..\..\dlls\cvar.cpp" />
+    <ClCompile Include="..\..\dlls\agrandom.cpp" />
+    <ClCompile Include="..\..\dlls\genericitem.cpp" />
     <ClCompile Include="..\..\pm_shared\pm_debug.cpp" />
     <ClCompile Include="..\..\pm_shared\pm_math.cpp" />
     <ClCompile Include="..\..\pm_shared\pm_shared.cpp" />
+    <ClCompile Include="..\..\dlls\agflood.cpp" />
+    <ClCompile Include="..\..\dlls\cvar.cpp" />
+    <ClCompile Include="..\..\dlls\agrandom.cpp" />
+    <ClCompile Include="..\..\dlls\agflood.cpp" />
+    <ClCompile Include="..\..\dlls\cvar.cpp" />
+    <ClCompile Include="..\..\dlls\agrandom.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\common\const.h" />

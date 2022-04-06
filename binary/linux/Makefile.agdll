@@ -173,7 +173,17 @@ HLDLL_OBJS = \
 	$(HLDLL_OBJ_DIR)/agctf.o \
 	$(HLDLL_OBJ_DIR)/aglms.o \
 	$(HLDLL_OBJ_DIR)/agdom.o \
-	$(HLDLL_OBJ_DIR)/spawnchooser.o
+	$(HLDLL_OBJ_DIR)/spawnchooser.o \
+	$(HLDLL_OBJ_DIR)/agflood.o \
+	$(HLDLL_OBJ_DIR)/cvar.o \
+	$(HLDLL_OBJ_DIR)/agrandom.o \
+	$(HLDLL_OBJ_DIR)/speedrunstats.o \
+	$(HLDLL_OBJ_DIR)/genericitem.o
+	$(HLDLL_OBJ_DIR)/spawnchooser.o \
+	$(HLDLL_OBJ_DIR)/agflood.o \
+	$(HLDLL_OBJ_DIR)/cvar.o \
+	$(HLDLL_OBJ_DIR)/agrandom.o \
+	$(HLDLL_OBJ_DIR)/speedrunstats.o
 
 HLWPN_OBJS = \
 	$(HLWPN_OBJ_DIR)/hl_wpn_glock.o \
@@ -225,9 +235,9 @@ dirs:
 	-mkdir $(GAME_SHARED_OBJ_DIR)
 	-mkdir $(MINISTL_OBJ_DIR)
 
-$(MODNAME).$(SHLIBEXT): $(HLDLL_OBJS) $(HLWPN_OBJS) $(OP4_OBJS) $(ROPE_OBJS) $(PM_OBJS) $(GAME_SHARED_OBJS) $(MINISTL_OBJS)
-	$(CC) $(LDFLAGS) $(SHLIBLDFLAGS) -o $(BUILD_DIR)/$@ $(HLDLL_OBJS) $(HLWPN_OBJS) $(OP4_OBJS) $(ROPE_OBJS) $(MINISTL_OBJS) $(PM_OBJS) $(GAME_SHARED_OBJS)
-	bash gendbg.sh $(BUILD_DIR)/$(MODNAME).$(SHLIBEXT)
+$(MODNAME).$(SHLIBEXT): $(HLDLL_OBJS) $(HLWPN_OBJS) $(PM_OBJS) $(GAME_SHARED_OBJS) $(MINISTL_OBJS)
+	$(CC) $(LDFLAGS) $(SHLIBLDFLAGS) -o $(BUILD_DIR)/$@ $(HLDLL_OBJS) $(HLWPN_OBJS) $(PM_OBJS) $(GAME_SHARED_OBJS)
+	./gendbg.sh $(BUILD_DIR)/$(MODNAME).$(SHLIBEXT)
 	
 $(HLWPN_OBJ_DIR)/%.o : $(HLWPN_SRC_DIR)/%.cpp
 	$(DO_HLWPN_CC)

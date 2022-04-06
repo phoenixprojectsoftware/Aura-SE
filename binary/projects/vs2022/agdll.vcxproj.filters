@@ -519,6 +519,9 @@
     <ClCompile Include="..\..\dlls\wpn_shared\oitc.cpp">
       <Filter>Source Files\dlls\wpn_shared</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\dlls\genericitem.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\dlls\doors.h">
