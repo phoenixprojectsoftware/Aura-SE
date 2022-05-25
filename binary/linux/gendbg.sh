@@ -1,4 +1,5 @@
 #!/bin/bash
+# In case this fails on WSL, do dos2unix on this file
 
 UNAME=`uname`
 if [ "$UNAME" == "Darwin" ]; then
