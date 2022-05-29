@@ -22,7 +22,7 @@ jobs:
      rm sdk.tar
 
   - name: Build Release macOS dylibs
-    run: cd binary/linux && make all CFG=${{env.RELEASE_CONFIGURATION}} -std=c++11/14
+    run: cd binary/linux && make all CFG=${{env.RELEASE_CONFIGURATION}}
 
   - name: Package dylibs
     run: |
