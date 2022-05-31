@@ -593,6 +593,9 @@ cvar_t	sk_player_leg1	= { "sk_player_leg1","1" };
 cvar_t	sk_player_leg2	= { "sk_player_leg2","1" };
 cvar_t	sk_player_leg3	= { "sk_player_leg3","1" };
 
+// BlueNightHawk : Infinite Ammo
+cvar_t	sv_aura_infinite_ammo = { "sv_aura_infinite_ammo","0", FCVAR_SERVER };
+
 // END Cvars for Skill Level settings
 
 // Register your console variables here
@@ -1145,8 +1148,13 @@ void GameDLLInit( void )
 	CVAR_REGISTER ( &sk_player_leg1 );
 	CVAR_REGISTER ( &sk_player_leg2 );
 	CVAR_REGISTER ( &sk_player_leg3 );
-// END REGISTER CVARS FOR SKILL LEVEL STUFF
 
+	// BlueNightHawk : Infinite Ammo
+	CVAR_REGISTER(&sv_aura_infinite_ammo);
+
+// END REGISTER CVARS FOR SKILL LEVEL STUFF
+//
+ 
 	//++ BulliT
 	AgInitGame();
 	//-- Martin Webrant
