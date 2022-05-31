@@ -72,6 +72,9 @@ extern CGraph	WorldGraph;
 #define	FLASH_DRAIN_TIME	 1.2 //100 units/3 minutes
 #define	FLASH_CHARGE_TIME	 0.2 // 100 units/20 seconds  (seconds per unit)
 
+// BlueNightHawk : Infinite Ammo
+extern cvar_t	sv_aura_infinite_ammo;
+
 // Global Savedata for player
 TYPEDESCRIPTION	CBasePlayer::m_playerSaveData[] =
 {
@@ -2081,6 +2084,23 @@ void CBasePlayer::PreThink(void)
     EnableControl(TRUE);
   else
     EnableControl(!g_bPaused);
+
+  // BlueNightHawk : Infinite Ammo
+  if (sv_aura_infinite_ammo.value != 0 && m_pActiveItem)
+  {
+	  ItemInfo p;
+	  m_pActiveItem->GetItemInfo(&p);
+	  if (sv_aura_infinite_ammo.value == 1)
+	  {
+		  ((CBasePlayerWeapon*)m_pActiveItem)->m_iClip = p.iMaxClip;
+	  }
+
+	  if (m_pActiveItem->PrimaryAmmoIndex() != -1 && p.iMaxAmmo1 > 0)
+		  m_rgAmmo[m_pActiveItem->PrimaryAmmoIndex()] = p.iMaxAmmo1;
+	  if (m_pActiveItem->SecondaryAmmoIndex() != -1 && p.iMaxAmmo2 > 0)
+		  m_rgAmmo[m_pActiveItem->SecondaryAmmoIndex()] = p.iMaxAmmo2;
+
+  }
   
   if (m_fDisplayGamemode > 0 && m_fDisplayGamemode < gpGlobals->time)
   {
