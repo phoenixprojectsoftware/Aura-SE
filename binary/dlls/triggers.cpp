@@ -692,7 +692,7 @@ void PlayCDTrack( int iTrack )
 {
 	edict_t *pClient;
 
-	const char* value = g_engfuncs.pfnInfoKeyValue(infobuffer, "cl_music");
+	//const char* value = g_engfuncs.pfnInfoKeyValue(infobuffer, "cl_music");
 	
 	// manually find the single player. 
 	pClient = g_engfuncs.pfnPEntityOfEntIndex( 1 );
