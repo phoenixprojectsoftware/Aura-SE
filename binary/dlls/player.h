@@ -394,6 +394,7 @@ public:
 	int   m_iDisableSpecs;
 	int   m_iAutoWepSwitch;
 	char  m_szModel[64];
+	bool m_bMusicEnabled;
 
 	//CTF
 	bool m_bFlagTeam1;        //True if you got flag 1.
