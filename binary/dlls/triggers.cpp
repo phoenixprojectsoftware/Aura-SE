@@ -688,35 +688,55 @@ void CTriggerCDAudio::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TY
 	PlayTrack();
 }
 
+
+// BlueNightHawk : Play music for all players
 void PlayCDTrack( int iTrack )
 {
 	edict_t *pClient;
 
-	//const char* value = g_engfuncs.pfnInfoKeyValue(infobuffer, "cl_music");
-	
-	// manually find the single player. 
-	pClient = g_engfuncs.pfnPEntityOfEntIndex( 1 );
-	
-	// Can't play if the client is not connected!
-	if ( !pClient )
-		return;
-
-	if ( iTrack < -1 || iTrack > 30 )
+	if (iTrack < -1 || iTrack > 30)
 	{
-		ALERT ( at_console, "TriggerCDAudio - Track %d out of range\n" );
-		return;
+		ALERT(at_console, "TriggerCDAudio - Track %d out of range\n");
 	}
 
-	if ( iTrack == -1 )
+	// find all the players. 
+	for (int i = 1; i < gpGlobals->maxClients + 1; i++)
 	{
-		CLIENT_COMMAND ( pClient, "cd stop\n");
-	}
-	else
-	{
-		char string [ 64 ];
+		pClient = g_engfuncs.pfnPEntityOfEntIndex(i);
 
-		sprintf( string, "cd play %3d\n", iTrack );
-		CLIENT_COMMAND ( pClient, string);
+		// Can't play if the client is not connected!
+		if (!pClient)
+			break;
+
+		if (!(pClient->v.flags & FL_CLIENT))
+		{
+			break;
+		}
+
+		CBasePlayer* pPlayer = (CBasePlayer *)CBaseEntity::Instance(pClient);
+
+		if (!pPlayer)
+		{
+			ALERT(at_console, "Player %i returned null\n", i);
+			continue;
+		}
+		if (!pPlayer->m_bMusicEnabled)
+		{
+			ClientPrint(&pClient->v, HUD_PRINTCONSOLE, "Music disabled for this player!\n");
+			continue;
+		}
+
+		if (iTrack == -1)
+		{
+			CLIENT_COMMAND(pClient, "cd stop\n");
+		}
+		else
+		{
+			char string[64];
+
+			sprintf(string, "cd play %3d\n", iTrack);
+			CLIENT_COMMAND(pClient, string);
+		}
 	}
 }
 
