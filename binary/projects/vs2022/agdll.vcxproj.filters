@@ -513,6 +513,9 @@
     <ClCompile Include="..\..\dlls\wesley.cpp">
       <Filter>Source Files\dlls</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\dlls\aura_servercommand.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\dlls\doors.h">
@@ -808,6 +811,9 @@
     </ClInclude>
     <ClInclude Include="..\..\dlls\op4_weapons\CSporeLauncher.h">
       <Filter>Header Files\dlls\op4_weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\aura_servercommand.h">
+      <Filter>Header Files\dlls</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
