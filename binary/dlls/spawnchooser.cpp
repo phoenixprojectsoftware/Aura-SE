@@ -16,11 +16,11 @@ extern void SetupVisibility(edict_t* pViewEntity, edict_t* pClient, unsigned cha
 inline int FNullEnt(CBaseEntity* ent) { return (ent == NULL) || FNullEnt(ent->edict()); }
 
 std::map<int, std::string> spawnSystemName = {
-	{0, "Classic"},
-	{1, "Random"},
-	{2, "Far"},
+    {0, std::string("Classic")},
+    {1, std::string("Random")},
+    {2, std::string("Far")},
 	// To make it "Position-aware" we have to move the Settings HUD a bit to the left in the clientside, because it's too much text
-	{3, "PA"},
+    {3, std::string("PA")},
 };
 
 // Checks if the spot is clear of players
