@@ -811,7 +811,9 @@ void AgGetPlayerInfo(char* pszDetails, int iMaxSize, int* piSize)
 
 char* AgOSVersion()
 {
-#ifdef _WIN32
+#if defined(_WIN32)
+    static char verbuf[256];
+#elif defined(_OSX)
     static char verbuf[256];
 #else
     static char verbuf[4 * SYS_NMLN + 4];

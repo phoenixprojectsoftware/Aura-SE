@@ -29,8 +29,8 @@ private:
 	// Maps the spot number to a bitmask of that spot's state
 	std::map<int, int> m_spotsState;
 
-	std::vector<int> CSpawnChooser::SelectSpotsFallingBack(std::vector<std::vector<int>> allSpots);
-	std::vector<int> CSpawnChooser::GetRecentlyUsedSpots();
+    std::vector<int> SelectSpotsFallingBack(std::vector<std::vector<int>> allSpots);
+    std::vector<int> GetRecentlyUsedSpots();
 	void ClassifySpots();
 
 public:

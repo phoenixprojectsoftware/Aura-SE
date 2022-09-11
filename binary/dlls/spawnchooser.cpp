@@ -157,7 +157,7 @@ CBaseEntity* CSpawnChooser::GetFarSpawnPoint()
 		distancesFromEnemy.insert({ spawnPoint, closestEnemyDistance });
 		distancesToSort.push_back(closestEnemyDistance);
 	}
-	std::sort(distancesToSort.begin(), distancesToSort.end(), std::greater<>());
+	std::sort(distancesToSort.begin(), distancesToSort.end(), std::greater<float>());
 
 	for (unsigned long i = 0; i < numberOfFarSpawns; i++)
 	{
