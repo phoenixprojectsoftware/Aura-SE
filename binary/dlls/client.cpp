@@ -887,6 +887,10 @@ void ClientPrecache( void )
 	PRECACHE_SOUND("player/geiger2.wav");
 	PRECACHE_SOUND("player/geiger1.wav");
 
+	PRECACHE_SOUND("items/suitchargeno1.wav");
+	PRECACHE_SOUND("items/suitchargeok1.wav");
+	PRECACHE_SOUND("items/suitcharge1.wav");
+
 	if (giPrecacheGrunt)
 		UTIL_PrecacheOther("monster_human_grunt");
 //++ BulliT

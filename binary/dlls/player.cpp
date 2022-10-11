@@ -75,6 +75,11 @@ extern CGraph	WorldGraph;
 // BlueNightHawk : Infinite Ammo
 extern cvar_t	sv_aura_infinite_ammo;
 
+// BlueNightHawk : Suit Energy Regeneration
+extern cvar_t sv_aura_regeneration;
+extern cvar_t sv_aura_regeneration_rate;
+extern cvar_t sv_aura_regeneration_wait;
+
 // Global Savedata for player
 TYPEDESCRIPTION	CBasePlayer::m_playerSaveData[] =
 {
@@ -776,7 +781,11 @@ int CBasePlayer :: TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, 
 			else
 				SetSuitUpdate("!HEV_HLTH1", FALSE, SUIT_NEXT_IN_10MIN);	// health dropping
 		}
-
+	// BlueNightHawk : Suit Energy Regeneration
+	if (sv_aura_regeneration.value != 0 && pev->armorvalue < MAX_NORMAL_BATTERY && fTookDamage)
+	{
+		m_flNextSuitRegenTime = gpGlobals->time + sv_aura_regeneration_wait.value;
+	}
 	return fTookDamage;
 }
 
@@ -4643,6 +4652,40 @@ void CBasePlayer :: UpdateClientData( void )
 		MESSAGE_END();
 
 		m_iClientHideHUD = m_iHideHUD;
+	}
+
+	// BlueNightHawk : Suit Energy Regeneration
+	if (sv_aura_regeneration.value != 0 && pev->armorvalue < MAX_NORMAL_BATTERY
+		&& m_flNextSuitRegenTime < gpGlobals->time)
+	{
+		pev->armorvalue += sv_aura_regeneration_rate.value;
+		pev->armorvalue = V_min(pev->armorvalue, MAX_NORMAL_BATTERY);
+
+		if (pev->armorvalue == MAX_NORMAL_BATTERY)
+		{
+			m_flNextSuitRegenTime = 0.0f;
+			m_fRegenOn = false;
+			STOP_SOUND(ENT(pev), CHAN_STATIC, "items/suitcharge1.wav");
+			EMIT_SOUND(ENT(pev), CHAN_ITEM, "items/suitchargeno1.wav", 0.85, ATTN_NORM);
+		}
+		else if (!m_fRegenOn)
+		{
+			m_fRegenOn = true;
+			EMIT_SOUND(ENT(pev), CHAN_ITEM, "items/suitchargeok1.wav", 0.85, ATTN_NORM);
+		}
+		else
+		{
+			STOP_SOUND(ENT(pev), CHAN_STATIC, "items/suitcharge1.wav");
+			EMIT_SOUND(ENT(pev), CHAN_STATIC, "items/suitcharge1.wav", 0.85, ATTN_NORM);
+		}
+
+		m_flNextSuitRegenTime = gpGlobals->time + sv_aura_regeneration_wait.value;
+	}
+	else if (sv_aura_regeneration.value == 0)
+	{
+		m_flNextSuitRegenTime = 0.0f;
+		m_fRegenOn = false;
+		m_fRegenOn = false;
 	}
 
 //++ BulliT

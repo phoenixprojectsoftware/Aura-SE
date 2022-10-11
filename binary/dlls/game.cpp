@@ -596,6 +596,11 @@ cvar_t	sk_player_leg3	= { "sk_player_leg3","1" };
 // BlueNightHawk : Infinite Ammo
 cvar_t	sv_aura_infinite_ammo = { "sv_aura_infinite_ammo","0", FCVAR_SERVER };
 
+// BlueNightHawk : Suit Energy Regeneration
+cvar_t sv_aura_regeneration = { "sv_aura_regeneration", "0", FCVAR_SERVER };
+cvar_t sv_aura_regeneration_rate = { "sv_aura_regeneration_rate", "10", FCVAR_SERVER };
+cvar_t sv_aura_regeneration_wait = { "sv_aura_regeneration_wait", "1.5", FCVAR_SERVER };
+
 // END Cvars for Skill Level settings
 
 // Register your console variables here
@@ -1151,6 +1156,11 @@ void GameDLLInit( void )
 
 	// BlueNightHawk : Infinite Ammo
 	CVAR_REGISTER(&sv_aura_infinite_ammo);
+
+	// BlueNightHawk : Suit Energy Regeneration
+	CVAR_REGISTER(&sv_aura_regeneration);
+	CVAR_REGISTER(&sv_aura_regeneration_rate);
+	CVAR_REGISTER(&sv_aura_regeneration_wait);
 
 // END REGISTER CVARS FOR SKILL LEVEL STUFF
 //
