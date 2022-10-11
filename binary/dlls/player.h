@@ -521,6 +521,10 @@ private:
 	bool m_bIsClimbing = false;
 
 	bool m_bRestored;
+
+	// BlueNightHawk : Suit Energy Regeneration
+	float m_flNextSuitRegenTime;
+	bool m_fRegenOn;
 };
 //++ BulliT
 inline void CBasePlayer::Init()
