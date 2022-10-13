@@ -608,7 +608,7 @@ int CBasePlayer :: TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, 
 		else
 			pev->armorvalue -= flArmor;
 		
-		flDamage = flNew;
+		flDamage = 0;
 	}
 
 	// this cast to INT is critical!!! If a player ends up with 0.5 health, the engine will get that
@@ -4676,7 +4676,8 @@ void CBasePlayer :: UpdateClientData( void )
 		else
 		{
 			STOP_SOUND(ENT(pev), CHAN_STATIC, "items/suitcharge1.wav");
-			EMIT_SOUND(ENT(pev), CHAN_STATIC, "items/suitcharge1.wav", 0.85, ATTN_NORM);
+			// too loud
+			EMIT_SOUND(ENT(pev), CHAN_STATIC, "items/suitcharge1.wav", 0.25, ATTN_NORM);
 		}
 
 		m_flNextSuitRegenTime = gpGlobals->time + sv_aura_regeneration_wait.value;
