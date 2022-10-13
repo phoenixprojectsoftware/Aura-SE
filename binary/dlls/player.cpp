@@ -784,7 +784,7 @@ int CBasePlayer :: TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, 
 	// BlueNightHawk : Suit Energy Regeneration
 	if (sv_aura_regeneration.value != 0 && pev->armorvalue < MAX_NORMAL_BATTERY && fTookDamage)
 	{
-		m_flNextSuitRegenTime = gpGlobals->time + sv_aura_regeneration_wait.value;
+		m_flNextSuitRegenTime = gpGlobals->time + 2.75 + sv_aura_regeneration_wait.value;
 	}
 	return fTookDamage;
 }

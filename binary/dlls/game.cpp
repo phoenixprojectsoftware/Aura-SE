@@ -597,9 +597,9 @@ cvar_t	sk_player_leg3	= { "sk_player_leg3","1" };
 cvar_t	sv_aura_infinite_ammo = { "sv_aura_infinite_ammo","0", FCVAR_SERVER };
 
 // BlueNightHawk : Suit Energy Regeneration
-cvar_t sv_aura_regeneration = { "sv_aura_regeneration", "0", FCVAR_SERVER };
-cvar_t sv_aura_regeneration_rate = { "sv_aura_regeneration_rate", "10", FCVAR_SERVER };
-cvar_t sv_aura_regeneration_wait = { "sv_aura_regeneration_wait", "1.5", FCVAR_SERVER };
+cvar_t sv_aura_regeneration = { "sv_aura_regeneration", "1", FCVAR_SERVER };
+cvar_t sv_aura_regeneration_rate = { "sv_aura_regeneration_rate", "1", FCVAR_SERVER };
+cvar_t sv_aura_regeneration_wait = { "sv_aura_regeneration_wait", "0.05", FCVAR_SERVER };
 
 // END Cvars for Skill Level settings
 
