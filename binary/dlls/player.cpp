@@ -4661,23 +4661,24 @@ void CBasePlayer :: UpdateClientData( void )
 		pev->armorvalue += sv_aura_regeneration_rate.value;
 		pev->armorvalue = V_min(pev->armorvalue, MAX_NORMAL_BATTERY);
 
-		if (pev->armorvalue == MAX_NORMAL_BATTERY)
+		if (pev->armorvalue == MAX_NORMAL_BATTERY) //when shield stops recharging
 		{
 			m_flNextSuitRegenTime = 0.0f;
 			m_fRegenOn = false;
-			STOP_SOUND(ENT(pev), CHAN_STATIC, "items/suitcharge1.wav");
-			EMIT_SOUND(ENT(pev), CHAN_ITEM, "items/suitchargeno1.wav", 0.85, ATTN_NORM);
+			STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_charge.wav");
+			//EMIT_SOUND(ENT(pev), CHAN_ITEM, "items/suitchargeno1.wav", 0.85, ATTN_NORM);
 		}
-		else if (!m_fRegenOn)
+		else if (!m_fRegenOn) // when shield starts recharging
 		{
 			m_fRegenOn = true;
-			EMIT_SOUND(ENT(pev), CHAN_ITEM, "items/suitchargeok1.wav", 0.85, ATTN_NORM);
+			//EMIT_SOUND(ENT(pev), CHAN_ITEM, "items/suitchargeok1.wav", 0.85, ATTN_NORM);
+			EMIT_SOUND(ENT(pev), CHAN_ITEM, "player/shield_charge.wav", 0.85, ATTN_NORM);
 		}
-		else
+		else // as it's recharging
 		{
-			STOP_SOUND(ENT(pev), CHAN_STATIC, "items/suitcharge1.wav");
+			STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_charge.wav");
 			// too loud
-			EMIT_SOUND(ENT(pev), CHAN_STATIC, "items/suitcharge1.wav", 0.25, ATTN_NORM);
+			//EMIT_SOUND(ENT(pev), CHAN_STATIC, "player/shield_charge.wav", 0.25, ATTN_NORM);
 		}
 
 		m_flNextSuitRegenTime = gpGlobals->time + sv_aura_regeneration_wait.value;
