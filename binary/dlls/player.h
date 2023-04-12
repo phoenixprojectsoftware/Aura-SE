@@ -571,7 +571,7 @@ inline void CBasePlayer::Init()
 	{
 		//Never allow new players in arena mode to spawn directly.
 		m_bIngame = false;
-		g_pGameRules->m_Arena.ClientConnected(this);
+		g_pGameRules->m_Arena.ClientConnected(this);// <- This might be important for the Hideandseek mode
 	}
 	else if (LMS == AgGametype())
 	{

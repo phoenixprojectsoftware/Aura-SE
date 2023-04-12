@@ -88,6 +88,10 @@ bool AgGameRules::AgThink()
         //Arena status.
         m_Arena.Think();
     }
+    else if (HIDEANDSEEK == AgGametype())
+    {
+        m_Hideandseek.Think();
+    }
     else
     {
         //Update match status.
@@ -662,6 +666,8 @@ void AgGameRules::ClientDisconnected(edict_t* pClient)
             else if (DOM == AgGametype())
                 m_DOM.ClientDisconnected(pPlayer);
             //-- muphicks
+            else if (HIDEANDSEEK == AgGametype())
+                m_Hideandseek.ClientDisconnected(pPlayer);
         }
     }
 }

@@ -17,6 +17,7 @@
 #include "agvote.h"
 #include "agclient.h"
 #include "agarena.h"
+#include "aghideandseek.h"
 #include "aglms.h"
 #include "agctf.h"
 #include "agdom.h"
@@ -93,6 +94,7 @@ public:
     AgVote              m_Vote;
     AgClient            m_Client;
     AgArena             m_Arena;
+    AgHideandseek       m_Hideandseek;
     AgLMS               m_LMS;
     AgCTF               m_CTF;
     AgDOM               m_DOM;

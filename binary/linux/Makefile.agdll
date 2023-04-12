@@ -151,6 +151,7 @@ HLDLL_OBJS = \
 	$(HLDLL_OBJ_DIR)/agadmin.o \
 	$(HLDLL_OBJ_DIR)/agadmincache.o \
 	$(HLDLL_OBJ_DIR)/agarena.o \
+	$(HLDLL_OJB_DIR)/aghideandseek.o \
 	$(HLDLL_OBJ_DIR)/agclient.o \
 	$(HLDLL_OBJ_DIR)/agcommand.o \
 	$(HLDLL_OBJ_DIR)/aggamerules.o \
