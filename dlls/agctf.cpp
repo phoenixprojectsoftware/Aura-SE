@@ -1211,7 +1211,7 @@ edict_t* EntSelectCTFSpawnPoint(CBaseEntity* pPlayer)
         if (pSpot)
         {
             // check if pSpot is valid
-            if (IsSpawnPointValid(cbPlayer, pSpot))
+            if (CSpawnChooser::IsSpawnPointValid(cbPlayer, pSpot))
             {
                 if (pSpot->pev->origin == Vector(0, 0, 0))
                 {
@@ -1245,7 +1245,10 @@ edict_t* EntSelectCTFSpawnPoint(CBaseEntity* pPlayer)
         {
             // if ent is a client, kill em (unless they are ourselves)
             if (ent->IsPlayer() && !(ent->edict() == player))
-                ent->TakeDamage(VARS(INDEXENT(0)), VARS(INDEXENT(0)), 300, DMG_GENERIC);
+            {
+                if (CSpawnChooser::IsPlayerBlockingSpot(ent, pSpot))
+                    ent->TakeDamage(VARS(INDEXENT(0)), VARS(INDEXENT(0)), 300, DMG_GENERIC);
+            }
         }
         goto ReturnSpot;
     }

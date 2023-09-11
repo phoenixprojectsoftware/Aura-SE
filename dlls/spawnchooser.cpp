@@ -24,21 +24,62 @@ std::map<int, std::string> spawnSystemName = {
 };
 
 // Checks if the spot is clear of players
-BOOL IsSpawnPointValid(CBasePlayer* pPlayer, CBaseEntity* pSpot)
+bool CSpawnChooser::IsSpawnPointValid(CBasePlayer* pPlayer, CBaseEntity* pSpot)
 {
 	CBaseEntity *ent = NULL;
 
 	if (!pSpot->IsTriggered(pPlayer))
-		return FALSE;
+		return false;
 
 	while ((ent = UTIL_FindEntityInSphere(ent, pSpot->pev->origin, 128)) != NULL)
 	{
 		// If ent is a client, don't spawn on them
 		if (ent->IsPlayer() && ent != pPlayer)
-			return FALSE;
+		{
+			if (CSpawnChooser::IsPlayerBlockingSpot(ent, pSpot))
+				return false;
+		}
+	}
+	return true;
+}
+
+// See if there's a wall, floor or ceiling between the spawnpoint and another player
+bool CSpawnChooser::IsPlayerBlockingSpot(CBaseEntity* ent, CBaseEntity* pSpot)
+{
+	TraceResult tr;
+	UTIL_TraceHull(ent->pev->origin, pSpot->pev->origin, ignore_monsters, human_hull, ent->edict(), &tr);
+	if (tr.fStartSolid == 0 && tr.flFraction == 1.0)
+	{
+		// There's no obstacle between this player and the spawnpoint, so we consider that this player is blocking it
+		return true;
 	}
 
-	return TRUE;
+	const auto playerHeadPos = ent->EyePosition();
+
+	// We check if the player can see the arms or the head of a player spawning at this spot
+	UTIL_TraceLine(playerHeadPos, pSpot->EyePosition(), ignore_monsters, ent->edict(), &tr);
+	if (tr.fStartSolid == 0 && tr.flFraction == 1.0)
+		return true;
+
+	const auto spawnPos = pSpot->Center();
+
+	UTIL_TraceLine(playerHeadPos, spawnPos + Vector(VEC_HUMAN_HULL_MIN[0], VEC_HUMAN_HULL_MIN[1], 0), ignore_monsters, ent->edict(), &tr);
+	if (tr.fStartSolid == 0 && tr.flFraction == 1.0)
+		return true;
+
+	UTIL_TraceLine(playerHeadPos, spawnPos + Vector(VEC_HUMAN_HULL_MIN[0], VEC_HUMAN_HULL_MAX[1], 0), ignore_monsters, ent->edict(), &tr);
+	if (tr.fStartSolid == 0 && tr.flFraction == 1.0)
+		return true;
+
+	UTIL_TraceLine(playerHeadPos, spawnPos + Vector(VEC_HUMAN_HULL_MAX[0], VEC_HUMAN_HULL_MIN[1], 0), ignore_monsters, ent->edict(), &tr);
+	if (tr.fStartSolid == 0 && tr.flFraction == 1.0)
+		return true;
+
+	UTIL_TraceLine(playerHeadPos, spawnPos + Vector(VEC_HUMAN_HULL_MAX[0], VEC_HUMAN_HULL_MAX[1], 0), ignore_monsters, ent->edict(), &tr);
+	if (tr.fStartSolid == 0 && tr.flFraction == 1.0)
+		return true;
+
+	return false;
 }
 
 CBaseEntity* CSpawnChooser::GetClassicSpawnPoint()
@@ -426,17 +467,7 @@ std::vector<int> CSpawnChooser::GetRecentlyUsedSpots()
 	for (auto i = g_spawnHistory.size(); i--;)
 	{
 		const auto usedSpot = g_spawnHistory[i];
-		auto idx = -1;
-
-		// Get the spot index
-		for (auto i = g_spawnPoints.size(); i--;)
-		{
-			if (g_spawnPoints[i] == usedSpot)
-			{
-				idx = i;
-				break;
-			}
-		}
+		auto idx = GetSpotIndex(usedSpot);
 
 		// We only want unique spots, no duplicates, so we're gonna prepare a vector
 		// with all the correct spots to discard, or to ignore in the rest of the process
@@ -540,4 +571,15 @@ bool CSpawnChooser::IsCleanStartNeeded()
 	// If the game is seeded, we want to have a predictable start,
 	// not depending on where the players are BEFORE starting the match
 	return IsGameStart() && g_spawnRNG.GetSeed() != 0;
+}
+
+int CSpawnChooser::GetSpotIndex(CBaseEntity* pSpot)
+{
+	for (auto i = g_spawnPoints.size(); i--;)
+	{
+		if (g_spawnPoints[i] == pSpot)
+			return i;
+	}
+
+	return -1;
 }

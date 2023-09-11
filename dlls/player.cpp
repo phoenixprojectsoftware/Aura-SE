@@ -3174,8 +3174,11 @@ edict_t *EntSelectSpawnPoint( CBasePlayer *pPlayer )
 			while ( (ent = UTIL_FindEntityInSphere( ent, pSpot->pev->origin, 128 )) != NULL )
 			{
 				// if ent is a client, kill em (unless they are ourselves)
-				if ( ent->IsPlayer() && !(ent->edict() == player) )
-					ent->TakeDamage( VARS(INDEXENT(0)), VARS(INDEXENT(0)), 300, DMG_GENERIC );
+				if (ent->IsPlayer() && !(ent->edict() == player))
+				{
+					if (CSpawnChooser::IsPlayerBlockingSpot(ent, pSpot))
+						ent->TakeDamage(VARS(INDEXENT(0)), VARS(INDEXENT(0)), 300, DMG_GENERIC);
+				}
 			}
 			goto ReturnSpot;
 		}

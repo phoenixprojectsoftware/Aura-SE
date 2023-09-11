@@ -1,8 +1,5 @@
 #pragma once
 
-// TODO: refactor AgCTF's EntSelectCTFSpawnPoint() to put this inside the class
-BOOL IsSpawnPointValid(CBasePlayer* pPlayer, CBaseEntity* pSpot);
-
 extern std::map<int, std::string> spawnSystemName;
 
 class CSpawnChooser
@@ -70,4 +67,10 @@ public:
 	// Classifies spawn spots based on opponents' PVS/PAS, that is,
 	// whether the spots are visible, and/or audible, or are safe from them
 	void SetupSpotAwareness();
+
+	static int GetSpotIndex(CBaseEntity* pSpot);
+
+	static bool IsSpawnPointValid(CBasePlayer* pPlayer, CBaseEntity* pSpot);
+
+	static bool IsPlayerBlockingSpot(CBaseEntity* ent, CBaseEntity* pSpot);
 };
