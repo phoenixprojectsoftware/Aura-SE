@@ -254,7 +254,7 @@ extern float g_flSpeedrunStartTime;
 
 extern AgRandom g_spawnRNG;
 
-constexpr float MIN_COUNTDOWN_TIME = 3.0f;
+constexpr float MIN_COUNTDOWN_TIME = 0.1f;
 
 void AgInitGame();
 CBasePlayer* AgPlayerByIndex(int iPlayerIndex);
