@@ -266,7 +266,7 @@ void AgDOMControlPoint::Capture(CBasePlayer* pPlayer, const char* szTeamName)
     // Inform all players that zone has been taken control of by playername	
     // really need identifiers for each control point! 
     char szText[300];
-    sprintf(szText, "%s captures CP at %s!", STRING(pPlayer->pev->netname), m_szLocation);
+    sprintf(szText, "%s captures control point at %s!", STRING(pPlayer->pev->netname), m_szLocation);
     AgConsole(szText);
     UTIL_ClientPrintAll(HUD_PRINTCENTER, szText);
 }
@@ -381,7 +381,7 @@ void AgDOMControlPoint::Think(void)
     // a neutral state. 
     if (m_iConsecutiveScores >= ag_dom_resetscorelimit.value) {
         char szText[201];
-        sprintf(szText, "Neutral CP available at %s", m_szLocation);
+        sprintf(szText, "Neutral control point available at %s", m_szLocation);
         AgConsole(szText);
         UTIL_ClientPrintAll(HUD_PRINTCENTER, szText);
         Reset();
