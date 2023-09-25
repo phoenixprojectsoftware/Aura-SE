@@ -81,7 +81,7 @@ bool AgVote::HandleCommand(CBasePlayer* pPlayer)
         return true;
     }
 
-    if (FStrEq(CMD_ARGV(0), "aglistvotes"))
+    /*if (FStrEq(CMD_ARGV(0), "aglistvotes"))
     {
         for (int i = 0; i < sizeof(s_szVotes) / sizeof(s_szVotes[0]); i++)
             AgConsole(s_szVotes[i], pPlayer);
@@ -89,7 +89,7 @@ bool AgVote::HandleCommand(CBasePlayer* pPlayer)
         GameMode.Help(pPlayer);
 
         return true;
-    }
+    }*/
     else if (FStrEq(m_sVote.c_str(), "agmaxtime"))
     {
         if (!ag_vote_setting.value)

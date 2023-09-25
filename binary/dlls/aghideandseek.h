@@ -4,10 +4,14 @@
 
 //#if !defined(AFX_AGARENA_H__1929C55A_3034_4C89_8398_1F8243B83499__INCLUDED_)
 #define AFX_AGARENA_H__1929C55A_3034_4C89_8398_1F8243B83499__INCLUDED_
+#ifndef HIDEANDSEEK_H
+#define HIDEANDSEEK_H
 
 #if _MSC_VER > 1000
 #pragma once
 #endif // _MSC_VER > 1000
+
+
 
 class AgHideandseek
 {
@@ -66,6 +70,8 @@ inline CBasePlayer* AgHideandseek::GetSeeker()
         return NULL;
 };
 
+
+
 inline bool AgHideandseek::CanTakeDamage()
 {
     return Playing == m_Status || PlayerDied == m_Status;
@@ -78,3 +84,4 @@ inline bool AgHideandseek::CanHaveItem()
 
 
 //#endif // !defined(AFX_AGARENA_H__1929C55A_3034_4C89_8398_1F8243B83499__INCLUDED_)
+#endif // HIDEANDSEEK_H
