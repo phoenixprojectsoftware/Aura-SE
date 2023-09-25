@@ -44,8 +44,8 @@ public:
     void ClientDisconnected(CBasePlayer* pPlayer);
     void ClientConnected(CBasePlayer* pPlayer);
 
-    bool CanTakeDamage();
-    bool CanHaveItem();
+   // bool CanTakeDamage();
+    //bool CanHaveItem();
 
 };
 
@@ -66,6 +66,7 @@ inline CBasePlayer* AgHideandseek::GetSeeker()
         return NULL;
 };
 
+/*
 inline bool AgHideandseek::CanTakeDamage()
 {
     return Playing == m_Status || PlayerDied == m_Status;
@@ -75,6 +76,7 @@ inline bool AgHideandseek::CanHaveItem()
 {
     return Spawning == m_Status;
 }
+*/
 
 
 //#endif // !defined(AFX_AGARENA_H__1929C55A_3034_4C89_8398_1F8243B83499__INCLUDED_)
