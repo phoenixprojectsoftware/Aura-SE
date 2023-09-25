@@ -268,7 +268,7 @@ void AgDOMControlPoint::Capture(CBasePlayer* pPlayer, const char* szTeamName)
     char szText[300];
     sprintf(szText, "%s captured %s!", STRING(pPlayer->pev->netname), m_szLocation);
     AgConsole(szText);
-    UTIL_ClientPrintAll(HUD_PRINTCENTER, szText);
+    UTIL_ClientPrintAll(HUD_PRINTTALK, szText);
 }
 
 void AgDOMControlPoint::ChangeControllingTeam(const char* szTeamName)
