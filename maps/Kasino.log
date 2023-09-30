@@ -1,0 +1,81 @@
+Job started on "2023-09-30T00:51:09.4379565+01:00"
+Loading map from D:\Program Files (x86)\Steam\steamapps\common\Half-Life\zamnhlmp_dev\maps\Kasino.bsp
+Deserializing BSP data
+Time elapsed: 00.00:00:00.230
+Decompiling map using Tree strategy
+Merging brushes
+Optimizing for texture placement
+brush size: <-2720, -3280, -160> to <2672, 2720, 568>
+texturing brushes
+2781 brushes
+1129 brushes merged
+converting brushes to map brushes
+1652 brushes
+1858 map brushes
+16 clip brushes
+Time elapsed: 00.00:00:04.646
+Writing E:\repos\C-DRIVE\Aura-SE\maps\Kasino.map
+Time elapsed: 00.00:00:04.873
+Writing E:\repos\C-DRIVE\Aura-SE\maps\Kasino_generated.wad
+Adding texture cas01
+Adding texture cas02
+Adding texture cas03
+Adding texture cas04
+Adding texture cas05
+Adding texture cas06
+Adding texture cas10
+Adding texture cas14
+Adding texture cas15
+Adding texture cas17
+Adding texture cas18
+Adding texture cas19
+Adding texture cas20
+Adding texture cas21
+Adding texture cas23
+Adding texture cas24
+Adding texture cas25
+Adding texture cas30
+Adding texture cas31
+Adding texture cas32
+Adding texture cas33
+Adding texture cas34
+Adding texture cas35
+Adding texture cas37
+Adding texture cas38
+Adding texture cas39
+Adding texture cas40
+Adding texture cas41
+Adding texture cas42
+Adding texture cas43
+Adding texture cas44
+Adding texture cas45
+Adding texture cas46
+Adding texture cas47
+Adding texture cas48
+Adding texture cas49
+Adding texture cas50
+Adding texture cas51
+Adding texture cas53
+Adding texture cas54
+Adding texture cas55
+Adding texture cas56
+Adding texture cas57
+Adding texture cas59
+Adding texture cas60
+Adding texture cas61
+Adding texture cas62
+Adding texture cas63
+Adding texture cas64
+Adding texture cas65
+Adding texture cas67
+Adding texture cas68
+Adding texture cas69
+Adding texture cas70
+Adding texture cas71
+Adding texture cas72
+Adding texture sign3az
+Adding texture {ex01
+Adding texture {vines1
+Added 59 textures
+Time elapsed: 00.00:00:04.981
+Total time elapsed: 00.00:00:04.981
