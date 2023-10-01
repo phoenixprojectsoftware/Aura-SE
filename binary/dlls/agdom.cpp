@@ -268,7 +268,7 @@ void AgDOMControlPoint::Capture(CBasePlayer* pPlayer, const char* szTeamName)
     char szText[300];
     sprintf(szText, "%s captured %s!", STRING(pPlayer->pev->netname), m_szLocation);
     AgConsole(szText);
-    UTIL_ClientPrintAll(HUD_PRINTTALK, szText);
+    UTIL_ClientPrintAll(HUD_PRINTCENTER, szText);
 }
 
 void AgDOMControlPoint::ChangeControllingTeam(const char* szTeamName)
@@ -381,9 +381,9 @@ void AgDOMControlPoint::Think(void)
     // a neutral state. 
     if (m_iConsecutiveScores >= ag_dom_resetscorelimit.value) {
         char szText[201];
-        sprintf(szText, "Control point available at %s", m_szLocation);
+        sprintf(szText, "Flag available at %s", m_szLocation);
         AgConsole(szText);
-        UTIL_ClientPrintAll(HUD_PRINTTALK, szText);
+        UTIL_ClientPrintAll(HUD_PRINTCENTER, szText);
         Reset();
     }
 
