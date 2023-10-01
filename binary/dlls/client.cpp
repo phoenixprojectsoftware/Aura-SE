@@ -892,6 +892,10 @@ void ClientPrecache( void )
 	PRECACHE_SOUND("items/suitchargeok1.wav");
 	PRECACHE_SOUND("items/suitcharge1.wav");
 
+	// BlueNightHawk : Suit Energy Regeneration
+	PRECACHE_SOUND("buttons/blip1.wav");
+	PRECACHE_SOUND("buttons/bell1.wav");
+
 	if (giPrecacheGrunt)
 		UTIL_PrecacheOther("monster_human_grunt");
 //++ BulliT
