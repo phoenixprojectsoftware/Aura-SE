@@ -1145,9 +1145,9 @@ class AgCTFDetect : public CBaseEntity
         pev->solid = SOLID_NOT;
         pev->effects = EF_NODRAW;
 
-        AgString sGametype = CVAR_GET_STRING("sv_aura_gametype");
+        /*AgString sGametype = CVAR_GET_STRING("sv_aura_gametype");
         if (sGametype != "ctf")
-            CVAR_SET_STRING("sv_aura_gamemode", "ctf");
+            CVAR_SET_STRING("sv_aura_gamemode", "ctf");*/
     }
     void KeyValue(KeyValueData* pkvd)
     {
