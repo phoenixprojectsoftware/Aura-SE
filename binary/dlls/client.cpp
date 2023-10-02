@@ -891,6 +891,7 @@ void ClientPrecache( void )
 	PRECACHE_SOUND("items/suitchargeno1.wav");
 	PRECACHE_SOUND("items/suitchargeok1.wav");
 	PRECACHE_SOUND("items/suitcharge1.wav");
+	PRECACHE_SOUND("items/suitcharge_no_lp.wav");
 
 	PRECACHE_SOUND("player/friend_online.wav");
 	PRECACHE_SOUND("player/friend_join.wav");
