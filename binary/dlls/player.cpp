@@ -4678,7 +4678,7 @@ void CBasePlayer :: UpdateClientData( void )
 		{
 			STOP_SOUND(ENT(pev), CHAN_STATIC, "items/suitcharge_no_lp.wav");
 			// too loud
-			EMIT_SOUND(ENT(pev), CHAN_STATIC, "buttons/suitcharge_no_lp.wav", 0.25, ATTN_NORM);
+			EMIT_SOUND(ENT(pev), CHAN_STATIC, "items/suitcharge_no_lp.wav", 0.25, ATTN_NORM);
 		}
 
 		m_flNextSuitRegenTime = gpGlobals->time + sv_aura_regeneration_wait.value;
