@@ -180,7 +180,6 @@ BOOL AgGameRules::FPlayerCanRespawn(CBasePlayer* pPlayer)
 
 void AgGameRules::PlayerSpawn(CBasePlayer* pPlayer)
 {
-    PRECACHE_SOUND("player/friend_online.wav");
 
     ASSERT(NULL != pPlayer);
     if (!pPlayer)
@@ -466,7 +465,7 @@ void AgGameRules::PlayerSpawn(CBasePlayer* pPlayer)
         WRITE_COORD(pPlayer->pev->origin.y);
         WRITE_COORD(pPlayer->pev->origin.z);
         MESSAGE_END();
-        EMIT_SOUND_DYN(ENT(pPlayer->pev), CHAN_ITEM, "player/friend_online.wav", 1, ATTN_NORM, 0, PITCH_HIGH);
+        EMIT_SOUND_DYN(ENT(pPlayer->pev), CHAN_ITEM, "player/friend_join.wav", 1, ATTN_NORM, 0, PITCH_HIGH);
     
 }
 

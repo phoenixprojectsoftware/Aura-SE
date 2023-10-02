@@ -892,6 +892,9 @@ void ClientPrecache( void )
 	PRECACHE_SOUND("items/suitchargeok1.wav");
 	PRECACHE_SOUND("items/suitcharge1.wav");
 
+	PRECACHE_SOUND("player/friend_online.wav");
+	PRECACHE_SOUND("player/friend_join.wav");
+
 	// BlueNightHawk : Suit Energy Regeneration
 	PRECACHE_SOUND("buttons/blip1.wav");
 	PRECACHE_SOUND("buttons/bell1.wav");
