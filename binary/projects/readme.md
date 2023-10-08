@@ -1,5 +1,5 @@
 # Windows Project Files
-Before building, please assure you have the following package(s) installed on either VS2019 or VS2022 in the Visual Studio Installer:
+Before building, please assure you have the following package(s) installed on VS2022 in the Visual Studio Installer:
 
 - *Desktop Development for C++*
 
