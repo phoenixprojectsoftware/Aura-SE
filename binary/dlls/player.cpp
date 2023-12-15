@@ -4666,19 +4666,19 @@ void CBasePlayer :: UpdateClientData( void )
 		{
 			m_flNextSuitRegenTime = 0.0f;
 			m_fRegenOn = false;
-			STOP_SOUND(ENT(pev), CHAN_STATIC, "items/suitcharge_no_lp.wav");
-			EMIT_SOUND(ENT(pev), CHAN_ITEM, "buttons/bell1.wav", 0.85, ATTN_NORM);
+			STOP_SOUND(ENT(pev), CHAN_SHIELD2, "items/suitcharge_no_lp.wav");
+			EMIT_SOUND(ENT(pev), CHAN_SHIELD1, "buttons/bell1.wav", 0.85, ATTN_NORM);
 		}
 		else if (!m_fRegenOn) // when shield starts recharging
 		{
 			m_fRegenOn = true;
-			EMIT_SOUND(ENT(pev), CHAN_ITEM, "items/suitchargeok1.wav", 0.85, ATTN_NORM);
+			EMIT_SOUND(ENT(pev), CHAN_SHIELD1, "items/suitchargeok1.wav", 0.85, ATTN_NORM);
 		}
 		else // as it's recharging
 		{
-			STOP_SOUND(ENT(pev), CHAN_STATIC, "items/suitcharge_no_lp.wav");
+			STOP_SOUND(ENT(pev), CHAN_SHIELD2, "items/suitcharge_no_lp.wav");
 			// too loud
-			EMIT_SOUND(ENT(pev), CHAN_STATIC, "items/suitcharge_no_lp.wav", 0.25, ATTN_NORM);
+			EMIT_SOUND(ENT(pev), CHAN_SHIELD2, "items/suitcharge_no_lp.wav", 0.25, ATTN_NORM);
 		}
 
 		m_flNextSuitRegenTime = gpGlobals->time + sv_aura_regeneration_wait.value;
