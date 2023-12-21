@@ -167,7 +167,7 @@ public:
 #define EAGLE_MAX_CLIP			7
 #define SPORELAUNCHER_MAX_CLIP 5
 #define SHOCKRIFLE_MAX_CLIP 10
-#define M249_MAX_CLIP				60
+#define M249_MAX_CLIP				100
 #define PENGUIN_MAX_CLIP 3
 #define SNIPERRIFLE_MAX_CLIP 5
 
@@ -192,7 +192,7 @@ public:
 #define SHOCKRIFLE_DEFAULT_GIVE 10
 #define EAGLE_DEFAULT_GIVE				7
 #define SNIPERRIFLE_DEFAULT_GIVE 5
-#define M249_DEFAULT_GIVE					60
+#define M249_DEFAULT_GIVE					100
 #define DISPLACER_DEFAULT_GIVE		40
 
 // The amount of ammo given to a player by an ammo item.
@@ -210,7 +210,7 @@ public:
 #define AMMO_EAGLE_GIVE					7
 #define AMMO_SPORE_GIVE 1
 #define AMMO_SNIPERRIFLE_GIVE 5
-#define AMMO_M249_GIVE					60
+#define AMMO_M249_GIVE					100
 
 // bullet types
 typedef	enum
