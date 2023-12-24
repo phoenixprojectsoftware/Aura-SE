@@ -179,6 +179,8 @@ HLWPN_OBJS = \
 	$(HLWPN_OBJ_DIR)/hl_wpn_glock.o
 
 OP4_OBJS = \
+	$(OP4_OBJ_DIR)/CDisplacer.o \
+	$(OP4_OBJ_DIR)/CDisplacerBall.o \
 	$(OP4_OBJ_DIR)/CEagle.o \
 	$(OP4_OBJ_DIR)/CEagleLaser.o \
 	$(OP4_OBJ_DIR)/CGrapple.o \
