@@ -437,7 +437,7 @@ AgGameRules* InstallGameRules(void)
 
 	
 
-#ifndef AG_NO_CLIENT_DLL
+/*#ifndef AG_NO_CLIENT_DLL
 	//Detect CTF maps.
 	if (AgIsCTFMap(STRING(gpGlobals->mapname)))
 	{
@@ -453,7 +453,7 @@ AgGameRules* InstallGameRules(void)
 		if (sGametype != "dom")
 			CVAR_SET_STRING("sv_aura_gamemode", "dom");
 	}
-#endif
+#endif*/
 
 	//Execute my rules just before allocating what class to use. 
 	//This ensures that all is set correctly. Server.cfg can override my vars with no trouble.
