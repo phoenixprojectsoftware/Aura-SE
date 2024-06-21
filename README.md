@@ -1,5 +1,4 @@
-# Aura Server
-![Aura logo](aura.png "Aura logo")
+# ![Aura logo](aura.png "Aura logo")
 
 This repository contains the serverside binary for Aura. Each subfolder has its own README file
 (named readme.txt, readme or README.md).
