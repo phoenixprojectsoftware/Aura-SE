@@ -785,7 +785,7 @@ int CBasePlayer :: TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, 
 	if (sv_aura_regeneration.value != 0 && pev->armorvalue < MAX_NORMAL_BATTERY && fTookDamage)
 	{
 		STOP_SOUND(ENT(pev), CHAN_STATIC, "items/suitcharge1.wav");
-		m_flNextSuitRegenTime = gpGlobals->time + 3.5 + sv_aura_regeneration_wait.value;
+		m_flNextSuitRegenTime = gpGlobals->time + 5.5 + sv_aura_regeneration_wait.value;
 	}
 	return fTookDamage;
 }
