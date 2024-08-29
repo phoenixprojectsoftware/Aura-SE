@@ -77,6 +77,7 @@ DLL_GLOBAL cvar_t	ag_blastradius = { "sv_aura_blastradius","1" };         //Defa
 
 DLL_GLOBAL cvar_t	ag_ban_crowbar = { "sv_aura_ban_crowbar","0" };
 DLL_GLOBAL cvar_t	ag_ban_glock = { "sv_aura_ban_glock","0" };
+DLL_GLOBAL cvar_t   ag_ban_oitc = { "sv_aura_ban_oitc", "1" };
 DLL_GLOBAL cvar_t	ag_ban_357 = { "sv_aura_ban_357","0" };
 DLL_GLOBAL cvar_t	ag_ban_mp5 = { "sv_aura_ban_mp5","0" };
 DLL_GLOBAL cvar_t	ag_ban_shotgun = { "sv_aura_ban_shotgun", "0" };
@@ -115,6 +116,7 @@ DLL_GLOBAL cvar_t	ag_ban_recharg = { "sv_aura_ban_recharg","0" };
 
 DLL_GLOBAL cvar_t	ag_start_crowbar = { "sv_aura_start_crowbar","1" };
 DLL_GLOBAL cvar_t	ag_start_glock = { "sv_aura_start_glock","1" };
+DLL_GLOBAL cvar_t   ag_start_oitc = { "sv_aura_start_oitc", "0" };
 DLL_GLOBAL cvar_t	ag_start_357 = { "sv_aura_start_357","0" };
 DLL_GLOBAL cvar_t	ag_start_mp5 = { "sv_aura_start_mp5","0" };
 DLL_GLOBAL cvar_t	ag_start_shotgun = { "sv_aura_start_shotgun", "0" };
@@ -252,6 +254,7 @@ void AgInitGame()
 
     CVAR_REGISTER(&ag_ban_crowbar);
     CVAR_REGISTER(&ag_ban_glock);
+    CVAR_REGISTER(&ag_ban_oitc);
     CVAR_REGISTER(&ag_ban_357);
     CVAR_REGISTER(&ag_ban_mp5);
     CVAR_REGISTER(&ag_ban_shotgun);
@@ -290,6 +293,7 @@ void AgInitGame()
 
     CVAR_REGISTER(&ag_start_crowbar);
     CVAR_REGISTER(&ag_start_glock);
+    CVAR_REGISTER(&ag_start_oitc);
     CVAR_REGISTER(&ag_start_357);
     CVAR_REGISTER(&ag_start_mp5);
     CVAR_REGISTER(&ag_start_shotgun);
