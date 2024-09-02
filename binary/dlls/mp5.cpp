@@ -154,9 +154,10 @@ void CMP5::PrimaryAttack()
 {
 #ifndef CLIENT_DLL
 	int mp5OldRate = mp5_old_rate.value;
-#endif
 	int fireWeaponsUnderwater = fire_weapons_underwater.value;
-
+#endif
+	
+#ifndef CLIENT_DLL
 	if (fire_weapons_underwater.value == 0)
 	{
 		// don't fire underwater
@@ -166,6 +167,8 @@ void CMP5::PrimaryAttack()
 			m_flNextPrimaryAttack = 0.15;
 			return;
 		}
+	}
+#endif
 
 		if (m_iClip <= 0)
 		{
@@ -173,9 +176,6 @@ void CMP5::PrimaryAttack()
 			m_flNextPrimaryAttack = 0.15;
 			return;
 		}
-	}
-	else
-	{
 
 
 		m_pPlayer->m_iWeaponVolume = NORMAL_GUN_VOLUME;
@@ -220,14 +220,11 @@ void CMP5::PrimaryAttack()
 #endif
 		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + UTIL_SharedRandomFloat(m_pPlayer->random_seed, 10, 15);
 	}
-}
 
 
 
 void CMP5::SecondaryAttack(void)
 {
-	if (fire_weapons_underwater.value == 0)
-	{
 		// don't fire underwater
 		if (m_pPlayer->pev->waterlevel == 3)
 		{
@@ -241,9 +238,6 @@ void CMP5::SecondaryAttack(void)
 			PlayEmptySound();
 			return;
 		}
-	}
-	else
-	{
 
 		m_pPlayer->m_iWeaponVolume = NORMAL_GUN_VOLUME;
 		m_pPlayer->m_iWeaponFlash = BRIGHT_GUN_FLASH;
@@ -299,7 +293,6 @@ void CMP5::SecondaryAttack(void)
 #ifndef CLIENT_WEAPONS
 		m_pPlayer->pev->punchangle.x -= 10;
 #endif
-	}
 }
 
 void CMP5::Reload( void )
