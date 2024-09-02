@@ -155,136 +155,151 @@ void CMP5::PrimaryAttack()
 #ifndef CLIENT_DLL
 	int mp5OldRate = mp5_old_rate.value;
 #endif
-	// don't fire underwater
-	if (m_pPlayer->pev->waterlevel == 3)
+	int fireWeaponsUnderwater = fire_weapons_underwater.value;
+
+	if (fire_weapons_underwater.value == 0)
 	{
-		PlayEmptySound( );
-		m_flNextPrimaryAttack = 0.15;
-		return;
-	}
+		// don't fire underwater
+		if (m_pPlayer->pev->waterlevel == 3)
+		{
+			PlayEmptySound();
+			m_flNextPrimaryAttack = 0.15;
+			return;
+		}
 
-	if (m_iClip <= 0)
+		if (m_iClip <= 0)
+		{
+			PlayEmptySound();
+			m_flNextPrimaryAttack = 0.15;
+			return;
+		}
+	}
+	else
 	{
-		PlayEmptySound();
-		m_flNextPrimaryAttack = 0.15;
-		return;
-	}
 
-	m_pPlayer->m_iWeaponVolume = NORMAL_GUN_VOLUME;
-	m_pPlayer->m_iWeaponFlash = NORMAL_GUN_FLASH;
 
-	m_iClip--;
+		m_pPlayer->m_iWeaponVolume = NORMAL_GUN_VOLUME;
+		m_pPlayer->m_iWeaponFlash = NORMAL_GUN_FLASH;
+
+		m_iClip--;
 #ifdef AGSTATS
-	Stats.FireShot(m_pPlayer,STRING(pev->classname));
+		Stats.FireShot(m_pPlayer, STRING(pev->classname));
 #endif
 
-	m_pPlayer->pev->effects = (int)(m_pPlayer->pev->effects) | EF_MUZZLEFLASH;
+		m_pPlayer->pev->effects = (int)(m_pPlayer->pev->effects) | EF_MUZZLEFLASH;
 
-	// player "shoot" animation
-	m_pPlayer->SetAnimation( PLAYER_ATTACK1 );
+		// player "shoot" animation
+		m_pPlayer->SetAnimation(PLAYER_ATTACK1);
 
-	Vector vecOffset = Vector(0, -0.08, 0);
-	Vector vecSrc	 = m_pPlayer->GetGunPosition( );
-	Vector vecAiming = m_pPlayer->GetAutoaimVector( AUTOAIM_5DEGREES );
-	Vector vecDir;
+		Vector vecOffset = Vector(0, -0.08, 0);
+		Vector vecSrc = m_pPlayer->GetGunPosition();
+		Vector vecAiming = m_pPlayer->GetAutoaimVector(AUTOAIM_5DEGREES);
+		Vector vecDir;
 
-	vecDir = m_pPlayer->FireBulletsPlayer( 1, vecSrc, vecAiming, VECTOR_CONE_3DEGREES, 8192, BULLET_PLAYER_MP5, 2, 0, m_pPlayer->pev, m_pPlayer->random_seed );
+		vecDir = m_pPlayer->FireBulletsPlayer(1, vecSrc, vecAiming, VECTOR_CONE_3DEGREES, 8192, BULLET_PLAYER_MP5, 2, 0, m_pPlayer->pev, m_pPlayer->random_seed);
 
-  int flags;
+		int flags;
 #if defined( CLIENT_WEAPONS )
-	flags = FEV_NOTHOST;
+		flags = FEV_NOTHOST;
 #else
-	flags = 0;
+		flags = 0;
 #endif
 
-	PLAYBACK_EVENT_FULL( flags, m_pPlayer->edict(), m_usMP5, 0.0, (float *)&g_vecZero, (float *)&g_vecZero, vecDir.x, vecDir.y, 0, 0, 0, 0 );
+		PLAYBACK_EVENT_FULL(flags, m_pPlayer->edict(), m_usMP5, 0.0, (float*)&g_vecZero, (float*)&g_vecZero, vecDir.x, vecDir.y, 0, 0, 0, 0);
 
-	if (!m_iClip && m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0)
-		// HEV suit - indicate out of ammo condition
-		m_pPlayer->SetSuitUpdate("!HEV_AMO0", FALSE, 0);
+		if (!m_iClip && m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0)
+			// HEV suit - indicate out of ammo condition
+			m_pPlayer->SetSuitUpdate("!HEV_AMO0", FALSE, 0);
 
-	m_flNextPrimaryAttack = GetNextAttackDelay(0.065);
+		m_flNextPrimaryAttack = GetNextAttackDelay(0.065);
 
-	if ( m_flNextPrimaryAttack < UTIL_WeaponTimeBase() )
+		if (m_flNextPrimaryAttack < UTIL_WeaponTimeBase())
 #ifndef CLIENT_DLL
-		if (mp5_old_rate.value == 1) m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 0.08;
+			if (mp5_old_rate.value == 1) m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 0.08;
 		if (mp5_old_rate.value == 0) m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 0.1;
 #endif
-	m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + UTIL_SharedRandomFloat( m_pPlayer->random_seed, 10, 15 );
+		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + UTIL_SharedRandomFloat(m_pPlayer->random_seed, 10, 15);
+	}
 }
 
 
 
-void CMP5::SecondaryAttack( void )
+void CMP5::SecondaryAttack(void)
 {
-	// don't fire underwater
-	if (m_pPlayer->pev->waterlevel == 3)
+	if (fire_weapons_underwater.value == 0)
 	{
-		PlayEmptySound( );
-		m_flNextPrimaryAttack = 0.15;
-		return;
-	}
+		// don't fire underwater
+		if (m_pPlayer->pev->waterlevel == 3)
+		{
+			PlayEmptySound();
+			m_flNextPrimaryAttack = 0.15;
+			return;
+		}
 
-	if (m_pPlayer->m_rgAmmo[m_iSecondaryAmmoType] == 0)
-	{
-		PlayEmptySound( );
-		return;
-	}
-
-	m_pPlayer->m_iWeaponVolume = NORMAL_GUN_VOLUME;
-	m_pPlayer->m_iWeaponFlash = BRIGHT_GUN_FLASH;
-
-	m_pPlayer->m_iExtraSoundTypes = bits_SOUND_DANGER;
-	m_pPlayer->m_flStopExtraSoundTime = UTIL_WeaponTimeBase() + 0.2;
-			
-	m_pPlayer->m_rgAmmo[m_iSecondaryAmmoType]--;
-
-	// player "shoot" animation
-	m_pPlayer->SetAnimation( PLAYER_ATTACK1 );
-
-#ifndef CLIENT_WEAPONS
-	SendWeaponAnim( MP5_LAUNCH );
-
-	if ( RANDOM_LONG(0,1) )
-	{
-		// play this sound through BODY channel so we can hear it if player didn't stop firing MP3
-		EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_WEAPON, "weapons/glauncher.wav", 0.8, ATTN_NORM);
+		if (m_pPlayer->m_rgAmmo[m_iSecondaryAmmoType] == 0)
+		{
+			PlayEmptySound();
+			return;
+		}
 	}
 	else
 	{
-		// play this sound through BODY channel so we can hear it if player didn't stop firing MP3
-		EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_WEAPON, "weapons/glauncher2.wav", 0.8, ATTN_NORM);
-	}
-#endif
 
+		m_pPlayer->m_iWeaponVolume = NORMAL_GUN_VOLUME;
+		m_pPlayer->m_iWeaponFlash = BRIGHT_GUN_FLASH;
 
- 	UTIL_MakeVectors( m_pPlayer->pev->v_angle + m_pPlayer->pev->punchangle );
+		m_pPlayer->m_iExtraSoundTypes = bits_SOUND_DANGER;
+		m_pPlayer->m_flStopExtraSoundTime = UTIL_WeaponTimeBase() + 0.2;
 
-	// we don't add in player velocity anymore.
-	CGrenade::ShootContact( m_pPlayer->pev, 
-							m_pPlayer->pev->origin + m_pPlayer->pev->view_ofs + gpGlobals->v_forward * 16, 
-							gpGlobals->v_forward * 800 );
+		m_pPlayer->m_rgAmmo[m_iSecondaryAmmoType]--;
 
-	int flags;
-#if defined( CLIENT_WEAPONS )
-	flags = FEV_NOTHOST;
-#else
-	flags = 0;
-#endif
+		// player "shoot" animation
+		m_pPlayer->SetAnimation(PLAYER_ATTACK1);
 
-	PLAYBACK_EVENT( flags, m_pPlayer->edict(), m_usMP52 );
-	
-	m_flNextPrimaryAttack = GetNextAttackDelay(1);
-	m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 1;
-	m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 5;// idle pretty soon after shooting.
-
-	if (!m_pPlayer->m_rgAmmo[m_iSecondaryAmmoType])
-		// HEV suit - indicate out of ammo condition
-		m_pPlayer->SetSuitUpdate("!HEV_AMO0", FALSE, 0);
-	
 #ifndef CLIENT_WEAPONS
-	m_pPlayer->pev->punchangle.x -= 10;
+		SendWeaponAnim(MP5_LAUNCH);
+
+		if (RANDOM_LONG(0, 1))
+		{
+			// play this sound through BODY channel so we can hear it if player didn't stop firing MP3
+			EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_WEAPON, "weapons/glauncher.wav", 0.8, ATTN_NORM);
+		}
+		else
+		{
+			// play this sound through BODY channel so we can hear it if player didn't stop firing MP3
+			EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_WEAPON, "weapons/glauncher2.wav", 0.8, ATTN_NORM);
+		}
 #endif
+
+
+		UTIL_MakeVectors(m_pPlayer->pev->v_angle + m_pPlayer->pev->punchangle);
+
+		// we don't add in player velocity anymore.
+		CGrenade::ShootContact(m_pPlayer->pev,
+			m_pPlayer->pev->origin + m_pPlayer->pev->view_ofs + gpGlobals->v_forward * 16,
+			gpGlobals->v_forward * 800);
+
+		int flags;
+#if defined( CLIENT_WEAPONS )
+		flags = FEV_NOTHOST;
+#else
+		flags = 0;
+#endif
+
+		PLAYBACK_EVENT(flags, m_pPlayer->edict(), m_usMP52);
+
+		m_flNextPrimaryAttack = GetNextAttackDelay(1);
+		m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 1;
+		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 5;// idle pretty soon after shooting.
+
+		if (!m_pPlayer->m_rgAmmo[m_iSecondaryAmmoType])
+			// HEV suit - indicate out of ammo condition
+			m_pPlayer->SetSuitUpdate("!HEV_AMO0", FALSE, 0);
+
+#ifndef CLIENT_WEAPONS
+		m_pPlayer->pev->punchangle.x -= 10;
+#endif
+	}
 }
 
 void CMP5::Reload( void )
