@@ -42,6 +42,7 @@ cvar_t	teamoverride = {"mp_teamoverride","1" };
 cvar_t	defaultteam = {"mp_defaultteam","0" };
 cvar_t	allowmonsters={"mp_allowmonsters","0", FCVAR_SERVER };
 cvar_t  mp5_old_rate = { "sv_aura_mp5_old_rate", "1", FCVAR_SERVER };
+cvar_t fire_weapons_underwater = { "sv_aura_fire_weapons_underwater", "0", FCVAR_SERVER };
 
 // mp_chattime is like the minimum intermission time, you can't skip it, it's meant
 // to have some time for saying gg, etc. before changing map, it's part of the intermission
@@ -599,7 +600,7 @@ cvar_t	sv_aura_infinite_ammo = { "sv_aura_infinite_ammo","0", FCVAR_SERVER };
 // BlueNightHawk : Suit Energy Regeneration
 cvar_t sv_aura_regeneration = { "sv_aura_regeneration", "1", FCVAR_SERVER };
 cvar_t sv_aura_regeneration_rate = { "sv_aura_regeneration_rate", "1", FCVAR_SERVER };
-cvar_t sv_aura_regeneration_wait = { "sv_aura_regeneration_wait", "0.05", FCVAR_SERVER };
+cvar_t sv_aura_regeneration_wait = { "sv_aura_regeneration_wait", "0.03", FCVAR_SERVER };
 
 // END Cvars for Skill Level settings
 
@@ -635,6 +636,7 @@ void GameDLLInit( void )
 	CVAR_REGISTER (&allowmonsters);
 
 	CVAR_REGISTER (&mp5_old_rate);
+	CVAR_REGISTER(&fire_weapons_underwater);
 
 	CVAR_REGISTER (&mp_chattime);
 	CVAR_REGISTER (&mp_intermission_time);

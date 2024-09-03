@@ -446,13 +446,11 @@ int TrainSpeed(int iSpeed, int iMax)
 void CBasePlayer :: DeathSound( void )
 {
 	// water death sounds
-	/*
 	if (pev->waterlevel == 3)
 	{
 		EMIT_SOUND(ENT(pev), CHAN_VOICE, "player/h2odeath.wav", 1, ATTN_NONE);
 		return;
 	}
-	*/
 
 	// temporarily using pain sounds for death sounds
 	switch (RANDOM_LONG(1,5)) 
@@ -469,7 +467,7 @@ void CBasePlayer :: DeathSound( void )
 	}
 
 	// play one of the suit death alarms
-	EMIT_GROUPNAME_SUIT(ENT(pev), "HEV_DEAD");
+	if (INSTAGIB != AgGametype()) { EMIT_GROUPNAME_SUIT(ENT(pev), "HEV_DEAD"); };
 }
 
 // override takehealth
@@ -785,7 +783,7 @@ int CBasePlayer :: TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, 
 	if (sv_aura_regeneration.value != 0 && pev->armorvalue < MAX_NORMAL_BATTERY && fTookDamage)
 	{
 		STOP_SOUND(ENT(pev), CHAN_STATIC, "items/suitcharge1.wav");
-		m_flNextSuitRegenTime = gpGlobals->time + 2.75 + sv_aura_regeneration_wait.value;
+		m_flNextSuitRegenTime = gpGlobals->time + 5.5 + sv_aura_regeneration_wait.value;
 	}
 	return fTookDamage;
 }

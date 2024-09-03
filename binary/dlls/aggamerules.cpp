@@ -290,6 +290,8 @@ void AgGameRules::PlayerSpawn(CBasePlayer* pPlayer)
             }
             if (1 > ag_ban_glock.value)
                 pPlayer->GiveNamedItem("weapon_9mmhandgun");
+            if (1 > ag_ban_oitc.value)
+                pPlayer->GiveNamedItem("weapon_one");
             if (1 > ag_ban_crowbar.value)
                 pPlayer->GiveNamedItem("weapon_crowbar");
             if (1 > ag_ban_shotgun.value)
@@ -377,6 +379,8 @@ void AgGameRules::PlayerSpawn(CBasePlayer* pPlayer)
             }
             if (0 < ag_start_glock.value)
                 pPlayer->GiveNamedItem("weapon_9mmhandgun");
+            if (0 < ag_start_oitc.value)
+                pPlayer->GiveNamedItem("weapon_one");
             if (0 < ag_start_crowbar.value)
                 pPlayer->GiveNamedItem("weapon_crowbar");
             if (0 < ag_start_shotgun.value)
@@ -720,6 +724,8 @@ int AgGameRules::IPointsForKill(CBasePlayer* pAttacker, CBasePlayer* pKilled)
                 pAttacker->GiveAmmo(ag_start_uranium.value, "uranium", URANIUM_MAX_CARRY);
             if (0 < ag_start_9mmar.value)
                 pAttacker->GiveAmmo(ag_start_9mmar.value, "9mm", _9MM_MAX_CARRY);
+            if (0 < ag_start_oitc.value)
+                pAttacker->GiveAmmo(ag_start_oitc.value, "weapon_one", ONE_MAX_CARRY);
             if (0 < ag_start_357ammo.value)
                 pAttacker->GiveAmmo(ag_start_357ammo.value, "357", _357_MAX_CARRY);
             if (0 < ag_start_bockshot.value)

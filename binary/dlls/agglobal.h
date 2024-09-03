@@ -49,6 +49,7 @@ extern cvar_t	ag_blastradius;
 
 extern cvar_t	ag_ban_crowbar;
 extern cvar_t	ag_ban_glock;
+extern cvar_t   ag_ban_oitc;
 extern cvar_t	ag_ban_357;
 extern cvar_t	ag_ban_mp5;
 extern cvar_t	ag_ban_shotgun;
@@ -89,6 +90,7 @@ extern cvar_t ag_ban_recharg;
 
 extern cvar_t	ag_start_crowbar;
 extern cvar_t	ag_start_glock;
+extern cvar_t   ag_start_oitc;
 extern cvar_t	ag_start_357;
 extern cvar_t	ag_start_mp5;
 extern cvar_t	ag_start_shotgun;

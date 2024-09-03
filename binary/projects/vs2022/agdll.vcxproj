@@ -306,6 +306,7 @@
     <ClCompile Include="..\..\dlls\wesley.cpp" />
     <ClCompile Include="..\..\dlls\world.cpp" />
     <ClCompile Include="..\..\dlls\wpn_shared\hl_wpn_glock.cpp" />
+    <ClCompile Include="..\..\dlls\wpn_shared\oitc.cpp" />
     <ClCompile Include="..\..\dlls\xen.cpp" />
     <ClCompile Include="..\..\dlls\zamn.cpp" />
     <ClCompile Include="..\..\dlls\zombie.cpp" />

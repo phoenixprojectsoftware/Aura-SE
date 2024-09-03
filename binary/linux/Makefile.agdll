@@ -176,7 +176,8 @@ HLDLL_OBJS = \
 	$(HLDLL_OBJ_DIR)/spawnchooser.o
 
 HLWPN_OBJS = \
-	$(HLWPN_OBJ_DIR)/hl_wpn_glock.o
+	$(HLWPN_OBJ_DIR)/hl_wpn_glock.o \
+	$(HLWPN_OBJ_DIR)/oitc.o
 
 OP4_OBJS = \
 	$(OP4_OBJ_DIR)/CDisplacer.o \

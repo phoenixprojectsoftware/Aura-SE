@@ -38,6 +38,7 @@ extern cvar_t	defaultteam;
 extern cvar_t	allowmonsters;
 extern cvar_t	mp_chattime;
 extern cvar_t   mp5_old_rate;
+extern cvar_t   fire_weapons_underwater;
 
 extern cvar_t	singleplayer;
 extern cvar_t	sploading;
