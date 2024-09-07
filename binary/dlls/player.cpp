@@ -742,7 +742,7 @@ int CBasePlayer :: TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, 
 		}
 	}
 
-	pev->punchangle.x = -2;
+	pev->punchangle.x = -2; // Punch the screen when we take damage.
 
 	if (fTookDamage && !ftrivial && fmajor && flHealthPrev >= 75) 
 	{
