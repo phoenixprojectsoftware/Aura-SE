@@ -1060,6 +1060,9 @@ void CBasePlayer::Killed( entvars_t *pevAttacker, int iGib )
 	}
 
 	DeathSound();
+
+	pev->armorvalue = 0;
+	m_fRegenOn = false;
 	
 	pev->angles.x = 0;
 	pev->angles.z = 0;
