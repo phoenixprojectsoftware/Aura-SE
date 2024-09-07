@@ -889,6 +889,7 @@ void ClientPrecache( void )
 
 	// BlueNightHawk : Suit Energy Regeneration
 	PRECACHE_SOUND("debris/beamstart15.wav");
+	PRECACHE_SOUND("player/shield_low.wav");
 	PRECACHE_SOUND("player/shield_empty.wav");
 	PRECACHE_SOUND("player/shield_charge.wav");
 	PRECACHE_SOUND("items/suitchargeno1.wav");

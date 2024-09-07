@@ -4658,6 +4658,35 @@ void CBasePlayer :: UpdateClientData( void )
 		m_iClientHideHUD = m_iHideHUD;
 	}
 
+	float currentTime = gpGlobals->time;
+
+	if (pev->armorvalue < 10)
+	{
+		if (!isShieldLow && (currentTime - lastShieldSoundTime > 1.0f)) // 1 second delay
+		{
+			EMIT_SOUND(ENT(pev), CHAN_AUTO, "player/shield_low.wav", 0.85, ATTN_NORM);
+			isShieldLow = true;
+			lastShieldSoundTime = currentTime;
+		}
+	}
+	else
+	{
+		if (isShieldLow)
+		{
+			STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_low.wav");
+			isShieldLow = false;
+		}
+	}
+
+	if (pev->armorvalue == 0)
+	{
+		STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_low.wav");
+	}
+	else if (pev->armorvalue > 10)
+	{
+		STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_low.wav");
+	}
+
 	// BlueNightHawk : Suit Energy Regeneration
 #define MSG_STOP_SOUND 100
 	if (sv_aura_regeneration.value != 0 && pev->armorvalue < MAX_NORMAL_BATTERY

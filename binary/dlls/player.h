@@ -255,7 +255,7 @@ public:
 	BOOL SwitchWeapon( CBasePlayerItem *pWeapon );
 
 	// JOHN:  sends custom messages if player HUD data has changed  (eg health, ammo)
-	virtual void UpdateClientData( void );
+	//virtual void UpdateClientData( void );
 	
 	static	TYPEDESCRIPTION m_playerSaveData[];
 
@@ -514,6 +514,13 @@ public:
 
 	Vector m_DisplacerReturn;
 	float m_flDisplacerSndRoomtype;
+
+	bool isShieldLow;
+	float lastShieldSoundTime;
+
+	CBasePlayer () : isShieldLow(false), lastShieldSoundTime(0.0f) {}
+
+	void UpdateClientData();
 
 private:
 	CRope* m_pRope;
