@@ -4657,6 +4657,7 @@ void CBasePlayer :: UpdateClientData( void )
 	}
 
 	// BlueNightHawk : Suit Energy Regeneration
+#define MSG_STOP_SOUND 100
 	if (sv_aura_regeneration.value != 0 && pev->armorvalue < MAX_NORMAL_BATTERY
 		&& m_flNextSuitRegenTime < gpGlobals->time)
 	{
@@ -4675,6 +4676,8 @@ void CBasePlayer :: UpdateClientData( void )
 			m_fRegenOn = true;
 			EMIT_SOUND(ENT(pev), CHAN_AUTO, "items/suitchargeok1.wav", 0.85, ATTN_NORM);
 			STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_empty.wav");
+			MESSAGE_BEGIN(MSG_ONE, MSG_STOP_SOUND, NULL);
+			MESSAGE_END();
 		}
 		else // as it's recharging
 		{
