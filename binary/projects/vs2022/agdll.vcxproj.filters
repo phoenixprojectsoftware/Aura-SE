@@ -516,8 +516,8 @@
     <ClCompile Include="..\..\dlls\aghideandseek.cpp">
       <Filter>Source Files\dlls</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\dlls\oitc.cpp">
-      <Filter>Source Files\dlls</Filter>
+    <ClCompile Include="..\..\dlls\wpn_shared\oitc.cpp">
+      <Filter>Source Files\dlls\wpn_shared</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

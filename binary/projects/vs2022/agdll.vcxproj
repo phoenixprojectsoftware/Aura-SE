@@ -251,7 +251,6 @@
     <ClCompile Include="..\..\dlls\nihilanth.cpp" />
     <ClCompile Include="..\..\dlls\nodes.cpp" />
     <ClCompile Include="..\..\dlls\observer.cpp" />
-    <ClCompile Include="..\..\dlls\oitc.cpp" />
     <ClCompile Include="..\..\dlls\op4_weapons\CDisplacer.cpp" />
     <ClCompile Include="..\..\dlls\op4_weapons\CDisplacerBall.cpp" />
     <ClCompile Include="..\..\dlls\op4_weapons\CEagle.cpp" />
@@ -307,6 +306,7 @@
     <ClCompile Include="..\..\dlls\wesley.cpp" />
     <ClCompile Include="..\..\dlls\world.cpp" />
     <ClCompile Include="..\..\dlls\wpn_shared\hl_wpn_glock.cpp" />
+    <ClCompile Include="..\..\dlls\wpn_shared\oitc.cpp" />
     <ClCompile Include="..\..\dlls\xen.cpp" />
     <ClCompile Include="..\..\dlls\zamn.cpp" />
     <ClCompile Include="..\..\dlls\zombie.cpp" />
