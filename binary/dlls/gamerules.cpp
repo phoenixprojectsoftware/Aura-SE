@@ -340,17 +340,17 @@ AgGameRules* InstallGameRules(void)
 	{
 		if (AgIsCTFMap(STRING(gpGlobals->mapname)))
 		{
-			AgString sGametype = CVAR_GET_STRING("sv_ag_gametype");
-			if (sGametype != "ctf" && NULL == strstr(CVAR_GET_STRING("sv_ag_gamemode"), "ctf"))
-				CVAR_SET_STRING("sv_ag_gamemode", "ctf");
+			AgString sGametype = CVAR_GET_STRING("sv_aura_gametype");
+			if (sGametype != "ctf" && NULL == strstr(CVAR_GET_STRING("sv_aura_gamemode"), "ctf"))
+				CVAR_SET_STRING("sv_aura_gamemode", "ctf");
 		}
 
 		//Detect DOM maps.
 		if (AgIsDOMMap(STRING(gpGlobals->mapname)))
 		{
-			AgString sGametype = CVAR_GET_STRING("sv_ag_gametype");
+			AgString sGametype = CVAR_GET_STRING("sv_aura_gametype");
 			if (sGametype != "dom")
-				CVAR_SET_STRING("sv_ag_gamemode", "dom");
+				CVAR_SET_STRING("sv_aura_gamemode", "dom");
 		}
 	}
 #endif

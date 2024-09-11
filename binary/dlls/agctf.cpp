@@ -1147,9 +1147,9 @@ class AgCTFDetect : public CBaseEntity
 
         if (ag_gamemode_auto.value > 0.0f)
         {
-            AgString sGametype = CVAR_GET_STRING("sv_ag_gametype");
+            AgString sGametype = CVAR_GET_STRING("sv_aura_gametype");
             if (sGametype != "ctf")
-                CVAR_SET_STRING("sv_ag_gamemode", "ctf");
+                CVAR_SET_STRING("sv_aura_gamemode", "ctf");
         }
     }
     void KeyValue(KeyValueData* pkvd)
