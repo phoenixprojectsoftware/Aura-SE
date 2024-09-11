@@ -43,9 +43,6 @@ FILE_GLOBAL char* s_szVotes[] =
   "ag_spawn_pa_visible_chance <number> - Probability of a visible spawnpoint being chosen in the PA system",
   "ag_spawn_pa_audible_chance <number> - Probability of an audible spawnpoint being chosen in the PA system",
   "ag_spawn_pa_safe_chance <number> - Probability of a safe spawnpoint being chosen in the PA system",
-  "ag_fps_limit <number> - 0 to disable, any other number to cap everyones' fps to that number",
-  "ag_fps_limit_auto <number> - 0 to disable, 1 to limit automatically based on most used fps at that moment",
-  "ag_fps_limit_check_interval <number> - How often to recalculate the fps limit when it's auto (in seconds)",
 };
 
 AgVote::AgVote()
@@ -84,12 +81,39 @@ bool AgVote::HandleCommand(CBasePlayer* pPlayer)
         return true;
     }
 
-    if (FStrEq(CMD_ARGV(0), "aglistvotes"))
+    /*if (FStrEq(CMD_ARGV(0), "aglistvotes"))
     {
         for (int i = 0; i < sizeof(s_szVotes) / sizeof(s_szVotes[0]); i++)
             AgConsole(s_szVotes[i], pPlayer);
 
         GameMode.Help(pPlayer);
+
+        return true;
+    }*/
+    else if (FStrEq(m_sVote.c_str(), "agmaxtime"))
+    {
+        if (!ag_vote_setting.value)
+        {
+            AgConsole("Voting settings is not allowed here.", pPlayer);
+            return true;
+        }
+        CallVote(pPlayer);
+
+        return true;
+    }
+    else if (FStrEq(m_sVote.c_str(), "agmoretime"))
+    {
+        if (!ag_vote_setting.value)
+        {
+            AgConsole("Voting settings is not allowed here.", pPlayer);
+            return true;
+        }
+        if (!ag_vote_extra_timelimit.value)
+        {
+            AgConsole("Voting for extra timelimit is not allowed here.", pPlayer);
+            return true;
+        }
+        CallVote(pPlayer);
 
         return true;
     }
@@ -141,24 +165,14 @@ bool AgVote::HandleCommand(CBasePlayer* pPlayer)
             if (2 <= CMD_ARGC())
                 m_sVote = CMD_ARGV(1);
             if (3 <= CMD_ARGC())
-            {
                 m_sValue = CMD_ARGV(2);
-                m_sFullValue = CMD_ARGS();
-            }
-            if (4 <= CMD_ARGC())
-                m_sValue2 = CMD_ARGV(3);
         }
         else
         {
             if (1 <= CMD_ARGC())
                 m_sVote = CMD_ARGV(0);
             if (2 <= CMD_ARGC())
-            {
-                m_sValue = CMD_ARGV(1);
-                m_sFullValue = CMD_ARGS();
-            }
-            if (3 <= CMD_ARGC())
-                m_sValue2 = CMD_ARGV(2);
+                m_sValue = CMD_ARGS();
         }
 
         if (m_sVote.size() && 32 > m_sVote.size() && 32 > m_sValue.size())
@@ -270,16 +284,11 @@ bool AgVote::HandleCommand(CBasePlayer* pPlayer)
             //Check command
             else if (FStrEq(m_sVote.c_str(), "agallow") ||
                 FStrEq(m_sVote.c_str(), "agkick") ||
-                FStrEq(m_sVote.c_str(), "agadmin") ||
-                0 == strncmp(m_sVote.c_str(), "agforceteam", 11) ||
-                FStrEq(m_sVote.c_str(), "agforcespectator"))
+                FStrEq(m_sVote.c_str(), "agadmin"))
             {
-                // TODO: this is ugly, refactor
-                if ((FStrEq(m_sVote.c_str(), "agkick") && 1 > ag_vote_kick.value)
-                    || (FStrEq(m_sVote.c_str(), "agadmin") && 1 > ag_vote_admin.value)
-                    || (FStrEq(m_sVote.c_str(), "agallow") && 1 > ag_vote_allow.value)
-                    || (0 == strncmp(m_sVote.c_str(), "agforceteam", 11) && 1 > ag_vote_team.value)
-                    || (FStrEq(m_sVote.c_str(), "agforcespectator") && 1 > ag_vote_spectator.value)
+                if (FStrEq(m_sVote.c_str(), "agkick") && 1 > ag_vote_kick.value
+                    || FStrEq(m_sVote.c_str(), "agadmin") && 1 > ag_vote_admin.value
+                    || FStrEq(m_sVote.c_str(), "agallow") && 1 > ag_vote_allow.value
                     )
                 {
                     AgConsole("Vote is not allowed by server admin.", pPlayer);
@@ -290,19 +299,14 @@ bool AgVote::HandleCommand(CBasePlayer* pPlayer)
                 if (pPlayerLoop)
                 {
                     m_sAuthID = pPlayerLoop->GetAuthID();
-                    m_sTarget = pPlayerLoop;
                     CallVote(pPlayer);
                 }
                 else
                 {
-                    if (!FStrEq(m_sVote.c_str(), "agkick")
-                        && 0 != strncmp(m_sVote.c_str(), "agforceteam", 11)
-                        && !FStrEq(m_sVote.c_str(), "agforcespectator"))
+                    if (!FStrEq(m_sVote.c_str(), "agkick"))
                     {
-                        // Target is the caller
                         m_sValue = pPlayer->GetName();
                         m_sAuthID = pPlayer->GetAuthID();
-                        m_sTarget = pPlayer;
                         CallVote(pPlayer);
                     }
                     else
@@ -310,71 +314,26 @@ bool AgVote::HandleCommand(CBasePlayer* pPlayer)
                 }
                 return true;
             }
-            else if (FStrEq(m_sVote.c_str(), "agmaxtime"))
+            //Check setting
+            // TODO: either remove or support `mp_friendlyfire` and `mp_weaponstay`, as they're being silently rejected in `AgSettings::AdminSetting()`
+            // TODO: refactor this, it's getting huge and unmaintainable
+            else if ((
+                0 == strncmp(m_sVote.c_str(), "ag_gauss_fix", 12) ||
+                0 == strncmp(m_sVote.c_str(), "ag_rpg_fix", 10) ||
+                0 == strncmp(m_sVote.c_str(), "ag_spectalk", 11) ||
+                0 == strncmp(m_sVote.c_str(), "mp_friendlyfire", 15) ||
+                0 == strncmp(m_sVote.c_str(), "mp_weaponstay", 13) ||
+                0 == strncmp(m_sVote.c_str(), "ag_spawn_system", 15) ||
+                0 == strncmp(m_sVote.c_str(), "ag_spawn_history_entries", 24) ||
+                0 == strncmp(m_sVote.c_str(), "ag_spawn_avoid_last_spots", 25) ||
+                0 == strncmp(m_sVote.c_str(), "ag_spawn_pa_visible_chance", 26) ||
+                0 == strncmp(m_sVote.c_str(), "ag_spawn_pa_audible_chance", 26) ||
+                0 == strncmp(m_sVote.c_str(), "ag_spawn_pa_safe_chance", 23))
+                && m_sValue.size())
             {
                 if (!ag_vote_setting.value)
                 {
-                    AgConsole("Voting settings is not allowed here.", pPlayer);
-                    return true;
-                }
-                CallVote(pPlayer);
-
-                return true;
-            }
-            else if (FStrEq(m_sVote.c_str(), "agmoretime"))
-            {
-                if (!ag_vote_setting.value)
-                {
-                    AgConsole("Voting settings is not allowed here.", pPlayer);
-                    return true;
-                }
-                if (!ag_vote_extra_timelimit.value)
-                {
-                    AgConsole("Voting for extra timelimit is not allowed here.", pPlayer);
-                    return true;
-                }
-
-                // Don't allow extending the timelimit too quickly... maybe someone wanted to add days of timelimit by spamming this
-                auto remainingMinutes = CVAR_GET_FLOAT("mp_timeleft") / 60.0f;
-                auto cooldown = remainingMinutes - (ag_vote_extra_timelimit.value / 2.0f);
-                if (cooldown > 0.0f)
-                {
-                    AgConsole(UTIL_VarArgs("Can't vote for extended timelimit yet. Please, try again in %d minutes",
-                        static_cast<int>(std::ceil(cooldown))), pPlayer);
-                    return true;
-                }
-                CallVote(pPlayer);
-
-                return true;
-            }
-            else if (FStrEq(m_sVote.c_str(), "spawnbot"))
-            {
-                if (ag_vote_bot.value == 0.0f)
-                {
-                    AgConsole("Adding bots by vote is not allowed by server admin.", pPlayer);
-                    return true;
-                }
-                if (ag_match_running.value != 0.0f && !g_bLangame)
-                {
-                    AgConsole("Sorry, can't add a bot during a match.", pPlayer);
-                    return true;
-                }
-
-                auto botsCount = 0;
-                for (int i = 1; i <= gpGlobals->maxClients; i++)
-                {
-                    CBasePlayer* player = AgPlayerByIndex(i);
-
-                    if (!player)
-                        continue;
-
-                    if (player->IsBot())
-                        botsCount++;
-                }
-
-                if (botsCount >= ag_bot_limit.value)
-                {
-                    AgConsole(UTIL_VarArgs("The limit of %d bots has been reached", (int) ag_bot_limit.value), pPlayer);
+                    AgConsole("Vote is not allowed by server admin.", pPlayer);
                     return true;
                 }
 
@@ -398,8 +357,7 @@ bool AgVote::HandleCommand(CBasePlayer* pPlayer)
                 if (atof(m_sValue.c_str()) < ag_vote_mp_timelimit_low.value)
                 {
                     AgConsole(UTIL_VarArgs("Can't vote this. It's too low of a timelimit. Please, try a higher value. (min time: %d)",
-                        static_cast<int>(std::ceil(ag_vote_mp_timelimit_low.value))), pPlayer);
-                    return true;
+                        static_cast<int>(std::ceil(ag_vote_mp_timelimit_low.value))), pPlayer);                    return true;
                 }
                 CallVote(pPlayer);
                 return true;
@@ -419,17 +377,19 @@ bool AgVote::HandleCommand(CBasePlayer* pPlayer)
                 CallVote(pPlayer);
                 return true;
             }
-            // Other settings like ag_* and mp_*
-            else if (m_sValue.size()
-                && std::find(std::begin(g_votableSettings), std::end(g_votableSettings), m_sVote.c_str()) != std::end(g_votableSettings)
-                )
+            // TODO: remove sv_maxspeed as it's silently rejected in `AgSettings::AdminSetting()` anyways
+            else if (0 == strncmp(m_sVote.c_str(), "sv_maxspeed", 11))
             {
                 if (!ag_vote_setting.value)
                 {
                     AgConsole("Vote is not allowed by server admin.", pPlayer);
                     return true;
                 }
-
+                if (atoi(m_sValue.c_str()) < 270 || atoi(m_sValue.c_str()) > 350)
+                {
+                    AgConsole("Maxpeed should be between 270 and 350.", pPlayer);
+                    return true;
+                }
                 CallVote(pPlayer);
                 return true;
             }
@@ -441,21 +401,13 @@ bool AgVote::HandleCommand(CBasePlayer* pPlayer)
 
 bool AgVote::CallVote(CBasePlayer* pPlayer)
 {
-    if (pPlayer->IsBot() && ag_bot_allow_vote.value == 0)
-    {
-        // Bots cannot start votes when sv_ag_bots_allow_vote is 0
-        return false;
-    }
-
     m_fMaxTime = AgTime() + 30.0;  //30 seconds is enough.
     m_fNextCount = AgTime();       //Next count directly
-
     pPlayer->m_iVote = 1;          //Voter voted yes
 #ifdef _DEBUG
     pPlayer->m_iVote = 0;
 #endif
     m_sCalled = pPlayer->GetName();
-    m_sCallerID = pPlayer->GetAuthID();
     m_bRunning = true;
 
     //++ muphicks
@@ -465,7 +417,7 @@ bool AgVote::CallVote(CBasePlayer* pPlayer)
     );
     //-- muphicks
 
-    return true;
+    return false;
 }
 
 
@@ -486,12 +438,6 @@ void AgVote::Think()
             CBasePlayer* pPlayerLoop = AgPlayerByIndex(i);
             if (pPlayerLoop && !pPlayerLoop->IsProxy())
             {
-                if (pPlayerLoop->IsBot() && ag_bot_allow_vote.value == 0)
-                {
-                    // Bots do not take part in votes when sv_ag_bot_allow_vote is 0
-                    continue;
-                }
-
                 iPlayers++;
 
                 if (1 == pPlayerLoop->m_iVote)
@@ -515,7 +461,7 @@ void AgVote::Think()
             WRITE_BYTE(iAgainst);
             WRITE_BYTE(iUndecided);
             WRITE_STRING(m_sVote.c_str());
-            WRITE_STRING(UTIL_VarArgs("%s %s", m_sValue.c_str(), m_sValue2.c_str()));
+            WRITE_STRING(m_sValue.c_str());
             WRITE_STRING(m_sCalled.c_str());
             MESSAGE_END();
 #endif
@@ -523,30 +469,19 @@ void AgVote::Think()
             //Exec vote.
             if (FStrEq(m_sVote.c_str(), "agadmin"))
             {
-                if (m_sTarget && m_sTarget->pev)
+                for (int i = 1; i <= gpGlobals->maxClients; i++)
                 {
-                    m_sTarget->SetIsAdmin(true);
-                }
-                else
-                {
-                    for (int i = 1; i <= gpGlobals->maxClients; i++)
+                    CBasePlayer* pPlayerLoop = AgPlayerByIndex(i);
+                    if (pPlayerLoop && pPlayerLoop->GetAuthID() == m_sAuthID)
                     {
-                        CBasePlayer* pPlayerLoop = AgPlayerByIndex(i);
-                        if (pPlayerLoop && pPlayerLoop->GetAuthID() == m_sAuthID)
-                        {
-                            pPlayerLoop->SetIsAdmin(true);
-                            break;
-                        }
+                        pPlayerLoop->SetIsAdmin(true);
+                        break;
                     }
                 }
-
             }
             else if (FStrEq(m_sVote.c_str(), "agallow"))
             {
-                if (m_sTarget && m_sTarget->pev)
-                    Command.Allow(m_sTarget);
-                else
-                    Command.Allow(m_sValue);
+                Command.Allow(m_sValue);
             }
             else if (FStrEq(m_sVote.c_str(), "agmap"))
             {
@@ -558,7 +493,7 @@ void AgVote::Think()
             }
             else if (FStrEq(m_sVote.c_str(), "agstart"))
             {
-                Command.Start(m_sFullValue);
+                Command.Start(m_sValue);
             }
             else if (FStrEq(m_sVote.c_str(), "agpause"))
             {
@@ -570,9 +505,6 @@ void AgVote::Think()
             }
             else if (GameMode.IsAllowedGamemode(m_sVote))
             {
-                // TODO: move this down in the else-if chain, because i guess
-                // you could name your gamemode "agkick" and then agkick would
-                // no longer work, it would try to load that gamemode instead
                 GameMode.Gamemode(m_sVote);
             }
             else if (FStrEq(m_sVote.c_str(), "agnextmode"))
@@ -581,10 +513,7 @@ void AgVote::Think()
             }
             else if (FStrEq(m_sVote.c_str(), "agkick"))
             {
-                if (m_sTarget && m_sTarget->pev)
-                    Command.Kick(m_sTarget);
-                else
-                    Command.Kick(m_sValue);
+                Command.Kick(m_sValue);
             }
             else if (FStrEq(m_sVote.c_str(), "agmaxtime"))
             {
@@ -593,24 +522,6 @@ void AgVote::Think()
             else if (FStrEq(m_sVote.c_str(), "agmoretime"))
             {
                 Command.MoreTime();
-            }
-            else if (FStrEq(m_sVote.c_str(), "spawnbot"))
-            {
-                Command.AddRespawningStaticBot(AgPlayerByAuthID(m_sCallerID));
-            }
-            else if (0 == strncmp(m_sVote.c_str(), "agforceteam", 11))
-            {
-                if (m_sTarget && m_sTarget->pev)
-                    Command.TeamUp(nullptr, m_sTarget, m_sValue2);
-                else
-                    Command.TeamUp(nullptr, m_sValue, m_sValue2);
-            }
-            else if (FStrEq(m_sVote.c_str(), "agforcespectator"))
-            {
-                if (m_sTarget && m_sTarget->pev)
-                    Command.Spectator(nullptr, m_sTarget);
-                else
-                    Command.Spectator(nullptr, m_sValue);
             }
             else
             {
@@ -632,7 +543,7 @@ void AgVote::Think()
                 WRITE_BYTE(iAgainst);
                 WRITE_BYTE(iUndecided);
                 WRITE_STRING(m_sVote.c_str());
-                WRITE_STRING(UTIL_VarArgs("%s %s", m_sValue.c_str(), m_sValue2.c_str()));
+                WRITE_STRING(m_sValue.c_str());
                 WRITE_STRING(m_sCalled.c_str());
                 MESSAGE_END();
 #endif
@@ -651,7 +562,7 @@ void AgVote::Think()
                 WRITE_BYTE(iAgainst);
                 WRITE_BYTE(iUndecided);
                 WRITE_STRING(m_sVote.c_str());
-                WRITE_STRING(UTIL_VarArgs("%s %s", m_sValue.c_str(), m_sValue2.c_str()));
+                WRITE_STRING(m_sValue.c_str());
                 WRITE_STRING(m_sCalled.c_str());
                 MESSAGE_END();
 #endif
@@ -673,11 +584,7 @@ bool AgVote::ResetVote()
 
     m_sVote = "";
     m_sValue = "";
-    m_sValue2 = "";
-    m_sFullValue = "";
-    m_sTarget = nullptr;
     m_sCalled = "";
-    m_sCallerID = "";
     m_fNextCount = 0.0;
     m_fMaxTime = 0.0;
     m_sAuthID = "";
