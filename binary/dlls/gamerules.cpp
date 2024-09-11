@@ -273,6 +273,36 @@ void CGameRules::RefreshSkillData ( void )
 	// Tripmine
 	gSkillData.plrDmgTripmine = GetSkillCvar( "sk_plr_tripmine");
 
+	// Pipe Wrench
+	gSkillData.plrDmgPipewrench = GetSkillCvar("sk_plr_pipewrench");
+
+	// Knife
+	gSkillData.plrDmgKnife = GetSkillCvar("sk_plr_knife");
+
+	// Grapple
+	gSkillData.plrDmgGrapple = GetSkillCvar("sk_plr_grapple");
+
+	// Desert Eagle
+	gSkillData.plrDmgEagle = GetSkillCvar("sk_plr_eagle");
+
+	// Sniper Rifle
+	gSkillData.plrDmg762 = GetSkillCvar("sk_plr_762_bullet");
+
+	// M249
+	gSkillData.plrDmg556 = GetSkillCvar("sk_plr_556_bullet");
+
+	// Displacer
+	gSkillData.plrDmgDisplacerSelf = GetSkillCvar("sk_plr_displacer_self");
+	gSkillData.plrDmgDisplacerOther = GetSkillCvar("sk_plr_displacer_other");
+	gSkillData.plrRadiusDisplacer = GetSkillCvar("sk_plr_displacer_radius");
+
+	// Shock Roack
+	gSkillData.plrDmgShockRoachS = GetSkillCvar("sk_plr_shockroachs");
+	gSkillData.plrDmgShockRoachM = GetSkillCvar("sk_plr_shockroachm");
+
+	// Spore Launcher
+	gSkillData.plrDmgSpore = GetSkillCvar("sk_plr_spore");
+
 	// MONSTER WEAPONS
 	gSkillData.monDmg12MM = GetSkillCvar( "sk_12mm_bullet");
 	gSkillData.monDmgMP5 = GetSkillCvar ("sk_9mmAR_bullet" );
@@ -360,7 +390,7 @@ AgGameRules* InstallGameRules(void)
 	GameMode.ExecConfig();
 
 	//Execute per map basis settings.
-	SERVER_COMMAND(UTIL_VarArgs("exec %s.cfg\n", STRING(gpGlobals->mapname)));
+	SERVER_COMMAND(UTIL_VarArgs("exec cfg/%s.cfg\n", STRING(gpGlobals->mapname)));
 	SERVER_EXECUTE();
 
 	if ( singleplayer.value > 0.0f )
