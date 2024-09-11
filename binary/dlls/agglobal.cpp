@@ -293,6 +293,7 @@ void AgInitGame()
 
     CVAR_REGISTER(&ag_ban_crowbar);
     CVAR_REGISTER(&ag_ban_glock);
+    CVAR_REGISTER(&ag_ban_oitc);
     CVAR_REGISTER(&ag_ban_357);
     CVAR_REGISTER(&ag_ban_mp5);
     CVAR_REGISTER(&ag_ban_shotgun);
@@ -301,6 +302,16 @@ void AgInitGame()
     CVAR_REGISTER(&ag_ban_gauss);
     CVAR_REGISTER(&ag_ban_egon);
     CVAR_REGISTER(&ag_ban_hornet);
+    CVAR_REGISTER(&ag_ban_m249);
+    CVAR_REGISTER(&ag_ban_penguin);
+    CVAR_REGISTER(&ag_ban_eagle);
+    CVAR_REGISTER(&ag_ban_displacer);
+    CVAR_REGISTER(&ag_ban_grapple);
+    CVAR_REGISTER(&ag_ban_knife);
+    CVAR_REGISTER(&ag_ban_pipewrench);
+    CVAR_REGISTER(&ag_ban_shockrifle);
+    CVAR_REGISTER(&ag_ban_sniperrifle);
+    CVAR_REGISTER(&ag_ban_sporelauncher);
 
     CVAR_REGISTER(&ag_ban_hgrenade);
     CVAR_REGISTER(&ag_ban_satchel);
@@ -321,6 +332,7 @@ void AgInitGame()
 
     CVAR_REGISTER(&ag_start_crowbar);
     CVAR_REGISTER(&ag_start_glock);
+    CVAR_REGISTER(&ag_start_oitc);
     CVAR_REGISTER(&ag_start_357);
     CVAR_REGISTER(&ag_start_mp5);
     CVAR_REGISTER(&ag_start_shotgun);
@@ -329,6 +341,16 @@ void AgInitGame()
     CVAR_REGISTER(&ag_start_gauss);
     CVAR_REGISTER(&ag_start_egon);
     CVAR_REGISTER(&ag_start_hornet);
+    CVAR_REGISTER(&ag_start_penguin);
+    CVAR_REGISTER(&ag_start_m249);
+    CVAR_REGISTER(&ag_start_eagle);
+    CVAR_REGISTER(&ag_start_displacer);
+    CVAR_REGISTER(&ag_start_grapple);
+    CVAR_REGISTER(&ag_start_knife);
+    CVAR_REGISTER(&ag_start_pipewrench);
+    CVAR_REGISTER(&ag_start_shockrifle);
+    CVAR_REGISTER(&ag_start_sniperrifle);
+    CVAR_REGISTER(&ag_start_sporelauncher);
 
     CVAR_REGISTER(&ag_start_hgrenade);
     CVAR_REGISTER(&ag_start_satchel);
@@ -342,6 +364,11 @@ void AgInitGame()
     CVAR_REGISTER(&ag_start_bolts);
     CVAR_REGISTER(&ag_start_rockets);
     CVAR_REGISTER(&ag_start_357ammo);
+
+    // Opposing Force ammo
+    CVAR_REGISTER(&ag_start_ammo556);
+    CVAR_REGISTER(&ag_start_ammo762);
+    CVAR_REGISTER(&ag_start_ammoSpore);
 
     CVAR_REGISTER(&ag_start_armour);
     CVAR_REGISTER(&ag_start_health);
