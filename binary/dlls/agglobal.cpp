@@ -26,9 +26,9 @@
 void AgInitTimer();
 
 #ifdef AG_NO_CLIENT_DLL
-DLL_GLOBAL cvar_t	ag_version = { "sv_aura_version","6.7mini", FCVAR_SERVER };
+DLL_GLOBAL cvar_t	ag_version = { "sv_aura_version","2.3", FCVAR_SERVER };
 #else
-DLL_GLOBAL cvar_t	ag_version = { "sv_aura_version","6.7", FCVAR_SERVER };
+DLL_GLOBAL cvar_t	ag_version = { "sv_aura_version","2.3", FCVAR_SERVER };
 #endif
 
 DLL_GLOBAL cvar_t	ag_gamemode = { "sv_aura_gamemode","ffa", FCVAR_SERVER }; //The current gamemode
@@ -78,6 +78,7 @@ DLL_GLOBAL cvar_t	ag_blastradius = { "sv_aura_blastradius","1" };         //Defa
 
 DLL_GLOBAL cvar_t	ag_ban_crowbar = { "sv_aura_ban_crowbar","0" };
 DLL_GLOBAL cvar_t	ag_ban_glock = { "sv_aura_ban_glock","0" };
+DLL_GLOBAL cvar_t   ag_ban_oitc = { "sv_aura_ban_oitc", "1" };
 DLL_GLOBAL cvar_t	ag_ban_357 = { "sv_aura_ban_357","0" };
 DLL_GLOBAL cvar_t	ag_ban_mp5 = { "sv_aura_ban_mp5","0" };
 DLL_GLOBAL cvar_t	ag_ban_shotgun = { "sv_aura_ban_shotgun", "0" };
@@ -117,6 +118,7 @@ DLL_GLOBAL cvar_t	ag_ban_recharg = { "sv_aura_ban_recharg","0" };
 
 DLL_GLOBAL cvar_t	ag_start_crowbar = { "sv_aura_start_crowbar","1" };
 DLL_GLOBAL cvar_t	ag_start_glock = { "sv_aura_start_glock","1" };
+DLL_GLOBAL cvar_t   ag_start_oitc = { "sv_aura_start_oitc", "0" };
 DLL_GLOBAL cvar_t	ag_start_357 = { "sv_aura_start_357","0" };
 DLL_GLOBAL cvar_t	ag_start_mp5 = { "sv_aura_start_mp5","0" };
 DLL_GLOBAL cvar_t	ag_start_shotgun = { "sv_aura_start_shotgun", "0" };
@@ -150,6 +152,11 @@ DLL_GLOBAL cvar_t   ag_start_sniperrifle = { "sv_aura_start_sniper", "0" };
 DLL_GLOBAL cvar_t   ag_start_sporelauncher = { "sv_aura_start_sporelauncher", "0" };
 DLL_GLOBAL cvar_t	ag_start_armour = { "sv_aura_start_armour","0" };
 DLL_GLOBAL cvar_t	ag_start_health = { "sv_aura_start_health","100" };
+
+// Opposing Force ammo
+DLL_GLOBAL cvar_t   ag_start_ammo556 = { "sv_aura_start_ammo_556", "0" }; // this should be 200 in gamemodes
+DLL_GLOBAL cvar_t   ag_start_ammo762 = { "sv_aura_start_ammo_762", "0" }; // this should be 15 in gamemodes
+DLL_GLOBAL cvar_t   ag_start_ammoSpore = { "sv_aura_start_ammo_spore", "0" }; // this should be 20 in gamemodes
 
 DLL_GLOBAL cvar_t	ag_dmg_crowbar = { "sv_aura_dmg_crowbar","25" };
 DLL_GLOBAL cvar_t	ag_dmg_glock = { "sv_aura_dmg_glock","12" };
