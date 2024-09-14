@@ -4685,7 +4685,7 @@ void CBasePlayer :: UpdateClientData( void )
 	{
 		STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_low.wav");
 	}
-	else if (pev->armorvalue > 10)
+	else if (pev->armorvalue > 25)
 	{
 		STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_low.wav");
 	}
