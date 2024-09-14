@@ -516,9 +516,10 @@ public:
 	float m_flDisplacerSndRoomtype;
 
 	bool isShieldLow;
+	bool isShieldEmpty;
 	float lastShieldSoundTime;
 
-	CBasePlayer () : isShieldLow(false), lastShieldSoundTime(0.0f) {}
+	CBasePlayer () : isShieldLow(false), isShieldEmpty(false), lastShieldSoundTime(0.0f) {}
 
 	void UpdateClientData();
 

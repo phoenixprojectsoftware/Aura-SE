@@ -4663,6 +4663,24 @@ void CBasePlayer :: UpdateClientData( void )
 
 	float currentTime = gpGlobals->time;
 
+	if (pev->armorvalue <= 0)
+	{
+		if (!isShieldEmpty && (currentTime - lastShieldSoundTime > 1.0f))
+		{
+			EMIT_SOUND(ENT(pev), CHAN_AUTO, "player/shield_empty.wav", 0.85, ATTN_NORM);
+			isShieldEmpty = true;
+			lastShieldSoundTime = currentTime;
+		}
+	}
+	else
+	{
+		if (isShieldEmpty)
+		{
+			STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_empty.wav");
+			isShieldEmpty = false;
+		}
+	}
+
 	if (pev->armorvalue < 10)
 	{
 		if (!isShieldLow && (currentTime - lastShieldSoundTime > 1.0f)) // 1 second delay
