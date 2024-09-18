@@ -795,12 +795,33 @@ void CTargetCDAudio::Think( void )
 {
 	edict_t *pClient;
 	
-	// manually find the single player. 
-	pClient = g_engfuncs.pfnPEntityOfEntIndex( 1 );
-	
-	// Can't play if the client is not connected!
-	if ( !pClient )
-		return;
+	// find all the players. 
+	for (int i = 1; i < gpGlobals->maxClients + 1; i++)
+	{
+		pClient = g_engfuncs.pfnPEntityOfEntIndex(i);
+
+		// Can't play if the client is not connected!
+		if (!pClient)
+			break;
+
+		if (!(pClient->v.flags & FL_CLIENT))
+		{
+			break;
+		}
+
+		CBasePlayer* pPlayer = (CBasePlayer*)CBaseEntity::Instance(pClient);
+
+		if (!pPlayer)
+		{
+			ALERT(at_console, "Player %i returned null\n", i);
+			continue;
+		}
+		if (!pPlayer->m_bMusicEnabled)
+		{
+			ClientPrint(&pClient->v, HUD_PRINTCONSOLE, "[TARGET CD] Music disabled for this player!\n");
+			continue;
+		}
+	}
 	
 	pev->nextthink = gpGlobals->time + 0.5;
 
