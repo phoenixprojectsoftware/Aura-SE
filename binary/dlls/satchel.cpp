@@ -116,7 +116,7 @@ void CSatchelCharge :: Spawn( void )
 		{
 			// Minimum 1 hp, because i'm not sure if stuff gets broken on 0 hp or less
 			// and how the rounding works on health, or if it gets rounded at all for non-player entities
-			CVAR_SET_FLOAT("sv_ag_satchel_health", 1.0f);
+			CVAR_SET_FLOAT("sv_aura_satchel_health", 1.0f);
 		}
 
 		pev->health = ag_satchel_health.value;
