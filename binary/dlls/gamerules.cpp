@@ -363,7 +363,6 @@ AgGameRules* InstallGameRules(void)
 		sprintf(szCommand, "exec %s\n", servercfgfile);
 		SERVER_COMMAND(szCommand);
 	}
-	CVar::StopRecordingServerChanges();
 
 #ifndef AG_NO_CLIENT_DLL
 	//Detect CTF maps.
