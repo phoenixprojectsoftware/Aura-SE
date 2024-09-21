@@ -788,6 +788,9 @@ void CTargetCDAudio :: Spawn( void )
 void CTargetCDAudio::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value )
 {
 	Play();
+
+	// this should make target_cdaudio usable more than once.
+	pev->nextthink = gpGlobals->time + 0.5;
 }
 
 // only plays for ONE client, so only use in single play!
