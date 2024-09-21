@@ -23,6 +23,10 @@
 #include "player.h"
 #include "gamerules.h"
 
+extern cvar_t ag_satchel_solid;
+extern cvar_t ag_satchel_health;
+extern cvar_t ag_satchel_destroyable;
+
 enum satchel_e {
 	SATCHEL_IDLE1 = 0,
 	SATCHEL_FIDGET1,
