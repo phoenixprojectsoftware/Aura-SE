@@ -4668,6 +4668,7 @@ void CBasePlayer :: UpdateClientData( void )
 		if (!isShieldEmpty && (currentTime - lastShieldSoundTime > 1.0f))
 		{
 			EMIT_SOUND(ENT(pev), CHAN_AUTO, "player/shield_empty.wav", 0.85, ATTN_NORM);
+			EMIT_SOUND(ENT(pev), CHAN_AUTO, "debris/beamstart15.wav", 0.7, ATTN_NORM);
 			isShieldEmpty = true;
 			lastShieldSoundTime = currentTime;
 		}
@@ -4721,6 +4722,7 @@ void CBasePlayer :: UpdateClientData( void )
 			m_flNextSuitRegenTime = 0.0f;
 			m_fRegenOn = false;
 			STOP_SOUND(ENT(pev), CHAN_STATIC, "items/suitcharge_no_lp.wav");
+			STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_empty.wav");
 			EMIT_SOUND(ENT(pev), CHAN_ITEM, "buttons/bell1.wav", 0.85, ATTN_NORM);
 		}
 		else if (!m_fRegenOn) // when shield starts recharging
@@ -4741,6 +4743,7 @@ void CBasePlayer :: UpdateClientData( void )
 		else // as it's recharging
 		{
 			STOP_SOUND(ENT(pev), CHAN_STATIC, "items/suitcharge_no_lp.wav");
+			STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_empty.wav");
 			// too loud
 			EMIT_SOUND(ENT(pev), CHAN_STATIC, "items/suitcharge_no_lp.wav", 0.25, ATTN_NORM);
 		}
@@ -4749,6 +4752,7 @@ void CBasePlayer :: UpdateClientData( void )
 	}
 	else if (sv_aura_regeneration.value == 0)
 	{
+		STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_empty.wav");
 		m_flNextSuitRegenTime = 0.0f;
 		m_fRegenOn = false;
 		m_fRegenOn = false;
