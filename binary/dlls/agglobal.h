@@ -202,18 +202,6 @@ extern cvar_t ag_spawn_pa_visible_chance;
 extern cvar_t ag_spawn_pa_audible_chance;
 extern cvar_t ag_spawn_pa_safe_chance;
 
-extern cvar_t ag_fps_limit;
-extern cvar_t ag_fps_limit_auto;
-extern cvar_t ag_fps_limit_check_interval;
-extern cvar_t ag_fps_limit_match_only;
-extern cvar_t ag_fps_limit_steampipe;
-extern cvar_t ag_fps_limit_warnings;
-extern cvar_t ag_fps_limit_warnings_interval;
-extern cvar_t ag_fps_limit_punishment;
-extern cvar_t ag_fps_limit_punishment_slap_intensity;
-extern cvar_t ag_fps_limit_punishment_slap_interval;
-extern cvar_t ag_fps_limit_punishment_ban_time;
-
 extern bool g_bLangame;
 extern bool g_bUseTeamColors;
 

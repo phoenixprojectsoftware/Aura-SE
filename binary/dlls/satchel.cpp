@@ -53,8 +53,6 @@ class CSatchelCharge : public CGrenade
 	void EXPORT SatchelSlide( CBaseEntity *pOther );
 	void EXPORT SatchelThink( void );
 
-	void Killed( entvars_t *pevAttacker, int iGib );
-
 public:
 	void Deactivate( void );
 };
@@ -76,6 +74,7 @@ void CSatchelCharge :: Spawn( void )
 	Precache( );
 	// motor
 	pev->movetype = MOVETYPE_BOUNCE;
+	pev->solid = SOLID_BBOX;
 
 	SET_MODEL(ENT(pev), "models/w_satchel.mdl");
 	//UTIL_SetSize(pev, Vector( -16, -16, -4), Vector(16, 16, 32));	// Old box -- size of headcrab monsters/players get blocked by this
@@ -87,20 +86,8 @@ void CSatchelCharge :: Spawn( void )
 	SetThink( &CSatchelCharge::SatchelThink );
 	pev->nextthink = gpGlobals->time + 0.1;
 
+	pev->gravity = 0.5;
 	pev->friction = 0.8;
-
-	if (ag_satchel_solid.value == 0.0f)
-	{
-		pev->solid = SOLID_TRIGGER;
-		// When you throw a satchel with SOLID_TRIGGER, it flies lower than with SOLID_BBOX,
-		// so we lower its gravity to match SOLID_BBOX's
-		pev->gravity = 0.4;
-	}
-	else
-	{
-		pev->solid = SOLID_BBOX;
-		pev->gravity = 0.5;
-	}
 
 	pev->dmg = gSkillData.plrDmgSatchel;
 	// ResetSequenceInfo( );
@@ -120,7 +107,7 @@ void CSatchelCharge :: Spawn( void )
 		{
 			// Minimum 1 hp, because i'm not sure if stuff gets broken on 0 hp or less
 			// and how the rounding works on health, or if it gets rounded at all for non-player entities
-			CVAR_SET_FLOAT("sv_aura_satchel_health", 1.0f);
+			CVAR_SET_FLOAT("sv_ag_satchel_health", 1.0f);
 		}
 
 		pev->health = ag_satchel_health.value;
@@ -133,11 +120,9 @@ void CSatchelCharge::SatchelSlide( CBaseEntity *pOther )
 {
 	entvars_t	*pevOther = pOther->pev;
 
-	if (pOther->entindex() > 0)
-	{
-		if (pOther->edict() == pev->owner || ag_satchel_solid.value == 0.0f)
-			return;
-	}
+	// don't hit the guy that launched this grenade
+	if ( pOther->edict() == pev->owner )
+		return;
 
 	// pev->avelocity = Vector (300, 300, 300);
 	pev->gravity = 1;// normal gravity now
@@ -151,7 +136,7 @@ void CSatchelCharge::SatchelSlide( CBaseEntity *pOther )
 		// add a bit of static friction
 		pev->velocity = pev->velocity * 0.95;
 		pev->avelocity = pev->avelocity * 0.9;
-		// TODO: play sliding sound, volume based on velocity
+		// play sliding sound, volume based on velocity
 	}
 	if ( !(pev->flags & FL_ONGROUND) && pev->velocity.Length2D() > 10 )
 	{
@@ -205,54 +190,6 @@ void CSatchelCharge :: BounceSound( void )
 	case 1:	EMIT_SOUND(ENT(pev), CHAN_VOICE, "weapons/g_bounce2.wav", 1, ATTN_NORM);	break;
 	case 2:	EMIT_SOUND(ENT(pev), CHAN_VOICE, "weapons/g_bounce3.wav", 1, ATTN_NORM);	break;
 	}
-}
-
-void CSatchelCharge :: Killed( entvars_t *pevAttacker, int iGib )
-{
-	if (!pev->owner)
-	{
-		CGrenade::Killed(pevAttacker, iGib);
-		return;
-	}
-
-	CBasePlayer* pPlayer = (CBasePlayer*)CBasePlayer::Instance(pev->owner);
-	CBaseEntity *pSatchel = NULL;
-	auto hasSatchelsLeft = false;
-	
-	// Find your satchels on the map (not in your inventory)
-	while ((pSatchel = UTIL_FindEntityInSphere(pSatchel, pPlayer->pev->origin, WORLD_BOUNDARY_DIST)) != NULL)
-	{
-		if (FClassnameIs(pSatchel->pev, "monster_satchel"))
-		{
-			if (pSatchel->pev->owner == pPlayer->edict() && pSatchel->edict() != edict())
-			{
-				hasSatchelsLeft = true;
-				break;
-			}
-		}
-	}
-	
-	if (!hasSatchelsLeft)
-	{
-		// Reset the satchel mode for the owner if they have any left in the inventory
-		// They have no satchels remaining on the field, so it makes no sense to have
-		// the remote as model when selecting the satchel, as there's nothing to explode
-		CBasePlayerItem* pWeaponSatchel = pPlayer->GetWeapon("weapon_satchel");
-
-		if (pWeaponSatchel)
-			pWeaponSatchel->m_chargeReady = 0;
-
-		if (pPlayer->m_pActiveItem && FClassnameIs(pPlayer->m_pActiveItem->pev, "weapon_satchel"))
-		{
-			// Case: when you place a satchel and it's destroyed while you have the remote out
-			// (you have the satchel weapon selected), the remote wouldn't disappear if we didn't Deploy().
-			// With this, the satchel model appears again in your hand as soon as all of your satchels
-			// on the field are killed
-			pPlayer->m_pActiveItem->Deploy();
-		}
-	}
-
-	CGrenade::Killed(pevAttacker, iGib);
 }
 
 
@@ -439,13 +376,14 @@ void CSatchel::PrimaryAttack()
 
 		CBaseEntity *pSatchel = NULL;
 
-		while ((pSatchel = UTIL_FindEntityInSphere( pSatchel, m_pPlayer->pev->origin, WORLD_BOUNDARY_DIST )) != NULL)
+		while ((pSatchel = UTIL_FindEntityInSphere( pSatchel, m_pPlayer->pev->origin, 4096 )) != NULL)
 		{
 			if (FClassnameIs( pSatchel->pev, "monster_satchel"))
 			{
 				if (pSatchel->pev->owner == pPlayer)
 				{
 					pSatchel->Use( m_pPlayer, m_pPlayer, USE_ON, 0 );
+					m_chargeReady = 2;
 				}
 			}
 		}
