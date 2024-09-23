@@ -160,7 +160,7 @@ DLL_GLOBAL cvar_t   ag_start_ammoSpore = { "sv_aura_start_ammo_spore", "0" }; //
 
 DLL_GLOBAL cvar_t	ag_dmg_crowbar = { "sv_aura_dmg_crowbar","25" };
 DLL_GLOBAL cvar_t	ag_dmg_glock = { "sv_aura_dmg_glock","12" };
-DLL_GLOBAL cvar_t	ag_dmg_357 = { "sv_aura_dmg_357","40" };
+DLL_GLOBAL cvar_t	ag_dmg_357 = { "sv_aura_dmg_357","50" };
 DLL_GLOBAL cvar_t	ag_dmg_mp5 = { "sv_aura_dmg_mp5","12" };
 DLL_GLOBAL cvar_t	ag_dmg_shotgun = { "sv_aura_dmg_shotgun", "20" };
 DLL_GLOBAL cvar_t	ag_dmg_crossbow = { "sv_aura_dmg_crossbow", "20" };
