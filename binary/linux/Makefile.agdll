@@ -174,16 +174,7 @@ HLDLL_OBJS = \
 	$(HLDLL_OBJ_DIR)/aglms.o \
 	$(HLDLL_OBJ_DIR)/agdom.o \
 	$(HLDLL_OBJ_DIR)/spawnchooser.o \
-	$(HLDLL_OBJ_DIR)/agflood.o \
-	$(HLDLL_OBJ_DIR)/cvar.o \
-	$(HLDLL_OBJ_DIR)/agrandom.o \
-	$(HLDLL_OBJ_DIR)/speedrunstats.o \
 	$(HLDLL_OBJ_DIR)/genericitem.o
-	$(HLDLL_OBJ_DIR)/spawnchooser.o \
-	$(HLDLL_OBJ_DIR)/agflood.o \
-	$(HLDLL_OBJ_DIR)/cvar.o \
-	$(HLDLL_OBJ_DIR)/agrandom.o \
-	$(HLDLL_OBJ_DIR)/speedrunstats.o
 
 HLWPN_OBJS = \
 	$(HLWPN_OBJ_DIR)/hl_wpn_glock.o \
