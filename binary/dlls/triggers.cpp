@@ -835,8 +835,7 @@ void CTargetCDAudio::Think( void )
 
 void CTargetCDAudio::Play( void ) 
 { 
-	PlayCDTrack( (int)pev->health );
-	UTIL_Remove(this); 
+	PlayCDTrack( (int)pev->health ); 
 }
 
 //=====================================
