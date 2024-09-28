@@ -25,11 +25,12 @@
 #include "customentity.h"
 #include "gamerules.h"
 
-#ifdef CLIENT_DLL
-#include "hud.h"
-#include "com_weapons.h"
-extern bool IsBustingGame();
-#endif
+#define	EGON_PRIMARY_VOLUME		450
+#define EGON_BEAM_SPRITE		"sprites/xbeam1.spr"
+#define EGON_FLARE_SPRITE		"sprites/XSpark1.spr"
+#define EGON_SOUND_OFF			"weapons/egon_off1.wav"
+#define EGON_SOUND_RUN			"weapons/egon_run3.wav"
+#define EGON_SOUND_STARTUP		"weapons/egon_windup2.wav"
 
 #define EGON_SWITCH_NARROW_TIME			0.75			// Time it takes to switch fire modes
 #define EGON_SWITCH_WIDE_TIME			1.5
@@ -154,11 +155,6 @@ BOOL CEgon::HasAmmo(void)
 
 void CEgon::UseAmmo(int count)
 {
-#ifndef CLIENT_DLL
-	if (IsBustingGame())
-		return;
-#endif
-
 	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] >= count)
 		m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] -= count;
 	else
@@ -523,17 +519,7 @@ void CEgon::WeaponIdle(void)
 	m_deployed = TRUE;
 }
 
-bool CEgon::CanHolster()
-{
-#ifndef CLIENT_DLL
-	if (IsBustingGame())
-	{
-		return false;
-	}
-#endif
 
-	return true;
-}
 
 void CEgon::EndAttack(void)
 {
