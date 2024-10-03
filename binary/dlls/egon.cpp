@@ -348,7 +348,7 @@ void CEgon::Fire(const Vector& vecOrigSrc, const Vector& vecDir)
 				//multiplayer uses 5 ammo/second
 				if (gpGlobals->time >= m_flAmmoUseTime)
 				{
-					UseAmmo(5);
+					UseAmmo(2);
 					m_flAmmoUseTime = gpGlobals->time + 0.001; // This is the actual Egon fire rate
 				}
 			}
