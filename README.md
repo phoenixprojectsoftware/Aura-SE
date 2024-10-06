@@ -43,3 +43,5 @@ footstep sounds for wooden surfaces, a CVar to change the MP5's fire-rate, the O
 and much more. The full changelog for ZAMNHLMP 2.6 + Aura 2.0 can be seen [here.](https://phoenixprojectsoftware.github.io/zamnhlmp/changelogs/updates/2.6.md)
 
 ![ZAMNHLMP 2.6 promo](assets/zamnhlmp-2.6.png "ZAMNHLMP 2.6 promo")
+
+
