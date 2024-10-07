@@ -330,6 +330,8 @@ void AgArena::ClientConnected(CBasePlayer* pPlayer)
     //Set status
     pPlayer->SetIngame(false);
 
+    CLIENT_COMMAND(pPlayer->edict(),"cd play 5"); // play music
+
     if (!pPlayer->IsProxy())
         Add(pPlayer);
 }
