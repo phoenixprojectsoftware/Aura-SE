@@ -5,3 +5,4 @@
 *.bsp
 !prefabs/prefabs.map
 !Leveled.map
+!Dev.map

@@ -1,0 +1,127 @@
+{
+"classname" "worldspawn"
+"defaultteam" "0"
+"newunit" "0"
+"gametitle" "0"
+"startdark" "0"
+"MaxRange" "4096"
+"sounds" "1"
+"mapversion" "220"
+"wad" "/Program Files (x86)/Steam/steamapps/common/Half-Life/zamnhlmp_dev/Halloween.wad;/Program Files (x86)/Steam/steamapps/common/Half-Life/zamnhlmp_dev/Kasino.wad;/Program Files (x86)/Steam/steamapps/common/Half-Life/zamnhlmp_dev/OPFOR.WAD;/Program Files (x86)/Steam/steamapps/common/Half-Life/zamnhlmp_dev/aw_agctf.wad;/Program Files (x86)/Steam/steamapps/common/Half-Life/zamnhlmp_dev/barney.wad;/Program Files (x86)/Steam/steamapps/common/Half-Life/zamnhlmp_dev/creative.wad;/Program Files (x86)/Steam/steamapps/common/Half-Life/zamnhlmp_dev/cs_747.wad;/Program Files (x86)/Steam/steamapps/common/Half-Life/zamnhlmp_dev/cs_assault.wad;/Program Files (x86)/Steam/steamapps/common/Half-Life/zamnhlmp_dev/cs_bdog.wad;/Program Files (x86)/Steam/steamapps/common/Half-Life/zamnhlmp_dev/cs_cbble.wad;/Program Files (x86)/Steam/steamapps/common/Half-Life/zamnhlmp_dev/cs_dust.wad;/Program Files (x86)/Steam/steamapps/common/Half-Life/zamnhlmp_dev/cs_havana.wad;/Program Files (x86)/Steam/steamapps/common/Half-Life/zamnhlmp_dev/cs_office.wad;/Program Files (x86)/Steam/steamapps/common/Half-Life/zamnhlmp_dev/cstrike.wad;/Program Files (x86)/Steam/steamapps/common/Half-Life/zamnhlmp_dev/de_aztec.wad;/Program Files (x86)/Steam/steamapps/common/Half-Life/zamnhlmp_dev/de_piranesi.wad;/Program Files (x86)/Steam/steamapps/common/Half-Life/zamnhlmp_dev/decals.wad;/Program Files (x86)/Steam/steamapps/common/Half-Life/zamnhlmp_dev/decay.wad;/Program Files (x86)/Steam/steamapps/common/Half-Life/zamnhlmp_dev/devtextures.wad;/Program Files (x86)/Steam/steamapps/common/Half-Life/zamnhlmp_dev/dmc.wad;/Program Files (x86)/Steam/steamapps/common/Half-Life/zamnhlmp_dev/fof_32.wad;/Program Files (x86)/Steam/steamapps/common/Half-Life/zamnhlmp_dev/fof_chillbhop_btm.wad;/Program Files (x86)/Steam/steamapps/common/Half-Life/zamnhlmp_dev/fonts.wad;/Program Files (x86)/Steam/steamapps/common/Half-Life/zamnhlmp_dev/gfx.wad;/Program Files (x86)/Steam/steamapps/common/Half-Life/zamnhlmp_dev/halflife.wad;/Program Files (x86)/Steam/steamapps/common/Half-Life/zamnhlmp_dev/hlcompound0001.wad;/Program Files (x86)/Steam/steamapps/common/Half-Life/zamnhlmp_dev/liquids.wad;/Program Files (x86)/Steam/steamapps/common/Half-Life/zamnhlmp_dev/my_txt.wad;/Program Files (x86)/Steam/steamapps/common/Half-Life/zamnhlmp_dev/n0th1ng.wad;/Program Files (x86)/Steam/steamapps/common/Half-Life/zamnhlmp_dev/nw.wad;/Program Files (x86)/Steam/steamapps/common/Half-Life/zamnhlmp_dev/op4ctf.wad;/Program Files (x86)/Steam/steamapps/common/Half-Life/zamnhlmp_dev/playground.wad;/Program Files (x86)/Steam/steamapps/common/Half-Life/zamnhlmp_dev/road.wad;/Program Files (x86)/Steam/steamapps/common/Half-Life/zamnhlmp_dev/roma.wad;/Program Files (x86)/Steam/steamapps/common/Half-Life/zamnhlmp_dev/secret_base_hl.wad;/Program Files (x86)/Steam/steamapps/common/Half-Life/zamnhlmp_dev/sinif.wad;/Program Files (x86)/Steam/steamapps/common/Half-Life/zamnhlmp_dev/spraypaint.wad;/Program Files (x86)/Steam/steamapps/common/Half-Life/zamnhlmp_dev/testchange.wad;/Program Files (x86)/Steam/steamapps/common/Half-Life/zamnhlmp_dev/timecounter.wad;/Program Files (x86)/Steam/steamapps/common/Half-Life/zamnhlmp_dev/wesley.wad;/Program Files (x86)/Steam/steamapps/common/Half-Life/zamnhlmp_dev/xeno.wad;/Program Files (x86)/Steam/steamapps/common/Half-Life/zamnhlmp_dev/zamn.wad;/Program Files (x86)/Steam/steamapps/common/Half-Life/zamnhlmp_dev/zamnhlmp.wad;/Program Files (x86)/Steam/steamapps/common/Half-Life/zamnhlmp_dev/Kasino2_generated.wad;/Program Files (x86)/Steam/steamapps/common/Half-Life/zamnhlmp_dev/blimp.wad"
+"_generator" "J.A.C.K. 1.1.3773 Freeware (vpHalfLife)"
+{
+( -3584 3585 3425 ) ( -3584 3585 -3457 ) ( -3584 -3777 3425 ) SKY [ 0 1 0 0 ] [ 0 0 -1 0 ] 0 1 1
+( -3585 -3777 3425 ) ( -3585 -3777 -3457 ) ( -3585 3585 3425 ) SKY [ 0 1 0 0 ] [ 0 0 -1 0 ] 0 1 1
+( -3585 -3777 3425 ) ( -3584 -3777 3425 ) ( -3585 -3777 -3457 ) SKY [ 1 0 0 0 ] [ 0 0 -1 0 ] 0 1 1
+( -3585 3585 -3457 ) ( -3584 3585 -3457 ) ( -3585 3585 3425 ) SKY [ 1 0 0 0 ] [ 0 0 -1 0 ] 0 1 1
+( -3585 3585 -3457 ) ( -3585 -3777 -3457 ) ( -3584 3585 -3457 ) SKY [ 1 0 0 0 ] [ 0 -1 0 0 ] 0 1 1
+( -3585 -3777 3425 ) ( -3585 3585 3425 ) ( -3584 -3777 3425 ) SKY [ 1 0 0 0 ] [ 0 -1 0 0 ] 0 1 1
+}
+{
+( 3552 -3777 3425 ) ( 3552 -3777 -3457 ) ( 3552 3585 3425 ) SKY [ 0 1 0 0 ] [ 0 0 -1 0 ] 0 1 1
+( 3553 3585 3425 ) ( 3553 3585 -3457 ) ( 3553 -3777 3425 ) SKY [ 0 1 0 0 ] [ 0 0 -1 0 ] 0 1 1
+( 3553 3585 3425 ) ( 3552 3585 3425 ) ( 3553 3585 -3457 ) SKY [ 1 0 0 0 ] [ 0 0 -1 0 ] 0 1 1
+( 3553 -3777 -3457 ) ( 3552 -3777 -3457 ) ( 3553 -3777 3425 ) SKY [ 1 0 0 0 ] [ 0 0 -1 0 ] 0 1 1
+( 3553 -3777 3425 ) ( 3552 -3777 3425 ) ( 3553 3585 3425 ) SKY [ 1 0 0 0 ] [ 0 -1 0 0 ] 0 1 1
+( 3553 3585 -3457 ) ( 3552 3585 -3457 ) ( 3553 -3777 -3457 ) SKY [ 1 0 0 0 ] [ 0 -1 0 0 ] 0 1 1
+}
+{
+( -3584 3585 3425 ) ( -3584 3584 3425 ) ( -3584 3585 -3457 ) SKY [ 0 1 0 0 ] [ 0 0 -1 0 ] 0 1 1
+( 3552 3585 -3457 ) ( 3552 3584 -3457 ) ( 3552 3585 3425 ) SKY [ 0 1 0 0 ] [ 0 0 -1 0 ] 0 1 1
+( 3552 3584 3425 ) ( 3552 3584 -3457 ) ( -3584 3584 3425 ) SKY [ 1 0 0 0 ] [ 0 0 -1 0 ] 0 1 1
+( -3584 3585 3425 ) ( -3584 3585 -3457 ) ( 3552 3585 3425 ) SKY [ 1 0 0 0 ] [ 0 0 -1 0 ] 0 1 1
+( -3584 3585 -3457 ) ( -3584 3584 -3457 ) ( 3552 3585 -3457 ) SKY [ 1 0 0 0 ] [ 0 -1 0 0 ] 0 1 1
+( -3584 3584 3425 ) ( -3584 3585 3425 ) ( 3552 3584 3425 ) SKY [ 1 0 0 0 ] [ 0 -1 0 0 ] 0 1 1
+}
+{
+( 3552 -3777 3425 ) ( 3552 -3776 3425 ) ( 3552 -3777 -3457 ) SKY [ 0 1 0 0 ] [ 0 0 -1 0 ] 0 1 1
+( -3584 -3777 -3457 ) ( -3584 -3776 -3457 ) ( -3584 -3777 3425 ) SKY [ 0 1 0 0 ] [ 0 0 -1 0 ] 0 1 1
+( -3584 -3776 3425 ) ( -3584 -3776 -3457 ) ( 3552 -3776 3425 ) SKY [ 1 0 0 0 ] [ 0 0 -1 0 ] 0 1 1
+( 3552 -3777 3425 ) ( 3552 -3777 -3457 ) ( -3584 -3777 3425 ) SKY [ 1 0 0 0 ] [ 0 0 -1 0 ] 0 1 1
+( -3584 -3777 3425 ) ( -3584 -3776 3425 ) ( 3552 -3777 3425 ) SKY [ 1 0 0 0 ] [ 0 -1 0 0 ] 0 1 1
+( -3584 -3776 -3457 ) ( -3584 -3777 -3457 ) ( 3552 -3776 -3457 ) SKY [ 1 0 0 0 ] [ 0 -1 0 0 ] 0 1 1
+}
+{
+( -3584 -3776 3425 ) ( -3584 -3776 3424 ) ( -3584 3584 3425 ) SKY [ 0 1 0 0 ] [ 0 0 -1 0 ] 0 1 1
+( 3552 3584 3425 ) ( 3552 3584 3424 ) ( 3552 -3776 3425 ) SKY [ 0 1 0 0 ] [ 0 0 -1 0 ] 0 1 1
+( -3584 3584 3425 ) ( -3584 3584 3424 ) ( 3552 3584 3425 ) SKY [ 1 0 0 0 ] [ 0 0 -1 0 ] 0 1 1
+( 3552 -3776 3425 ) ( 3552 -3776 3424 ) ( -3584 -3776 3425 ) SKY [ 1 0 0 0 ] [ 0 0 -1 0 ] 0 1 1
+( -3584 3584 3424 ) ( -3584 -3776 3424 ) ( 3552 3584 3424 ) SKY [ -1 0 0 0 ] [ 0 -1 0 0 ] 0 1 1
+( -3584 -3776 3425 ) ( -3584 3584 3425 ) ( 3552 -3776 3425 ) SKY [ 1 0 0 0 ] [ 0 -1 0 0 ] 0 1 1
+}
+{
+( 3552 3584 -3456 ) ( 3552 3584 -3457 ) ( 3552 -3776 -3456 ) SKY [ 0 1 0 0 ] [ 0 0 -1 0 ] 0 1 1
+( -3584 -3776 -3456 ) ( -3584 -3776 -3457 ) ( -3584 3584 -3456 ) SKY [ 0 1 0 0 ] [ 0 0 -1 0 ] 0 1 1
+( 3552 -3776 -3456 ) ( 3552 -3776 -3457 ) ( -3584 -3776 -3456 ) SKY [ 1 0 0 0 ] [ 0 0 -1 0 ] 0 1 1
+( -3584 3584 -3456 ) ( -3584 3584 -3457 ) ( 3552 3584 -3456 ) SKY [ 1 0 0 0 ] [ 0 0 -1 0 ] 0 1 1
+( -3584 -3776 -3456 ) ( -3584 3584 -3456 ) ( 3552 -3776 -3456 ) SKY [ 1 0 -0 0 ] [ 0 -1 0 0 ] 0 1 1
+( -3584 3584 -3457 ) ( -3584 -3776 -3457 ) ( 3552 3584 -3457 ) SKY [ 1 0 0 0 ] [ 0 -1 0 0 ] 0 1 1
+}
+{
+( -2400 -2240 0 ) ( -2400 -2240 -32 ) ( -2400 -1984 0 ) PRXROAD1 [ 0 -1 0 -191.999 ] [ 0 0 -1 0 ] 0 1 1
+( 2048 -1984 0 ) ( 2048 -1984 -32 ) ( 2048 -2240 0 ) PRXROAD1 [ 0 -1 0 -191.999 ] [ 0 0 -1 0 ] 0 1 1
+( 2048 -2240 0 ) ( 2048 -2240 -32 ) ( -2400 -2240 0 ) PRXROAD1 [ 1 0 0 0 ] [ 0 0 -1 0 ] 0 1 1
+( -2400 -1984 0 ) ( -2400 -1984 -32 ) ( 2048 -1984 0 ) PRXROAD1 [ 1 0 0 0 ] [ 0 0 -1 0 ] 0 1 1
+( 2048 -1984 -32 ) ( -2400 -1984 -32 ) ( 2048 -2240 -32 ) PRXROAD1 [ 0 -1 0 -191.999 ] [ -1 -0 0 -0 ] 0 1 1
+( -2400 -2240 0 ) ( -2400 -1984 0 ) ( 2048 -2240 0 ) PRXROAD1 [ 0 -1 0 -191.999 ] [ -1 -0 0 -0 ] 0 1 1
+}
+{
+( -2400 -3104 0 ) ( -2400 -3104 -32 ) ( -2400 -2240 0 ) PRXROAD1 [ 0 -1 0 -31.9998 ] [ 0 0 -1 0 ] 0 1 1
+( -2144 -2240 0 ) ( -2144 -2240 -32 ) ( -2144 -3104 0 ) PRXROAD1 [ 0 -1 0 -31.9998 ] [ 0 0 -1 0 ] 0 1 1
+( -2400 -2240 0 ) ( -2400 -2240 -32 ) ( -2144 -2240 0 ) PRXROAD1 [ -1 -0 0 -96.0002 ] [ 0 0 -1 0 ] 0 1 1
+( -2144 -3104 0 ) ( -2144 -3104 -32 ) ( -2400 -3104 0 ) PRXROAD1 [ -1 -0 0 -96.0002 ] [ 0 0 -1 0 ] 0 1 1
+( -2144 -3104 -32 ) ( -2144 -2240 -32 ) ( -2400 -3104 -32 ) PRXROAD1 [ -1 -0 0 -96.0002 ] [ -0 1 0 31.9998 ] 0 1 1
+( -2400 -2240 0 ) ( -2144 -2240 0 ) ( -2400 -3104 0 ) PRXROAD1 [ -1 -0 0 -96.0002 ] [ -0 1 0 31.9998 ] 0 1 1
+}
+{
+( -2144 1024 0 ) ( -2144 1024 -32 ) ( -2144 -1984 0 ) PRXROAD1 [ 0 -1 0 -192 ] [ 0 0 -1 0 ] 0 1 1
+( -2400 -1984 0 ) ( -2400 -1984 -32 ) ( -2400 1024 0 ) PRXROAD1 [ 0 -1 0 -192 ] [ 0 0 -1 0 ] 0 1 1
+( -2144 -1984 0 ) ( -2144 -1984 -32 ) ( -2400 -1984 0 ) PRXROAD1 [ -1 -0 0 -96.001 ] [ 0 0 -1 0 ] 0 1 1
+( -2400 1024 0 ) ( -2400 1024 -32 ) ( -2144 1024 0 ) PRXROAD1 [ -1 -0 0 -96.001 ] [ 0 0 -1 0 ] 0 1 1
+( -2400 1024 0 ) ( -2144 1024 0 ) ( -2400 -1984 0 ) PRXROAD1 [ -1 -0 0 -96.001 ] [ -0 1 0 192 ] 0 1 1
+( -2144 -1984 -32 ) ( -2144 1024 -32 ) ( -2400 -1984 -32 ) PRXROAD1 [ -1 -0 0 -96.001 ] [ -0 1 0 192 ] 0 1 1
+}
+{
+( -2400 1024 0 ) ( -2400 1024 -32 ) ( -2400 1280 0 ) PRXROAD1 [ 0 -1 0 -255.999 ] [ 0 0 -1 0 ] 0 1 1
+( 2048 1280 0 ) ( 2048 1280 -32 ) ( 2048 1024 0 ) PRXROAD1 [ 0 -1 0 -255.999 ] [ 0 0 -1 0 ] 0 1 1
+( 2048 1024 0 ) ( 2048 1024 -32 ) ( -2400 1024 0 ) PRXROAD1 [ 1 0 0 -0 ] [ 0 0 -1 0 ] 0 1 1
+( -2400 1280 0 ) ( -2400 1280 -32 ) ( 2048 1280 0 ) PRXROAD1 [ 1 0 0 -0 ] [ 0 0 -1 0 ] 0 1 1
+( 2048 1280 -32 ) ( -2400 1280 -32 ) ( 2048 1024 -32 ) PRXROAD1 [ 0 -1 0 -255.999 ] [ -1 -0 0 0 ] 0 1 1
+( -2400 1024 0 ) ( -2400 1280 0 ) ( 2048 1024 0 ) PRXROAD1 [ 0 -1 0 -255.999 ] [ -1 -0 0 0 ] 0 1 1
+}
+{
+( 1792 -1984 0 ) ( 1792 -1984 -32 ) ( 1792 1024 0 ) PRXROAD1 [ 0 -1 0 -192 ] [ 0 0 -1 0 ] 0 1 1
+( 2048 1024 0 ) ( 2048 1024 -32 ) ( 2048 -1984 0 ) PRXROAD1 [ 0 -1 0 -192 ] [ 0 0 -1 0 ] 0 1 1
+( 1792 1024 0 ) ( 1792 1024 -32 ) ( 2048 1024 0 ) PRXROAD1 [ -1 -0 0 255.999 ] [ 0 0 -1 0 ] 0 1 1
+( 2048 -1984 0 ) ( 2048 -1984 -32 ) ( 1792 -1984 0 ) PRXROAD1 [ -1 -0 0 255.999 ] [ 0 0 -1 0 ] 0 1 1
+( 2048 -1984 -32 ) ( 2048 1024 -32 ) ( 1792 -1984 -32 ) PRXROAD1 [ -1 -0 0 255.999 ] [ -0 1 0 192 ] 0 1 1
+( 1792 1024 0 ) ( 2048 1024 0 ) ( 1792 -1984 0 ) PRXROAD1 [ -1 -0 0 255.999 ] [ -0 1 0 192 ] 0 1 1
+}
+{
+( 1792 1024 0 ) ( 1792 1024 -32 ) ( 1792 -1984 0 ) BOOT_GRASS_06 [ 0 1 0 0 ] [ 0 0 -1 0 ] 0 1 1
+( -2144 -1984 0 ) ( -2144 -1984 -32 ) ( -2144 1024 0 ) BOOT_GRASS_06 [ 0 1 0 0 ] [ 0 0 -1 0 ] 0 1 1
+( 1792 -1984 0 ) ( 1792 -1984 -32 ) ( -2144 -1984 0 ) BOOT_GRASS_06 [ 1 0 0 0 ] [ 0 0 -1 0 ] 0 1 1
+( -2144 1024 0 ) ( -2144 1024 -32 ) ( 1792 1024 0 ) BOOT_GRASS_06 [ 1 0 0 0 ] [ 0 0 -1 0 ] 0 1 1
+( -2144 1024 -32 ) ( -2144 -1984 -32 ) ( 1792 1024 -32 ) BOOT_GRASS_06 [ 1 0 0 0 ] [ 0 -1 0 0 ] 0 1 1
+( 1792 -1984 0 ) ( -2144 -1984 0 ) ( 1792 1024 0 ) BOOT_GRASS_06 [ 1 0 0 0 ] [ 0 -1 0 0 ] 0 1 1
+}
+}
+{
+"classname" "info_player_start"
+"angles" "0 0 0"
+"origin" "105 -393 36"
+}
+{
+"classname" "info_player_deathmatch"
+"angles" "0 0 0"
+"origin" "130 -480 36"
+}
+{
+"classname" "light_environment"
+"_light" "255 255 128 200"
+"pitch" "0"
+"_falloff" "0"
+"_fade" "1.0"
+"angles" "0 0 0"
+"origin" "82 -434 128"
+}
