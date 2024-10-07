@@ -36,9 +36,9 @@
 #define MAX_AMMO_SLOTS  32		// not really slots
 
 #define HUD_PRINTNOTIFY		1
-#define HUD_PRINTCONSOLE	2
-#define HUD_PRINTTALK		3
-#define HUD_PRINTCENTER		4
+#define HUD_PRINTCONSOLE	2 // console
+#define HUD_PRINTTALK		3 // chat
+#define HUD_PRINTCENTER		4 // middle of screen
 
 
 #define WEAPON_SUIT			31

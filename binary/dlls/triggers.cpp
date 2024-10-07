@@ -27,6 +27,7 @@
 #include "saverestore.h"
 #include "trains.h"			// trigger_camera has train functionality
 #include "gamerules.h"
+#include "aggamemode.h"
 
 #define	SF_TRIGGER_PUSH_START_OFF	2//spawnflag that makes trigger_push spawn turned OFF
 #define SF_TRIGGER_HURT_TARGETONCE	1// Only fire hurt target once
@@ -723,19 +724,27 @@ void PlayCDTrack( int iTrack )
 		if (!pPlayer->m_bMusicEnabled)
 		{
 			ClientPrint(&pClient->v, HUD_PRINTCONSOLE, "Music disabled for this player!\n");
+
 			continue;
 		}
 
-		if (iTrack == -1)
+		if (ARENA != AgGametype())
 		{
-			CLIENT_COMMAND(pClient, "cd stop\n");
+			if (iTrack == -1)
+			{
+				CLIENT_COMMAND(pClient, "cd stop\n");
+			}
+			else
+			{
+				char string[64];
+
+				sprintf(string, "cd play %3d\n", iTrack);
+				CLIENT_COMMAND(pClient, string);
+			}
 		}
 		else
 		{
-			char string[64];
-
-			sprintf(string, "cd play %3d\n", iTrack);
-			CLIENT_COMMAND(pClient, string);
+			ClientPrint(&pClient->v, HUD_PRINTCONSOLE, "Map music unavailable in Arena games\n");
 		}
 	}
 }
