@@ -107,7 +107,7 @@ void AgMatch::Start(const AgString& sSpawn)
 
     if (iPlayers < (int)ag_start_minplayers.value)
     {
-        UTIL_ClientPrintAll(HUD_PRINTCENTER, UTIL_VarArgs("You need %d players to start a game on this server.", (int)ag_start_minplayers.value));
+        UTIL_ClientPrintAll(HUD_PRINTCENTER, UTIL_VarArgs("You need %d players to start.", (int)ag_start_minplayers.value));
         return;
     }
 
