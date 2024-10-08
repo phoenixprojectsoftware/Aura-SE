@@ -777,7 +777,6 @@ FILE_GLOBAL BANWEAPON s_Bans[] =
 {
   "weapon_crowbar",&ag_ban_crowbar,
   "weapon_9mmhandgun",&ag_ban_glock,
-  "weapon_shotgun",&ag_ban_357,
   "weapon_9mmAR",&ag_ban_mp5,
   "weapon_shotgun",&ag_ban_shotgun,
   "weapon_crossbow",&ag_ban_crossbow,
