@@ -364,6 +364,12 @@ void AgGameRules::PlayerSpawn(CBasePlayer* pPlayer)
                 pPlayer->GiveAmmo(BOLT_MAX_CARRY, "bolts", BOLT_MAX_CARRY);
             if (1 > ag_ban_rpg.value)
                 pPlayer->GiveAmmo(ROCKET_MAX_CARRY, "rockets", ROCKET_MAX_CARRY);
+            if (1 > ag_ban_ammo556.value)
+                pPlayer->GiveAmmo(M249_MAX_CARRY, "556", M249_MAX_CARRY);
+            if (1 > ag_ban_ammo762.value)
+                pPlayer->GiveAmmo(EAGLE_MAX_CLIP, "762", EAGLE_MAX_CLIP);
+            if (1 > ag_ban_ammoSpore.value)
+                pPlayer->GiveAmmo(SPORELAUNCHER_MAX_CARRY, "spores", SPORELAUNCHER_MAX_CARRY);
         }
         else
         {
@@ -812,6 +818,9 @@ FILE_GLOBAL BANWEAPON s_Bans[] =
   "ammo_357",&ag_ban_357ammo,
   "item_battery",&ag_ban_armour,
   "item_healthkit",&ag_ban_health,
+  "ammo_556",&ag_ban_ammo556,
+  "ammo_762",&ag_ban_ammo762,
+  "ammo_spore",&ag_ban_ammoSpore,
 };
 
 

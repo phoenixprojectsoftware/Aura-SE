@@ -111,6 +111,9 @@ DLL_GLOBAL cvar_t	ag_ban_uranium = { "sv_aura_ban_uranium","0" };
 DLL_GLOBAL cvar_t	ag_ban_bolts = { "sv_aura_ban_bolts","0" };
 DLL_GLOBAL cvar_t	ag_ban_rockets = { "sv_aura_ban_rockets","0" };
 DLL_GLOBAL cvar_t	ag_ban_357ammo = { "sv_aura_ban_357ammo","0" };
+DLL_GLOBAL cvar_t   ag_ban_ammo556 = { "sv_aura_ban_ammo_556","0" };
+DLL_GLOBAL cvar_t   ag_ban_ammo762 = { "sv_aura_ban_ammo_762","0" };
+DLL_GLOBAL cvar_t   ag_ban_ammoSpore = { "sv_aura_ban_ammo_spore","0" };
 
 DLL_GLOBAL cvar_t	ag_ban_armour = { "sv_aura_ban_armour","0" };
 DLL_GLOBAL cvar_t	ag_ban_health = { "sv_aura_ban_health","0" };
@@ -329,6 +332,9 @@ void AgInitGame()
     CVAR_REGISTER(&ag_ban_bolts);
     CVAR_REGISTER(&ag_ban_rockets);
     CVAR_REGISTER(&ag_ban_357ammo);
+    CVAR_REGISTER(&ag_ban_ammo556);
+    CVAR_REGISTER(&ag_ban_ammo762);
+    CVAR_REGISTER(&ag_ban_ammoSpore);
 
     CVAR_REGISTER(&ag_ban_armour);
     CVAR_REGISTER(&ag_ban_health);

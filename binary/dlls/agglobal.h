@@ -83,6 +83,9 @@ extern cvar_t	ag_ban_uranium;
 extern cvar_t	ag_ban_bolts;
 extern cvar_t	ag_ban_rockets;
 extern cvar_t	ag_ban_357ammo;
+extern cvar_t	ag_ban_ammo556;
+extern cvar_t	ag_ban_ammo762;
+extern cvar_t	ag_ban_ammoSpore;
 
 extern cvar_t	ag_ban_armour;
 extern cvar_t	ag_ban_health;
