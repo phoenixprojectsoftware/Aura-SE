@@ -728,7 +728,7 @@ void PlayCDTrack( int iTrack )
 			continue;
 		}
 
-		if (ARENA != AgGametype())
+		if (ARENA != AgGametype() && CTF!= AgGametype())
 		{
 			if (iTrack == -1)
 			{
@@ -744,7 +744,33 @@ void PlayCDTrack( int iTrack )
 		}
 		else
 		{
-			ClientPrint(&pClient->v, HUD_PRINTCONSOLE, "Map music unavailable in Arena games\n");
+			ClientPrint(&pClient->v, HUD_PRINTCONSOLE, "Map music unavailable in this gamemode\n");
+		}
+
+		if (ARENA == AgGametype())
+		{
+			if (iTrack == -1)
+			{
+
+				CLIENT_COMMAND(pClient, "cd play 5\n");
+				// TODO: make this random CLIENT_COMMAND(pClient, "cd play 3\n");
+			}
+			else
+			{
+				CLIENT_COMMAND(pClient, "echo ZEKE WAS HERE\n");
+			}
+		}
+
+		if (CTF == AgGametype())
+		{
+			if (iTrack == -1)
+			{
+				CLIENT_COMMAND(pClient, "echo CTF Music Not Made Yet Pal\n");
+			}
+			else
+			{
+				CLIENT_COMMAND(pClient, "echo ZEKE WAS HERE\n");
+			}
 		}
 	}
 }
