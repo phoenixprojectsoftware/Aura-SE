@@ -728,7 +728,7 @@ void PlayCDTrack( int iTrack )
 			continue;
 		}
 
-		if (ARENA != AgGametype() && CTF!= AgGametype())
+		if (ARENA != AgGametype() && CTF != AgGametype() && LMS != AgGametype())
 		{
 			if (iTrack == -1)
 			{
