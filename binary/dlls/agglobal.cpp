@@ -472,6 +472,10 @@ void AgInitGame()
     CVAR_REGISTER(&ag_fps_limit_punishment_slap_interval);
     CVAR_REGISTER(&ag_fps_limit_punishment_ban_time);
 
+    CVAR_REGISTER(&ag_satchel_destroyable);
+    CVAR_REGISTER(&ag_satchel_health);
+    CVAR_REGISTER(&ag_satchel_solid);
+
     CVAR_REGISTER(&mm_agsay);
 
     Command.Init();
