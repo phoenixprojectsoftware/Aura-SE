@@ -212,7 +212,7 @@ void AgGameRules::PlayerSpawn(CBasePlayer* pPlayer)
             if (iSpectators >= ag_max_spectators.value && ARENA != AgGametype() && LMS != AgGametype() && !pPlayer->IsAdmin())
             {
                 //He has to go.
-                AgConsole("To many spectators, kicking him.");
+                AgConsole("Too many spectators, kicking.");
                 char szCommand[128];
                 sprintf(szCommand, "kick \"%s\"\n", (const char*)pPlayer->GetName());
                 SERVER_COMMAND(szCommand);
