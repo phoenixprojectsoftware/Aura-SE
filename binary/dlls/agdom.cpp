@@ -511,7 +511,7 @@ void AgDOMFileItemCache::Add(const AgString& sFileItem, CBasePlayer* pPlayer)
 
     Save(pPlayer);
 
-    AgConsole(UTIL_VarArgs("Added item %s.", (const char*)sFileItem.c_str()), pPlayer);
+    AgConsole(UTIL_VarArgs("Added item - %s.", (const char*)sFileItem.c_str()), pPlayer);
 }
 
 void AgDOMFileItemCache::Del(CBasePlayer* pPlayer)
