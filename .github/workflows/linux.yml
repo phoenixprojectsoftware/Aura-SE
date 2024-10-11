@@ -24,7 +24,9 @@ jobs:
        sudo apt-get install gcc-multilib g++-multilib
     - name: Build aura.so
       working-directory: binary/linux
-      run: make
+      run: |
+       dos2unix gendbg.sh
+       make aura
     #- name: make check
       #run: make check
     #- name: make distcheck
