@@ -26,6 +26,7 @@ jobs:
     - name: Build aura.so
       working-directory: binary/linux
       run: |
+       chmod +x gendbg.sh
        dos2unix gendbg.sh
        make aura
     #- name: make check
