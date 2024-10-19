@@ -185,7 +185,6 @@ int gmsgShake = 0;
 int gmsgFade = 0;
 int gmsgSelAmmo = 0;
 int gmsgFlashlight = 0;
-int gmsgStopSound = 0;
 int gmsgFlashBattery = 0;
 int gmsgResetHUD = 0;
 int gmsgInitHUD = 0;
@@ -275,7 +274,6 @@ void LinkUserMessages( void )
 	gmsgHealth = REG_USER_MSG( "Health", 1 );
 	gmsgDamage = REG_USER_MSG( "Damage", 12 );
 	gmsgBattery = REG_USER_MSG( "Battery", 2);
-	gmsgStopSound = REG_USER_MSG("StopSound", -1);
 	gmsgTrain = REG_USER_MSG( "Train", 1);
 	//gmsgHudText = REG_USER_MSG( "HudTextPro", -1 );
 	gmsgHudText = REG_USER_MSG( "HudText", -1 ); // we don't use the message but 3rd party addons may!
@@ -4729,7 +4727,7 @@ void CBasePlayer :: UpdateClientData( void )
 			m_fRegenOn = true;
 			EMIT_SOUND(ENT(pev), CHAN_AUTO, "items/suitchargeok1.wav", 0.85, ATTN_NORM);
 			STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_empty.wav");
-			
+
 		}
 		else // as it's recharging
 		{
