@@ -152,7 +152,7 @@ public:
 #define WEAPON_NOCLIP			-1
 
 //#define CROWBAR_MAX_CLIP		WEAPON_NOCLIP
-#define GLOCK_MAX_CLIP			17
+#define GLOCK_MAX_CLIP			18
 #define ONE_MAX_CLIP			WEAPON_NOCLIP
 #define PYTHON_MAX_CLIP			6
 #define MP5_MAX_CLIP			60
