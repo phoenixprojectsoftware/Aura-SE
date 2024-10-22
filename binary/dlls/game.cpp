@@ -40,6 +40,7 @@ cvar_t	decalfrequency = {"decalfrequency","30", FCVAR_SERVER };
 cvar_t	teamlist = {"mp_teamlist","hgrunt;scientist", FCVAR_SERVER };
 cvar_t	teamoverride = {"mp_teamoverride","1" };
 cvar_t	defaultteam = {"mp_defaultteam","0" };
+cvar_t  coopmode = { "sv_aura_coop", "0", FCVAR_SERVER };
 cvar_t	allowmonsters={"mp_allowmonsters","0", FCVAR_SERVER };
 cvar_t  mp5_old_rate = { "sv_aura_mp5_old_rate", "1", FCVAR_SERVER };
 cvar_t fire_weapons_underwater = { "sv_aura_fire_weapons_underwater", "0", FCVAR_SERVER };
@@ -633,6 +634,7 @@ void GameDLLInit( void )
 	CVAR_REGISTER (&teamlist);
 	CVAR_REGISTER (&teamoverride);
 	CVAR_REGISTER (&defaultteam);
+	CVAR_REGISTER(&coopmode);
 	CVAR_REGISTER (&allowmonsters);
 
 	CVAR_REGISTER (&mp5_old_rate);

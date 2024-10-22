@@ -1291,6 +1291,8 @@ BOOL CHalfLifeMultiplay :: FAllowFlashlight( void )
 //=========================================================
 BOOL CHalfLifeMultiplay :: FAllowMonsters( void )
 {
+	extern cvar_t coopmode;
+	return (coopmode.value != 0);
 	return ( allowmonsters.value != 0 );
 }
 
