@@ -18,3 +18,4 @@ to do a clean build do make clean then do make aura again.
 
 IF gendbg.sh fails on wsl you need to apt-get install dos2unix and then run
 	dos2unix gendbg.sh
+  chmod +x gendbg.sh
