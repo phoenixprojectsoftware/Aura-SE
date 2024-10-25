@@ -34,3 +34,8 @@ AgFirefight::~AgFirefight()
 {
 
 }
+
+void AgFirefight::Think()
+{
+
+}
