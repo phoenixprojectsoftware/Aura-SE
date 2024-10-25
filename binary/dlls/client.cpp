@@ -888,7 +888,7 @@ void ClientPrecache( void )
 	PRECACHE_SOUND("player/geiger1.wav");
 
 	// BlueNightHawk : Suit Energy Regeneration
-	PRECACHE_SOUND("debris/beamstart15.wav");
+	PRECACHE_SOUND("player/shield_depleted2.wav");
 	PRECACHE_SOUND("player/shield_low.wav");
 	PRECACHE_SOUND("player/shield_empty.wav");
 	PRECACHE_SOUND("player/shield_charge.wav");
@@ -898,7 +898,7 @@ void ClientPrecache( void )
 	PRECACHE_SOUND("items/suitcharge_no_lp.wav");
 
 	PRECACHE_SOUND("player/friend_online.wav");
-	PRECACHE_SOUND("player/friend_join.wav");
+	PRECACHE_SOUND("player/spawn.wav");
 
 	// BlueNightHawk : Suit Energy Regeneration
 	PRECACHE_SOUND("buttons/blip1.wav");
