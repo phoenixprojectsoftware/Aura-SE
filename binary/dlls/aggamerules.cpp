@@ -479,7 +479,7 @@ void AgGameRules::PlayerSpawn(CBasePlayer* pPlayer)
         WRITE_COORD(pPlayer->pev->origin.y);
         WRITE_COORD(pPlayer->pev->origin.z);
         MESSAGE_END();
-        EMIT_SOUND_DYN(ENT(pPlayer->pev), CHAN_ITEM, "player/friend_join.wav", 1, ATTN_NORM, 0, PITCH_HIGH);
+        EMIT_SOUND_DYN(ENT(pPlayer->pev), CHAN_ITEM, "player/spawn.wav", 1, ATTN_NORM, 0, PITCH_HIGH);
     
 }
 

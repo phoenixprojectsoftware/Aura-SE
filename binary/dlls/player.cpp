@@ -4666,7 +4666,7 @@ void CBasePlayer :: UpdateClientData( void )
 		if (!isShieldEmpty && (currentTime - lastShieldSoundTime > 1.0f))
 		{
 			EMIT_SOUND(ENT(pev), CHAN_AUTO, "player/shield_empty.wav", 0.85, ATTN_NORM);
-			EMIT_SOUND(ENT(pev), CHAN_AUTO, "debris/beamstart15.wav", 0.7, ATTN_NORM);
+			EMIT_SOUND(ENT(pev), CHAN_AUTO, "player/shield_depleted2.wav", 0.7, ATTN_NORM);
 			isShieldEmpty = true;
 			lastShieldSoundTime = currentTime;
 		}
