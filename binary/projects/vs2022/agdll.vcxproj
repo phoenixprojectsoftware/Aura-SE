@@ -153,6 +153,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\dlls\aflock.cpp" />
+    <ClCompile Include="..\..\dlls\agfirefight.cpp" />
     <ClCompile Include="..\..\dlls\aghideandseek.cpp" />
     <ClCompile Include="..\..\dlls\agrunt.cpp" />
     <ClCompile Include="..\..\dlls\airtank.cpp" />
@@ -315,6 +316,7 @@
     <ClInclude Include="..\..\common\weaponinfo.h" />
     <ClInclude Include="..\..\dlls\activity.h" />
     <ClInclude Include="..\..\dlls\activitymap.h" />
+    <ClInclude Include="..\..\dlls\agfirefight.h" />
     <ClInclude Include="..\..\dlls\aghideandseek.h" />
     <ClInclude Include="..\..\dlls\animation.h" />
     <ClInclude Include="..\..\dlls\basemonster.h" />

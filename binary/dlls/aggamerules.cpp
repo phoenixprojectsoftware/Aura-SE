@@ -92,6 +92,10 @@ bool AgGameRules::AgThink()
     {
         m_Hideandseek.Think();
     }
+    else if (FIREFIGHT == AgGametype())
+    {
+        m_Firefight.Think();
+    }
     else
     {
         //Update match status.
