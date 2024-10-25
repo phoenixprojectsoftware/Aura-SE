@@ -96,10 +96,10 @@ public:
     AgClient            m_Client;
     AgArena             m_Arena;
     AgHideandseek       m_Hideandseek;
-    AgFirefight         m_Firefight;
     AgLMS               m_LMS;
     AgCTF               m_CTF;
     AgDOM               m_DOM;
+    AgFirefight         m_Firefight;
     AgInfoIntermission  m_InfoInterMission;
     AgSuddenDeath       m_SuddenDeath;
     AgTimeout           m_Timeout;

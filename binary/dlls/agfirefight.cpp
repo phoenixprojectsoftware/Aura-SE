@@ -23,6 +23,8 @@
 
 #include "algo.h"
 
+extern cvar_t coopmode;
+
 AgFirefight::AgFirefight()
 {
 
