@@ -115,8 +115,8 @@ CRpgRocket *CRpgRocket::CreateRpgRocket( Vector vecOrigin, Vector vecAngles, CBa
 	pRocket->pev->angles = vecAngles;
 	pRocket->Spawn();
 	pRocket->SetTouch( &CRpgRocket::RocketTouch );
-	pRocket->m_pLauncher = pLauncher;// remember what RPG fired me. 
-	pRocket->m_pLauncher->m_cActiveRockets++;// register this missile as active for the launcher
+	pRocket->m_hLauncher = pLauncher;// remember what RPG fired me. 
+	pLauncher->m_cActiveRockets++;// register this missile as active for the launcher
 	pRocket->pev->owner = pOwner->edict();
 
 	return pRocket;
@@ -156,10 +156,10 @@ void CRpgRocket :: Spawn( void )
 //=========================================================
 void CRpgRocket :: RocketTouch ( CBaseEntity *pOther )
 {
-	if ( m_pLauncher )
+	if ( m_hLauncher )
 	{
 		// my launcher is still around, tell it I'm dead.
-		m_pLauncher->m_cActiveRockets--;
+		static_cast<CRpg*>(static_cast<CBaseEntity*>(m_hLauncher))->m_cActiveRockets--;
 	}
 
 	STOP_SOUND( edict(), CHAN_VOICE, "weapons/rocket1.wav" );
@@ -208,6 +208,13 @@ void CRpgRocket :: IgniteThink( void  )
 	pev->nextthink = gpGlobals->time + 0.1;
 }
 
+CRpg* CRpgRocket::GetLauncher()
+{
+	if (!m_hLauncher)
+		return NULL;
+
+	return (CRpg*)((CBaseEntity*)m_hLauncher);
+}
 
 void CRpgRocket :: FollowThink( void  )
 {
@@ -225,8 +232,16 @@ void CRpgRocket :: FollowThink( void  )
 	// Examine all entities within a reasonable radius
 	while ((pOther = UTIL_FindEntityByClassname( pOther, "laser_spot" )) != NULL)
 	{
-		UTIL_TraceLine ( pev->origin, pOther->pev->origin, dont_ignore_monsters, ENT(pev), &tr );
-		// ALERT( at_console, "%f\n", tr.flFraction );
+		Vector vSpotLocation = pOther->pev->origin;
+
+		/*if (UTIL_PointContents(vSpotLocation) == CONTENTS_SKY)
+		{
+			ALERT(at_console, "laser spot is in the sky...\n");
+		}*/
+
+		UTIL_TraceLine(pev->origin, vSpotLocation, dont_ignore_monsters, ENT(pev), &tr);
+		//ALERT(at_console, "fraction: %f\n", tr.flFraction);
+
 		if (tr.flFraction >= 0.90)
 		{
 			vecDir = pOther->pev->origin - pev->origin;
@@ -278,15 +293,31 @@ void CRpgRocket :: FollowThink( void  )
 			Detonate( );
 			//++ BulliT
 			//Fixes the bug where it won't auto reload when it explodes coming out of the water
-			if (m_pLauncher)
+			if (m_hLauncher)
 			{
 				// my launcher is still around, tell it I'm dead.
-				m_pLauncher->m_cActiveRockets--;
+				m_hLauncher->m_cActiveRockets--;
 			}
 			//-- Martin Webrant
 		}
 	}
-	// ALERT( at_console, "%.0f\n", flSpeed );
+	if (GetLauncher())
+	{
+		float flDistance = (pev->origin - GetLauncher()->pev->origin).Length();
+		// if we've travelled more than max distance the player can send a spot, stop tracking the original launcher (allow it to reload)
+		if (flDistance > 8192.0f || gpGlobals->time - m_flIgniteTime > 6.0f)
+		{
+			// ALERT(at_console, "RPG too far (%f)!\n", flDistance);
+			GetLauncher()->m_cActiveRockets--;
+			m_hLauncher = NULL;
+		}
+		//ALERT(at_console, "%.0f, m_pLauncher: %u, flDistance: %f\n", flSpeed, GetLauncher(), flDistance);
+	}
+	if ((UTIL_PointContents(pev->origin) == CONTENTS_SKY))
+	{
+		//ALERT( at_console, "Rocket is in the sky, detonating...\n");
+		Detonate();
+	}
 
 	pev->nextthink = gpGlobals->time + 0.1;
 }
@@ -589,6 +620,8 @@ void CRpg::WeaponIdle( void )
 
 			m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 3.0;
 		}
+
+		ResetEmptySound();
 
 		SendWeaponAnim( iAnim );
 	}
