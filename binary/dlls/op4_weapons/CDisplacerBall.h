@@ -31,6 +31,10 @@ public:
 
 	void EXPORT BallTouch(CBaseEntity* pOther);
 
+	CBaseEntity* PlayerCrosshair(CBaseEntity* pOwner);
+
+	void FollowTarget(CBaseEntity* pOwner);
+
 	void EXPORT FlyThink();
 
 	void EXPORT FlyThink2();
