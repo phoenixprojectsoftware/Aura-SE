@@ -606,6 +606,8 @@ cvar_t sv_aura_regeneration_wait = { "sv_aura_regeneration_wait", "0.03", FCVAR_
 
 // END Cvars for Skill Level settings
 
+cvar_t sv_pushable_fixed_tick_fudge = { "sv_pushable_fixed_tick_fudge", "15" };
+
 // Register your console variables here
 // This gets called one time when the game is initialied
 void GameDLLInit( void )
@@ -1169,7 +1171,8 @@ void GameDLLInit( void )
 	CVAR_REGISTER(&sv_aura_regeneration_wait);
 
 // END REGISTER CVARS FOR SKILL LEVEL STUFF
-//
+
+	CVAR_REGISTER(&sv_pushable_fixed_tick_fudge);
  
 	//++ BulliT
 	AgInitGame();
