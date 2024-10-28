@@ -69,6 +69,7 @@ cvar_t	spgausscharging = { "sv_sp_gauss_charging", "0", FCVAR_SERVER }; // only 
 // Engine Cvars
 cvar_t 	*g_psv_gravity = NULL;
 cvar_t	*g_psv_aim = NULL;
+cvar_t  *g_psv_allow_autoaim = NULL;
 cvar_t	*g_footsteps = NULL;
 
 //Macros to make skill cvars easier to define
@@ -613,6 +614,7 @@ void GameDLLInit( void )
 
 	g_psv_gravity = CVAR_GET_POINTER( "sv_gravity" );
 	g_psv_aim = CVAR_GET_POINTER( "sv_aim" );
+	g_psv_allow_autoaim = CVAR_GET_POINTER("sv_allow_autoaim");
 	g_footsteps = CVAR_GET_POINTER( "mp_footsteps" );
 
 	CVAR_REGISTER (&displaysoundlist);
