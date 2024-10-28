@@ -96,6 +96,9 @@
     <CustomBuildStep>
       <Command>copy "$(TargetPath)" "E:\Steam\steamapps\common\Half-Life\zamnhlmp\dlls\$(TargetFileName)"</Command>
     </CustomBuildStep>
+    <PostBuildEvent>
+      <Command>debug_filecopy.bat</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
