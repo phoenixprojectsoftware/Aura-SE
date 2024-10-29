@@ -147,6 +147,9 @@ public:
 	void GibMonster( void );
 	void SpeakSentence( void );
 
+	void Killed(entvars_t* pevAttacker, int iGib) override;
+	void RespawnFirefightMonster();
+
 	int	Save( CSave &save ); 
 	int Restore( CRestore &restore );
 	
@@ -255,6 +258,28 @@ void CHGrunt :: SpeakSentence( void )
 		SENTENCEG_PlayRndSz( ENT(pev), pGruntSentences[ m_iSentence ], HGRUNT_SENTENCE_VOLUME, GRUNT_ATTN, 0, m_voicePitch);
 		JustSpoke();
 	}
+}
+
+void CHGrunt::Killed(entvars_t* pevAttacker, int iGib)
+{
+	if (FStrEq(STRING(pev->targetname), "FIREFIGHT")) {
+		// Set a timer to respawn after 5 seconds
+		SetThink(&CHGrunt::RespawnFirefightMonster);
+		pev->nextthink = gpGlobals->time + 5.0f;
+	}
+
+	// Call the base Killed function if the parent class has one
+	CBaseMonster::Killed(pevAttacker, iGib);
+}
+
+void CHGrunt::RespawnFirefightMonster()
+{
+	pev->origin = m_vecInitialPos;
+	pev->health = pev->max_health;
+	pev->deadflag = DEAD_NO;
+	pev->takedamage = DAMAGE_AIM;
+
+	Spawn();
 }
 
 //=========================================================
@@ -981,6 +1006,8 @@ void CHGrunt :: Spawn()
 	// Only spawn if coopmode is enabled
 	if (CVAR_GET_FLOAT("sv_aura_coop") == 1)
 	{
+		if (FStrEq(STRING(pev->targetname), "FIREFIGHT"))
+			m_vecInitialPos = pev->origin;
 		CBaseMonster::Spawn(); // Proceed with spawning if coopmode is on
 	}
 	else
