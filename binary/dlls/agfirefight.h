@@ -9,6 +9,9 @@
 *
 ****/
 
+#include "aggamerules.h"
+#include <vector>
+
 #ifndef FIREFIGHT_H
 #define FIREFIGHT_H
 
@@ -16,13 +19,24 @@
 #pragma once
 #endif // _MSC_VER
 
-class AgFirefight
+class AgFirefight : public CGameRules
 {
 public:
 	AgFirefight();
 	virtual ~AgFirefight();
 
 	void Think();
+	void InitMonsters();
+
+private:
+	struct RespawnInfo
+	{
+		edict_t* edict;
+		vec3_t spawnPosition;
+		float respawnTime;
+	};
+
+	std::vector<RespawnInfo> m_respawnQueue;
 };
 
 #endif // FIREFIGHT_H
