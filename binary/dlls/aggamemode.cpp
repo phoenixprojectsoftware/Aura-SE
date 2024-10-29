@@ -35,6 +35,8 @@ void SetupGametype()
         g_GameType = ARCADE;
     else if (sGametype == "hideandseek")
         g_GameType = HIDEANDSEEK;
+    else if (sGametype == "firefight")
+        g_GameType = FIREFIGHT;
 #ifndef AG_NO_CLIENT_DLL
     else if (sGametype == "ctf")
         g_GameType = CTF;
