@@ -29,11 +29,11 @@ jobs:
        chmod +x gendbg.sh
        dos2unix gendbg.sh
        make aura
-    - name: Publish Linux client binary.
+    - name: Publish Linux server binary.
       uses: actions/upload-artifact@v4
       with:
             path: |
-                binary/linux/aura.so
-                binary/linux/aura.so.dbg
+                aura.so
+                aura.so.dbg
       env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
