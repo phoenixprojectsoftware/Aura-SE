@@ -33,6 +33,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
             path: |
-                linux/aura.so
+                release/aura.so
+                release/aura.so.dbg
       env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
