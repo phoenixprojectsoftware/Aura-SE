@@ -816,6 +816,7 @@ FILE_GLOBAL BANWEAPON s_Bans[] =
   "ammo_crossbow",&ag_ban_bolts,
   "ammo_rpgclip",&ag_ban_rockets,
   "ammo_357",&ag_ban_357ammo,
+  "ammo_eagleclip",&ag_ban_357ammo,
   "item_battery",&ag_ban_armour,
   "item_healthkit",&ag_ban_health,
   "ammo_556",&ag_ban_ammo556,
