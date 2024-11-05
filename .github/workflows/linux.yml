@@ -29,7 +29,10 @@ jobs:
        chmod +x gendbg.sh
        dos2unix gendbg.sh
        make aura
-    #- name: make check
-      #run: make check
-    #- name: make distcheck
-      #run: make distcheck
+    - name: Publish Linux server binary.
+      uses: actions/upload-artifact@v4
+      with:
+            path: |
+                aura.so
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
