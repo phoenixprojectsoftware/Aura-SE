@@ -34,6 +34,5 @@ jobs:
       with:
             path: |
                 aura.so
-                aura.so.dbg
       env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
