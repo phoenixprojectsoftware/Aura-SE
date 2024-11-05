@@ -372,7 +372,10 @@ void CHalfLifeTeamplay::ChangePlayerTeam( CBasePlayer *pPlayer, const char *pTea
 		}
 
 		entvars_t *pevWorld = VARS( INDEXENT(0) );
-		pPlayer->TakeDamage( pevWorld, pevWorld, 900, damageFlags );
+		pPlayer->TakeDamage( pevWorld, pevWorld, 5000, damageFlags );
+		pPlayer->Killed(pevWorld, GIB_NORMAL);
+		CLIENT_COMMAND(pPlayer->edict(), "+attack\n");
+		CLIENT_COMMAND(pPlayer->edict(), "-attack\n");
 
 		m_DisableDeathMessages = FALSE;
 		m_DisableDeathPenalty = FALSE;
