@@ -121,7 +121,7 @@ AR=ar
 LIBEXT=a
 MAKE+= -j8
 
-MAKE_AG_LIB=$(MAKE) -f Makefile.agdll
+MAKE_AG_LIB=$(MAKE) -f aura
 
 #############################################################################
 # SETUP AND BUILD
