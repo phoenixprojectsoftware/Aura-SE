@@ -122,8 +122,7 @@
       <ModuleDefinitionFile>$(ProjectDir)..\..\dlls\ag.def</ModuleDefinitionFile>
     </Link>
     <PostBuildEvent>
-      <Command>
-      </Command>
+      <Command>release_filecopy.bat</Command>
     </PostBuildEvent>
     <PostBuildEvent />
   </ItemDefinitionGroup>
