@@ -3,7 +3,7 @@ name: Linux build
 on:
   push:
     paths:
-     - binary/**
+     - SourceCode/**
   pull_request:
 
 jobs:
@@ -24,7 +24,7 @@ jobs:
        sudo apt install libc6-dev-i386
        sudo apt-get install gcc-multilib g++-multilib
     - name: Build aura.so
-      working-directory: binary/linux
+      working-directory: SourceCode/linux
       run: |
        chmod +x gendbg.sh
        dos2unix gendbg.sh
@@ -33,7 +33,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
             path: |
-                /home/runner/work/Aura-SE/Aura-SE/binary/linux/release/aura.so
-                /home/runner/work/Aura-SE/Aura-SE/binary/linux/release/aura.so.dbg
+                /home/runner/work/Aura-SE/Aura-SE/SourceCode/linux/release/aura.so
+                /home/runner/work/Aura-SE/Aura-SE/SourceCode/linux/release/aura.so.dbg
       env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,8 +1,0 @@
-*.rmx
-*.map
-*.prt
-*.max
-*.bsp
-!prefabs/prefabs.map
-!Leveled.map
-!Dev.map

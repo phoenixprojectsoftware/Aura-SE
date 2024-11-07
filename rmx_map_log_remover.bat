@@ -1,6 +1,6 @@
 :: Settings
 @echo off
-cd maps
+cd MapSources
 title Scrap File Remover B)
 color 0e
 
