@@ -1,2 +1,0 @@
-These are the decompiled models we used for zamnhlmp. red and blue were going to be used at one point,
-but we thought that they were too weird and stuck to the AG models. Their sources can still be seen here.
