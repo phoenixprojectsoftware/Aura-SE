@@ -1701,64 +1701,73 @@ ChangeLevel
 Server is changing to a new level, check mapcycle.txt for map name and setup info
 ==============
 */
-void CHalfLifeMultiplay :: ChangeLevel( void )
+void CHalfLifeMultiplay::ChangeLevel(void)
 {
-	static char szPreviousMapCycleFile[ 256 ];
+	static char szPreviousMapCycleFile[256];
 	static mapcycle_t mapcycle;
 
 	char szNextMap[32];
 	char szFirstMapInList[32];
-	char szCommands[ 1500 ];
-	char szRules[ 1500 ];
+	char szCommands[1500];
+	char szRules[1500];
 	int minplayers = 0, maxplayers = 0;
-	strcpy( szFirstMapInList, "hldm1" );  // the absolute default level is hldm1
+	strcpy(szFirstMapInList, "hldm1");  // the absolute default level is hldm1
 
-	int	curplayers;
+	int curplayers;
 	BOOL do_cycle = TRUE;
 
-	// find the map to change to
-	char *mapcfile = (char*)CVAR_GET_STRING( "mapcyclefile" );
-	ASSERT( mapcfile != NULL );
+	// Sabian: Get the user input for mapcyclefile
+	char userInputMapCycleFile[256];
+	char* userInput = (char*)CVAR_GET_STRING("mapcyclefile");
 
-	szCommands[ 0 ] = '\0';
-	szRules[ 0 ] = '\0';
+	// Sabian: Remove ".txt" if present in user input
+	size_t len = strlen(userInput);
+	if (len > 4 && strcmp(&userInput[len - 4], ".txt") == 0) {
+		userInput[len - 4] = '\0';  // Truncate the ".txt" part
+	}
+
+	// Sabian: Format the path as "mapcycles/%USERINPUT%.mc"
+	sprintf(userInputMapCycleFile, "mapcycles/%s.mc", userInput);
+
+	szCommands[0] = '\0';
+	szRules[0] = '\0';
 
 	curplayers = CountPlayers();
 
-	// Has the map cycle filename changed?
-	if ( stricmp( mapcfile, szPreviousMapCycleFile ) )
+	// Check if the constructed map cycle filename has changed
+	if (stricmp(userInputMapCycleFile, szPreviousMapCycleFile))
 	{
-		strcpy( szPreviousMapCycleFile, mapcfile );
+		strcpy(szPreviousMapCycleFile, userInputMapCycleFile);
 
-		DestroyMapCycle( &mapcycle );
+		DestroyMapCycle(&mapcycle);
 
-		if ( !ReloadMapCycleFile( mapcfile, &mapcycle ) || ( !mapcycle.items ) )
+		if (!ReloadMapCycleFile(userInputMapCycleFile, &mapcycle) || (!mapcycle.items))
 		{
-			ALERT( at_console, "Unable to load map cycle file %s\n", mapcfile );
+			ALERT(at_console, "Unable to load map cycle file %s\n", userInputMapCycleFile);
 			do_cycle = FALSE;
 		}
 	}
 
-	if ( do_cycle && mapcycle.items )
+	if (do_cycle && mapcycle.items)
 	{
 		BOOL keeplooking = FALSE;
 		BOOL found = FALSE;
-		mapcycle_item_s *item;
+		mapcycle_item_s* item;
 
 		// Assume current map
-		strcpy( szNextMap, STRING(gpGlobals->mapname) );
-		strcpy( szFirstMapInList, STRING(gpGlobals->mapname) );
+		strcpy(szNextMap, STRING(gpGlobals->mapname));
+		strcpy(szFirstMapInList, STRING(gpGlobals->mapname));
 
 		// Traverse list
-		for ( item = mapcycle.next_item; item->next != mapcycle.next_item; item = item->next )
+		for (item = mapcycle.next_item; item->next != mapcycle.next_item; item = item->next)
 		{
 			keeplooking = FALSE;
 
-			ASSERT( item != NULL );
+			ASSERT(item != NULL);
 
-			if ( item->minplayers != 0 )
+			if (item->minplayers != 0)
 			{
-				if ( curplayers >= item->minplayers )
+				if (curplayers >= item->minplayers)
 				{
 					found = TRUE;
 					minplayers = item->minplayers;
@@ -1769,9 +1778,9 @@ void CHalfLifeMultiplay :: ChangeLevel( void )
 				}
 			}
 
-			if ( item->maxplayers != 0 )
+			if (item->maxplayers != 0)
 			{
-				if ( curplayers <= item->maxplayers )
+				if (curplayers <= item->maxplayers)
 				{
 					found = TRUE;
 					maxplayers = item->maxplayers;
@@ -1782,49 +1791,49 @@ void CHalfLifeMultiplay :: ChangeLevel( void )
 				}
 			}
 
-			if ( keeplooking )
+			if (keeplooking)
 				continue;
 
 			found = TRUE;
 			break;
 		}
 
-		if ( !found )
+		if (!found)
 		{
 			item = mapcycle.next_item;
-		}			
-		
+		}
+
 		// Increment next item pointer
 		mapcycle.next_item = item->next;
 
 		// Perform logic on current item
-		strcpy( szNextMap, item->mapname );
+		strcpy(szNextMap, item->mapname);
 
-		ExtractCommandString( item->rulebuffer, szCommands );
-		strcpy( szRules, item->rulebuffer );
+		ExtractCommandString(item->rulebuffer, szCommands);
+		strcpy(szRules, item->rulebuffer);
 	}
 
-	if ( !IS_MAP_VALID(szNextMap) )
+	if (!IS_MAP_VALID(szNextMap))
 	{
-		strcpy( szNextMap, szFirstMapInList );
+		strcpy(szNextMap, szFirstMapInList);
 	}
 
 	g_fGameOver = TRUE;
 
-	ALERT( at_console, "CHANGE LEVEL: %s\n", szNextMap );
-	if ( minplayers || maxplayers )
+	ALERT(at_console, "CHANGE LEVEL: %s\n", szNextMap);
+	if (minplayers || maxplayers)
 	{
-		ALERT( at_console, "PLAYER COUNT:  min %i max %i current %i\n", minplayers, maxplayers, curplayers );
+		ALERT(at_console, "PLAYER COUNT:  min %i max %i current %i\n", minplayers, maxplayers, curplayers);
 	}
-	if ( strlen( szRules ) > 0 )
+	if (strlen(szRules) > 0)
 	{
-		ALERT( at_console, "RULES:  %s\n", szRules );
+		ALERT(at_console, "RULES:  %s\n", szRules);
 	}
-	
-	CHANGE_LEVEL( szNextMap, NULL );
-	if ( strlen( szCommands ) > 0 )
+
+	CHANGE_LEVEL(szNextMap, NULL);
+	if (strlen(szCommands) > 0)
 	{
-		SERVER_COMMAND( szCommands );
+		SERVER_COMMAND(szCommands);
 	}
 }
 
