@@ -902,7 +902,7 @@ void ClientPrecache( void )
 
 	// BlueNightHawk : Suit Energy Regeneration
 	PRECACHE_SOUND("buttons/blip1.wav");
-	PRECACHE_SOUND("buttons/bell1.wav");
+	PRECACHE_SOUND("plats/elevbell1.wav");
 	PRECACHE_SOUND("buttons/spark1.wav");
 
 	if (giPrecacheGrunt)

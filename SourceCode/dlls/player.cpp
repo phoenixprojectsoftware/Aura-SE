@@ -4725,7 +4725,7 @@ void CBasePlayer :: UpdateClientData( void )
 			m_fRegenOn = false;
 			STOP_SOUND(ENT(pev), CHAN_STATIC, "items/suitcharge_no_lp.wav");
 			STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_empty.wav");
-			EMIT_SOUND(ENT(pev), CHAN_ITEM, "buttons/bell1.wav", 0.85, ATTN_NORM);
+			EMIT_SOUND(ENT(pev), CHAN_ITEM, "plats/elevbell1.wav", 0.85, ATTN_NORM);
 		}
 		else if (!m_fRegenOn) // when shield starts recharging
 		{
