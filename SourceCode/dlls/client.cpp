@@ -888,7 +888,6 @@ void ClientPrecache( void )
 	PRECACHE_SOUND("player/geiger1.wav");
 
 	// BlueNightHawk : Suit Energy Regeneration
-	PRECACHE_SOUND("player/shield_disrupted.wav");
 	PRECACHE_SOUND("player/shield_depleted2.wav");
 	PRECACHE_SOUND("player/shield_low.wav");
 	PRECACHE_SOUND("player/shield_empty.wav");
