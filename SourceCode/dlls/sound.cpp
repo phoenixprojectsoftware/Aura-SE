@@ -1733,6 +1733,13 @@ float TEXTURETYPE_PlaySound(TraceResult *ptr,  Vector vecSrc, Vector vecEnd, int
 		rgsz[2] = "debris/wood3.wav";
 		cnt = 3;
 		break;
+	case CHAR_TEX_SNOW: fvol = 0.9; fvolbar = 0.2;
+		rgsz[0] = "player/pl_snow1.wav";
+		rgsz[1] = "player/pl_snow2.wav";
+		rgsz[2] = "player/pl_snow3.wav";
+		rgsz[3] = "player/pl_snow4.wav";
+		cnt = 3;
+		break;
 	case CHAR_TEX_GLASS:
 	case CHAR_TEX_COMPUTER:
 		fvol = 0.8; fvolbar = 0.2;
