@@ -944,11 +944,11 @@ void CHGrunt :: HandleAnimEvent( MonsterEvent_t *pEvent )
 
 		case HGRUNT_AE_KICK:
 		{
+			EMIT_SOUND(ENT(pev), CHAN_WEAPON, "hgrunt/gr_kick.wav", 1, ATTN_NORM);
 			CBaseEntity *pHurt = Kick();
 
 			if ( pHurt )
 			{
-				// SOUND HERE!
 				UTIL_MakeVectors( pev->angles );
 				pHurt->pev->punchangle.x = 15;
 				pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_forward * 100 + gpGlobals->v_up * 50;
@@ -1077,6 +1077,8 @@ void CHGrunt :: Precache()
 	PRECACHE_SOUND( "weapons/sbarrel1.wav" );
 
 	PRECACHE_SOUND("zombie/claw_miss2.wav");// because we use the basemonster SWIPE animation event
+
+	PRECACHE_SOUND("hgrunt/gr_kick.wav");
 
 	// get voice pitch
 	if (RANDOM_LONG(0,1))
