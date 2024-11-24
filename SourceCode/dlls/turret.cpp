@@ -286,12 +286,14 @@ void CBaseTurret::Spawn()
 void CBaseTurret::Precache( )
 {
 	PRECACHE_SOUND ("turret/tu_fire1.wav");
+	PRECACHE_SOUND ("weapons/saw_fire1.wav");
+	PRECACHE_SOUND ("weapons/saw_fire2.wav");
+	PRECACHE_SOUND ("weapons/saw_fire3.wav");
 	PRECACHE_SOUND ("turret/tu_ping.wav");
 	PRECACHE_SOUND ("turret/tu_active2.wav");
 	PRECACHE_SOUND ("turret/tu_die.wav");
 	PRECACHE_SOUND ("turret/tu_die2.wav");
 	PRECACHE_SOUND ("turret/tu_die3.wav");
-	// PRECACHE_SOUND ("turret/tu_retract.wav"); // just use deploy sound to save memory
 	PRECACHE_SOUND ("turret/tu_deploy.wav");
 	PRECACHE_SOUND ("turret/tu_spinup.wav");
 	PRECACHE_SOUND ("turret/tu_spindown.wav");
@@ -629,6 +631,14 @@ void CBaseTurret::ActiveThink(void)
 void CTurret::Shoot(Vector &vecSrc, Vector &vecDirToEnemy)
 {
 	FireBullets( 1, vecSrc, vecDirToEnemy, TURRET_SPREAD, TURRET_RANGE, BULLET_MONSTER_12MM, 1 );
+
+	switch (RANDOM_LONG(0, 2))
+	{
+	case 0: EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/saw_fire1.wav", 1, ATTN_NORM); break;
+	case 1: EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/saw_fire2.wav", 1, ATTN_NORM); break;
+	case 2: EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/saw_fire3.wav", 1, ATTN_NORM); break;
+
+	}
 	EMIT_SOUND(ENT(pev), CHAN_WEAPON, "turret/tu_fire1.wav", 1, 0.6);
 	pev->effects = pev->effects | EF_MUZZLEFLASH;
 }
