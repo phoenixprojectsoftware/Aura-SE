@@ -1208,11 +1208,12 @@ void CSentry::Shoot(Vector &vecSrc, Vector &vecDirToEnemy)
 {
 	FireBullets( 1, vecSrc, vecDirToEnemy, TURRET_SPREAD, TURRET_RANGE, BULLET_MONSTER_MP5, 1 );
 	
-	switch(RANDOM_LONG(0,2))
+	switch (RANDOM_LONG(0, 2))
 	{
-	case 0: EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/hks1.wav", 1, ATTN_NORM); break;
-	case 1: EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/hks2.wav", 1, ATTN_NORM); break;
-	case 2: EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/hks3.wav", 1, ATTN_NORM); break;
+	case 0: EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/saw_fire1.wav", 1, ATTN_NORM); break;
+	case 1: EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/saw_fire2.wav", 1, ATTN_NORM); break;
+	case 2: EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/saw_fire3.wav", 1, ATTN_NORM); break;
+
 	}
 	pev->effects = pev->effects | EF_MUZZLEFLASH;
 }
