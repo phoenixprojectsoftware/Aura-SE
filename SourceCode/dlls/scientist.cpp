@@ -700,6 +700,7 @@ void CScientist :: Precache( void )
 	PRECACHE_SOUND("scientist/sci_pain3.wav");
 	PRECACHE_SOUND("scientist/sci_pain4.wav");
 	PRECACHE_SOUND("scientist/sci_pain5.wav");
+	PRECACHE_SOUND("scream.wav");
 
 	// every new scientist must call this, otherwise
 	// when a level is loaded, nobody will talk (time is reset to 0)
@@ -807,7 +808,7 @@ void CScientist :: PainSound ( void )
 //=========================================================
 void CScientist :: DeathSound ( void )
 {
-	PainSound();
+	EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "scream.wav", 1, ATTN_NORM, 0, GetVoicePitch());
 }
 
 
