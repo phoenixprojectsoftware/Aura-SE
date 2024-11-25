@@ -102,6 +102,7 @@ typedef struct hull_s
 #define CHAR_TEX_COMPUTER	'P'
 #define CHAR_TEX_GLASS		'Y'
 #define CHAR_TEX_FLESH		'F'
+#define CHAR_TEX_SNOW		'N'
 
 #define STEP_CONCRETE	0		// default step sound
 #define STEP_METAL		1		// metal floor
@@ -112,6 +113,8 @@ typedef struct hull_s
 #define STEP_SLOSH		6		// shallow liquid puddle
 #define STEP_WADE		7		// wading in liquid
 #define STEP_LADDER		8		// climbing ladder
+#define STEP_WOOD		9		// wood
+#define STEP_SNOW	   10		// snow
 
 #define PLAYER_FATAL_FALL_SPEED		1024// approx 60 feet
 #define PLAYER_MAX_SAFE_FALL_SPEED	580// approx 20 feet
@@ -452,6 +455,8 @@ int PM_MapTextureTypeStepType(char chTextureType)
 		case CHAR_TEX_GRATE: return STEP_GRATE;	
 		case CHAR_TEX_TILE: return STEP_TILE;
 		case CHAR_TEX_SLOSH: return STEP_SLOSH;
+		case CHAR_TEX_WOOD: return STEP_WOOD;
+		case CHAR_TEX_SNOW: return STEP_SNOW;
 	}
 }
 
@@ -616,6 +621,14 @@ void PM_UpdateStepSound( void )
 				break;
 
 			case CHAR_TEX_SLOSH:
+				fvol = fWalking ? 0.2 : 0.5;
+				pmove->flTimeStepSound = fWalking ? 400 : 300;
+				break;
+			case CHAR_TEX_WOOD:
+				fvol = fWalking ? 0.2 : 0.5;
+				pmove->flTimeStepSound = fWalking ? 400 : 300;
+				break;
+			case CHAR_TEX_SNOW:
 				fvol = fWalking ? 0.2 : 0.5;
 				pmove->flTimeStepSound = fWalking ? 400 : 300;
 				break;

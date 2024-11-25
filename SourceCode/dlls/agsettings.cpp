@@ -635,30 +635,39 @@ void AgSettings::CalcNextMap()
 	char szCommands[1500];
 	char szRules[1500];
 	int minplayers = 0, maxplayers = 0;
-	strcpy(szFirstMapInList, "boot_camp");  // the absolute default level is hldm1
+	strcpy(szFirstMapInList, "boot_camp");  // the absolute default level
 
-	int	curplayers;
+	int curplayers;
 	BOOL do_cycle = TRUE;
 
-	// find the map to change to
-	char* mapcfile = (char*)CVAR_GET_STRING("mapcyclefile");
-	ASSERT(mapcfile != NULL);
+	// Sabian: Get the user input for mapcyclefile
+	char userInputMapCycleFile[256];
+	char* userInput = (char*)CVAR_GET_STRING("mapcyclefile");
+
+	// Sabian: Remove ".txt" if present in user input
+	size_t len = strlen(userInput);
+	if (len > 4 && strcmp(&userInput[len - 4], ".txt") == 0) {
+		userInput[len - 4] = '\0';  // Truncate the ".txt" part
+	}
+
+	// Sabian: Format the path as "mapcycles/%USERINPUT%.mc"
+	sprintf(userInputMapCycleFile, "mapcycles/%s.mc", userInput);
 
 	szCommands[0] = '\0';
 	szRules[0] = '\0';
 
 	curplayers = AgCountPlayers();
 
-	// Has the map cycle filename changed?
-	if (stricmp(mapcfile, szPreviousMapCycleFile))
+	// Check if the constructed map cycle filename has changed
+	if (stricmp(userInputMapCycleFile, szPreviousMapCycleFile))
 	{
-		strcpy(szPreviousMapCycleFile, mapcfile);
+		strcpy(szPreviousMapCycleFile, userInputMapCycleFile);
 
 		AgDestroyMapCycle(&mapcycle);
 
-		if (!AgReloadMapCycleFile(mapcfile, &mapcycle) || (!mapcycle.items))
+		if (!AgReloadMapCycleFile(userInputMapCycleFile, &mapcycle) || (!mapcycle.items))
 		{
-			ALERT(at_console, "Unable to load map cycle file %s\n", mapcfile);
+			ALERT(at_console, "Unable to load map cycle file %s\n", userInputMapCycleFile);
 			do_cycle = FALSE;
 		}
 	}
@@ -743,10 +752,10 @@ void AgSettings::CalcNextMap()
 		ALERT(at_console, "RULES:  %s\n", szRules);
 	}
 
+	// Set the next map and rules for use in other parts of the code
 	g_sNextMap = szNextMap;
 	g_sNextRules = szCommands;
-	//No need to calc more.
-	m_bCalcNextMap = false;
+	m_bCalcNextMap = false;  // Flag indicating calculation is complete
 }
 
 
