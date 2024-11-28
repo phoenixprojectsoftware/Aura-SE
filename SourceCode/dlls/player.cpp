@@ -4685,7 +4685,7 @@ void CBasePlayer :: UpdateClientData( void )
 	}
 	else if (sv_aura_regeneration.value != 0) // IsObserver || !IsAlive
 	{
-		if (pev->armorvalue <= 0)
+		if (pev->armorvalue < 1)
 		{
 			if (!isShieldEmpty && (currentTime - lastShieldSoundTime > 1.0f))
 			{
@@ -4705,7 +4705,7 @@ void CBasePlayer :: UpdateClientData( void )
 			}
 		}
 
-		if (pev->armorvalue < 10)
+		if (pev->armorvalue >= 1 && pev->armorvalue <= 10)
 		{
 			if (!isShieldLow && (currentTime - lastShieldSoundTime > 1.0f)) // 1 second delay
 			{
