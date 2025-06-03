@@ -26,9 +26,9 @@
 void AgInitTimer();
 
 #ifdef AG_NO_CLIENT_DLL
-DLL_GLOBAL cvar_t	ag_version = { "sv_aura_version","2.3.1", FCVAR_SERVER };
+DLL_GLOBAL cvar_t	ag_version = { "sv_aura_version","2.3.2", FCVAR_SERVER };
 #else
-DLL_GLOBAL cvar_t	ag_version = { "sv_aura_version","2.3.1", FCVAR_SERVER };
+DLL_GLOBAL cvar_t	ag_version = { "sv_aura_version","2.3.2", FCVAR_SERVER };
 #endif
 
 DLL_GLOBAL cvar_t	ag_gamemode = { "sv_aura_gamemode","ffa", FCVAR_SERVER }; //The current gamemode

@@ -786,6 +786,9 @@ int CBasePlayer :: TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, 
 	if (sv_aura_regeneration.value != 0 && pev->armorvalue < MAX_NORMAL_BATTERY && fTookDamage)
 	{
 		STOP_SOUND(ENT(pev), CHAN_STATIC, "items/suitcharge_no_lp.wav");
+		STOP_SOUND(ENT(pev), CHAN_STATIC, "items/regen01.wav");
+		STOP_SOUND(ENT(pev), CHAN_STATIC, "items/regen02.wav");
+		STOP_SOUND(ENT(pev), CHAN_STATIC, "items/regen03.wav");
 		if (m_fRegenOn && !isShieldEmpty)
 			EMIT_SOUND(ENT(pev), CHAN_ITEM, "items/suitchargeno1.wav", 0.85, ATTN_NORM); // low-pitched elevbell
 		m_fRegenOn = false;
@@ -4676,6 +4679,9 @@ void CBasePlayer :: UpdateClientData( void )
 		STOP_SOUND(ENT(pev), CHAN_STATIC, "items/suitcharge1.wav");
 		STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_empty.wav");
 		STOP_SOUND(ENT(pev), CHAN_STATIC, "items/suitcharge_no_lp.wav");
+		STOP_SOUND(ENT(pev), CHAN_STATIC, "items/regen01.wav");
+		STOP_SOUND(ENT(pev), CHAN_STATIC, "items/regen02.wav");
+		STOP_SOUND(ENT(pev), CHAN_STATIC, "items/regen03.wav");
 		STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_charge.wav");
 		STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_low.wav");
 
@@ -4744,6 +4750,9 @@ void CBasePlayer :: UpdateClientData( void )
 				m_flNextSuitRegenTime = 0.0f;
 				m_fRegenOn = false;
 				STOP_SOUND(ENT(pev), CHAN_STATIC, "items/suitcharge_no_lp.wav");
+				STOP_SOUND(ENT(pev), CHAN_STATIC, "items/regen01.wav");
+				STOP_SOUND(ENT(pev), CHAN_STATIC, "items/regen02.wav");
+				STOP_SOUND(ENT(pev), CHAN_STATIC, "items/regen03.wav");
 				STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_empty.wav");
 				EMIT_SOUND(ENT(pev), CHAN_ITEM, "plats/elevbell1.wav", 0.85, ATTN_NORM);
 			}
@@ -4754,9 +4763,42 @@ void CBasePlayer :: UpdateClientData( void )
 				STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_empty.wav");
 
 			}
-			else // as it's recharging
+			else if (m_fRegenOn && pev->armorvalue < 20) // as it's recharging
 			{
 				STOP_SOUND(ENT(pev), CHAN_STATIC, "items/suitcharge_no_lp.wav");
+				STOP_SOUND(ENT(pev), CHAN_STATIC, "items/regen01.wav");
+				STOP_SOUND(ENT(pev), CHAN_STATIC, "items/regen02.wav");
+				STOP_SOUND(ENT(pev), CHAN_STATIC, "items/regen03.wav");
+				STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_empty.wav");
+				// too loud
+				EMIT_SOUND(ENT(pev), CHAN_STATIC, "items/regen01.wav", 0.25, ATTN_NORM);
+			}
+			else if (m_fRegenOn && pev->armorvalue < 40) // as it's recharging
+			{
+				STOP_SOUND(ENT(pev), CHAN_STATIC, "items/suitcharge_no_lp.wav");
+				STOP_SOUND(ENT(pev), CHAN_STATIC, "items/regen01.wav");
+				STOP_SOUND(ENT(pev), CHAN_STATIC, "items/regen02.wav");
+				STOP_SOUND(ENT(pev), CHAN_STATIC, "items/regen03.wav");
+				STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_empty.wav");
+				// too loud
+				EMIT_SOUND(ENT(pev), CHAN_STATIC, "items/regen02.wav", 0.25, ATTN_NORM);
+			}
+			else if (m_fRegenOn && pev->armorvalue < 80) // as it's recharging
+			{
+				STOP_SOUND(ENT(pev), CHAN_STATIC, "items/suitcharge_no_lp.wav");
+				STOP_SOUND(ENT(pev), CHAN_STATIC, "items/regen01.wav");
+				STOP_SOUND(ENT(pev), CHAN_STATIC, "items/regen02.wav");
+				STOP_SOUND(ENT(pev), CHAN_STATIC, "items/regen03.wav");
+				STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_empty.wav");
+				// too loud
+				EMIT_SOUND(ENT(pev), CHAN_STATIC, "items/regen03.wav", 0.25, ATTN_NORM);
+			}
+			else if (m_fRegenOn && pev->armorvalue >= 80) // as it's recharging
+			{
+				STOP_SOUND(ENT(pev), CHAN_STATIC, "items/suitcharge_no_lp.wav");
+				STOP_SOUND(ENT(pev), CHAN_STATIC, "items/regen01.wav");
+				STOP_SOUND(ENT(pev), CHAN_STATIC, "items/regen02.wav");
+				STOP_SOUND(ENT(pev), CHAN_STATIC, "items/regen03.wav");
 				STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_empty.wav");
 				// too loud
 				EMIT_SOUND(ENT(pev), CHAN_STATIC, "items/suitcharge_no_lp.wav", 0.25, ATTN_NORM);
