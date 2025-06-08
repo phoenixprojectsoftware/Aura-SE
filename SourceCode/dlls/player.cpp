@@ -4759,10 +4759,11 @@ void CBasePlayer :: UpdateClientData( void )
 			else if (!m_fRegenOn) // when shield starts recharging
 			{
 				m_fRegenOn = true;
-				EMIT_SOUND(ENT(pev), CHAN_AUTO, "items/suitchargeok1.wav", 0.85, ATTN_NORM);
+				EMIT_SOUND(ENT(pev), CHAN_STATIC, "player/shield_charge.wav", 0.85, ATTN_NORM);
 				STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_empty.wav");
 
 			}
+#ifndef _HALO //_HALO === shield regeneration sounds ===
 			else if (m_fRegenOn && pev->armorvalue < 20) // as it's recharging
 			{
 				STOP_SOUND(ENT(pev), CHAN_STATIC, "items/suitcharge_no_lp.wav");
@@ -4803,6 +4804,7 @@ void CBasePlayer :: UpdateClientData( void )
 				// too loud
 				EMIT_SOUND(ENT(pev), CHAN_STATIC, "items/suitcharge_no_lp.wav", 0.25, ATTN_NORM);
 			}
+#endif //_HALO === shield regeneration sounds ===
 
 			m_flNextSuitRegenTime = gpGlobals->time + sv_aura_regeneration_wait.value;
 		}

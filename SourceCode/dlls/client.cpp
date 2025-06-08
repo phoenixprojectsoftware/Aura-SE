@@ -906,9 +906,11 @@ void ClientPrecache( void )
 	PRECACHE_SOUND("items/suitchargeok1.wav");
 	PRECACHE_SOUND("items/suitcharge1.wav");
 	PRECACHE_SOUND("items/suitcharge_no_lp.wav");
+#ifndef _HALO
 	PRECACHE_SOUND("items/regen01.wav");
 	PRECACHE_SOUND("items/regen02.wav");
 	PRECACHE_SOUND("items/regen03.wav");
+#endif
 
 	PRECACHE_SOUND("player/friend_online.wav");
 	PRECACHE_SOUND("player/spawn.wav");
