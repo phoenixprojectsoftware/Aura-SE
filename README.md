@@ -11,4 +11,4 @@ which originally started development in April 2019. ZAMNHLMP started using **Aur
 
 TPPS currently has plans to use Aura for other multiplayer Half-Life 1 based games.
 
-© 2021-2024 The Phoenix Project Software.
+© 2021-2025 The Phoenix Project Software.
