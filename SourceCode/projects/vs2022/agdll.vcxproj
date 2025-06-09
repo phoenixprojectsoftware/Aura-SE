@@ -168,7 +168,7 @@
       <ModuleDefinitionFile>$(ProjectDir)..\..\dlls\ag.def</ModuleDefinitionFile>
     </Link>
     <PostBuildEvent>
-      <Command>release_filecopy.bat</Command>
+      <Command>halo_filecopy.bat</Command>
     </PostBuildEvent>
     <PostBuildEvent />
   </ItemDefinitionGroup>

@@ -4673,7 +4673,7 @@ void CBasePlayer :: UpdateClientData( void )
 
 	float currentTime = gpGlobals->time;
 
-	// BlueNightHawk : Suit Energy Regeneration
+	// BlueNightHawk : Suit Energy Regeneration | Sounds
 	if (sv_aura_regeneration.value != 0 && IsObserver() || IsSpectator() || !IsAlive()) // TODO: make this if statement apply to "welcome cam"
 	{
 		STOP_SOUND(ENT(pev), CHAN_STATIC, "items/suitcharge1.wav");
@@ -4738,7 +4738,7 @@ void CBasePlayer :: UpdateClientData( void )
 			STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_low.wav");
 		}
 
-		// BlueNightHawk : Suit Energy Regeneration
+		// BlueNightHawk : Suit Energy Regeneration | Sounds
 		if (sv_aura_regeneration.value != 0 && pev->armorvalue < MAX_NORMAL_BATTERY
 			&& m_flNextSuitRegenTime < gpGlobals->time)
 		{
@@ -4754,12 +4754,17 @@ void CBasePlayer :: UpdateClientData( void )
 				STOP_SOUND(ENT(pev), CHAN_STATIC, "items/regen02.wav");
 				STOP_SOUND(ENT(pev), CHAN_STATIC, "items/regen03.wav");
 				STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_empty.wav");
+				STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_charge.wav"); // Halo Shield
 				EMIT_SOUND(ENT(pev), CHAN_ITEM, "plats/elevbell1.wav", 0.85, ATTN_NORM);
 			}
 			else if (!m_fRegenOn) // when shield starts recharging
 			{
 				m_fRegenOn = true;
+#ifndef _HALO
+				EMIT_SOUND(ENT(pev), CHAN_STATIC, "items/suitchargeok1.wav", 0.85, ATTN_NORM);
+#else
 				EMIT_SOUND(ENT(pev), CHAN_STATIC, "player/shield_charge.wav", 0.85, ATTN_NORM);
+#endif
 				STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_empty.wav");
 
 			}
@@ -4811,6 +4816,7 @@ void CBasePlayer :: UpdateClientData( void )
 		else if (sv_aura_regeneration.value == 0)
 		{
 			STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_empty.wav");
+			STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_charge.wav");
 			m_flNextSuitRegenTime = 0.0f;
 			m_fRegenOn = false;
 			m_fRegenOn = false;
