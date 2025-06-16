@@ -4671,13 +4671,14 @@ void CBasePlayer :: UpdateClientData( void )
 	float currentTime = gpGlobals->time;
 
 	// BlueNightHawk : Suit Energy Regeneration
-	if (sv_aura_regeneration.value != 0 && IsObserver() || IsSpectator() || !IsAlive()) // TODO: make this if statement apply to "welcome cam"
+	if (sv_aura_regeneration.value != 0 && IsObserver() || IsSpectator() || !IsAlive() || pev->armorvalue >= MAX_NORMAL_BATTERY) // TODO: make this if statement apply to "welcome cam"
 	{
 		STOP_SOUND(ENT(pev), CHAN_STATIC, "items/suitcharge1.wav");
 		STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_empty.wav");
 		STOP_SOUND(ENT(pev), CHAN_STATIC, "items/suitcharge_no_lp.wav");
 		STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_charge.wav");
 		STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_low.wav");
+		STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_lp.wav");
 
 		isShieldLow = false;
 		m_fRegenOn = false;
@@ -4709,7 +4710,7 @@ void CBasePlayer :: UpdateClientData( void )
 		{
 			if (!isShieldLow && (currentTime - lastShieldSoundTime > 1.0f)) // 1 second delay
 			{
-				EMIT_SOUND(ENT(pev), CHAN_AUTO, "player/shield_low.wav", 0.85, ATTN_NORM);
+				EMIT_SOUND(ENT(pev), CHAN_AUTO, "player/shield_low.wav", 0.75, ATTN_NORM);
 				isShieldLow = true;
 				lastShieldSoundTime = currentTime;
 			}
@@ -4746,20 +4747,19 @@ void CBasePlayer :: UpdateClientData( void )
 				STOP_SOUND(ENT(pev), CHAN_STATIC, "items/suitcharge_no_lp.wav");
 				STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_empty.wav");
 				EMIT_SOUND(ENT(pev), CHAN_ITEM, "plats/elevbell1.wav", 0.85, ATTN_NORM);
+				EMIT_SOUND(ENT(pev), CHAN_STATIC, "player/shield_finish.wav", 1, ATTN_NORM);
 			}
 			else if (!m_fRegenOn) // when shield starts recharging
 			{
 				m_fRegenOn = true;
-				EMIT_SOUND(ENT(pev), CHAN_AUTO, "items/suitchargeok1.wav", 0.85, ATTN_NORM);
+				EMIT_SOUND(ENT(pev), CHAN_AUTO, "player/shield_start.wav", 1, ATTN_NORM);
+				EMIT_SOUND(ENT(pev), CHAN_STATIC, "player/shield_lp.wav", 0.85, ATTN_NORM);
 				STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_empty.wav");
 
 			}
 			else // as it's recharging
 			{
-				STOP_SOUND(ENT(pev), CHAN_STATIC, "items/suitcharge_no_lp.wav");
 				STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_empty.wav");
-				// too loud
-				EMIT_SOUND(ENT(pev), CHAN_STATIC, "items/suitcharge_no_lp.wav", 0.25, ATTN_NORM);
 			}
 
 			m_flNextSuitRegenTime = gpGlobals->time + sv_aura_regeneration_wait.value;
