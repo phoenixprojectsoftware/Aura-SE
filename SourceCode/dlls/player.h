@@ -105,7 +105,7 @@ enum sbar_data
 class CBasePlayer : public CBaseMonster
 {
 public:
-	
+	bool HaveSoundsStopped;
 	// Spectator camera
 	void	Observer_FindNextPlayer( bool bReverse );
 	void	Observer_HandleButtons();
