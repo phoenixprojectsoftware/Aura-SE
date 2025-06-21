@@ -603,7 +603,7 @@ decltype(g_engfuncs.pfnMessageBegin) g_originalMessageBegin = nullptr;
 // wrapper for MessageBegin
 void Au_MessageBegin(int msg_dest, int msg_type, const float* pOrigin, edict_t* ed)
 {
-	NetProfiling::Submit(__FILE__,__LINE__,std::to_string(msg_type).c_str());
+	NetProfiling::Submit(msg_type);
 	g_originalMessageBegin(msg_dest, msg_type, pOrigin, ed);
 }
 
@@ -619,6 +619,83 @@ cvar_t sv_aura_regeneration_wait = { "sv_aura_regeneration_wait", "0.03", FCVAR_
 
 cvar_t sv_pushable_fixed_tick_fudge = { "sv_pushable_fixed_tick_fudge", "15" };
 
+// NETPROFILING MSGS START
+extern int gmsgShake;
+extern int gmsgFade;
+extern int gmsgSelAmmo;
+extern int gmsgFlashlight;
+extern int gmsgFlashBattery;
+extern int gmsgResetHUD;
+extern int gmsgInitHUD;
+extern int gmsgShowGameTitle;
+extern int gmsgHealth;
+extern int gmsgDamage;
+extern int gmsgBattery;
+extern int gmsgTrain;
+extern int gmsgLogo;
+extern int gmsgWeaponList;
+extern int gmsgHudText;
+extern int gmsgDeathMsg;
+extern int gmsgScoreInfo;
+extern int gmsgTeamInfo;
+extern int gmsgTeamScore;
+extern int gmsgGameMode;
+extern int gmsgMOTD;
+extern int gmsgServerName;
+extern int gmsgAmmoPickup;
+extern int gmsgWeapPickup;
+extern int gmsgItemPickup;
+extern int gmsgHideWeapon;
+extern int gmsgSetCurWeap;
+extern int gmsgSayText;
+extern int gmsgTextMsg;
+extern int gmsgSetFOV;
+extern int gmsgShowMenu;
+extern int gmsgGeigerRange;
+extern int gmsgTeamNames;
+extern int gmsgSetSky;
+
+extern int gmsgStatusText;
+extern int gmsgStatusValue;
+
+//++ BulliT
+extern int gmsgAllowSpec;
+extern int gmsgSpectator;
+extern int gmsgVGUIMenu;
+extern int gmsgCheatCheck;
+extern int gmsgSplash;
+extern int gmsgCountdown;
+extern int gmsgTimer;
+extern int gmsgPlayerId;
+extern int gmsgSettings;
+extern int gmsgSuddenDeath;
+extern int gmsgLongjump;
+extern int gmsgTimeout;
+extern int gmsgPlaySound;
+extern int gmsgVote;
+extern int gmsgNextmap;
+extern int gmsgInitLoc;
+extern int gmsgLocation;
+extern int gmsgWallhack;
+extern int gmsgSpikeCheck;
+extern int gmsgGametype;
+extern int gmsgStatusIcon;
+extern int gmsgCTF;
+extern int gmsgAuthID;
+extern int gmsgCTFSound;
+extern int gmsgMapList;
+extern int gmsgCTFFlag;
+extern int gmsgCRC32;
+//-- Martin Webrant
+
+extern int gmsgLaserSpot;
+
+extern int gmsgCurWeapon;
+extern int gmsgAmmoX;
+extern int gmsgSayText;
+extern int gmsgStatusText;
+// NETPROFILING MSGS END
+
 // Register your console variables here
 // This gets called one time when the game is initialied
 void GameDLLInit( void )
@@ -629,11 +706,88 @@ void GameDLLInit( void )
 	// replace with our wrapper
 	g_engfuncs.pfnMessageBegin = Au_MessageBegin;
 
+#ifdef _DEBUG
+	// Register readable names
+	NetProfiling::RegisterName(gmsgHealth, "gmsgHealth");
+	NetProfiling::RegisterName(gmsgDamage, "gmsgDamage");
+	NetProfiling::RegisterName(gmsgCurWeapon, "gmsgCurWeapon");
+	NetProfiling::RegisterName(gmsgAmmoX, "gmsgAmmoX");
+	NetProfiling::RegisterName(gmsgSayText, "gmsgSayText");
+	NetProfiling::RegisterName(gmsgStatusText, "gmsgStatusText");
+	NetProfiling::RegisterName(gmsgShake, "gmsgShake");
+	NetProfiling::RegisterName(gmsgFade, "gmsgFade");
+	NetProfiling::RegisterName(gmsgSelAmmo, "gmsgSelAmmo");
+	NetProfiling::RegisterName(gmsgFlashlight, "gmsgFlashlight");
+	NetProfiling::RegisterName(gmsgFlashBattery, "gmsgFlashBattery");
+	NetProfiling::RegisterName(gmsgResetHUD, "gmsgResetHUD");
+	NetProfiling::RegisterName(gmsgInitHUD, "gmsgInitHUD");
+	NetProfiling::RegisterName(gmsgShowGameTitle, "gmsgShowGameTitle");
+	NetProfiling::RegisterName(gmsgTrain, "gmsgTrain");
+	NetProfiling::RegisterName(gmsgLogo, "gmsgLogo");
+	NetProfiling::RegisterName(gmsgWeaponList, "gmsgWeaponList");
+	NetProfiling::RegisterName(gmsgHudText, "gmsgHudText");
+	NetProfiling::RegisterName(gmsgDeathMsg, "gmsgDeathMsg");
+	NetProfiling::RegisterName(gmsgScoreInfo, "gmsgScoreInfo");
+	NetProfiling::RegisterName(gmsgTeamInfo, "gmsgTeamInfo");
+	NetProfiling::RegisterName(gmsgTeamScore, "gmsgTeamScore");
+	NetProfiling::RegisterName(gmsgGameMode, "gmsgGameMode");
+	NetProfiling::RegisterName(gmsgMOTD, "gmsgMOTD");
+	NetProfiling::RegisterName(gmsgServerName, "gmsgServerName");
+	NetProfiling::RegisterName(gmsgAmmoPickup, "gmsgAmmoPickup");
+	NetProfiling::RegisterName(gmsgWeapPickup, "gmsgWeapPickup");
+	NetProfiling::RegisterName(gmsgItemPickup, "gmsgItemPickup");
+	NetProfiling::RegisterName(gmsgHideWeapon, "gmsgHideWeapon");
+	NetProfiling::RegisterName(gmsgSetCurWeap, "gmsgSetCurWeap");
+	NetProfiling::RegisterName(gmsgTextMsg, "gmsgTextMsg");
+	NetProfiling::RegisterName(gmsgSetFOV, "gmsgSetFOV");
+	NetProfiling::RegisterName(gmsgShowMenu, "gmsgShowMenu");
+	NetProfiling::RegisterName(gmsgGeigerRange, "gmsgGeigerRange");
+	NetProfiling::RegisterName(gmsgTeamNames, "gmsgTeamNames");
+	NetProfiling::RegisterName(gmsgSetSky, "gmsgSetSky");
+	NetProfiling::RegisterName(gmsgStatusText, "gmsgStatusText");
+	NetProfiling::RegisterName(gmsgStatusValue, "gmsgStatusValue");
+	//++ BulliT
+	NetProfiling::RegisterName(gmsgAllowSpec, "gmsgAllowSpec");
+	NetProfiling::RegisterName(gmsgSpectator, "gmsgSpectator");
+	NetProfiling::RegisterName(gmsgVGUIMenu, "gmsgVGUIMenu");
+	NetProfiling::RegisterName(gmsgCheatCheck, "gmsgCheatCheck");
+	NetProfiling::RegisterName(gmsgSplash, "gmsgSplash");
+	NetProfiling::RegisterName(gmsgCountdown, "gmsgCountdown");
+	NetProfiling::RegisterName(gmsgTimer, "gmsgTimer");
+	NetProfiling::RegisterName(gmsgPlayerId, "gmsgPlayerId");
+	NetProfiling::RegisterName(gmsgSettings, "gmsgSettings");
+	NetProfiling::RegisterName(gmsgSuddenDeath, "gmsgSuddenDeath");
+	NetProfiling::RegisterName(gmsgLongjump, "gmsgLongjump");
+	NetProfiling::RegisterName(gmsgTimeout, "gmsgTimeout");
+	NetProfiling::RegisterName(gmsgPlaySound, "gmsgPlaySound");
+	NetProfiling::RegisterName(gmsgVote, "gmsgVote");
+	NetProfiling::RegisterName(gmsgNextmap, "gmsgNextmap");
+	NetProfiling::RegisterName(gmsgInitLoc, "gmsgInitLoc");
+	NetProfiling::RegisterName(gmsgLocation, "gmsgLocation");
+	NetProfiling::RegisterName(gmsgWallhack, "gmsgWallhack");
+	NetProfiling::RegisterName(gmsgSpikeCheck, "gmsgSpikeCheck");
+	NetProfiling::RegisterName(gmsgGametype, "gmsgGametype");
+	NetProfiling::RegisterName(gmsgStatusIcon, "gmsgStatusIcon");
+	NetProfiling::RegisterName(gmsgCTF, "gmsgCTF");
+	NetProfiling::RegisterName(gmsgAuthID, "gmsgAuthID");
+	NetProfiling::RegisterName(gmsgCTFSound, "gmsgCTFSound");
+	NetProfiling::RegisterName(gmsgMapList, "gmsgMapList");
+	NetProfiling::RegisterName(gmsgCTFFlag, "gmsgCTFFlag");
+	NetProfiling::RegisterName(gmsgCRC32, "gmsgCRC32");
+	//-- Martin Webrant
+	NetProfiling::RegisterName(gmsgLaserSpot, "gmsgLaserSpot");
+	NetProfiling::RegisterName(gmsgSayText, "gmsgSayText");
+	NetProfiling::RegisterName(gmsgStatusText, "gmsgStatusText");
+#endif // _DEBUG
+
+
 	// Register cvars here:
+#ifdef _DEBUG
 	g_engfuncs.pfnAddServerCommand("dump_net_stats", []()
 		{
 			NetProfiling::GetProfiler().DumpStats();
 		});
+#endif
 
 	g_psv_gravity = CVAR_GET_POINTER( "sv_gravity" );
 	g_psv_aim = CVAR_GET_POINTER( "sv_aim" );

@@ -11,54 +11,67 @@ namespace NetProfiling
 	struct MsgInfo
 	{
 		int count = 0;
-		std::string file;
-		int line = 0;
 	};
 
 	class Profiler
 	{
 	private:
-		std::unordered_map<std::string, MsgInfo> msgMap;
+		std::unordered_map<int, MsgInfo> msgMap;
+		std::unordered_map<int, std::string> msgNames;
 		std::mutex mtx;
+
 	public:
-		void Submit(const char* file, int line, const char* msgType)
+		// Register a human-readable name for a message type
+		void RegisterName(int msgType, const char* name)
 		{
 			std::lock_guard<std::mutex> lock(mtx);
-			auto& info = msgMap[msgType];
-			info.count++;
-			if (info.file.empty())
-			{
-				info.file = file;
-				info.line = line;
-			}
+			msgNames[msgType] = name;
 		}
 
+		// Increment count for a message type
+		void Submit(int msgType)
+		{
+			std::lock_guard<std::mutex> lock(mtx);
+			msgMap[msgType].count++;
+		}
+
+		// Dump all stats to console
 		void DumpStats()
 		{
-			printf("Net Profiling Stats:\n");
+			ALERT(at_console, "----- Net Profiling Stats -----\n");
 			for (const auto& pair : msgMap)
 			{
-				ALERT(at_console, "MsgType: %d, Count: %d\n", pair.first, pair.second.count);
+				auto it = msgNames.find(pair.first);
+				const char* name = it != msgNames.end() ? it->second.c_str() : "UNKNOWN";
+
+				ALERT(at_console, "MsgType: %d (%s), Count: %d\n",
+					pair.first, name, pair.second.count);
 			}
-			ALERT(at_console, "[NetProfiling] End of stats.\n");
+			ALERT(at_console, "--------------------------------\n");
 		}
 
 		void Clear()
-					{
+		{
 			std::lock_guard<std::mutex> lock(mtx);
 			msgMap.clear();
 		}
 	};
 
-	static Profiler& GetProfiler()
+	// Global access functions
+	inline Profiler& GetProfiler()
 	{
 		static Profiler instance;
 		return instance;
 	}
 
-	inline void Submit(const char* file, int line, const char* msgType)
+	inline void Submit(int msgType)
 	{
-		GetProfiler().Submit(file, line, msgType);
+		GetProfiler().Submit(msgType);
+	}
+
+	inline void RegisterName(int msgType, const char* name)
+	{
+		GetProfiler().RegisterName(msgType, name);
 	}
 
 	inline void DumpStats()
