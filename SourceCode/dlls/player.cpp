@@ -4671,24 +4671,21 @@ void CBasePlayer :: UpdateClientData( void )
 	float currentTime = gpGlobals->time;
 
 	// BlueNightHawk : Suit Energy Regeneration
-	if (!HaveSoundsStopped && sv_aura_regeneration.value != 0 && pev->armorvalue == MAX_NORMAL_BATTERY)
+	if (sv_aura_regeneration.value != 0 && pev->armorvalue == MAX_NORMAL_BATTERY)
 		STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_lp.wav");
-	if (!HaveSoundsStopped && sv_aura_regeneration.value != 0 && (IsObserver() || IsSpectator() || !IsAlive())) // TODO: make this if statement apply to "welcome cam"
+	if (sv_aura_regeneration.value != 0 && IsObserver() || IsSpectator() || !IsAlive()) // TODO: make this if statement apply to "welcome cam"
 	{
 		STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_empty.wav");
 		STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_charge.wav");
 		STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_low.wav");
 		STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_lp.wav");
-		ALERT(at_console, "FUCK!! Stopping shield sounds because player is an observer or not alive.\n");
 
-		HaveSoundsStopped = true;
 		isShieldLow = false;
 		m_fRegenOn = false;
 		return;
 	}
 	else if (sv_aura_regeneration.value != 0) // IsObserver || !IsAlive
 	{
-		HaveSoundsStopped = false;
 		if (pev->armorvalue < 1)
 		{
 			if (!isShieldEmpty && (currentTime - lastShieldSoundTime > 1.0f))
