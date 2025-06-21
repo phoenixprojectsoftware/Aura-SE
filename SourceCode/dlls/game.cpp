@@ -13,6 +13,7 @@
 *
 ****/
 #include "extdll.h"
+#include "net_profiling.h"
 #include "eiface.h"
 #include "util.h"
 #include "game.h"
@@ -596,6 +597,16 @@ cvar_t	sk_player_leg1	= { "sk_player_leg1","1" };
 cvar_t	sk_player_leg2	= { "sk_player_leg2","1" };
 cvar_t	sk_player_leg3	= { "sk_player_leg3","1" };
 
+// save original pointer
+decltype(g_engfuncs.pfnMessageBegin) g_originalMessageBegin = nullptr;
+
+// wrapper for MessageBegin
+void Au_MessageBegin(int msg_dest, int msg_type, const float* pOrigin, edict_t* ed)
+{
+	NetProfiling::Submit(__FILE__,__LINE__,std::to_string(msg_type).c_str());
+	g_originalMessageBegin(msg_dest, msg_type, pOrigin, ed);
+}
+
 // BlueNightHawk : Infinite Ammo
 cvar_t	sv_aura_infinite_ammo = { "sv_aura_infinite_ammo","0", FCVAR_SERVER };
 
@@ -612,7 +623,17 @@ cvar_t sv_pushable_fixed_tick_fudge = { "sv_pushable_fixed_tick_fudge", "15" };
 // This gets called one time when the game is initialied
 void GameDLLInit( void )
 {
+	// store original function
+	g_originalMessageBegin = g_engfuncs.pfnMessageBegin;
+
+	// replace with our wrapper
+	g_engfuncs.pfnMessageBegin = Au_MessageBegin;
+
 	// Register cvars here:
+	g_engfuncs.pfnAddServerCommand("dump_net_stats", []()
+		{
+			NetProfiling::GetProfiler().DumpStats();
+		});
 
 	g_psv_gravity = CVAR_GET_POINTER( "sv_gravity" );
 	g_psv_aim = CVAR_GET_POINTER( "sv_aim" );
