@@ -272,6 +272,8 @@ void AgGameRules::PlayerSpawn(CBasePlayer* pPlayer)
 
     pPlayer->m_bInSpawn = true;
 
+    extern cvar_t sv_aura_regeneration;
+
     if (addDefault)
     {
         if (pPlayer->GetSpawnFull())
@@ -375,6 +377,9 @@ void AgGameRules::PlayerSpawn(CBasePlayer* pPlayer)
         {
             //Normal spawn.
             pPlayer->pev->health = ag_start_health.value;
+            if (sv_aura_regeneration.value != 0)
+                pPlayer->pev->armorvalue = MAX_NORMAL_BATTERY;
+            else
             pPlayer->pev->armorvalue = ag_start_armour.value;
 
             if (0 < ag_start_longjump.value)
