@@ -785,12 +785,9 @@ int CBasePlayer :: TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, 
 	// BlueNightHawk : Suit Energy Regeneration || after damage taken!!
 	if (sv_aura_regeneration.value != 0 && pev->armorvalue < MAX_NORMAL_BATTERY && fTookDamage)
 	{
-		STOP_SOUND(ENT(pev), CHAN_STATIC, "items/suitcharge_no_lp.wav");
-		STOP_SOUND(ENT(pev), CHAN_STATIC, "items/regen01.wav");
-		STOP_SOUND(ENT(pev), CHAN_STATIC, "items/regen02.wav");
-		STOP_SOUND(ENT(pev), CHAN_STATIC, "items/regen03.wav");
+		STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_lp.wav");
 		if (m_fRegenOn && !isShieldEmpty)
-			EMIT_SOUND(ENT(pev), CHAN_ITEM, "items/suitchargeno1.wav", 0.85, ATTN_NORM); // low-pitched elevbell
+			EMIT_SOUND(ENT(pev), CHAN_ITEM, "items/suitchargeno1.wav", 0.85, ATTN_NORM);
 		m_fRegenOn = false;
 
 		m_flNextSuitRegenTime = gpGlobals->time + 5.5 + sv_aura_regeneration_wait.value;
@@ -4673,17 +4670,15 @@ void CBasePlayer :: UpdateClientData( void )
 
 	float currentTime = gpGlobals->time;
 
-	// BlueNightHawk : Suit Energy Regeneration | Sounds
+	// BlueNightHawk : Suit Energy Regeneration
+	if (sv_aura_regeneration.value != 0 && pev->armorvalue == MAX_NORMAL_BATTERY)
+		STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_lp.wav");
 	if (sv_aura_regeneration.value != 0 && IsObserver() || IsSpectator() || !IsAlive()) // TODO: make this if statement apply to "welcome cam"
 	{
-		STOP_SOUND(ENT(pev), CHAN_STATIC, "items/suitcharge1.wav");
 		STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_empty.wav");
-		STOP_SOUND(ENT(pev), CHAN_STATIC, "items/suitcharge_no_lp.wav");
-		STOP_SOUND(ENT(pev), CHAN_STATIC, "items/regen01.wav");
-		STOP_SOUND(ENT(pev), CHAN_STATIC, "items/regen02.wav");
-		STOP_SOUND(ENT(pev), CHAN_STATIC, "items/regen03.wav");
 		STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_charge.wav");
 		STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_low.wav");
+		STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_lp.wav");
 
 		isShieldLow = false;
 		m_fRegenOn = false;
@@ -4715,7 +4710,7 @@ void CBasePlayer :: UpdateClientData( void )
 		{
 			if (!isShieldLow && (currentTime - lastShieldSoundTime > 1.0f)) // 1 second delay
 			{
-				EMIT_SOUND(ENT(pev), CHAN_AUTO, "player/shield_low.wav", 0.85, ATTN_NORM);
+				EMIT_SOUND(ENT(pev), CHAN_AUTO, "player/shield_low.wav", 0.75, ATTN_NORM);
 				isShieldLow = true;
 				lastShieldSoundTime = currentTime;
 			}
@@ -4749,65 +4744,22 @@ void CBasePlayer :: UpdateClientData( void )
 			{
 				m_flNextSuitRegenTime = 0.0f;
 				m_fRegenOn = false;
-				STOP_SOUND(ENT(pev), CHAN_STATIC, "items/suitcharge_no_lp.wav");
-				STOP_SOUND(ENT(pev), CHAN_STATIC, "items/regen01.wav");
-				STOP_SOUND(ENT(pev), CHAN_STATIC, "items/regen02.wav");
-				STOP_SOUND(ENT(pev), CHAN_STATIC, "items/regen03.wav");
 				STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_empty.wav");
 				STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_charge.wav"); // Halo Shield
 				EMIT_SOUND(ENT(pev), CHAN_ITEM, "plats/elevbell1.wav", 0.85, ATTN_NORM);
+				EMIT_SOUND(ENT(pev), CHAN_STATIC, "player/shield_finish.wav", 1, ATTN_NORM);
 			}
 			else if (!m_fRegenOn) // when shield starts recharging
 			{
 				m_fRegenOn = true;
-#ifndef _HALO
-				EMIT_SOUND(ENT(pev), CHAN_STATIC, "items/suitchargeok1.wav", 0.85, ATTN_NORM);
-#else
-				EMIT_SOUND(ENT(pev), CHAN_STATIC, "player/shield_charge.wav", 0.85, ATTN_NORM);
-#endif
+				EMIT_SOUND(ENT(pev), CHAN_AUTO, "player/shield_start.wav", 1, ATTN_NORM);
+				EMIT_SOUND(ENT(pev), CHAN_STATIC, "player/shield_lp.wav", 0.85, ATTN_NORM);
 				STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_empty.wav");
 
 			}
-#ifndef _HALO //_HALO === shield regeneration sounds ===
-			else if (m_fRegenOn && pev->armorvalue < 20) // as it's recharging
+			else // as it's recharging
 			{
-				STOP_SOUND(ENT(pev), CHAN_STATIC, "items/suitcharge_no_lp.wav");
-				STOP_SOUND(ENT(pev), CHAN_STATIC, "items/regen01.wav");
-				STOP_SOUND(ENT(pev), CHAN_STATIC, "items/regen02.wav");
-				STOP_SOUND(ENT(pev), CHAN_STATIC, "items/regen03.wav");
 				STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_empty.wav");
-				// too loud
-				EMIT_SOUND(ENT(pev), CHAN_STATIC, "items/regen01.wav", 0.25, ATTN_NORM);
-			}
-			else if (m_fRegenOn && pev->armorvalue < 40) // as it's recharging
-			{
-				STOP_SOUND(ENT(pev), CHAN_STATIC, "items/suitcharge_no_lp.wav");
-				STOP_SOUND(ENT(pev), CHAN_STATIC, "items/regen01.wav");
-				STOP_SOUND(ENT(pev), CHAN_STATIC, "items/regen02.wav");
-				STOP_SOUND(ENT(pev), CHAN_STATIC, "items/regen03.wav");
-				STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_empty.wav");
-				// too loud
-				EMIT_SOUND(ENT(pev), CHAN_STATIC, "items/regen02.wav", 0.25, ATTN_NORM);
-			}
-			else if (m_fRegenOn && pev->armorvalue < 80) // as it's recharging
-			{
-				STOP_SOUND(ENT(pev), CHAN_STATIC, "items/suitcharge_no_lp.wav");
-				STOP_SOUND(ENT(pev), CHAN_STATIC, "items/regen01.wav");
-				STOP_SOUND(ENT(pev), CHAN_STATIC, "items/regen02.wav");
-				STOP_SOUND(ENT(pev), CHAN_STATIC, "items/regen03.wav");
-				STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_empty.wav");
-				// too loud
-				EMIT_SOUND(ENT(pev), CHAN_STATIC, "items/regen03.wav", 0.25, ATTN_NORM);
-			}
-			else if (m_fRegenOn && pev->armorvalue >= 80) // as it's recharging
-			{
-				STOP_SOUND(ENT(pev), CHAN_STATIC, "items/suitcharge_no_lp.wav");
-				STOP_SOUND(ENT(pev), CHAN_STATIC, "items/regen01.wav");
-				STOP_SOUND(ENT(pev), CHAN_STATIC, "items/regen02.wav");
-				STOP_SOUND(ENT(pev), CHAN_STATIC, "items/regen03.wav");
-				STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_empty.wav");
-				// too loud
-				EMIT_SOUND(ENT(pev), CHAN_STATIC, "items/suitcharge_no_lp.wav", 0.25, ATTN_NORM);
 			}
 #endif //_HALO === shield regeneration sounds ===
 

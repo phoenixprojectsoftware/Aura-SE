@@ -824,6 +824,9 @@
     <ClInclude Include="..\..\dlls\aghideandseek.h">
       <Filter>Header Files\dlls</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\dlls\net_profiling.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\dlls\agfirefight.h">
       <Filter>Header Files\dlls</Filter>
     </ClInclude>
