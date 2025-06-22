@@ -785,7 +785,9 @@ int CBasePlayer :: TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, 
 	// BlueNightHawk : Suit Energy Regeneration || after damage taken!!
 	if (sv_aura_regeneration.value != 0 && pev->armorvalue < MAX_NORMAL_BATTERY && fTookDamage)
 	{
+#ifndef _HALO
 		STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_lp.wav");
+#endif
 		if (m_fRegenOn && !isShieldEmpty)
 			EMIT_SOUND(ENT(pev), CHAN_ITEM, "items/suitchargeno1.wav", 0.85, ATTN_NORM);
 		m_fRegenOn = false;
@@ -4678,11 +4680,10 @@ void CBasePlayer :: UpdateClientData( void )
 	if (sv_aura_regeneration.value != 0 && IsObserver() || IsSpectator() || !IsAlive()) // TODO: make this if statement apply to "welcome cam"
 	{
 		STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_empty.wav");
+		STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_low.wav");
 #ifdef _HALO
 		STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_charge.wav");
-#endif
-		STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_low.wav");
-#ifndef _HALO
+#else
 		STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_lp.wav");
 #endif
 
@@ -4751,15 +4752,22 @@ void CBasePlayer :: UpdateClientData( void )
 				m_flNextSuitRegenTime = 0.0f;
 				m_fRegenOn = false;
 				STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_empty.wav");
+#ifdef _HALO
 				STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_charge.wav"); // Halo Shield
-				EMIT_SOUND(ENT(pev), CHAN_ITEM, "plats/elevbell1.wav", 0.85, ATTN_NORM);
+#else
 				EMIT_SOUND(ENT(pev), CHAN_STATIC, "player/shield_finish.wav", 1, ATTN_NORM);
+#endif
+				EMIT_SOUND(ENT(pev), CHAN_ITEM, "plats/elevbell1.wav", 0.85, ATTN_NORM);
 			}
 			else if (!m_fRegenOn) // when shield starts recharging
 			{
 				m_fRegenOn = true;
+#ifdef _HALO
+				EMIT_SOUND(ENT(pev), CHAN_STATIC, "player/shield_charge.wav", 1, ATTN_NORM);
+#else
 				EMIT_SOUND(ENT(pev), CHAN_AUTO, "player/shield_start.wav", 1, ATTN_NORM);
 				EMIT_SOUND(ENT(pev), CHAN_STATIC, "player/shield_lp.wav", 0.85, ATTN_NORM);
+#endif
 				STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_empty.wav");
 
 			}
