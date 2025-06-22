@@ -4671,14 +4671,20 @@ void CBasePlayer :: UpdateClientData( void )
 	float currentTime = gpGlobals->time;
 
 	// BlueNightHawk : Suit Energy Regeneration
+#ifndef _HALO
 	if (sv_aura_regeneration.value != 0 && pev->armorvalue == MAX_NORMAL_BATTERY)
 		STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_lp.wav");
+#endif
 	if (sv_aura_regeneration.value != 0 && IsObserver() || IsSpectator() || !IsAlive()) // TODO: make this if statement apply to "welcome cam"
 	{
 		STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_empty.wav");
+#ifdef _HALO
 		STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_charge.wav");
+#endif
 		STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_low.wav");
+#ifndef _HALO
 		STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_lp.wav");
+#endif
 
 		isShieldLow = false;
 		m_fRegenOn = false;
@@ -4761,7 +4767,6 @@ void CBasePlayer :: UpdateClientData( void )
 			{
 				STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_empty.wav");
 			}
-#endif //_HALO === shield regeneration sounds ===
 
 			m_flNextSuitRegenTime = gpGlobals->time + sv_aura_regeneration_wait.value;
 		}
