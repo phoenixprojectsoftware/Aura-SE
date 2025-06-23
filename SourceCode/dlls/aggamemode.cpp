@@ -24,13 +24,7 @@ void SetupGametype()
     AgString sGametype = CVAR_GET_STRING("sv_aura_gametype");
     g_GameType = STANDARD;
     if (sGametype == "arena")
-    {
         g_GameType = ARENA;
-        /*char szCommand[128];
-        sprintf(szCommand, "cd play 5\n");
-        SERVER_COMMAND(szCommand);
-        SERVER_EXECUTE();*/
-    }
     else if (sGametype == "arcade")
         g_GameType = ARCADE;
     else if (sGametype == "hideandseek")
