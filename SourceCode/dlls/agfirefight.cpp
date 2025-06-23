@@ -27,12 +27,18 @@ extern cvar_t coopmode;
 
 AgFirefight::AgFirefight()
 {
-
+	ALERT(at_console, "fart\n");
 }
 
 AgFirefight::~AgFirefight()
 {
 
+}
+
+void AgFirefight::SpawnWave(int waveIndex)
+{
+	// This function should spawn the enemies for the given wave index
+	ALERT(at_console, "Spawning wave %d\n", waveIndex);
 }
 
 void AgFirefight::Think()

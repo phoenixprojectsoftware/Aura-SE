@@ -21,6 +21,8 @@ class AgFirefight
 public:
 	AgFirefight();
 	virtual ~AgFirefight();
+	
+	void SpawnWave(int waveIndex);
 
 	void Think();
 };
