@@ -782,7 +782,7 @@ void GameDLLInit( void )
 
 
 	// Register cvars here:
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(_HALO)
 	g_engfuncs.pfnAddServerCommand("dump_net_stats", []()
 		{
 			NetProfiling::GetProfiler().DumpStats();
