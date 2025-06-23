@@ -288,7 +288,7 @@ void AgGameMode::LoadGames()
 
         //AgConsole(UTIL_VarArgs("Found gamemode file %s",sFile.c_str()));
 
-        if (!strstr(sFile.c_str(), ".cfg"))
+        if (!strstr(sFile.c_str(), ".agc"))
             continue;
 
         //Read the description lines.
