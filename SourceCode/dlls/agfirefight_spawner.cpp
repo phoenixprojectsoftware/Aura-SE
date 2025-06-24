@@ -9,7 +9,14 @@
 *
 ****/
 
+#include "extdll.h"
+#include "util.h"
+#include "cbase.h"
+#include "monsters.h"
+#include "enginecallback.h"
+
 #include "agfirefight_spawner.h"
+#include "agfirefight.h"
 
 void AgWaveSpawner::SpawnWave(const std::vector<FirefightSpawnInfo>& waveSpawns, AgFirefight* pGameType)  
 {  
@@ -20,7 +27,7 @@ void AgWaveSpawner::SpawnWave(const std::vector<FirefightSpawnInfo>& waveSpawns,
 	{  
 		for (int i = 0; i < spawn.iCount; ++i)  
 		{  
-			CBaseEntity* pEnt = CBaseEntity::Create(const_cast<char*>STRING(spawn.iszMonsterClass), spawn.vecOrigin, spawn.vecAngles, nullptr);   
+			CBaseEntity* pEnt = CBaseEntity::Create(const_cast<char*>(STRING(spawn.iszMonsterClass)), spawn.vecOrigin, spawn.vecAngles, nullptr);   
 		}  
 	}  
 }

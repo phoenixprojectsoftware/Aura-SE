@@ -1,6 +1,6 @@
 /****
 *
-* Copyright © 2021-2024 The Phoenix Project Software. Some Rights Reserved.
+* Copyright © 2021-2025 The Phoenix Project Software. Some Rights Reserved.
 *
 * AURA
 *
@@ -16,11 +16,13 @@
 #pragma once
 #endif // _MSC_VER
 
-#include "agfirefight_spawner.h"
-#include "cbase.h"
-#include "util.h"
+#include <vector>
 
-class AgFirefight
+class CBaseEntity;
+class CBasePlayer;
+struct FirefightSpawnInfo;
+
+class AgFirefight : public CBaseEntity
 {
 public:
 	AgFirefight();

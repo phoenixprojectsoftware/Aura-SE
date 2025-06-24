@@ -1,6 +1,6 @@
 /****
 * 
-* Copyright © 2021-2024 The Phoenix Project Software. Some Rights Reserved.
+* Copyright © 2021-2025 The Phoenix Project Software. Some Rights Reserved.
 * 
 * AURA
 * 
@@ -8,8 +8,6 @@
 * 
 * 
 ****/
-
-#include <algorithm>
 
 #include "extdll.h"
 #include "util.h"
@@ -20,10 +18,15 @@
 
 #include "agglobal.h"
 #include "agfirefight.h"
+#include "agfirefight_spawner.h"
 
 #include "algo.h"
 
+#include <vector>
+#include <algorithm>
+
 extern cvar_t coopmode;
+bool m_bCoopStarted = false;
 
 AgFirefight::AgFirefight()
 {
@@ -42,11 +45,11 @@ void AgFirefight::Init()
 
 std::vector<FirefightSpawnInfo> AgFirefight::GetWaveDefinition(int set, int round, int wave)
 {
-std:vector<FirefightSpawnInfo> result;
+	std::vector<FirefightSpawnInfo> result;
 
 	if (set == 1 && round == 1 && wave == 1)
 	{
-		result.push_back( {Vector(512,512,0), Vector(0,0,0), MAKE_STRING("hgrunt", 3), 3});
+		result.push_back(FirefightSpawnInfo{Vector(512,512,0), Vector(0,0,0), MAKE_STRING("monster_hgrunt")});
 	}
 
 	return result;
@@ -97,7 +100,7 @@ void AgFirefight::CheckWaveComplete()
 {
 	m_vecMonstersAlive.erase(
 		std::remove_if(m_vecMonstersAlive.begin(), m_vecMonstersAlive.end(),
-			[](const EHANDLE& h) { return h.Get() == nullptr; }),
+			[](EHANDLE& h) { return h.Get() == nullptr; }),
 		m_vecMonstersAlive.end());
 
 	if (m_vecMonstersAlive.empty())
@@ -114,12 +117,23 @@ void AgFirefight::CheckWaveComplete()
 
 void AgFirefight::RegisterSpawnedMonster(CBaseEntity* pEnt)
 {
-	m_vecMonstersAlive.push_back(EHANDLE(pEnt));
+	EHANDLE handle;
+	handle = pEnt;
+
+	m_vecMonstersAlive.push_back(handle);
 }
 
 void AgFirefight::OnMonsterDied(CBaseEntity* pEnt)
 {
-	m_vecMonstersAlive.erase(std::remove_if(m_vecMonstersAlive.begin(), m_vecMonstersAlive.end(), [pEnt](const EHANDLE& h) { return h.Get() == pEnt; }), m_vecMonstersAlive.end());
+	m_vecMonstersAlive.erase(
+		std::remove_if(
+			m_vecMonstersAlive.begin(),
+			m_vecMonstersAlive.end(),
+			[pEnt](EHANDLE& h)
+			{
+				return h == pEnt;
+			}
+		), m_vecMonstersAlive.end());
 
 	CheckWaveComplete();
 }
@@ -147,5 +161,7 @@ void AgFirefight::Start()
 
 void AgFirefight::Think()
 {
-	
+	if( !m_bCoopStarted)
+		Start();
+	m_bCoopStarted = true;
 }

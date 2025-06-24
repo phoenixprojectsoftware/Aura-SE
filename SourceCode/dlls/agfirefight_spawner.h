@@ -8,6 +8,13 @@
 *
 *
 ****/
+#ifndef AGFIREFIGHT_SPAWNER_H
+#define AGFIREFIGHT_SPAWNER_H
+
+#if _MSC_VER > 1000
+#pragma once
+#endif
+
 #include "extdll.h"
 #include "vector.h"
 #include <vector>
@@ -27,3 +34,4 @@ class AgWaveSpawner
 public:
 	static void SpawnWave(const std::vector<FirefightSpawnInfo>& waveSpawns, AgFirefight* pGameType);
 };
+#endif // AGFIREFIGHT_SPAWNER_H
