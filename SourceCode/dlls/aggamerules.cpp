@@ -96,6 +96,10 @@ bool AgGameRules::AgThink()
     {
         m_Firefight.Think();
     }
+    else if (FIESTA == AgGametype())
+    {
+        m_Fiesta.Think();
+    }
     else
     {
         //Update match status.

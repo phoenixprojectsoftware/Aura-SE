@@ -19,6 +19,7 @@
 #include "agarena.h"
 #include "aghideandseek.h"
 #include "agfirefight.h"
+#include "agfiesta.h"
 #include "aglms.h"
 #include "agctf.h"
 #include "agdom.h"
@@ -100,6 +101,7 @@ public:
     AgCTF               m_CTF;
     AgDOM               m_DOM;
     AgFirefight         m_Firefight;
+	AgFiesta            m_Fiesta;
     AgInfoIntermission  m_InfoInterMission;
     AgSuddenDeath       m_SuddenDeath;
     AgTimeout           m_Timeout;
