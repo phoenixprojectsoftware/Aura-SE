@@ -153,7 +153,7 @@ bool CPipewrench::Swing(const bool bFirst)
 	{
 		PLAYBACK_EVENT_FULL(FEV_NOTHOST, m_pPlayer->edict(), m_usPipewrench,
 			0.0, (float*)&g_vecZero, (float*)&g_vecZero, 0, 0, 0,
-			0.0, 0, 0.0);
+			0.0, 0, tr.flFraction < 1);
 	}
 
 
@@ -171,11 +171,13 @@ bool CPipewrench::Swing(const bool bFirst)
 			// an intended feature), if you only want a single
 			// sound, comment this "switch" or the one in the
 			// event (EV_Pipewrench)
+			/*
 			switch (((m_iSwing++) % 1))
 			{
 			case 0: EMIT_SOUND(m_pPlayer->edict(), CHAN_ITEM, "weapons/pwrench_miss1.wav", 1, ATTN_NORM); break;
 			case 1: EMIT_SOUND(m_pPlayer->edict(), CHAN_ITEM, "weapons/pwrench_miss2.wav", 1, ATTN_NORM); break;
 			}
+			*/
 
 			// player "shoot" animation
 			m_pPlayer->SetAnimation(PLAYER_ATTACK1);
@@ -183,6 +185,7 @@ bool CPipewrench::Swing(const bool bFirst)
 	}
 	else
 	{
+		// Sabian - TODO; maybe comment this switch out?
 		switch (((m_iSwing++) % 2) + 1)
 		{
 		case 0:
@@ -318,7 +321,9 @@ void CPipewrench::BigSwing()
 
 	PLAYBACK_EVENT_FULL(FEV_NOTHOST, m_pPlayer->edict(), m_usPipewrench,
 		0.0, (float*)&g_vecZero, (float*)&g_vecZero, 0, 0, 0,
-		0.0, 1, 0.0);
+		0.0, 1, tr.flFraction < 1);
+
+	EMIT_SOUND_DYN(edict(), CHAN_WEAPON, "weapons/pwrench_big_miss.wav", VOL_NORM, ATTN_NORM, 0, 94 + RANDOM_LONG(0, 15));
 
 
 	if (tr.flFraction >= 1.0)
@@ -327,6 +332,8 @@ void CPipewrench::BigSwing()
 		m_flNextPrimaryAttack = GetNextAttackDelay(1.0);
 		m_flNextSecondaryAttack = GetNextAttackDelay(1.0);
 		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 1.0;
+
+		SendWeaponAnim(PIPEWRENCH_BIG_SWING_MISS);
 
 		// player "shoot" animation
 		m_pPlayer->SetAnimation(PLAYER_ATTACK1);
