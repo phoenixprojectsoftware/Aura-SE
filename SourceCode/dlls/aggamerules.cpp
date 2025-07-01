@@ -1159,7 +1159,7 @@ void AgGameRules::RefreshSkillData(void)
     gSkillData.plrDmgGrapple = ag_dmg_grapple.value;
     gSkillData.plrDmgEagle = ag_dmg_eagle.value;
     gSkillData.plrDmg762 = ag_dmg_762.value;
-    gSkillData.plrDmg556 = ag_dmg_762.value;
+    gSkillData.plrDmg556 = ag_dmg_556.value;
     gSkillData.plrDmgDisplacerSelf = ag_dmg_displacer_self.value;
     gSkillData.plrDmgDisplacerOther = ag_dmg_displacer_self.value;
     gSkillData.plrRadiusDisplacer = ag_displacer_radius.value;
