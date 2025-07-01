@@ -354,7 +354,7 @@ void CPipewrench::BigSwing()
 		{
 			ClearMultiDamage();
 
-			float flDamage = (gpGlobals->time - m_flBigSwingStart) * gSkillData.plrDmgPipewrench + 25.0f;
+			float flDamage = (gpGlobals->time - m_flBigSwingStart) * gSkillData.plrDmgPipewrench + 25.0f; // Add 25% to the existing dmg value for pipewrench. Ergo no need for 2nd aura dmg cmd.
 			if ((m_flNextPrimaryAttack + 1 < UTIL_WeaponTimeBase()) || g_pGameRules->IsMultiplayer())
 			{
 				// first swing does full damage

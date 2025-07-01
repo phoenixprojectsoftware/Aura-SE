@@ -151,6 +151,19 @@ extern cvar_t ag_dmg_satchel;
 extern cvar_t ag_dmg_tripmine;
 extern cvar_t ag_dmg_m203;
 
+extern cvar_t ag_dmg_pipewrench;
+extern cvar_t ag_dmg_knife;
+extern cvar_t ag_dmg_grapple;
+extern cvar_t ag_dmg_eagle;
+extern cvar_t ag_dmg_762;
+extern cvar_t ag_dmg_556;
+extern cvar_t ag_dmg_displacer_self;
+extern cvar_t ag_dmg_displacer_other;
+extern cvar_t ag_displacer_radius;
+extern cvar_t ag_dmg_shockrifle_m;
+extern cvar_t ag_dmg_shockrifle_s;
+extern cvar_t ag_dmg_spore;
+
 extern cvar_t ag_spawn_volume;
 extern cvar_t ag_show_gibs;
 

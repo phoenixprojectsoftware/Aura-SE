@@ -1153,6 +1153,21 @@ void AgGameRules::RefreshSkillData(void)
     // hornet
     gSkillData.plrDmgHornet = ag_dmg_hornet.value;
 
+    //++ Opposing Force Weapons
+    gSkillData.plrDmgPipewrench = ag_dmg_pipewrench.value;
+    gSkillData.plrDmgKnife = ag_dmg_knife.value;
+    gSkillData.plrDmgGrapple = ag_dmg_grapple.value;
+    gSkillData.plrDmgEagle = ag_dmg_eagle.value;
+    gSkillData.plrDmg762 = ag_dmg_762.value;
+    gSkillData.plrDmg556 = ag_dmg_762.value;
+    gSkillData.plrDmgDisplacerSelf = ag_dmg_displacer_self.value;
+    gSkillData.plrDmgDisplacerOther = ag_dmg_displacer_self.value;
+    gSkillData.plrRadiusDisplacer = ag_displacer_radius.value;
+    gSkillData.plrDmgShockRoachM = ag_dmg_shockrifle_m.value;
+    gSkillData.plrDmgShockRoachS = ag_dmg_shockrifle_s.value;
+    gSkillData.plrDmgSpore = ag_dmg_spore.value;
+    //-- Opposing Force Weapons
+
     // Head
     gSkillData.plrHead = ag_headshot.value;
 }
