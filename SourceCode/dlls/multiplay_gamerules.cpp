@@ -162,7 +162,7 @@ void CHalfLifeMultiplay::RefreshSkillData( void )
 
 	// suitcharger
 	gSkillData.suitchargerCapacity = 30;
-
+	/*
 	// Crowbar whack
 	gSkillData.plrDmgCrowbar = 25;
 
@@ -202,6 +202,7 @@ void CHalfLifeMultiplay::RefreshSkillData( void )
 
 	// hornet
 	gSkillData.plrDmgHornet = 10;
+	*/
 }
 
 // Hard cap to mp_intermission_time, we don't want players to wait forever because they don't know
