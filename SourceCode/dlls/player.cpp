@@ -79,6 +79,11 @@ extern cvar_t	sv_aura_infinite_ammo;
 extern cvar_t sv_aura_regeneration;
 extern cvar_t sv_aura_regeneration_rate;
 extern cvar_t sv_aura_regeneration_wait;
+bool bAreWeMaxxed = false; // switch to stop the sound of regeneration when we spawn
+bool bAreWeAt100 = false; // switch to stop the sound of regeneration when we are at 100 energy
+bool bInitialSounds = false; // switch to stop the initial sounds when we connect
+bool bRegenSwitchOff = false; // switch to stop the sounds when regen becomes turned off
+bool hasShieldLowStopped = false; // switch for the shield low sound to prevent overflows
 
 // Global Savedata for player
 TYPEDESCRIPTION	CBasePlayer::m_playerSaveData[] =
@@ -789,6 +794,8 @@ int CBasePlayer :: TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, 
 		if (m_fRegenOn && !isShieldEmpty)
 			EMIT_SOUND(ENT(pev), CHAN_ITEM, "items/suitchargeno1.wav", 0.85, ATTN_NORM);
 		m_fRegenOn = false;
+
+		bAreWeMaxxed = false; // switch those stop sound calls back on
 
 		m_flNextSuitRegenTime = gpGlobals->time + 5.5 + sv_aura_regeneration_wait.value;
 	}
@@ -4670,22 +4677,28 @@ void CBasePlayer :: UpdateClientData( void )
 
 	float currentTime = gpGlobals->time;
 
-	// BlueNightHawk : Suit Energy Regeneration
-	if (sv_aura_regeneration.value != 0 && pev->armorvalue == MAX_NORMAL_BATTERY)
+	// BlueNightHawk : Suit Energy Regeneration | Sounds
+	if (sv_aura_regeneration.value != 0 && pev->armorvalue == MAX_NORMAL_BATTERY && !bAreWeMaxxed) // SHIELD AT 100%
+	{
 		STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_lp.wav");
-	if (sv_aura_regeneration.value != 0 && IsObserver() || IsSpectator() || !IsAlive()) // TODO: make this if statement apply to "welcome cam"
+		bAreWeMaxxed = true;
+	}
+
+	if (sv_aura_regeneration.value != 0 && IsObserver() || IsSpectator() || !IsAlive() && bInitialSounds) // JUST CONNECTED - DEAD, OR SPECTATING
 	{
 		STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_empty.wav");
 		STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_charge.wav");
 		STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_low.wav");
 		STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_lp.wav");
 
+		bInitialSounds = false;
 		isShieldLow = false;
 		m_fRegenOn = false;
 		return;
 	}
-	else if (sv_aura_regeneration.value != 0) // IsObserver || !IsAlive
+	else if (sv_aura_regeneration.value != 0) // PLAYER HAS SPAWNED AND IS ALIVE
 	{
+		bInitialSounds = true;
 		if (pev->armorvalue < 1)
 		{
 			if (!isShieldEmpty && (currentTime - lastShieldSoundTime > 1.0f))
@@ -4712,6 +4725,7 @@ void CBasePlayer :: UpdateClientData( void )
 			{
 				EMIT_SOUND(ENT(pev), CHAN_AUTO, "player/shield_low.wav", 0.75, ATTN_NORM);
 				isShieldLow = true;
+				hasShieldLowStopped = false;
 				lastShieldSoundTime = currentTime;
 			}
 		}
@@ -4724,13 +4738,16 @@ void CBasePlayer :: UpdateClientData( void )
 			}
 		}
 
-		if (pev->armorvalue == 0)
+		// SHIELD LOW SOUNDS
+		if (pev->armorvalue == 0 && !hasShieldLowStopped)
 		{
 			STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_low.wav");
+			hasShieldLowStopped = true;
 		}
-		else if (pev->armorvalue > 25)
+		else if (pev->armorvalue > 25 && !hasShieldLowStopped)
 		{
 			STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_low.wav");
+			hasShieldLowStopped = true;
 		}
 
 		// BlueNightHawk : Suit Energy Regeneration
@@ -4740,13 +4757,14 @@ void CBasePlayer :: UpdateClientData( void )
 			pev->armorvalue += sv_aura_regeneration_rate.value;
 			pev->armorvalue = V_min(pev->armorvalue, MAX_NORMAL_BATTERY);
 
-			if (pev->armorvalue == MAX_NORMAL_BATTERY) //when shield stops recharging
+			if (pev->armorvalue == MAX_NORMAL_BATTERY && !bAreWeAt100) //when shield stops recharging
 			{
 				m_flNextSuitRegenTime = 0.0f;
 				m_fRegenOn = false;
 				STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_empty.wav");
 				EMIT_SOUND(ENT(pev), CHAN_ITEM, "plats/elevbell1.wav", 0.85, ATTN_NORM);
 				EMIT_SOUND(ENT(pev), CHAN_STATIC, "player/shield_finish.wav", 1, ATTN_NORM);
+				bAreWeAt100 = true;
 			}
 			else if (!m_fRegenOn) // when shield starts recharging
 			{
@@ -4763,14 +4781,16 @@ void CBasePlayer :: UpdateClientData( void )
 
 			m_flNextSuitRegenTime = gpGlobals->time + sv_aura_regeneration_wait.value;
 		}
-		else if (sv_aura_regeneration.value == 0)
+		else if (sv_aura_regeneration.value == 0 && !bRegenSwitchOff)
 		{
 			STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_empty.wav");
+
+			bRegenSwitchOff = true;
 			m_flNextSuitRegenTime = 0.0f;
 			m_fRegenOn = false;
 			m_fRegenOn = false;
 		}
-	} // IsObserver || !IsAlive
+	} // END OF SHIELD REGENERATION SOUND LOGIC
 
 //++ BulliT
   CBasePlayer* pPlayerTarget = NULL;
