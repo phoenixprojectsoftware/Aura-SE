@@ -1141,7 +1141,7 @@ void AgGameRules::RefreshSkillData(void)
     gSkillData.plrDmgEgonWide = ag_dmg_egon_wide.value;
     gSkillData.plrDmgEgonNarrow = ag_dmg_egon_narrow.value;
 
-    // Hand Grendade
+    // Hand Grenade
     gSkillData.plrDmgHandGrenade = ag_dmg_hgrenade.value;
 
     // Satchel Charge
