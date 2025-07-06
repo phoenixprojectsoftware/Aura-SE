@@ -1081,6 +1081,15 @@ void CBasePlayer::Killed( entvars_t *pevAttacker, int iGib )
 
 	DeathSound();
 
+	// Stop All Shield Sounds
+	STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_empty.wav");
+	STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_charge.wav");
+	STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_low.wav");
+	STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_lp.wav");
+
+	bInitialSounds = false;
+	isShieldLow = false;
+
 	pev->armorvalue = 0;
 	m_fRegenOn = false;
 	
