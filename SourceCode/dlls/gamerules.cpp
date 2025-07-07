@@ -231,7 +231,6 @@ void CGameRules::RefreshSkillData ( void )
 	gSkillData.sentryHealth = GetSkillCvar( "sk_sentry_health");
 
 // PLAYER WEAPONS
-	/*
 	// Crowbar whack
 	gSkillData.plrDmgCrowbar = GetSkillCvar( "sk_plr_crowbar");
 
@@ -302,7 +301,6 @@ void CGameRules::RefreshSkillData ( void )
 
 	// Spore Launcher
 	gSkillData.plrDmgSpore = GetSkillCvar("sk_plr_spore");
-	*/
 
 	// MONSTER WEAPONS
 	gSkillData.monDmg12MM = GetSkillCvar( "sk_12mm_bullet");
