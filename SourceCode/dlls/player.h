@@ -521,6 +521,7 @@ public:
 
 	CBasePlayer () : isShieldLow(false), isShieldEmpty(false), lastShieldSoundTime(0.0f) {}
 
+	void RunShieldUpdates();
 	void UpdateClientData();
 
 private:

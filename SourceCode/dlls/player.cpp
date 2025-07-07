@@ -4612,82 +4612,10 @@ void CBasePlayer::SendAmmoUpdate(void)
 	}
 }
 
-/*
-=========================================================
-	UpdateClientData
-
-resends any changed player HUD info to the client.
-Called every frame by PlayerPreThink
-Also called at start of demo recording and playback by
-ForceClientDllUpdate to ensure the demo gets messages
-reflecting all of the HUD state info.
-=========================================================
-*/
-void CBasePlayer :: UpdateClientData( void )
+void CBasePlayer::RunShieldUpdates(void)
 {
-	if (m_fInitHUD)
-	{
-		m_fInitHUD = FALSE;
-		gInitHUD = FALSE;
-		
-		MESSAGE_BEGIN( MSG_ONE, gmsgResetHUD, NULL, pev );
-			WRITE_BYTE( 0 );
-		MESSAGE_END();
-
-		if ( !m_fGameHUDInitialized )
-		{
-			MESSAGE_BEGIN( MSG_ONE, gmsgInitHUD, NULL, pev );
-				WRITE_BYTE( 1 ); // slopebug = ON
-			MESSAGE_END();
-
-      //++ BulliT
-      SendWallhackInfo();
-
-      if (0 < ag_match_running.value)
-        g_pGameRules->m_ScoreCache.RestoreScore(this);
-      g_pGameRules->m_ScoreCache.UpdateScore(this);
-
-      MESSAGE_BEGIN( MSG_ALL, gmsgSpectator );  
-        WRITE_BYTE( ENTINDEX(edict()) );
-        WRITE_BYTE( 0 );
-      MESSAGE_END();
-      
-      MESSAGE_BEGIN( MSG_ONE, gmsgAllowSpec, NULL, pev );
-        WRITE_BYTE( 1 );
-      MESSAGE_END();
-      
-
-      //-- Martin Webrant
-			g_pGameRules->InitHUD( this );
-			m_fGameHUDInitialized = TRUE;
-			
-			//m_iObserverLastMode = OBS_ROAMING;
-			
-			if ( g_pGameRules->IsMultiplayer() )
-			{
-				FireTargets( "game_playerjoin", this, this, USE_TOGGLE, 0 );
-			}
-		}
-
-		FireTargets( "game_playerspawn", this, this, USE_TOGGLE, 0 );
-
-#ifdef AG_NO_CLIENT_DLL
-    InitStatusBar();
-#endif
-  }
-
-	if ( m_iHideHUD != m_iClientHideHUD )
-	{
-		MESSAGE_BEGIN( MSG_ONE, gmsgHideWeapon, NULL, pev );
-			WRITE_BYTE( m_iHideHUD );
-		MESSAGE_END();
-
-		m_iClientHideHUD = m_iHideHUD;
-	}
-
 	float currentTime = gpGlobals->time;
 
-	// BlueNightHawk : Suit Energy Regeneration | Sounds
 	if (sv_aura_regeneration.value != 0 && pev->armorvalue == MAX_NORMAL_BATTERY && !bAreWeMaxxed) // SHIELD AT 100%
 	{
 		STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_lp.wav");
@@ -4803,6 +4731,83 @@ void CBasePlayer :: UpdateClientData( void )
 		}
 	} // END OF SHIELD REGENERATION SOUND LOGIC
 
+}
+
+/*
+=========================================================
+	UpdateClientData
+
+resends any changed player HUD info to the client.
+Called every frame by PlayerPreThink
+Also called at start of demo recording and playback by
+ForceClientDllUpdate to ensure the demo gets messages
+reflecting all of the HUD state info.
+=========================================================
+*/
+void CBasePlayer :: UpdateClientData( void )
+{
+	if (m_fInitHUD)
+	{
+		m_fInitHUD = FALSE;
+		gInitHUD = FALSE;
+		
+		MESSAGE_BEGIN( MSG_ONE, gmsgResetHUD, NULL, pev );
+			WRITE_BYTE( 0 );
+		MESSAGE_END();
+
+		if ( !m_fGameHUDInitialized )
+		{
+			MESSAGE_BEGIN( MSG_ONE, gmsgInitHUD, NULL, pev );
+				WRITE_BYTE( 1 ); // slopebug = ON
+			MESSAGE_END();
+
+      //++ BulliT
+      SendWallhackInfo();
+
+      if (0 < ag_match_running.value)
+        g_pGameRules->m_ScoreCache.RestoreScore(this);
+      g_pGameRules->m_ScoreCache.UpdateScore(this);
+
+      MESSAGE_BEGIN( MSG_ALL, gmsgSpectator );  
+        WRITE_BYTE( ENTINDEX(edict()) );
+        WRITE_BYTE( 0 );
+      MESSAGE_END();
+      
+      MESSAGE_BEGIN( MSG_ONE, gmsgAllowSpec, NULL, pev );
+        WRITE_BYTE( 1 );
+      MESSAGE_END();
+      
+
+      //-- Martin Webrant
+			g_pGameRules->InitHUD( this );
+			m_fGameHUDInitialized = TRUE;
+			
+			//m_iObserverLastMode = OBS_ROAMING;
+			
+			if ( g_pGameRules->IsMultiplayer() )
+			{
+				FireTargets( "game_playerjoin", this, this, USE_TOGGLE, 0 );
+			}
+		}
+
+		FireTargets( "game_playerspawn", this, this, USE_TOGGLE, 0 );
+
+#ifdef AG_NO_CLIENT_DLL
+    InitStatusBar();
+#endif
+  }
+
+	if ( m_iHideHUD != m_iClientHideHUD )
+	{
+		MESSAGE_BEGIN( MSG_ONE, gmsgHideWeapon, NULL, pev );
+			WRITE_BYTE( m_iHideHUD );
+		MESSAGE_END();
+
+		m_iClientHideHUD = m_iHideHUD;
+	}
+
+	// BlueNightHawk : Suit Energy Regeneration | Sounds
+	RunShieldUpdates();
 //++ BulliT
   CBasePlayer* pPlayerTarget = NULL;
   if (m_hSpectateTarget != NULL && m_hSpectateTarget->pev != NULL)
