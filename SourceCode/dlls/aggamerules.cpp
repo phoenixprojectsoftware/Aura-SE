@@ -228,9 +228,8 @@ void AgGameRules::PlayerSpawn(CBasePlayer* pPlayer)
 
     if (pPlayer->IsProxy() || pPlayer->pev->flags & FL_FAKECLIENT)
         pPlayer->m_bDoneFirstSpawn = true;
-    if (1 == pPlayer->pev->iuser3)
-      pPlayer->m_bDoneFirstSpawn = true;
-    /*
+    // if (1 == pPlayer->pev->iuser3)
+     // pPlayer->m_bDoneFirstSpawn = true;
     if (!pPlayer->m_bDoneFirstSpawn)
     {
         pPlayer->m_bDoneFirstSpawn = true;
@@ -257,7 +256,7 @@ void AgGameRules::PlayerSpawn(CBasePlayer* pPlayer)
 
         return;
     }
-    */
+   
 
     BOOL		addDefault;
     CBaseEntity* pWeaponEntity = NULL;
