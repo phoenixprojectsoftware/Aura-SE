@@ -796,6 +796,9 @@ int CBasePlayer :: TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, 
 		m_fRegenOn = false;
 
 		bAreWeMaxxed = false; // switch those stop sound calls back on
+#ifdef _DEBUG
+		ALERT(at_console, "bAreWeMaxxed is now false\n");
+#endif
 		bAreWeAt100 = false; // switch those stop sound calls back on
 
 		m_flNextSuitRegenTime = gpGlobals->time + 5.5 + sv_aura_regeneration_wait.value;
@@ -4620,6 +4623,9 @@ void CBasePlayer::RunShieldUpdates(void)
 	{
 		STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_lp.wav");
 		bAreWeMaxxed = true;
+#ifdef _DEBUG
+		ALERT(at_console, "bAreWeMaxxed is now true\n");
+#endif
 	}
 
 	if (sv_aura_regeneration.value != 0 && IsObserver() || IsSpectator() || !IsAlive() || !m_bDoneFirstSpawn && bInitialSounds) // JUST CONNECTED - DEAD, SPECTATING, OR WELCOME CAM
