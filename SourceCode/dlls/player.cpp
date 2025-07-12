@@ -4622,7 +4622,7 @@ void CBasePlayer::RunShieldUpdates(void)
 		bAreWeMaxxed = true;
 	}
 
-	if (sv_aura_regeneration.value != 0 && IsObserver() || IsSpectator() || !IsAlive() && bInitialSounds) // JUST CONNECTED - DEAD, OR SPECTATING
+	if (sv_aura_regeneration.value != 0 && IsObserver() || IsSpectator() || !IsAlive() || !m_bDoneFirstSpawn && bInitialSounds) // JUST CONNECTED - DEAD, SPECTATING, OR WELCOME CAM
 	{
 		STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_empty.wav");
 		STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_charge.wav");
