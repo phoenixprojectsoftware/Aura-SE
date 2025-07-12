@@ -4643,7 +4643,7 @@ void CBasePlayer::RunShieldUpdates(void)
 	else if (sv_aura_regeneration.value != 0) // PLAYER HAS SPAWNED AND IS ALIVE
 	{
 		bInitialSounds = true;
-		if (pev->armorvalue < 1)
+		if (pev->armorvalue < SHIELD_EMPTY_THRESHOLD)
 		{
 			if (!isShieldEmpty && (currentTime - lastShieldSoundTime > 1.0f))
 			{
@@ -4663,7 +4663,7 @@ void CBasePlayer::RunShieldUpdates(void)
 			}
 		}
 
-		if (pev->armorvalue >= 1 && pev->armorvalue <= 10)
+		if (pev->armorvalue >= 1 && pev->armorvalue <= SHIELD_LOW_THRESHOLD)
 		{
 			if (!isShieldLow && (currentTime - lastShieldSoundTime > 1.0f)) // 1 second delay
 			{
@@ -4683,12 +4683,12 @@ void CBasePlayer::RunShieldUpdates(void)
 		}
 
 		// SHIELD LOW SOUNDS
-		if (pev->armorvalue == 0 && !hasShieldLowStopped)
+		if (pev->armorvalue == SHIELD_SND_EMPTY && !hasShieldLowStopped)
 		{
 			STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_low.wav");
 			hasShieldLowStopped = true;
 		}
-		else if (pev->armorvalue > 25 && !hasShieldLowStopped)
+		else if (pev->armorvalue > SHIELD_LOW_THRESHOLD && !hasShieldLowStopped)
 		{
 			STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_low.wav");
 			hasShieldLowStopped = true;
