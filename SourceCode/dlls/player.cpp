@@ -4636,7 +4636,6 @@ void CBasePlayer::RunShieldUpdates(void)
 		STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_lp.wav");
 
 		bInitialSounds = false;
-		bAreWeMaxxed = false;
 		isShieldLow = false;
 		m_fRegenOn = false;
 		return;
