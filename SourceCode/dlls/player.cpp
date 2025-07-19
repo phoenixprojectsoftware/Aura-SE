@@ -4710,6 +4710,7 @@ void CBasePlayer::RunShieldUpdates(void)
 				EMIT_SOUND(ENT(pev), CHAN_ITEM, "plats/elevbell1.wav", 0.85, ATTN_NORM);
 				EMIT_SOUND(ENT(pev), CHAN_STATIC, "player/shield_finish.wav", 1, ATTN_NORM);
 				bAreWeAt100 = true;
+				bAreWeMaxxed = true;
 			}
 			else if (!m_fRegenOn) // when shield starts recharging
 			{

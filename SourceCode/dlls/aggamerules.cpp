@@ -467,7 +467,7 @@ void AgGameRules::PlayerSpawn(CBasePlayer* pPlayer)
             if (0 < ag_start_ammo556.value)
                 pPlayer->GiveAmmo(ag_start_ammo556.value, "556", M249_MAX_CARRY);
             if (0 < ag_start_ammo762.value)
-                pPlayer->GiveAmmo(ag_start_ammo762.value, "762", EAGLE_MAX_CLIP);
+                pPlayer->GiveAmmo(ag_start_ammo762.value, "762", SNIPERRIFLE_MAX_CARRY);
             if (0 < ag_start_ammoSpore.value)
                 pPlayer->GiveAmmo(ag_start_ammoSpore.value, "spores", SPORELAUNCHER_MAX_CARRY);
         }
