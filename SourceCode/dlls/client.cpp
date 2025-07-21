@@ -911,7 +911,6 @@ void ClientPrecache( void )
 	PRECACHE_SOUND("player/shield_finish.wav");
 #endif
 
-	PRECACHE_SOUND("player/friend_online.wav");
 	PRECACHE_SOUND("player/spawn.wav");
 
 	// BlueNightHawk : Suit Energy Regeneration
