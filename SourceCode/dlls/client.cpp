@@ -901,11 +901,15 @@ void ClientPrecache( void )
 	PRECACHE_SOUND("player/shield_depleted2.wav");
 	PRECACHE_SOUND("player/shield_low.wav");
 	PRECACHE_SOUND("player/shield_empty.wav");
+#ifdef _HALO
 	PRECACHE_SOUND("player/shield_charge.wav");
+#endif
 
+#ifndef _HALO
 	PRECACHE_SOUND("player/shield_start.wav");
 	PRECACHE_SOUND("player/shield_lp.wav");
 	PRECACHE_SOUND("player/shield_finish.wav");
+#endif
 
 	PRECACHE_SOUND("player/friend_online.wav");
 	PRECACHE_SOUND("player/spawn.wav");
