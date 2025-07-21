@@ -4707,7 +4707,6 @@ void CBasePlayer::RunShieldUpdates(void)
 				m_fRegenOn = false;
 				STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_empty.wav");
 				STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_lp.wav");
-				EMIT_SOUND(ENT(pev), CHAN_ITEM, "plats/elevbell1.wav", 0.85, ATTN_NORM);
 				EMIT_SOUND(ENT(pev), CHAN_STATIC, "player/shield_finish.wav", 1, ATTN_NORM);
 				bAreWeAt100 = true;
 				bAreWeMaxxed = true;
