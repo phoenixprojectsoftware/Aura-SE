@@ -1,0 +1,18 @@
+"AddonInfo"
+{
+    "Title"       "KitKat_Kasino2"
+    "Author"      "Your Name or Alias"
+    "Description" "A short description of your addon"
+
+    "Tags"
+    {
+        "Map"         "1"  
+        "Weapons"     "1" 
+        "Sounds"      "1"
+        "Survivor"    "1" 
+        "Zombie"      "1"  
+        "Background"  "1"  
+        "Sprays"      "1"  
+        "Music"       "1" 
+    }
+}
