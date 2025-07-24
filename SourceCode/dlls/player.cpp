@@ -79,6 +79,7 @@ extern cvar_t	sv_aura_infinite_ammo;
 extern cvar_t sv_aura_regeneration;
 extern cvar_t sv_aura_regeneration_rate;
 extern cvar_t sv_aura_regeneration_wait;
+bool bIsPlayerDead = false; // switch for when the player is dead
 bool bAreWeMaxxed = false; // switch to stop the sound of regeneration when we spawn
 bool bAreWeAt100 = false; // switch to stop the sound of regeneration when we are at 100 energy
 bool bInitialSounds = false; // switch to stop the initial sounds when we connect
@@ -1085,10 +1086,18 @@ void CBasePlayer::Killed( entvars_t *pevAttacker, int iGib )
 	DeathSound();
 
 	// Stop All Shield Sounds
-	STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_empty.wav");
-	STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_charge.wav");
-	STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_low.wav");
-	STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_lp.wav");
+	if (!bIsPlayerDead)
+	{
+		STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_empty.wav");
+		STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_low.wav");
+#ifndef _HALO
+		STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_lp.wav");
+#else
+		STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_charge.wav");
+#endif
+
+		bIsPlayerDead = true;
+	}
 
 	bInitialSounds = false;
 	isShieldLow = false;
@@ -4631,9 +4640,12 @@ void CBasePlayer::RunShieldUpdates(void)
 	if (sv_aura_regeneration.value != 0 && IsObserver() || IsSpectator() || !IsAlive() || !m_bDoneFirstSpawn && bInitialSounds) // JUST CONNECTED - DEAD, SPECTATING, OR WELCOME CAM
 	{
 		STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_empty.wav");
-		STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_charge.wav");
 		STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_low.wav");
+#ifdef _HALO
+		STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_charge.wav");
+#else
 		STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_lp.wav");
+#endif
 
 		bInitialSounds = false;
 		isShieldLow = false;
@@ -4643,6 +4655,7 @@ void CBasePlayer::RunShieldUpdates(void)
 	else if (sv_aura_regeneration.value != 0) // PLAYER HAS SPAWNED AND IS ALIVE
 	{
 		bInitialSounds = true;
+		bIsPlayerDead = false;
 		if (pev->armorvalue < SHIELD_EMPTY_THRESHOLD)
 		{
 			if (!isShieldEmpty && (currentTime - lastShieldSoundTime > 1.0f))

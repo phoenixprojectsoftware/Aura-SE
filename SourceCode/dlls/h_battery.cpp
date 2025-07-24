@@ -27,6 +27,8 @@
 #include "skill.h"
 #include "gamerules.h"
 
+extern cvar_t sv_aura_regeneration;
+
 class CRecharge : public CBaseToggle
 {
 public:
@@ -47,6 +49,7 @@ public:
 	int		m_iJuice;
 	int		m_iOn;			// 0 = off, 1 = startup, 2 = going
 	float   m_flSoundTime;
+	virtual void Reset();
 };
 
 TYPEDESCRIPTION CRecharge::m_SaveData[] =
@@ -118,7 +121,7 @@ void CRecharge::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE use
 	}
 
 	// if the player doesn't have the suit, or there is no juice left, make the deny noise
-	if ((m_iJuice <= 0) || (!(pActivator->pev->weapons & (1<<WEAPON_SUIT))))
+	if ((m_iJuice <= 0) || (!(pActivator->pev->weapons & (1<<WEAPON_SUIT))) || 0 < ag_ban_recharg.value || sv_aura_regeneration.value != 0)
 	{
 		if (m_flSoundTime <= gpGlobals->time)
 		{
@@ -197,4 +200,12 @@ void CRecharge::Off(void)
 	}
 	else
 		SetThink( &CRecharge::SUB_DoNothing );
+}
+
+void CRecharge::Reset()
+{
+	m_iJuice = gSkillData.suitchargerCapacity;
+	pev->frame = 0;
+	pev->nextthink = pev->ltime;
+	Off();
 }
