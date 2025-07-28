@@ -22,6 +22,7 @@
 #include "decals.h"
 #include "func_break.h"
 #include "shake.h"
+#include "player.h"
 
 #define	SF_GIBSHOOTER_REPEATABLE	1 // allows a gibshooter to be refired
 
@@ -2474,3 +2475,196 @@ void CEnvSky::Think()
 }
 
 LINK_ENTITY_TO_CLASS(env_sky, CEnvSky);
+
+//==========================================================
+// CEnvWeather
+//==========================================================
+#define SF_WEATHER_ACTIVE 1
+extern int gmsgWeather;
+class CEnvWeather : public CBaseEntity
+{
+public:
+	void Spawn(void);
+	void Precache(void);
+	void SendInitMessages(CBaseEntity* pPlayer = NULL);
+	void KeyValue(KeyValueData* pkvd);
+	void Activate(void);
+	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+	virtual int OjectCaps(void) { return CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
+
+	virtual int Save(CSave& save);
+	virtual int Restore(CRestore& restore);
+	static TYPEDESCRIPTION m_SaveData[];
+
+private:
+	BOOL m_bActive;
+	
+	float m_flSpawnHeight;
+
+	int m_iFrequency;
+	int m_iType;
+	int m_iWindX;
+	int m_iMinWindX;
+	int m_iWindY;
+	int m_iMinWindY;
+
+	string_t m_sParticleSprite;
+	string_t m_sImpactSprite;
+};
+
+LINK_ENTITY_TO_CLASS(env_weather, CEnvWeather);
+TYPEDESCRIPTION CEnvWeather::m_SaveData[] =
+{
+	DEFINE_FIELD(CEnvWeather, m_bActive, FIELD_BOOLEAN),
+	DEFINE_FIELD(CEnvWeather, m_flSpawnHeight, FIELD_FLOAT),
+	DEFINE_FIELD(CEnvWeather, m_iFrequency, FIELD_INTEGER),
+	DEFINE_FIELD(CEnvWeather, m_iType, FIELD_INTEGER),
+	DEFINE_FIELD(CEnvWeather, m_iWindX, FIELD_INTEGER),
+	DEFINE_FIELD(CEnvWeather, m_iMinWindX, FIELD_INTEGER),
+	DEFINE_FIELD(CEnvWeather, m_iWindY, FIELD_INTEGER),
+	DEFINE_FIELD(CEnvWeather, m_iMinWindY, FIELD_INTEGER),
+	DEFINE_FIELD(CEnvWeather, m_sParticleSprite, FIELD_STRING),
+	DEFINE_FIELD(CEnvWeather, m_sImpactSprite, FIELD_STRING),
+};
+IMPLEMENT_SAVERESTORE(CEnvWeather, CBaseEntity);
+
+void CEnvWeather::KeyValue(KeyValueData* pkvd)
+{
+	if (FStrEq(pkvd->szKeyName, "type"))
+	{
+		m_iType = atoi(pkvd->szValue);
+		pkvd->fHandled = TRUE;
+	}
+	else if (FStrEq(pkvd->szKeyName, "windx"))
+	{
+		m_iWindX = atoi(pkvd->szValue);
+		pkvd->fHandled = TRUE;
+	}
+	else if (FStrEq(pkvd->szKeyName, "minwindx"))
+	{
+		m_iMinWindX = atoi(pkvd->szValue);
+		pkvd->fHandled = TRUE;
+	}
+	else if (FStrEq(pkvd->szKeyName, "windy"))
+	{
+		m_iWindY = atoi(pkvd->szValue);
+		pkvd->fHandled = TRUE;
+	}
+	else if (FStrEq(pkvd->szKeyName, "minwindy"))
+	{
+		m_iMinWindY = atoi(pkvd->szValue);
+		pkvd->fHandled = TRUE;
+	}
+	else if (FStrEq(pkvd->szKeyName, "frequency"))
+	{
+		m_iFrequency = atoi(pkvd->szValue);
+		pkvd->fHandled = TRUE;
+	}
+	else if (FStrEq(pkvd->szKeyName, "fallsprite"))
+	{
+		m_sParticleSprite = ALLOC_STRING(pkvd->szValue);
+		pkvd->fHandled = TRUE;
+	}
+	else if (FStrEq(pkvd->szKeyName, "impactsprite"))
+	{
+		m_sImpactSprite = ALLOC_STRING(pkvd->szValue);
+		pkvd->fHandled = TRUE;
+	}
+	else
+		CBaseEntity::KeyValue(pkvd);
+}
+
+void CEnvWeather::Spawn(void)
+{
+	Precache();
+	pev->solid = SOLID_NOT;
+	pev->effects |= EF_NODRAW;
+	pev->movetype = MOVETYPE_NONE;
+
+	if (FStringNull(m_sParticleSprite))
+	{
+		if (FStringNull(pev->targetname))
+			ALERT(at_console, "%s - No particle sprite specified.\n", STRING(pev->classname));
+		else
+			ALERT(at_console, "%s(%s) - No particle sprite specified.\n", STRING(pev->classname), STRING(pev->targetname));
+
+		UTIL_Remove(this);
+		return;
+	}
+
+	if (FStringNull(m_sImpactSprite))
+	{
+		if (FStringNull(pev->targetname))
+			ALERT(at_console, "%s - No particle sprite specified.\n", STRING(pev->classname));
+		else
+			ALERT(at_console, "%s(%s) - No particle sprite specified.\n", STRING(pev->classname), STRING(pev->targetname));
+
+		UTIL_Remove(this);
+		return;
+	}
+
+	if (FStringNull(pev->targetname)
+		|| FBitSet(pev->spawnflags, SF_WEATHER_ACTIVE))
+		m_bActive = TRUE;
+}
+
+void CEnvWeather::Precache(void)
+{
+	PRECACHE_MODEL((char*)STRING(m_sParticleSprite));
+	PRECACHE_MODEL((char*)STRING(m_sImpactSprite));
+}
+
+void CEnvWeather::Activate(void)
+{
+	TraceResult tr;
+	UTIL_TraceLine(pev->origin, pev->origin + Vector(0, 0, 8196), ignore_monsters, ignore_glass, ENT(pev), &tr);
+
+	if (tr.flFraction == 1.0 || UTIL_PointContents(tr.vecEndPos) != CONTENTS_SKY)
+	{
+		ALERT(at_console, "Error, env_weather entity couldn't find sky texture above!\n");
+		UTIL_Remove(this);
+	}
+
+	m_flSpawnHeight = tr.vecEndPos.z;
+}
+
+void CEnvWeather::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
+{
+	CBasePlayer* pPlayer = (CBasePlayer*)CBaseEntity::Instance(g_engfuncs.pfnPEntityOfEntIndex(1));
+	m_bActive = !m_bActive;
+
+	MESSAGE_BEGIN(MSG_ONE, gmsgWeather, NULL, pPlayer->pev);
+	WRITE_BYTE(m_bActive);
+	if (m_bActive)
+	{
+		WRITE_BYTE(m_iType);
+		WRITE_COORD(m_iFrequency / 10.0f);
+		WRITE_COORD(m_flSpawnHeight);
+		WRITE_SHORT(m_iWindX);
+		WRITE_SHORT(m_iMinWindY);
+		WRITE_SHORT(m_iWindY);
+		WRITE_SHORT(m_iMinWindY);
+		WRITE_STRING((char*)STRING(m_sParticleSprite));
+		WRITE_STRING((char*)STRING(m_sImpactSprite));
+	}
+	MESSAGE_END();
+}
+
+void CEnvWeather::SendInitMessages(CBaseEntity* pPlayer)
+{
+	if (!m_bActive)
+		return;
+
+	MESSAGE_BEGIN(MSG_ONE, gmsgWeather, NULL, pPlayer->pev);
+	WRITE_BYTE(m_bActive);
+	WRITE_BYTE(m_iType);
+	WRITE_COORD(m_iFrequency / 10.0f);
+	WRITE_COORD(m_flSpawnHeight);
+	WRITE_SHORT(m_iWindX);
+	WRITE_SHORT(m_iMinWindY);
+	WRITE_SHORT(m_iWindY);
+	WRITE_SHORT(m_iMinWindY);
+	WRITE_STRING((char*)STRING(m_sParticleSprite));
+	WRITE_STRING((char*)STRING(m_sImpactSprite));
+	MESSAGE_END();
+}
