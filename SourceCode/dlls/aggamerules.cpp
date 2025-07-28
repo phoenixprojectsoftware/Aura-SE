@@ -961,10 +961,6 @@ void AgGameRules::ClientUserInfoChanged(CBasePlayer* pPlayer, char* infobuffer)
     if (strlen(pszDisableSpecs))
         pPlayer->m_iDisableSpecs = atoi(pszDisableSpecs);
 
-    char* pszMusicEnabled = g_engfuncs.pfnInfoKeyValue(infobuffer, "cl_music_enabled");
-    if (strlen(pszMusicEnabled))
-        pPlayer->m_bMusicEnabled = (atoi(pszMusicEnabled) != 0) ? true : false;
-
     /*
       char* pszWeaponWeights = g_engfuncs.pfnInfoKeyValue( infobuffer, "cl_weaponweights" );
       if (strlen(pszWeaponWeights))
