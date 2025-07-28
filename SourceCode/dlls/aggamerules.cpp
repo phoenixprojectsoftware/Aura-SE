@@ -92,6 +92,10 @@ bool AgGameRules::AgThink()
     {
         m_Hideandseek.Think();
     }
+    else if (SWAT == AgGametype())
+    {
+        m_SWAT.Think();
+    }
     else
     {
         //Update match status.
