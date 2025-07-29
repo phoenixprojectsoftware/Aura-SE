@@ -245,6 +245,7 @@ void AgGameRules::PlayerSpawn(CBasePlayer* pPlayer)
         pPlayer->pev->movetype = MOVETYPE_NOCLIP;
         pPlayer->pev->modelindex = 0;
         pPlayer->m_pGoalEnt = NULL;
+        pPlayer->pev->armorvalue = 100; // HACK: fixing Shield causing overflows when people join.
 
         //Move player to info intermission spot
         edict_t* pSpot = m_InfoInterMission.GetRandomSpot();
