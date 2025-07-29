@@ -222,7 +222,6 @@ int gmsgSetFOV = 0;
 int gmsgShowMenu = 0;
 int gmsgGeigerRange = 0;
 int gmsgTeamNames = 0;
-int gmsgWeather = 0;
 int gmsgSetSky = 0;
 
 int gmsgStatusText = 0;
@@ -309,7 +308,6 @@ void LinkUserMessages( void )
 	gmsgFade = REG_USER_MSG("ScreenFade", sizeof(ScreenFade));
 	gmsgAmmoX = REG_USER_MSG("AmmoX", 2);
 	gmsgTeamNames = REG_USER_MSG( "TeamNames", -1 );
-	gmsgWeather = REG_USER_MSG("Weather", -1); // Weather message, used for rain and snow.
   //++ BulliT
 	gmsgScoreInfo = REG_USER_MSG("ScoreInfo", 9);
 	gmsgAllowSpec = REG_USER_MSG("AllowSpec", 1);   //Allow spectator button message.
@@ -1557,7 +1555,6 @@ void CBasePlayer::PlayerDeathThink(void)
 	//ALERT(at_console, "Respawn\n");
 
 	respawn(pev, !(m_afPhysicsFlags & PFLAG_OBSERVER) );// don't copy a corpse if we're in deathcam.
-	m_bSendMessages = TRUE;
 	pev->nextthink = -1;
 }
 
@@ -3571,8 +3568,6 @@ void CBasePlayer :: Precache( void )
 
 	m_iUpdateTime = 5;  // won't update for 1/2 a second
 
-	m_bSendMessages = TRUE;
-
 	if ( gInitHUD )
 		m_fInitHUD = TRUE;
 }
@@ -4821,12 +4816,6 @@ void CBasePlayer :: UpdateClientData( void )
 #endif
   }
 
-	if (m_bSendMessages)
-	{
-		InitializeEntities();
-		m_bSendMessages = FALSE;
-	}
-
 	if ( m_iHideHUD != m_iClientHideHUD )
 	{
 		MESSAGE_BEGIN( MSG_ONE, gmsgHideWeapon, NULL, pev );
@@ -5211,27 +5200,6 @@ void CBasePlayer :: UpdateClientData( void )
 	}
 }
 
-//=========================================================
-// InitializeEntities - Overridden for the player to set the proper
-// physics flags when a barnacle grabs player.
-//=========================================================
-void CBasePlayer::InitializeEntities(void)
-{
-	edict_t* pEdict = g_engfuncs.pfnPEntityOfEntIndex(1);
-	CBaseEntity* pEntity;
-
-	for (int i = 0; i < gpGlobals->maxEntities; i++, pEdict++)
-	{
-		if (pEdict->free)
-			continue;
-
-		pEntity = CBaseEntity::Instance(pEdict);
-		if (!pEntity)
-			break;
-
-		pEntity->SendInitMessages(this);
-	}
-}
 
 //=========================================================
 // FBecomeProne - Overridden for the player to set the proper

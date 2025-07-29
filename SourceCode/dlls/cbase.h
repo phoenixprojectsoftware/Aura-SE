@@ -196,7 +196,6 @@ public:
 	virtual BOOL	IsNetClient( void ) { return FALSE; }
 	virtual const char *TeamID( void ) { return ""; }
 
-	virtual void SendInitMessages(CBaseEntity* pPlayer = NULL) {};
 
 //	virtual void	SetActivator( CBaseEntity *pActivator ) {}
 	virtual CBaseEntity *GetNextTarget( void );

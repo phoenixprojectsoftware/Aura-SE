@@ -251,8 +251,6 @@ public:
 															// Spectators should return TRUE for this
 	virtual const char *TeamID( void );
 
-	virtual void InitializeEntities(void);
-
 	virtual int		Save( CSave &save );
 	virtual int		Restore( CRestore &restore );
 	void RenewItems(void);
@@ -352,8 +350,6 @@ public:
 	char m_SbarString1[ SBAR_STRING_SIZE ];
 	
 	float m_flNextChatTime;
-
-	BOOL m_bSendMessages;
 	
 	//++ BulliT
 protected:
