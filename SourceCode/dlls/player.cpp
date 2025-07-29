@@ -1085,6 +1085,7 @@ void CBasePlayer::Killed( entvars_t *pevAttacker, int iGib )
 
 	DeathSound();
 
+	/*
 	// Stop All Shield Sounds
 	if (!bIsPlayerDead)
 	{
@@ -1100,7 +1101,9 @@ void CBasePlayer::Killed( entvars_t *pevAttacker, int iGib )
 	}
 
 	bInitialSounds = false;
-	isShieldLow = false;
+	*/
+
+	isShieldLow = false; // do we need this?
 
 	pev->armorvalue = 0;
 	m_fRegenOn = false;
