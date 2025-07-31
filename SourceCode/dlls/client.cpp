@@ -898,17 +898,18 @@ void ClientPrecache( void )
 	PRECACHE_SOUND("player/geiger1.wav");
 
 	// BlueNightHawk : Suit Energy Regeneration
-	PRECACHE_SOUND("player/shield_depleted2.wav");
-	PRECACHE_SOUND("player/shield_low.wav");
-	PRECACHE_SOUND("player/shield_empty.wav");
+	PRECACHE_SOUND("items/suitchargeno1.wav");  // dmg taken while recharging
+	PRECACHE_SOUND("player/shield_depleted2.wav"); // shield depleted sound
+	PRECACHE_SOUND("player/shield_low.wav"); // shield low sound
+	PRECACHE_SOUND("player/shield_empty.wav"); // shield empty sound
 #ifdef _HALO
-	PRECACHE_SOUND("player/shield_charge.wav");
+	PRECACHE_SOUND("player/shield_charge.wav"); // shield charge sound
 #endif
 
 #ifndef _HALO
-	PRECACHE_SOUND("player/shield_start.wav");
-	PRECACHE_SOUND("player/shield_lp.wav");
-	PRECACHE_SOUND("player/shield_finish.wav");
+	PRECACHE_SOUND("player/shield_start.wav"); // shield start sound
+	PRECACHE_SOUND("player/shield_lp.wav"); // shield currently-recharging / loop sound
+	PRECACHE_SOUND("player/shield_finish.wav"); // shield finish sound
 #endif
 
 	PRECACHE_SOUND("player/spawn.wav");

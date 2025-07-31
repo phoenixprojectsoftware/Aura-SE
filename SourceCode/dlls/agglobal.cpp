@@ -1041,7 +1041,7 @@ void AgDisplayGreetingMessage(const char* pszAuthID)
 {
     AgAuthIDToGreeting::iterator itrGreeting = s_mapGreeting.find(pszAuthID);
     if (itrGreeting != s_mapGreeting.end())
-        UTIL_ClientPrintAll(HUD_PRINTNOTIFY, (*itrGreeting).second.c_str());
+        UTIL_ClientPrintAll(HUD_PRINTTALK, (*itrGreeting).second.c_str());
 }
 
 
