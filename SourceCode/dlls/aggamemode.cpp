@@ -26,15 +26,13 @@ void SetupGametype()
     if (sGametype == "arena")
     {
         g_GameType = ARENA;
-        /*char szCommand[128];
-        sprintf(szCommand, "cd play 5\n");
-        SERVER_COMMAND(szCommand);
-        SERVER_EXECUTE();*/
     }
     else if (sGametype == "arcade")
         g_GameType = ARCADE;
     else if (sGametype == "hideandseek")
         g_GameType = HIDEANDSEEK;
+    else if (sGametype == "swat")
+        g_GameType = SWAT;
 #ifndef AG_NO_CLIENT_DLL
     else if (sGametype == "ctf")
         g_GameType = CTF;

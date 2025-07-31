@@ -162,6 +162,7 @@ HLDLL_OBJS = \
 	$(HLDLL_OBJ_DIR)/agscorecache.o \
 	$(HLDLL_OBJ_DIR)/agscorelog.o \
 	$(HLDLL_OBJ_DIR)/agsettings.o \
+	$(HLDLL_OBJ_DIR)/agswat.o \
 	$(HLDLL_OBJ_DIR)/agtimer.o \
 	$(HLDLL_OBJ_DIR)/agvote.o \
 	$(HLDLL_OBJ_DIR)/agspectator.o \

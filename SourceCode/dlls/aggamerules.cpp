@@ -92,6 +92,10 @@ bool AgGameRules::AgThink()
     {
         m_Hideandseek.Think();
     }
+    else if (SWAT == AgGametype())
+    {
+        m_SWAT.Think();
+    }
     else
     {
         //Update match status.
@@ -228,9 +232,8 @@ void AgGameRules::PlayerSpawn(CBasePlayer* pPlayer)
 
     if (pPlayer->IsProxy() || pPlayer->pev->flags & FL_FAKECLIENT)
         pPlayer->m_bDoneFirstSpawn = true;
-    if (1 == pPlayer->pev->iuser3)
-      pPlayer->m_bDoneFirstSpawn = true;
-    /*
+    // if (1 == pPlayer->pev->iuser3)
+     // pPlayer->m_bDoneFirstSpawn = true;
     if (!pPlayer->m_bDoneFirstSpawn)
     {
         pPlayer->m_bDoneFirstSpawn = true;
@@ -242,6 +245,7 @@ void AgGameRules::PlayerSpawn(CBasePlayer* pPlayer)
         pPlayer->pev->movetype = MOVETYPE_NOCLIP;
         pPlayer->pev->modelindex = 0;
         pPlayer->m_pGoalEnt = NULL;
+        pPlayer->pev->armorvalue = 100; // HACK: fixing Shield causing overflows when people join.
 
         //Move player to info intermission spot
         edict_t* pSpot = m_InfoInterMission.GetRandomSpot();
@@ -257,7 +261,7 @@ void AgGameRules::PlayerSpawn(CBasePlayer* pPlayer)
 
         return;
     }
-    */
+   
 
     BOOL		addDefault;
     CBaseEntity* pWeaponEntity = NULL;
@@ -468,7 +472,7 @@ void AgGameRules::PlayerSpawn(CBasePlayer* pPlayer)
             if (0 < ag_start_ammo556.value)
                 pPlayer->GiveAmmo(ag_start_ammo556.value, "556", M249_MAX_CARRY);
             if (0 < ag_start_ammo762.value)
-                pPlayer->GiveAmmo(ag_start_ammo762.value, "762", EAGLE_MAX_CLIP);
+                pPlayer->GiveAmmo(ag_start_ammo762.value, "762", SNIPERRIFLE_MAX_CARRY);
             if (0 < ag_start_ammoSpore.value)
                 pPlayer->GiveAmmo(ag_start_ammoSpore.value, "spores", SPORELAUNCHER_MAX_CARRY);
         }
@@ -957,10 +961,6 @@ void AgGameRules::ClientUserInfoChanged(CBasePlayer* pPlayer, char* infobuffer)
     char* pszDisableSpecs = g_engfuncs.pfnInfoKeyValue(infobuffer, "cl_disablespecs");
     if (strlen(pszDisableSpecs))
         pPlayer->m_iDisableSpecs = atoi(pszDisableSpecs);
-
-    char* pszMusicEnabled = g_engfuncs.pfnInfoKeyValue(infobuffer, "cl_music_enabled");
-    if (strlen(pszMusicEnabled))
-        pPlayer->m_bMusicEnabled = (atoi(pszMusicEnabled) != 0) ? true : false;
 
     /*
       char* pszWeaponWeights = g_engfuncs.pfnInfoKeyValue( infobuffer, "cl_weaponweights" );

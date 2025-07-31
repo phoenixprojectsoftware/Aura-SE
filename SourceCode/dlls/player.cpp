@@ -79,6 +79,7 @@ extern cvar_t	sv_aura_infinite_ammo;
 extern cvar_t sv_aura_regeneration;
 extern cvar_t sv_aura_regeneration_rate;
 extern cvar_t sv_aura_regeneration_wait;
+bool bIsPlayerDead = false; // switch for when the player is dead
 bool bAreWeMaxxed = false; // switch to stop the sound of regeneration when we spawn
 bool bAreWeAt100 = false; // switch to stop the sound of regeneration when we are at 100 energy
 bool bInitialSounds = false; // switch to stop the initial sounds when we connect
@@ -472,7 +473,7 @@ void CBasePlayer :: DeathSound( void )
 	}
 
 	// play one of the suit death alarms
-	if (INSTAGIB != AgGametype()) 
+	if (INSTAGIB != AgGametype() && SWAT != AgGametype())
 	{ 
 		EMIT_GROUPNAME_SUIT(ENT(pev), "HEV_DEAD"); 
 	};
@@ -796,6 +797,9 @@ int CBasePlayer :: TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, 
 		m_fRegenOn = false;
 
 		bAreWeMaxxed = false; // switch those stop sound calls back on
+#ifdef _DEBUG
+		ALERT(at_console, "bAreWeMaxxed is now false\n");
+#endif
 		bAreWeAt100 = false; // switch those stop sound calls back on
 
 		m_flNextSuitRegenTime = gpGlobals->time + 5.5 + sv_aura_regeneration_wait.value;
@@ -1081,14 +1085,25 @@ void CBasePlayer::Killed( entvars_t *pevAttacker, int iGib )
 
 	DeathSound();
 
+	/*
 	// Stop All Shield Sounds
-	STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_empty.wav");
-	STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_charge.wav");
-	STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_low.wav");
-	STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_lp.wav");
+	if (!bIsPlayerDead)
+	{
+		STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_empty.wav");
+		STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_low.wav");
+#ifndef _HALO
+		STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_lp.wav");
+#else
+		STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_charge.wav");
+#endif
+
+		bIsPlayerDead = true;
+	}
 
 	bInitialSounds = false;
-	isShieldLow = false;
+	*/
+
+	isShieldLow = false; // do we need this?
 
 	pev->armorvalue = 0;
 	m_fRegenOn = false;
@@ -4620,14 +4635,20 @@ void CBasePlayer::RunShieldUpdates(void)
 	{
 		STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_lp.wav");
 		bAreWeMaxxed = true;
+#ifdef _DEBUG
+		ALERT(at_console, "bAreWeMaxxed is now true\n");
+#endif
 	}
 
-	if (sv_aura_regeneration.value != 0 && IsObserver() || IsSpectator() || !IsAlive() && bInitialSounds) // JUST CONNECTED - DEAD, OR SPECTATING
+	if (sv_aura_regeneration.value != 0 && IsObserver() || IsSpectator() || !IsAlive() || !m_bDoneFirstSpawn && bInitialSounds) // JUST CONNECTED - DEAD, SPECTATING, OR WELCOME CAM
 	{
 		STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_empty.wav");
-		STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_charge.wav");
 		STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_low.wav");
+#ifdef _HALO
+		STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_charge.wav");
+#else
 		STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_lp.wav");
+#endif
 
 		bInitialSounds = false;
 		isShieldLow = false;
@@ -4637,7 +4658,8 @@ void CBasePlayer::RunShieldUpdates(void)
 	else if (sv_aura_regeneration.value != 0) // PLAYER HAS SPAWNED AND IS ALIVE
 	{
 		bInitialSounds = true;
-		if (pev->armorvalue < 1)
+		bIsPlayerDead = false;
+		if (pev->armorvalue < SHIELD_EMPTY_THRESHOLD)
 		{
 			if (!isShieldEmpty && (currentTime - lastShieldSoundTime > 1.0f))
 			{
@@ -4657,7 +4679,7 @@ void CBasePlayer::RunShieldUpdates(void)
 			}
 		}
 
-		if (pev->armorvalue >= 1 && pev->armorvalue <= 10)
+		if (pev->armorvalue >= 1 && pev->armorvalue <= SHIELD_LOW_THRESHOLD)
 		{
 			if (!isShieldLow && (currentTime - lastShieldSoundTime > 1.0f)) // 1 second delay
 			{
@@ -4677,12 +4699,12 @@ void CBasePlayer::RunShieldUpdates(void)
 		}
 
 		// SHIELD LOW SOUNDS
-		if (pev->armorvalue == 0 && !hasShieldLowStopped)
+		if (pev->armorvalue == SHIELD_SND_EMPTY && !hasShieldLowStopped)
 		{
 			STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_low.wav");
 			hasShieldLowStopped = true;
 		}
-		else if (pev->armorvalue > 25 && !hasShieldLowStopped)
+		else if (pev->armorvalue > SHIELD_LOW_THRESHOLD && !hasShieldLowStopped)
 		{
 			STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_low.wav");
 			hasShieldLowStopped = true;
@@ -4701,9 +4723,9 @@ void CBasePlayer::RunShieldUpdates(void)
 				m_fRegenOn = false;
 				STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_empty.wav");
 				STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_lp.wav");
-				EMIT_SOUND(ENT(pev), CHAN_ITEM, "plats/elevbell1.wav", 0.85, ATTN_NORM);
 				EMIT_SOUND(ENT(pev), CHAN_STATIC, "player/shield_finish.wav", 1, ATTN_NORM);
 				bAreWeAt100 = true;
+				bAreWeMaxxed = true;
 			}
 			else if (!m_fRegenOn) // when shield starts recharging
 			{

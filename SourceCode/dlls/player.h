@@ -71,6 +71,10 @@ constexpr float BARELY_AUDIBLE_DIST = 1280.0;
 #define SUIT_NEXT_IN_30MIN	1800
 #define SUIT_NEXT_IN_1HOUR	3600
 
+#define SHIELD_SND_EMPTY 0
+#define SHIELD_EMPTY_THRESHOLD 1 // not really sure we need this but whatevs.
+#define SHIELD_LOW_THRESHOLD 25 // it goes red at 25 so why not beep at 25?
+
 #define CSUITNOREPEAT		32
 
 #define	SOUND_FLASHLIGHT_ON		"items/flashlight1.wav"
@@ -394,7 +398,6 @@ public:
 	int   m_iDisableSpecs;
 	int   m_iAutoWepSwitch;
 	char  m_szModel[64];
-	bool m_bMusicEnabled;
 
 	//CTF
 	bool m_bFlagTeam1;        //True if you got flag 1.
