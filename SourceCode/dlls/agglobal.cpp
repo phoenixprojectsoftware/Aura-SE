@@ -166,6 +166,7 @@ DLL_GLOBAL cvar_t   ag_start_ammo556 = { "sv_aura_start_ammo_556", "0" }; // thi
 DLL_GLOBAL cvar_t   ag_start_ammo762 = { "sv_aura_start_ammo_762", "0" }; // this should be 15 in gamemodes
 DLL_GLOBAL cvar_t   ag_start_ammoSpore = { "sv_aura_start_ammo_spore", "0" }; // this should be 20 in gamemodes
 
+// Half-Life Weapons
 DLL_GLOBAL cvar_t	ag_dmg_crowbar = { "sv_aura_dmg_crowbar","25" };
 DLL_GLOBAL cvar_t	ag_dmg_glock = { "sv_aura_dmg_glock","12" };
 DLL_GLOBAL cvar_t	ag_dmg_357 = { "sv_aura_dmg_357","50" };
@@ -182,6 +183,21 @@ DLL_GLOBAL cvar_t	ag_dmg_hgrenade = { "sv_aura_dmg_hgrenade","100" };
 DLL_GLOBAL cvar_t	ag_dmg_satchel = { "sv_aura_dmg_satchel","120" };
 DLL_GLOBAL cvar_t	ag_dmg_tripmine = { "sv_aura_dmg_tripmine","150" };
 DLL_GLOBAL cvar_t	ag_dmg_m203 = { "sv_aura_dmg_m203","100" };
+
+// Opposing Force Weapons
+DLL_GLOBAL cvar_t ag_dmg_pipewrench = { "sv_aura_dmg_pipewrench", "20" };
+DLL_GLOBAL cvar_t ag_dmg_pipewrench2 = { "sv_aura_dmg_pipewrench2", "40" }; // default "BIG SWING" damage value
+DLL_GLOBAL cvar_t ag_dmg_knife = { "sv_aura_dmg_knife", "10" };
+DLL_GLOBAL cvar_t ag_dmg_grapple = { "sv_aura_dmg_grapple", "25" };
+DLL_GLOBAL cvar_t ag_dmg_eagle = { "sv_aura_dmg_eagle", "34" };
+DLL_GLOBAL cvar_t ag_dmg_762 = { "sv_aura_dmg_sniperrifle", "101" }; // 762 == Sniper Bullet Type
+DLL_GLOBAL cvar_t ag_dmg_556 = { "sv_aura_dmg_m249", "20" }; // 556 == M249 SAW Bullet Type
+DLL_GLOBAL cvar_t ag_dmg_displacer_self = { "sv_aura_dmg_displacer_self", "5" }; // Self Displace
+DLL_GLOBAL cvar_t ag_dmg_displacer_other = { "sv_aura_dmg_displacer_other", "250" }; // Displacer Primary Attack's Shockwave
+DLL_GLOBAL cvar_t ag_displacer_radius = { "sv_aura_displacer_radius", "300" }; // Radius of shockwave
+DLL_GLOBAL cvar_t ag_dmg_shockrifle_m = { "sv_aura_dmg_shockrifle_m", "15" };
+DLL_GLOBAL cvar_t ag_dmg_shockrifle_s = { "sv_aura_dmg_shockrifle_s", "15" };
+DLL_GLOBAL cvar_t ag_dmg_spore = { "sv_aura_dmg_spore", "50" };
 
 
 DLL_GLOBAL cvar_t	ag_max_spectators = { "sv_aura_max_spectators","5" };
@@ -388,6 +404,7 @@ void AgInitGame()
     CVAR_REGISTER(&ag_start_armour);
     CVAR_REGISTER(&ag_start_health);
 
+    // Half-Life Weapons
     CVAR_REGISTER(&ag_dmg_crowbar);
     CVAR_REGISTER(&ag_dmg_glock);
     CVAR_REGISTER(&ag_dmg_357);
@@ -404,6 +421,20 @@ void AgInitGame()
     CVAR_REGISTER(&ag_dmg_satchel);
     CVAR_REGISTER(&ag_dmg_tripmine);
     CVAR_REGISTER(&ag_dmg_m203);
+
+    // Opposing Force Weapons
+    CVAR_REGISTER(&ag_dmg_pipewrench);
+    CVAR_REGISTER(&ag_dmg_knife);
+    CVAR_REGISTER(&ag_dmg_grapple);
+    CVAR_REGISTER(&ag_dmg_eagle);
+    CVAR_REGISTER(&ag_dmg_762);
+    CVAR_REGISTER(&ag_dmg_556);
+    CVAR_REGISTER(&ag_dmg_displacer_self);
+    CVAR_REGISTER(&ag_dmg_displacer_other);
+    CVAR_REGISTER(&ag_displacer_radius);
+    CVAR_REGISTER(&ag_dmg_shockrifle_m);
+    CVAR_REGISTER(&ag_dmg_shockrifle_s);
+    CVAR_REGISTER(&ag_dmg_spore);
 
     CVAR_REGISTER(&ag_allow_timeout);
 
@@ -1015,7 +1046,7 @@ void AgDisplayGreetingMessage(const char* pszAuthID)
 {
     AgAuthIDToGreeting::iterator itrGreeting = s_mapGreeting.find(pszAuthID);
     if (itrGreeting != s_mapGreeting.end())
-        UTIL_ClientPrintAll(HUD_PRINTNOTIFY, (*itrGreeting).second.c_str());
+        UTIL_ClientPrintAll(HUD_PRINTTALK, (*itrGreeting).second.c_str());
 }
 
 

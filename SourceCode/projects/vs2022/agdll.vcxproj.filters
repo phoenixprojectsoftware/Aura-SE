@@ -531,6 +531,9 @@
     <ClCompile Include="..\..\dlls\agfirefight_spawner.cpp">
       <Filter>Source Files\dlls</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\dlls\agswat.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\dlls\doors.h">
@@ -840,6 +843,9 @@
       <Filter>Header Files\dlls</Filter>
     </ClInclude>
     <ClInclude Include="..\..\dlls\agfirefight_spawner.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\agswat.h">
       <Filter>Header Files\dlls</Filter>
     </ClInclude>
   </ItemGroup>

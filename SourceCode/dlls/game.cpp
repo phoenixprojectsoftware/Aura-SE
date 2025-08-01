@@ -45,6 +45,7 @@ cvar_t  coopmode = { "sv_aura_coop", "0", FCVAR_SERVER };
 cvar_t	allowmonsters={"mp_allowmonsters","0", FCVAR_SERVER };
 cvar_t  mp5_old_rate = { "sv_aura_mp5_old_rate", "1", FCVAR_SERVER };
 cvar_t fire_weapons_underwater = { "sv_aura_fire_weapons_underwater", "0", FCVAR_SERVER };
+cvar_t motionsensor = { "sv_aura_motionsensor", "1", FCVAR_SERVER };
 
 // mp_chattime is like the minimum intermission time, you can't skip it, it's meant
 // to have some time for saying gg, etc. before changing map, it's part of the intermission

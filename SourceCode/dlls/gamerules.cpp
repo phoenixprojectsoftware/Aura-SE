@@ -231,7 +231,6 @@ void CGameRules::RefreshSkillData ( void )
 	gSkillData.sentryHealth = GetSkillCvar( "sk_sentry_health");
 
 // PLAYER WEAPONS
-
 	// Crowbar whack
 	gSkillData.plrDmgCrowbar = GetSkillCvar( "sk_plr_crowbar");
 
