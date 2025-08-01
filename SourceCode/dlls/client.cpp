@@ -903,7 +903,7 @@ void ClientPrecache( void )
 	PRECACHE_SOUND("player/shield_low.wav"); // shield low sound
 	PRECACHE_SOUND("player/shield_empty.wav"); // shield empty sound
 #ifdef _HALO
-	PRECACHE_SOUND("player/shield_charge.wav"); // shield charge sound
+	PRECACHE_SOUND("player/shield_charge.wav"); // Halo GS shield charge sound
 #endif
 
 #ifndef _HALO

@@ -495,7 +495,7 @@ void AgGameRules::PlayerSpawn(CBasePlayer* pPlayer)
         WRITE_COORD(pPlayer->pev->origin.z);
         MESSAGE_END();
         EMIT_SOUND_DYN(ENT(pPlayer->pev), CHAN_ITEM, "player/spawn.wav", 1, ATTN_NORM, 0, PITCH_HIGH);
-        STOP_SOUND(ENT(pPlayer->pev), CHAN_STATIC, "player/shield_charge.wav");
+        // STOP_SOUND(ENT(pPlayer->pev), CHAN_STATIC, "player/shield_charge.wav");
     
 }
 
