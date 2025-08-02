@@ -1,6 +1,6 @@
 /****
 *
-* Copyright © 2021-2025 The Phoenix Project Software. Some Rights Reserved.
+* Copyright (c) 2021-2025 The Phoenix Project Software. Some Rights Reserved.
 *
 * AURA
 *
@@ -9,50 +9,58 @@
 *
 ****/
 
-#ifndef FIREFIGHT_H
-#define FIREFIGHT_H
+#ifndef AGFIREFIGHT_H
+#define AGFIREFIGHT_H
 
-#if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER
 
 #include <vector>
+#include <map>
 
-class CBaseEntity;
-class CBasePlayer;
-struct FirefightSpawnInfo;
+struct FirefightSpawnInfo
+{
+	Vector vecOrigin;
+	Vector vecAngles;
+	string_t iszMonsterClass;
+	int iCount = 1;
+};
 
 class AgFirefight : public CBaseEntity
 {
 public:
-	AgFirefight();
-	virtual ~AgFirefight();
+	void Spawn() override;
+	void Think() override;
 
-	void Think();
 	void Init();
-	void Start();
-	void PlayerDied(CBasePlayer* pPlayer);
-
+	void Start(); // starts the first wave
 	void StartNextWave();
-	void RegisterSpawnedMonster(CBaseEntity* pEnt);
-	void OnMonsterDied(CBaseEntity* pEnt);
 	void CheckWaveComplete();
 
+	void RegisterSpawnedMonster(CBaseEntity* pEnt);
+	void OnMonsterDied(CBaseEntity* pEnt);
+	void PlayerDied(CBasePlayer* pPlayer);
+
+	bool LoadWaveDefinitions();
 	std::vector<FirefightSpawnInfo> GetWaveDefinition(int set, int round, int wave);
 
 private:
+	bool m_bInWave = false;
+	bool m_bStarted = false;
+
+	int m_iSharedLives = 10;
+
 	int m_iCurrentSet = 1;
 	int m_iCurrentRound = 1;
 	int m_iCurrentWave = 0;
 
-	int m_iMaxSets = 3;
-	int m_iRoundsPerSet = 3;
-	int m_iWavesPerSound = 5;
+	int m_iMaxSets = 1;
+	int m_iRoundsPerSet = 1;
+	int m_iWavesPerRound = 10;
 
-	int m_iSharedLives = 7;
-	bool m_bInWave = false;
-
+	std::map<int, std::vector<FirefightSpawnInfo>> m_WaveMap;
 	std::vector<EHANDLE> m_vecMonstersAlive;
 };
 
-#endif // FIREFIGHT_H
+extern AgFirefight* g_pFirefightController;
+
+#endif // AGFIREFIGHT_H
