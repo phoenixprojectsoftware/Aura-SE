@@ -1,5 +1,5 @@
 /*
-	Half-Life SDK Copyright © Valve
+	Half-Life SDK Copyright (c) Valve
 	Code modified by Sabian Roberts
 	This code follows the Half Life 1 SDK LICENSE
 */

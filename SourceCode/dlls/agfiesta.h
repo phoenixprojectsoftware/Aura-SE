@@ -1,6 +1,6 @@
 /****
 *
-* Copyright © 2021-2025 The Phoenix Project Software. Some Rights Reserved.
+* Copyright (c) 2021-2025 The Phoenix Project Software. Some Rights Reserved.
 *
 * AURA
 *
