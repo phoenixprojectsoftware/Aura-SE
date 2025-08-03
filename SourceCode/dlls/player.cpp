@@ -2145,22 +2145,39 @@ void CBasePlayer::PreThink(void)
     EnableControl(!g_bPaused);
 
   // BlueNightHawk : Infinite Ammo
-  if (sv_aura_infinite_ammo.value != 0 && m_pActiveItem)
+  if ((sv_aura_infinite_ammo.value != 0 || FIESTA == AgGametype() || FIESTAFIGHT == AgGametype()) && m_pActiveItem)
   {
 	  ItemInfo p;
 	  m_pActiveItem->GetItemInfo(&p);
-	  if (sv_aura_infinite_ammo.value == 1)
+
+	 if (sv_aura_infinite_ammo.value == 1)
 	  {
+		  // mode 1 - bottomless clip. refill every frame.
 		  ((CBasePlayerWeapon*)m_pActiveItem)->m_iClip = p.iMaxClip;
+
+		  if (m_pActiveItem->PrimaryAmmoIndex() != -1 && p.iMaxAmmo1 > 0)
+			  m_rgAmmo[m_pActiveItem->PrimaryAmmoIndex()] = p.iMaxAmmo1;
+
+		  if (m_pActiveItem->SecondaryAmmoIndex() != -1 && p.iMaxAmmo2 > 0)
+			  m_rgAmmo[m_pActiveItem->SecondaryAmmoIndex()] = p.iMaxAmmo2;
 	  }
+	  else if (sv_aura_infinite_ammo.value == 2 || FIESTA == AgGametype() || FIESTAFIGHT == AgGametype())
+	  {
+		  // mode 2 - refillable clip, infinite reserve
 
-	  if (m_pActiveItem->PrimaryAmmoIndex() != -1 && p.iMaxAmmo1 > 0)
-		  m_rgAmmo[m_pActiveItem->PrimaryAmmoIndex()] = p.iMaxAmmo1;
-	  if (m_pActiveItem->SecondaryAmmoIndex() != -1 && p.iMaxAmmo2 > 0)
-		  m_rgAmmo[m_pActiveItem->SecondaryAmmoIndex()] = p.iMaxAmmo2;
+		  // set reserve ammo to max and allow normal reloading
+		  if (m_pActiveItem->PrimaryAmmoIndex() != -1 && p.iMaxAmmo1 > 0)
+		  {
+			  m_rgAmmo[m_pActiveItem->PrimaryAmmoIndex()] = p.iMaxAmmo1;
+		  }
 
+		  if (m_pActiveItem->SecondaryAmmoIndex() != -1 && p.iMaxAmmo2 > 0)
+		  {
+			  m_rgAmmo[m_pActiveItem->SecondaryAmmoIndex()] = p.iMaxAmmo2;
+		  }
+	  }
   }
-  
+
   if (m_fDisplayGamemode > 0 && m_fDisplayGamemode < gpGlobals->time)
   {
     //Print gameinfo text.
