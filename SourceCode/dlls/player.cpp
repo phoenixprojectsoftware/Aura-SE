@@ -1109,6 +1109,8 @@ void CBasePlayer::Killed( entvars_t *pevAttacker, int iGib )
 
 	pev->armorvalue = 0;
 	m_fRegenOn = false;
+
+	m_bFiestaLock = false; // Allow Fiesta to assign two random weapons again.
 	
 	pev->angles.x = 0;
 	pev->angles.z = 0;
@@ -3412,6 +3414,7 @@ ReturnSpot:
 
 void CBasePlayer::Spawn( void )
 {
+	m_bFiestaLock = false;
 	pev->classname		= MAKE_STRING("player");
 	pev->health			= 100;
 	pev->armorvalue		= 0;

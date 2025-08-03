@@ -163,7 +163,7 @@ void AgGameRules::Start(const AgString& sSpawn)
 
 int AgGameRules::DeadPlayerWeapons(CBasePlayer* pPlayer)
 {
-    if (ARENA == AgGametype() || ARCADE == AgGametype())
+    if (ARENA == AgGametype() || ARCADE == AgGametype() || FIESTA == AgGametype() || FIESTAFIGHT == AgGametype())
         return GR_PLR_DROP_GUN_NO;
     else
         return GR_PLR_DROP_GUN_ACTIVE;
@@ -171,7 +171,7 @@ int AgGameRules::DeadPlayerWeapons(CBasePlayer* pPlayer)
 
 int AgGameRules::DeadPlayerAmmo(CBasePlayer* pPlayer)
 {
-    if (ARENA == AgGametype() || ARCADE == AgGametype())
+    if (ARENA == AgGametype() || ARCADE == AgGametype() || FIESTA == AgGametype() || FIESTAFIGHT == AgGametype())
         return GR_PLR_DROP_AMMO_NO;
     else
         return GR_PLR_DROP_AMMO_ACTIVE;
@@ -254,6 +254,7 @@ void AgGameRules::PlayerSpawn(CBasePlayer* pPlayer)
         pPlayer->pev->modelindex = 0;
         pPlayer->m_pGoalEnt = NULL;
         pPlayer->pev->armorvalue = 100; // HACK: fixing Shield causing overflows when people join.
+        pPlayer->m_bFiestaLock = false;
 
         //Move player to info intermission spot
         edict_t* pSpot = m_InfoInterMission.GetRandomSpot();
@@ -394,7 +395,7 @@ void AgGameRules::PlayerSpawn(CBasePlayer* pPlayer)
             if (sv_aura_regeneration.value != 0)
                 pPlayer->pev->armorvalue = MAX_NORMAL_BATTERY;
             else
-            pPlayer->pev->armorvalue = ag_start_armour.value;
+                pPlayer->pev->armorvalue = ag_start_armour.value;
 
             if (0 < ag_start_longjump.value)
             {
@@ -402,88 +403,133 @@ void AgGameRules::PlayerSpawn(CBasePlayer* pPlayer)
                 g_engfuncs.pfnSetPhysicsKeyValue(pPlayer->edict(), "slj", "1");
                 pPlayer->OnPickupLongjump();
             }
-            if (0 < ag_start_glock.value)
-                pPlayer->GiveNamedItem("weapon_9mmhandgun");
-            if (0 < ag_start_oitc.value)
-                pPlayer->GiveNamedItem("weapon_one");
-            if (0 < ag_start_crowbar.value)
-                pPlayer->GiveNamedItem("weapon_crowbar");
-            if (0 < ag_start_shotgun.value)
-                pPlayer->GiveNamedItem("weapon_shotgun");
-            if (0 < ag_start_mp5.value)
-                pPlayer->GiveNamedItem("weapon_9mmAR");
-            if (0 < ag_start_gauss.value)
-                pPlayer->GiveNamedItem("weapon_gauss");
-            if (0 < ag_start_hgrenade.value)
-                pPlayer->GiveNamedItem("weapon_handgrenade");
-            if (0 < ag_start_tripmine.value)
-                pPlayer->GiveNamedItem("weapon_tripmine");
-            if (0 < ag_start_egon.value)
-                pPlayer->GiveNamedItem("weapon_egon");
-            if (0 < ag_start_crossbow.value)
-                pPlayer->GiveNamedItem("weapon_crossbow");
-            if (0 < ag_start_357.value)
-                pPlayer->GiveNamedItem("weapon_357");
-            if (0 < ag_start_rpg.value)
-                pPlayer->GiveNamedItem("weapon_rpg");
-            if (0 < ag_start_satchel.value)
-                pPlayer->GiveNamedItem("weapon_satchel");
-            if (0 < ag_start_snark.value)
-                pPlayer->GiveNamedItem("weapon_snark");
-            if (0 < ag_start_hornet.value)
-                pPlayer->GiveNamedItem("weapon_hornetgun");
-            if (0 < ag_start_penguin.value)
-                pPlayer->GiveNamedItem("weapon_penguin");
-            if (0 < ag_start_m249.value)
-                pPlayer->GiveNamedItem("weapon_m249");
-            if (0 < ag_start_eagle.value)
-                pPlayer->GiveNamedItem("weapon_eagle");
-            if (0 < ag_start_displacer.value)
-                pPlayer->GiveNamedItem("weapon_displacer");
-            if (0 < ag_start_grapple.value)
-                pPlayer->GiveNamedItem("weapon_grapple");
-            if (0 < ag_start_knife.value)
-                pPlayer->GiveNamedItem("weapon_knife");
-            if (0 < ag_start_pipewrench.value)
-                pPlayer->GiveNamedItem("weapon_pipewrench");
-            if (0 < ag_start_shockrifle.value)
-                pPlayer->GiveNamedItem("weapon_shockrifle");
-            if (0 < ag_start_sniperrifle.value)
-                pPlayer->GiveNamedItem("weapon_sniperrifle");
-            if (0 < ag_start_sporelauncher.value)
-                pPlayer->GiveNamedItem("weapon_sporelauncher");
 
-            if (0 < ag_start_hgrenade.value)
-                pPlayer->GiveAmmo(ag_start_hgrenade.value, "Hand Grenade", HANDGRENADE_MAX_CARRY);
-            if (0 < ag_start_satchel.value)
-                pPlayer->GiveAmmo(ag_start_satchel.value, "Satchel Charge", SATCHEL_MAX_CARRY);
-            if (0 < ag_start_tripmine.value)
-                pPlayer->GiveAmmo(ag_start_tripmine.value, "Trip Mine", TRIPMINE_MAX_CARRY);
-            if (0 < ag_start_snark.value)
-                pPlayer->GiveAmmo(ag_start_snark.value, "Snarks", SNARK_MAX_CARRY);
-            if (0 < ag_start_hornet.value)
-                pPlayer->GiveAmmo(ag_start_hornet.value, "Hornets", HORNET_MAX_CARRY);
-            if (0 < ag_start_m203.value)
-                pPlayer->GiveAmmo(ag_start_m203.value, "ARgrenades", M203_GRENADE_MAX_CARRY);
-            if (0 < ag_start_uranium.value)
-                pPlayer->GiveAmmo(ag_start_uranium.value, "uranium", URANIUM_MAX_CARRY);
-            if (0 < ag_start_9mmar.value)
-                pPlayer->GiveAmmo(ag_start_9mmar.value, "9mm", _9MM_MAX_CARRY);
-            if (0 < ag_start_357ammo.value)
-                pPlayer->GiveAmmo(ag_start_357ammo.value, "357", _357_MAX_CARRY);
-            if (0 < ag_start_bockshot.value)
-                pPlayer->GiveAmmo(ag_start_bockshot.value, "buckshot", BUCKSHOT_MAX_CARRY);
-            if (0 < ag_start_bolts.value)
-                pPlayer->GiveAmmo(ag_start_bolts.value, "bolts", BOLT_MAX_CARRY);
-            if (0 < ag_start_rockets.value)
-                pPlayer->GiveAmmo(ag_start_rockets.value, "rockets", ROCKET_MAX_CARRY);
-            if (0 < ag_start_ammo556.value)
-                pPlayer->GiveAmmo(ag_start_ammo556.value, "556", M249_MAX_CARRY);
-            if (0 < ag_start_ammo762.value)
-                pPlayer->GiveAmmo(ag_start_ammo762.value, "762", SNIPERRIFLE_MAX_CARRY);
-            if (0 < ag_start_ammoSpore.value)
-                pPlayer->GiveAmmo(ag_start_ammoSpore.value, "spores", SPORELAUNCHER_MAX_CARRY);
-        }
+            if (FIESTA == AgGametype() || FIESTAFIGHT == AgGametype())
+            {
+                const char* weaponList[] = {
+                    "weapon_9mmhandgun",
+                    "weapon_357",
+                    "weapon_shotgun",
+                    "weapon_9mmAR",
+                    "weapon_crossbow",
+                    "weapon_gauss",
+                    "weapon_egon",
+                    "weapon_rpg",
+                    "weapon_snark",
+                    "weapon_m249",
+                    "weapon_eagle",
+                    "weapon_displacer",
+                    "weapon_sniperrifle",
+                    "weapon_sporelauncher",
+                };
+
+                const int weaponCount = ARRAYSIZE(weaponList);
+
+                // Pick two different weapons
+                int index1 = RANDOM_LONG(0, weaponCount - 1);
+                int index2;
+                do
+                {
+                    index2 = RANDOM_LONG(0, weaponCount - 1);
+                } while (index2 == index1);
+
+                pPlayer->m_bFiestaLock = false;
+
+                const char* weapon1 = weaponList[index1];
+                const char* weapon2 = weaponList[index2];
+
+                pPlayer->GiveNamedItem(weapon1);
+                pPlayer->GiveNamedItem(weapon2);
+
+                ALERT(at_console, "Fiesta: Giving Weapons %s and %s\n", weapon1, weapon2);
+
+               pPlayer-> m_bFiestaLock = true;
+            }
+            else
+            {
+                if (0 < ag_start_glock.value)
+                    pPlayer->GiveNamedItem("weapon_9mmhandgun");
+                if (0 < ag_start_oitc.value)
+                    pPlayer->GiveNamedItem("weapon_one");
+                if (0 < ag_start_crowbar.value)
+                    pPlayer->GiveNamedItem("weapon_crowbar");
+                if (0 < ag_start_shotgun.value)
+                    pPlayer->GiveNamedItem("weapon_shotgun");
+                if (0 < ag_start_mp5.value)
+                    pPlayer->GiveNamedItem("weapon_9mmAR");
+                if (0 < ag_start_gauss.value)
+                    pPlayer->GiveNamedItem("weapon_gauss");
+                if (0 < ag_start_hgrenade.value)
+                    pPlayer->GiveNamedItem("weapon_handgrenade");
+                if (0 < ag_start_tripmine.value)
+                    pPlayer->GiveNamedItem("weapon_tripmine");
+                if (0 < ag_start_egon.value)
+                    pPlayer->GiveNamedItem("weapon_egon");
+                if (0 < ag_start_crossbow.value)
+                    pPlayer->GiveNamedItem("weapon_crossbow");
+                if (0 < ag_start_357.value)
+                    pPlayer->GiveNamedItem("weapon_357");
+                if (0 < ag_start_rpg.value)
+                    pPlayer->GiveNamedItem("weapon_rpg");
+                if (0 < ag_start_satchel.value)
+                    pPlayer->GiveNamedItem("weapon_satchel");
+                if (0 < ag_start_snark.value)
+                    pPlayer->GiveNamedItem("weapon_snark");
+                if (0 < ag_start_hornet.value)
+                    pPlayer->GiveNamedItem("weapon_hornetgun");
+                if (0 < ag_start_penguin.value)
+                    pPlayer->GiveNamedItem("weapon_penguin");
+                if (0 < ag_start_m249.value)
+                    pPlayer->GiveNamedItem("weapon_m249");
+                if (0 < ag_start_eagle.value)
+                    pPlayer->GiveNamedItem("weapon_eagle");
+                if (0 < ag_start_displacer.value)
+                    pPlayer->GiveNamedItem("weapon_displacer");
+                if (0 < ag_start_grapple.value)
+                    pPlayer->GiveNamedItem("weapon_grapple");
+                if (0 < ag_start_knife.value)
+                    pPlayer->GiveNamedItem("weapon_knife");
+                if (0 < ag_start_pipewrench.value)
+                    pPlayer->GiveNamedItem("weapon_pipewrench");
+                if (0 < ag_start_shockrifle.value)
+                    pPlayer->GiveNamedItem("weapon_shockrifle");
+                if (0 < ag_start_sniperrifle.value)
+                    pPlayer->GiveNamedItem("weapon_sniperrifle");
+                if (0 < ag_start_sporelauncher.value)
+                    pPlayer->GiveNamedItem("weapon_sporelauncher");
+            }
+
+                if (0 < ag_start_hgrenade.value)
+                    pPlayer->GiveAmmo(ag_start_hgrenade.value, "Hand Grenade", HANDGRENADE_MAX_CARRY);
+                if (0 < ag_start_satchel.value)
+                    pPlayer->GiveAmmo(ag_start_satchel.value, "Satchel Charge", SATCHEL_MAX_CARRY);
+                if (0 < ag_start_tripmine.value)
+                    pPlayer->GiveAmmo(ag_start_tripmine.value, "Trip Mine", TRIPMINE_MAX_CARRY);
+                if (0 < ag_start_snark.value)
+                    pPlayer->GiveAmmo(ag_start_snark.value, "Snarks", SNARK_MAX_CARRY);
+                if (0 < ag_start_hornet.value)
+                    pPlayer->GiveAmmo(ag_start_hornet.value, "Hornets", HORNET_MAX_CARRY);
+                if (0 < ag_start_m203.value)
+                    pPlayer->GiveAmmo(ag_start_m203.value, "ARgrenades", M203_GRENADE_MAX_CARRY);
+                if (0 < ag_start_uranium.value)
+                    pPlayer->GiveAmmo(ag_start_uranium.value, "uranium", URANIUM_MAX_CARRY);
+                if (0 < ag_start_9mmar.value)
+                    pPlayer->GiveAmmo(ag_start_9mmar.value, "9mm", _9MM_MAX_CARRY);
+                if (0 < ag_start_357ammo.value)
+                    pPlayer->GiveAmmo(ag_start_357ammo.value, "357", _357_MAX_CARRY);
+                if (0 < ag_start_bockshot.value)
+                    pPlayer->GiveAmmo(ag_start_bockshot.value, "buckshot", BUCKSHOT_MAX_CARRY);
+                if (0 < ag_start_bolts.value)
+                    pPlayer->GiveAmmo(ag_start_bolts.value, "bolts", BOLT_MAX_CARRY);
+                if (0 < ag_start_rockets.value)
+                    pPlayer->GiveAmmo(ag_start_rockets.value, "rockets", ROCKET_MAX_CARRY);
+                if (0 < ag_start_ammo556.value)
+                    pPlayer->GiveAmmo(ag_start_ammo556.value, "556", M249_MAX_CARRY);
+                if (0 < ag_start_ammo762.value)
+                    pPlayer->GiveAmmo(ag_start_ammo762.value, "762", SNIPERRIFLE_MAX_CARRY);
+                if (0 < ag_start_ammoSpore.value)
+                    pPlayer->GiveAmmo(ag_start_ammoSpore.value, "spores", SPORELAUNCHER_MAX_CARRY);
+            }
     }
     pPlayer->m_bInSpawn = false;
     
@@ -857,6 +903,8 @@ BOOL AgGameRules::CanHavePlayerItem(CBasePlayer* pPlayer, CBasePlayerItem* pItem
     if (!pItem)
         return FALSE;
     if (!pPlayer->IsAlive())
+        return FALSE;
+    if ((FIESTA == AgGametype() || FIESTAFIGHT == AgGametype()) && pPlayer->m_bFiestaLock)
         return FALSE;
 
     if (ARENA == AgGametype() && m_Arena.CanHaveItem())

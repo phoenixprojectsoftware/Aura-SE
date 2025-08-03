@@ -642,6 +642,19 @@ void CBasePlayerItem::DefaultTouch( CBaseEntity *pOther )
 
 	CBasePlayer *pPlayer = (CBasePlayer *)pOther;
 
+	// Block further pickups in Fiesta mode
+	const char* pszClass = STRING(pev->classname);
+
+	if ((FIESTA == AgGametype() || FIESTAFIGHT == AgGametype()) && pPlayer->m_bFiestaLock)
+	{
+		if (strstr(pszClass, "weapon_") && strcmp(pszClass, "weapon_handgrenande") != 0) // block all weapons except ammo and grenades
+		{
+			ClientPrint(pPlayer->pev, HUD_PRINTCENTER, "Weapon pickup disabled in Fiesta mode!\n");
+			ALERT(at_console, "Fiesta: Blocking pickup of %s\n", STRING(pev->classname));
+			return;
+		}
+	}
+
 	// can I have this?
 	if ( !g_pGameRules->CanHavePlayerItem( pPlayer, this ) )
 	{

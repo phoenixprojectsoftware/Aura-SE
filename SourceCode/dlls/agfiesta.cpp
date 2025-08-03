@@ -34,5 +34,5 @@ AgFiesta::~AgFiesta()
 
 void AgFiesta::Think()
 {
-	ALERT(at_console, "Fiesta gametype thinking...\n");
+	// ALERT(at_console, "Fiesta gametype thinking...\n");
 }
