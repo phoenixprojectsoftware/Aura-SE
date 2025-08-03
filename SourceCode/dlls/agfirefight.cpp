@@ -1,6 +1,6 @@
 /****
 * 
-* Copyright (c) 2021-2025 The Phoenix Project Software. Some Rights Reserved.
+* Copyright © 2021-2025 The Phoenix Project Software. Some Rights Reserved.
 * 
 * AURA
 * 
@@ -16,59 +16,43 @@
 #include "weapons.h"
 #include "gamerules.h"
 
+#include "agglobal.h"
 #include "agfirefight.h"
 #include "agfirefight_spawner.h"
 
-AgFirefight* g_pFirefightController = nullptr;
+#include "algo.h"
 
-void AgFirefight::Spawn()
+#include <vector>
+#include <algorithm>
+
+extern cvar_t coopmode;
+bool m_bCoopStarted = false;
+
+AgFirefight::AgFirefight()
 {
-	pev->nextthink = gpGlobals->time + 0.1f;
-	SetThink(&AgFirefight::Think);
+	ALERT(at_console, "fart\n");
+}
 
-	Init();
+AgFirefight::~AgFirefight()
+{
+
 }
 
 void AgFirefight::Init()
 {
-	ALERT(at_console, "[Firefight] Initializing...\n");
-
-	g_pFirefightController = this;
-
-	m_bStarted = false;
-	m_bInWave = false;
-
-	m_iSharedLives = 10;
-
-	m_iCurrentSet = 1;
-	m_iCurrentRound = 1;
-	m_iCurrentWave = 0;
-
-	m_iMaxSets = 1;
-	m_iRoundsPerSet = 1;
-	m_iWavesPerRound = 10;
-
-	m_vecMonstersAlive.clear();
-	m_WaveMap.clear();
-
-	LoadWaveDefinitions();
+	ALERT(at_console, "Firefight gametype initialized.\n");
 }
 
-void AgFirefight::Think()
+std::vector<FirefightSpawnInfo> AgFirefight::GetWaveDefinition(int set, int round, int wave)
 {
-	if (!m_bStarted)
+	std::vector<FirefightSpawnInfo> result;
+
+	if (set == 1 && round == 1 && wave == 1)
 	{
-		Start();
-		m_bStarted = true;
+		result.push_back(FirefightSpawnInfo{Vector(512,512,0), Vector(0,0,0), MAKE_STRING("monster_hgrunt")});
 	}
 
-	pev->nextthink = gpGlobals->time + 0.1f;
-}
-
-void AgFirefight::Start()
-{
-	AgSay(NULL, "\n>> WELCOME TO FIREFIGHT <<\n");
-	StartNextWave();
+	return result;
 }
 
 void AgFirefight::StartNextWave()
@@ -76,11 +60,12 @@ void AgFirefight::StartNextWave()
 	if (m_bInWave)
 		return;
 
+	m_bInWave = true;
 	m_iCurrentWave++;
-	if (m_iCurrentWave > m_iWavesPerRound)
+	if (m_iCurrentWave > m_iWavesPerSound)
 	{
 		m_iCurrentWave = 1;
-		m_iCurrentRound++; 
+		m_iCurrentRound++;
 
 		if (m_iCurrentRound > m_iRoundsPerSet)
 		{
@@ -89,75 +74,94 @@ void AgFirefight::StartNextWave()
 
 			if (m_iCurrentSet > m_iMaxSets)
 			{
-				AgSay(NULL, "Game over");
+				AgSay(NULL, "All sets completed! Game over.");
+				// TODO: SET INTERMISSION  
 				return;
 			}
-			AgSay(NULL, UTIL_VarArgs("Set %d begins!", m_iCurrentSet));
-		}
-		AgSay(NULL, UTIL_VarArgs("Round %d begins!", m_iCurrentRound));
-	}
-	AgSay(NULL, UTIL_VarArgs("Wave %d begins!", m_iCurrentWave));
 
-	m_bInWave = true;
+			char setbuffer[128];
+			snprintf(setbuffer, sizeof(setbuffer), "Set %d begins.", m_iCurrentSet);
+			AgSay(NULL, setbuffer);
+		}
+
+		char roundbuffer[128];
+		snprintf(roundbuffer, sizeof(roundbuffer), "Round %d begins.", m_iCurrentRound);
+		AgSay(NULL, roundbuffer);
+	}
+	char wavebuffer[128];
+	snprintf(wavebuffer, sizeof(wavebuffer), "Wave %d begins.", m_iCurrentWave);
+	AgSay(NULL, wavebuffer);
+
 	auto wave = GetWaveDefinition(m_iCurrentSet, m_iCurrentRound, m_iCurrentWave);
 	AgWaveSpawner::SpawnWave(wave, this);
 }
 
-void AgFirefight::RegisterSpawnedMonster(CBaseEntity* pEnt)
-{
-	if (pEnt)
-		m_vecMonstersAlive.push_back(EHANDLE(pEnt));
-}
-
-void AgFirefight::OnMonsterDied(CBaseEntity* pEnt)
-{
-	m_vecMonstersAlive.erase(std::remove_if(m_vecMonstersAlive.begin(), m_vecMonstersAlive.end(), [pEnt](EHANDLE& h) { return h == pEnt || h.Get() == nullptr;  }), m_vecMonstersAlive.end());
-
-	CheckWaveComplete();
-}
-
 void AgFirefight::CheckWaveComplete()
 {
-	m_vecMonstersAlive.erase(std::remove_if(m_vecMonstersAlive.begin(), m_vecMonstersAlive.end(), [](EHANDLE& h) { return h.Get() == nullptr;  }), m_vecMonstersAlive.end());
+	m_vecMonstersAlive.erase(
+		std::remove_if(m_vecMonstersAlive.begin(), m_vecMonstersAlive.end(),
+			[](EHANDLE& h) { return h.Get() == nullptr; }),
+		m_vecMonstersAlive.end());
 
 	if (m_vecMonstersAlive.empty())
 	{
 		m_bInWave = false;
 		AgSay(NULL, "Wave cleared!");
 
+		// Delay before next wave
 		SetThink(&AgFirefight::StartNextWave);
-		pev->nextthink = gpGlobals->time + 5.0f; // 5 second delay before next wave begins
+		pev->nextthink = gpGlobals->time + 5.0f;
 	}
+}
+
+
+void AgFirefight::RegisterSpawnedMonster(CBaseEntity* pEnt)
+{
+	EHANDLE handle;
+	handle = pEnt;
+
+	m_vecMonstersAlive.push_back(handle);
+}
+
+void AgFirefight::OnMonsterDied(CBaseEntity* pEnt)
+{
+	m_vecMonstersAlive.erase(
+		std::remove_if(
+			m_vecMonstersAlive.begin(),
+			m_vecMonstersAlive.end(),
+			[pEnt](EHANDLE& h)
+			{
+				return h == pEnt;
+			}
+		), m_vecMonstersAlive.end());
+
+	CheckWaveComplete();
 }
 
 void AgFirefight::PlayerDied(CBasePlayer* pPlayer)
 {
 	if (--m_iSharedLives <= 0)
 	{
-		AgSay(NULL, "Game over. All lives lost.");
-		// TODO: Trigger intermission here.
+		AgSay(NULL, "All lives lost! Game over.");
+		// TODO: SET INTERMISSION
 	}
 	else
 	{
-		AgSay(NULL, UTIL_VarArgs("Player down! Shared lives remaining: %d", m_iSharedLives));
+		char pdownbuffer[128];
+		snprintf(pdownbuffer, sizeof(pdownbuffer), "Player down! Shared lives remaining: %d", m_iSharedLives);
+		AgSay(NULL, pdownbuffer);
 	}
 }
 
-std::vector<FirefightSpawnInfo> AgFirefight::GetWaveDefinition(int set, int round, int wave)
+void AgFirefight::Start()
 {
-	int index = (set - 1) * m_iRoundsPerSet * m_iWavesPerRound + (round - 1) * m_iWavesPerRound + wave;
-	auto it = m_WaveMap.find(index);
-	if (it != m_WaveMap.end())
-		return it->second;
-
-	return{};
+	AgSay(NULL, "WELCOME TO FIREFIGHT!");
+	StartNextWave();
 }
 
-bool AgFirefight::LoadWaveDefinitions()
+void AgFirefight::Think()
 {
-	// STUB
-	// TODO: parse ff/<mapname>.ff and populate m_WaveMap. . .
-	AgSay(NULL, "[Firefight] No wave defs loaded, parser not implemented.\n");
-	ALERT(at_console, "[FIREFIGHT] No wave defs loaded, parser not implemented.\n");
-	return false;
+	if( !m_bCoopStarted)
+		Start();
+	m_bCoopStarted = true;
 }

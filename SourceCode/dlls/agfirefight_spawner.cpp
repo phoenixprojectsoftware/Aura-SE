@@ -1,6 +1,6 @@
 /****
 *
-* Copyright (c) 2021-2025 The Phoenix Project Software. Some Rights Reserved.
+* Copyright © 2021-2025 The Phoenix Project Software. Some Rights Reserved.
 *
 * AURA
 *
@@ -9,21 +9,25 @@
 *
 ****/
 
+#include "extdll.h"
+#include "util.h"
+#include "cbase.h"
+#include "monsters.h"
+#include "enginecallback.h"
+
 #include "agfirefight_spawner.h"
 #include "agfirefight.h"
-#include "util.h"
-#include "monsters.h"
 
-void AgWaveSpawner::SpawnWave(const std::vector<FirefightSpawnInfo>& spawns, AgFirefight* pGameType)
-{
-	for (const auto& info : spawns)
-	{
-		for (int i = 0; i < info.iCount; ++i)
-		{
-			CBaseEntity* pEnt = CBaseEntity::Create(STRING(info.iszMonsterClass), info.vecOrigin, info.vecAngles, NULL);
+void AgWaveSpawner::SpawnWave(const std::vector<FirefightSpawnInfo>& waveSpawns, AgFirefight* pGameType)  
+{  
+	if (!pGameType || waveSpawns.empty())  
+		return;  
 
-			if (pEnt)
-				pGameType->RegisterSpawnedMonster(pEnt);
-		}
-	}
+	for (const auto& spawn : waveSpawns)  
+	{  
+		for (int i = 0; i < spawn.iCount; ++i)  
+		{  
+			CBaseEntity* pEnt = CBaseEntity::Create(const_cast<char*>(STRING(spawn.iszMonsterClass)), spawn.vecOrigin, spawn.vecAngles, nullptr);   
+		}  
+	}  
 }
