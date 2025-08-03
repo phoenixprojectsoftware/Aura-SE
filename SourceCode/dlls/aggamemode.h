@@ -44,7 +44,22 @@ AgString AgGamename();
 AgString AgGamedescription();
 
 //++ muphicks
-enum enumGameType { STANDARD = 0, ARENA = 1, LMS = 2, CTF = 3, ARCADE = 4, SGBOW = 5, INSTAGIB = 6, DOM = 7, HIDEANDSEEK = 8, FIREFIGHT = 9, FIESTA = 10, SWAT = 11 };
+enum enumGameType
+{
+    STANDARD = 0,
+    ARENA = 1,
+    LMS = 2,
+    CTF = 3,
+    ARCADE = 4,
+    SGBOW = 5,
+    INSTAGIB = 6,
+    DOM = 7,
+    HIDEANDSEEK = 8,
+    FIREFIGHT = 9,
+    FIESTAFIGHT = 10,
+    FIESTA = 11,
+    SWAT = 12
+};
 //-- muphicks
 extern DLL_GLOBAL BYTE g_GameType;
 inline BYTE AgGametype()

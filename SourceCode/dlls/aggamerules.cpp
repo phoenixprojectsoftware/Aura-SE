@@ -92,7 +92,7 @@ bool AgGameRules::AgThink()
     {
         m_Hideandseek.Think();
     }
-    else if (FIREFIGHT == AgGametype())
+    else if (FIREFIGHT == AgGametype() || FIESTAFIGHT == AgGametype())
     {
         m_Firefight.Think();
     }
