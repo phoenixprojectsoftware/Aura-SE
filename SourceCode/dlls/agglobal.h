@@ -251,8 +251,6 @@ void AgStripColors(char* pszString);
 void AgGetDetails(char* pszDetails, int iMaxSize, int* piSize);
 void AgGetPlayerInfo(char* pszPlayerInfo, int iMaxSize, int* piSize);
 
-char* AgOSVersion();
-
 AgString AgReadFile(const char* pszFile);
 
 void AgDisplayGreetingMessage(const char* pszAuthID);
