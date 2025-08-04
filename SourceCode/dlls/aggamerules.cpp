@@ -415,7 +415,6 @@ void AgGameRules::PlayerSpawn(CBasePlayer* pPlayer)
                     "weapon_gauss",
                     "weapon_egon",
                     "weapon_rpg",
-                    "weapon_snark",
                     "weapon_m249",
                     "weapon_eagle",
                     "weapon_displacer",
