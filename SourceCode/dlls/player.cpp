@@ -2138,48 +2138,48 @@ void CBasePlayer::PreThink(void)
 	if ( g_fGameOver )
 		return;         // intermission or finale
 
-  //++ BulliT
-  if (IsSpectator() || ARENA == AgGametype() || LMS == AgGametype())
-    EnableControl(TRUE);
-  else
-    EnableControl(!g_bPaused);
+	//++ BulliT
+	if (IsSpectator() || ARENA == AgGametype() || LMS == AgGametype())
+		EnableControl(TRUE);
+	else
+		EnableControl(!g_bPaused);
 
-  // BlueNightHawk : Infinite Ammo
-  if ((sv_aura_infinite_ammo.value != 0 || FIESTA == AgGametype() || FIESTAFIGHT == AgGametype()) && m_pActiveItem)
-  {
-	  ItemInfo p;
-	  m_pActiveItem->GetItemInfo(&p);
+	// BlueNightHawk : Infinite Ammo
+	if ((sv_aura_infinite_ammo.value != 0 || FIESTA == AgGametype() || FIESTAFIGHT == AgGametype()) && m_pActiveItem)
+	{
+		ItemInfo p;
+		m_pActiveItem->GetItemInfo(&p);
 
-	 if (sv_aura_infinite_ammo.value == 1)
-	  {
-		  // mode 1 - bottomless clip. refill every frame.
-		  ((CBasePlayerWeapon*)m_pActiveItem)->m_iClip = p.iMaxClip;
+		if (sv_aura_infinite_ammo.value == 1)
+		{
+			// mode 1 - bottomless clip. refill every frame.
+			((CBasePlayerWeapon*)m_pActiveItem)->m_iClip = p.iMaxClip;
 
-		  if (m_pActiveItem->PrimaryAmmoIndex() != -1 && p.iMaxAmmo1 > 0)
-			  m_rgAmmo[m_pActiveItem->PrimaryAmmoIndex()] = p.iMaxAmmo1;
+			if (m_pActiveItem->PrimaryAmmoIndex() != -1 && p.iMaxAmmo1 > 0)
+				m_rgAmmo[m_pActiveItem->PrimaryAmmoIndex()] = p.iMaxAmmo1;
 
-		  if (m_pActiveItem->SecondaryAmmoIndex() != -1 && p.iMaxAmmo2 > 0)
-			  m_rgAmmo[m_pActiveItem->SecondaryAmmoIndex()] = p.iMaxAmmo2;
-	  }
-	  else if (sv_aura_infinite_ammo.value == 2 || FIESTA == AgGametype() || FIESTAFIGHT == AgGametype())
-	  {
-		  // mode 2 - refillable clip, infinite reserve
+			if (m_pActiveItem->SecondaryAmmoIndex() != -1 && p.iMaxAmmo2 > 0)
+				m_rgAmmo[m_pActiveItem->SecondaryAmmoIndex()] = p.iMaxAmmo2;
+		}
+		else if (sv_aura_infinite_ammo.value == 2 || FIESTA == AgGametype() || FIESTAFIGHT == AgGametype())
+		{
+		// mode 2 - refillable clip, infinite reserve
 
-		  // set reserve ammo to max and allow normal reloading
-		  if (m_pActiveItem->PrimaryAmmoIndex() != -1 && p.iMaxAmmo1 > 0)
-		  {
-			  m_rgAmmo[m_pActiveItem->PrimaryAmmoIndex()] = p.iMaxAmmo1;
-		  }
+		// set reserve ammo to max and allow normal reloading
+		if (m_pActiveItem->PrimaryAmmoIndex() != -1 && p.iMaxAmmo1 > 0)
+		{
+			m_rgAmmo[m_pActiveItem->PrimaryAmmoIndex()] = p.iMaxAmmo1;
+		}
 
-		  if (m_pActiveItem->SecondaryAmmoIndex() != -1 && p.iMaxAmmo2 > 0)
-		  {
-			  m_rgAmmo[m_pActiveItem->SecondaryAmmoIndex()] = p.iMaxAmmo2;
-		  }
-	  }
-  }
+		if (m_pActiveItem->SecondaryAmmoIndex() != -1 && p.iMaxAmmo2 > 0)
+		{
+			m_rgAmmo[m_pActiveItem->SecondaryAmmoIndex()] = p.iMaxAmmo2;
+		}
+	}
+}
 
-  if (m_fDisplayGamemode > 0 && m_fDisplayGamemode < gpGlobals->time)
-  {
+	if (m_fDisplayGamemode > 0 && m_fDisplayGamemode < gpGlobals->time)
+	{
     //Print gameinfo text.
 #ifdef AG_NO_CLIENT_DLL
       //Print gameinfo text.
