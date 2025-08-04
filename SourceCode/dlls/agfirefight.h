@@ -1,6 +1,6 @@
 /****
 *
-* Copyright © 2021-2025 The Phoenix Project Software. Some Rights Reserved.
+* Copyright (c) 2021-2025 The Phoenix Project Software. Some Rights Reserved.
 *
 * AURA
 *
@@ -12,47 +12,83 @@
 #ifndef FIREFIGHT_H
 #define FIREFIGHT_H
 
-#if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER
 
 #include <vector>
+#include <string>
+#include <set>
 
-class CBaseEntity;
-class CBasePlayer;
-struct FirefightSpawnInfo;
+enum FirefightState
+{
+	FF_WAITING,
+	FF_SPAWNING,
+	FF_FIGHTING,
+	FF_ROUND_OVER,
+	FF_GAME_OVER
+};
 
-class AgFirefight : public CBaseEntity
+struct AgFFWaveSpawn
+{
+	int waveNumber;
+	Vector origin;
+	Vector angles;
+	char monsterClass[64];
+	int difficulty;
+};
+
+class AgFirefightFileItem
+{
+public:
+	AgFirefightFileItem();
+	~AgFirefightFileItem();
+
+	char m_szName[64];
+	Vector m_vOrigin;
+	Vector m_vAngles;
+	char m_szWaveID[32];
+};
+
+class AgFirefightFileCache
+{
+public:
+	AgFirefightFileCache();
+	~AgFirefightFileCache();
+
+	void Load();
+	void PrecacheAllMonsters();
+	const std::vector<AgFFWaveSpawn>& GetWaveSpawns(int waveNumber) const;
+
+private:
+	std::vector<AgFirefightFileItem*> m_lstFileItems;
+	std::set<std::string> m_PrecachedMonsters;
+	std::vector<AgFFWaveSpawn> m_spawnPoints;
+};
+
+
+class AgFirefight
 {
 public:
 	AgFirefight();
-	virtual ~AgFirefight();
+	~AgFirefight();
 
 	void Think();
-	void Init();
-	void Start();
-	void PlayerDied(CBasePlayer* pPlayer);
-
-	void StartNextWave();
-	void RegisterSpawnedMonster(CBaseEntity* pEnt);
-	void OnMonsterDied(CBaseEntity* pEnt);
-	void CheckWaveComplete();
-
-	std::vector<FirefightSpawnInfo> GetWaveDefinition(int set, int round, int wave);
 
 private:
-	int m_iCurrentSet = 1;
-	int m_iCurrentRound = 1;
-	int m_iCurrentWave = 0;
+	void StartNextWave();
+	void SpawnWaveEnemies();
+	void CheckWaveStatus();
+	void EndRound();
+	void GameOver();
 
-	int m_iMaxSets = 3;
-	int m_iRoundsPerSet = 3;
-	int m_iWavesPerSound = 5;
+	float m_flNextThinkTime;
+	float m_flWaveStartTime;
+	int m_iWaveNumber;
+	int m_iEnemiesRemaining;
 
-	int m_iSharedLives = 7;
-	bool m_bInWave = false;
+	FirefightState m_State;
 
-	std::vector<EHANDLE> m_vecMonstersAlive;
+	std::vector<EHANDLE> m_Enemies;
+	AgFirefightFileCache m_FileCache;
 };
 
 #endif // FIREFIGHT_H

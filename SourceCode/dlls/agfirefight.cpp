@@ -1,6 +1,6 @@
 /****
 * 
-* Copyright © 2021-2025 The Phoenix Project Software. Some Rights Reserved.
+* Copyright (c) 2021-2025 The Phoenix Project Software. Some Rights Reserved.
 * 
 * AURA
 * 
@@ -12,156 +12,193 @@
 #include "extdll.h"
 #include "util.h"
 #include "cbase.h"
-#include "player.h"
-#include "weapons.h"
 #include "gamerules.h"
-
-#include "agglobal.h"
 #include "agfirefight.h"
-#include "agfirefight_spawner.h"
+#include "aggamerules.h"
+#include "agglobal.h"
+#include "monsters.h" // for spawning monsters
 
-#include "algo.h"
-
-#include <vector>
-#include <algorithm>
-
-extern cvar_t coopmode;
-bool m_bCoopStarted = false;
-
-AgFirefight::AgFirefight()
+CBaseMonster* UTIL_SpawnMonster(const char* pszClassname, const Vector& vecOrigin, const Vector& vecAngles)
 {
-	ALERT(at_console, "fart\n");
+	edict_t* pent = CREATE_NAMED_ENTITY(MAKE_STRING(pszClassname));
+	if (!pent)
+		return nullptr;
+
+	CBaseEntity* pEnt = CBaseEntity::Instance(pent);
+	if (!pEnt)
+		return nullptr;
+
+	pEnt->pev->origin = vecOrigin;
+	pEnt->pev->angles = vecAngles;
+
+	DispatchSpawn(pEnt->edict());
+
+	return pEnt->MyMonsterPointer(); // returns null if not a monster
 }
 
-AgFirefight::~AgFirefight()
+void AgFirefightFileCache::Load()
 {
+	char szFile[MAX_PATH];
+	sprintf(szFile, "%s/ff/%s.ff", AgGetDirectory(), STRING(gpGlobals->mapname));
 
-}
-
-void AgFirefight::Init()
-{
-	ALERT(at_console, "Firefight gametype initialized.\n");
-}
-
-std::vector<FirefightSpawnInfo> AgFirefight::GetWaveDefinition(int set, int round, int wave)
-{
-	std::vector<FirefightSpawnInfo> result;
-
-	if (set == 1 && round == 1 && wave == 1)
+	FILE* pFile = fopen(szFile, "r");
+	if (!pFile)
 	{
-		result.push_back(FirefightSpawnInfo{Vector(512,512,0), Vector(0,0,0), MAKE_STRING("monster_hgrunt")});
+		ALERT(at_console, "This map does not support Firefight!\n");
+		UTIL_ClientPrintAll(HUD_PRINTCENTER, "This map does not support Firefight\n");
+		return;
+	}
+
+	char line[256];
+	while (fgets(line, sizeof(line), pFile))
+	{
+		if (line[0] == '#' || line[0] == '\n') // skip comments & empty lines
+			continue;
+
+		AgFFWaveSpawn spawn;
+		sscanf(line, "%d %f %f %f %f %f %f %s %d", &spawn.waveNumber, &spawn.origin.x, &spawn.origin.y, &spawn.origin.z, &spawn.angles.x, &spawn.angles.y, &spawn.angles.z, spawn.monsterClass, &spawn.difficulty);
+
+		m_spawnPoints.push_back(spawn);
+	}
+
+	fclose(pFile);
+}
+
+const std::vector<AgFFWaveSpawn>& AgFirefightFileCache::GetWaveSpawns(int waveNumber) const
+{
+	static std::vector<AgFFWaveSpawn> empty;
+
+	// could cache results if needed, for now just filter on the fly
+	static std::vector<AgFFWaveSpawn> result;
+
+	result.clear();
+
+	for (const auto& spawn : m_spawnPoints)
+	{
+		if (spawn.waveNumber == waveNumber)
+			result.push_back(spawn);
 	}
 
 	return result;
 }
 
-void AgFirefight::StartNextWave()
+extern AgFirefightFileCache g_FirefightFileCache;
+
+AgFirefight::AgFirefight()
 {
-	if (m_bInWave)
-		return;
-
-	m_bInWave = true;
-	m_iCurrentWave++;
-	if (m_iCurrentWave > m_iWavesPerSound)
-	{
-		m_iCurrentWave = 1;
-		m_iCurrentRound++;
-
-		if (m_iCurrentRound > m_iRoundsPerSet)
-		{
-			m_iCurrentRound = 1;
-			m_iCurrentSet++;
-
-			if (m_iCurrentSet > m_iMaxSets)
-			{
-				AgSay(NULL, "All sets completed! Game over.");
-				// TODO: SET INTERMISSION  
-				return;
-			}
-
-			char setbuffer[128];
-			snprintf(setbuffer, sizeof(setbuffer), "Set %d begins.", m_iCurrentSet);
-			AgSay(NULL, setbuffer);
-		}
-
-		char roundbuffer[128];
-		snprintf(roundbuffer, sizeof(roundbuffer), "Round %d begins.", m_iCurrentRound);
-		AgSay(NULL, roundbuffer);
-	}
-	char wavebuffer[128];
-	snprintf(wavebuffer, sizeof(wavebuffer), "Wave %d begins.", m_iCurrentWave);
-	AgSay(NULL, wavebuffer);
-
-	auto wave = GetWaveDefinition(m_iCurrentSet, m_iCurrentRound, m_iCurrentWave);
-	AgWaveSpawner::SpawnWave(wave, this);
+	m_State = FF_WAITING;
+	m_flNextThinkTime = gpGlobals->time;
+	m_flWaveStartTime = 0.0f;
+	m_iWaveNumber = 0;
+	m_iEnemiesRemaining = 0;
+	m_FileCache.Load();
 }
 
-void AgFirefight::CheckWaveComplete()
+AgFirefight::~AgFirefight()
 {
-	m_vecMonstersAlive.erase(
-		std::remove_if(m_vecMonstersAlive.begin(), m_vecMonstersAlive.end(),
-			[](EHANDLE& h) { return h.Get() == nullptr; }),
-		m_vecMonstersAlive.end());
-
-	if (m_vecMonstersAlive.empty())
-	{
-		m_bInWave = false;
-		AgSay(NULL, "Wave cleared!");
-
-		// Delay before next wave
-		SetThink(&AgFirefight::StartNextWave);
-		pev->nextthink = gpGlobals->time + 5.0f;
-	}
-}
-
-
-void AgFirefight::RegisterSpawnedMonster(CBaseEntity* pEnt)
-{
-	EHANDLE handle;
-	handle = pEnt;
-
-	m_vecMonstersAlive.push_back(handle);
-}
-
-void AgFirefight::OnMonsterDied(CBaseEntity* pEnt)
-{
-	m_vecMonstersAlive.erase(
-		std::remove_if(
-			m_vecMonstersAlive.begin(),
-			m_vecMonstersAlive.end(),
-			[pEnt](EHANDLE& h)
-			{
-				return h == pEnt;
-			}
-		), m_vecMonstersAlive.end());
-
-	CheckWaveComplete();
-}
-
-void AgFirefight::PlayerDied(CBasePlayer* pPlayer)
-{
-	if (--m_iSharedLives <= 0)
-	{
-		AgSay(NULL, "All lives lost! Game over.");
-		// TODO: SET INTERMISSION
-	}
-	else
-	{
-		char pdownbuffer[128];
-		snprintf(pdownbuffer, sizeof(pdownbuffer), "Player down! Shared lives remaining: %d", m_iSharedLives);
-		AgSay(NULL, pdownbuffer);
-	}
-}
-
-void AgFirefight::Start()
-{
-	AgSay(NULL, "WELCOME TO FIREFIGHT!");
-	StartNextWave();
 }
 
 void AgFirefight::Think()
 {
-	if( !m_bCoopStarted)
-		Start();
-	m_bCoopStarted = true;
+	if (gpGlobals->time < m_flNextThinkTime)
+		return;
+
+	m_flNextThinkTime = gpGlobals->time + 0.1f; // think every 0.1s
+
+	switch (m_State)
+	{
+	case FF_WAITING:
+		if (UTIL_IsMultiplayer())
+		{
+			m_iWaveNumber = 1;
+			StartNextWave();
+		}
+		break;
+
+	case FF_SPAWNING:
+		SpawnWaveEnemies();
+		m_State = FF_FIGHTING;
+		break;
+
+	case FF_FIGHTING:
+		CheckWaveStatus();
+		break;
+
+	case FF_ROUND_OVER:
+		if (gpGlobals->time > m_flWaveStartTime + 5.0f)
+		{
+			++m_iWaveNumber;
+			StartNextWave();
+		}
+		break;
+
+	case FF_GAME_OVER:
+		// do intermission here?
+		break;
+	}
+}
+
+void AgFirefight::StartNextWave()
+{
+	m_Enemies.clear();
+	m_State = FF_SPAWNING;
+	m_flWaveStartTime = gpGlobals->time;
+
+	g_FirefightFileCache.PrecacheAllMonsters(); // precache the monsters before spawning them
+
+	// could add dynamic difficulty based on wave number
+	UTIL_ClientPrintAll(HUD_PRINTCENTER, UTIL_VarArgs("Wave %d starting", m_iWaveNumber));
+}
+
+void AgFirefight::SpawnWaveEnemies()
+{
+	m_Enemies.clear();
+
+	const auto& spawns = m_FileCache.GetWaveSpawns(m_iWaveNumber);
+
+	for (const auto& spawn : spawns)
+	{
+		CBaseMonster* pMonster = UTIL_SpawnMonster(spawn.monsterClass, spawn.origin, spawn.angles);
+		if (pMonster)
+		{
+			EHANDLE h;
+			h = pMonster;
+			m_Enemies.push_back(h);
+		}
+	}
+
+	m_iEnemiesRemaining = m_Enemies.size();
+}
+
+void AgFirefight::CheckWaveStatus()
+{
+	m_iEnemiesRemaining = 0;
+
+	for (auto& hEnt : m_Enemies)
+	{
+		CBaseEntity* pEnt = CBaseEntity::Instance(hEnt);
+		if (pEnt && pEnt->IsAlive())
+		{
+			m_iEnemiesRemaining++;
+		}
+	}
+
+	if (m_iEnemiesRemaining == 0)
+	{
+		UTIL_ClientPrintAll(HUD_PRINTCENTER, UTIL_VarArgs("Wave %d cleared", m_iWaveNumber));
+		m_State = FF_ROUND_OVER;
+		m_flWaveStartTime = gpGlobals->time;
+	}
+}
+
+void AgFirefight::GameOver()
+{
+	UTIL_ClientPrintAll(HUD_PRINTCENTER, "Game over");
+	m_State = FF_GAME_OVER;
+}
+
+void AgFirefight::EndRound()
+{
+	// do we need more cleanup here??
+	m_State = FF_ROUND_OVER;
 }

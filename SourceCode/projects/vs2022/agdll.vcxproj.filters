@@ -528,10 +528,10 @@
     <ClCompile Include="..\..\dlls\agfiesta.cpp">
       <Filter>Source Files\dlls</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\dlls\agfirefight_spawner.cpp">
+    <ClCompile Include="..\..\dlls\agswat.cpp">
       <Filter>Source Files\dlls</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\dlls\agswat.cpp">
+    <ClCompile Include="..\..\dlls\agfirefight_cache.cpp">
       <Filter>Source Files\dlls</Filter>
     </ClCompile>
   </ItemGroup>
@@ -840,9 +840,6 @@
       <Filter>Header Files\dlls</Filter>
     </ClInclude>
     <ClInclude Include="..\..\dlls\agfiesta.h">
-      <Filter>Header Files\dlls</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\dlls\agfirefight_spawner.h">
       <Filter>Header Files\dlls</Filter>
     </ClInclude>
     <ClInclude Include="..\..\dlls\agswat.h">
