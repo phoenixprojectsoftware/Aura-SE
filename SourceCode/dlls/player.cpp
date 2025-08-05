@@ -4752,8 +4752,8 @@ void CBasePlayer::RunShieldUpdates(void)
 				STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_charge.wav");
 #else
 				STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_lp.wav");
-#endif
 				EMIT_SOUND(ENT(pev), CHAN_STATIC, "player/shield_finish.wav", 1, ATTN_NORM);
+#endif
 				bAreWeAt100 = true;
 				bAreWeMaxxed = true;
 			}
