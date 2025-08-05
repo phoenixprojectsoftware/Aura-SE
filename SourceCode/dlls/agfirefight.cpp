@@ -18,7 +18,7 @@
 #include "agglobal.h"
 #include "monsters.h" // for spawning monsters
 
-AgFirefight g_AgFirefight;
+// AgFirefight g_AgFirefight;
 
 CBaseMonster* UTIL_SpawnMonster(const char* pszClassname, const Vector& vecOrigin, const Vector& vecAngles)
 {
@@ -88,7 +88,7 @@ AgFirefightFileCache g_FirefightFileCache;
 
 AgFirefight::AgFirefight()
 {
-	g_FirefightFileCache.PrecacheAllMonsters(); // precache the monsters before spawning them
+	// g_FirefightFileCache.PrecacheAllMonsters(); // precache the monsters before spawning them
 	m_State = FF_WAITING;
 	m_flNextThinkTime = gpGlobals->time;
 	m_flWaveStartTime = 0.0f;
@@ -104,7 +104,7 @@ AgFirefight::~AgFirefight()
 void AgFirefight::Precache()
 {
 	m_FileCache.Load();
-	m_FileCache.PrecacheAllMonsters();
+	// m_FileCache.PrecacheAllMonsters();
 }
 
 void AgFirefight::Think()
@@ -153,7 +153,7 @@ void AgFirefight::StartNextWave()
 	m_State = FF_SPAWNING;
 	m_flWaveStartTime = gpGlobals->time;
 
-	g_FirefightFileCache.PrecacheAllMonsters(); // precache the monsters before spawning them
+	// g_FirefightFileCache.PrecacheAllMonsters(); // precache the monsters before spawning them
 
 	// could add dynamic difficulty based on wave number
 	UTIL_ClientPrintAll(HUD_PRINTCENTER, UTIL_VarArgs("Wave %d starting", m_iWaveNumber));
