@@ -47,7 +47,6 @@ void AgFirefightFileCache::Load()
 	if (!pFile)
 	{
 		ALERT(at_console, "This map does not support Firefight!\n");
-		UTIL_ClientPrintAll(HUD_PRINTCENTER, "This map does not support Firefight\n");
 		return;
 	}
 

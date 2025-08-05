@@ -4655,7 +4655,11 @@ void CBasePlayer::RunShieldUpdates(void)
 
 	if (sv_aura_regeneration.value != 0 && pev->armorvalue == MAX_NORMAL_BATTERY && !bAreWeMaxxed) // SHIELD AT 100%
 	{
+#ifdef _HALO
+		STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_charge.wav");
+#else
 		STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_lp.wav");
+#endif
 		bAreWeMaxxed = true;
 #ifdef _DEBUG
 		ALERT(at_console, "bAreWeMaxxed is now true\n");
@@ -4744,7 +4748,11 @@ void CBasePlayer::RunShieldUpdates(void)
 				m_flNextSuitRegenTime = 0.0f;
 				m_fRegenOn = false;
 				STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_empty.wav");
+#ifdef _HALO
+				STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_charge.wav");
+#else
 				STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_lp.wav");
+#endif
 				EMIT_SOUND(ENT(pev), CHAN_STATIC, "player/shield_finish.wav", 1, ATTN_NORM);
 				bAreWeAt100 = true;
 				bAreWeMaxxed = true;
