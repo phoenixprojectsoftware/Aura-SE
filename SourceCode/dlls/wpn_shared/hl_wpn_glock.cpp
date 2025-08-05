@@ -18,6 +18,7 @@
 #include "cbase.h"
 #include "monsters.h"
 #include "weapons.h"
+#include "weapon_hierarchy.h"
 #include "nodes.h"
 #include "player.h"
 //++ BulliT
@@ -89,8 +90,12 @@ int CGlock::GetItemInfo(ItemInfo *p)
 	p->pszAmmo2 = NULL;
 	p->iMaxAmmo2 = -1;
 	p->iMaxClip = GLOCK_MAX_CLIP;
-	p->iSlot = 1;
-	p->iPosition = 0;
+#ifdef _HALO
+	p->iSlot = WPN_MAGNUM_SLOT;
+#else
+	p->iSlot = WPN_HANDGUN_SLOT;
+#endif
+	p->iPosition = WPN_GLOCK_POS;
 	p->iFlags = 0;
 	p->iId = m_iId = WEAPON_GLOCK;
 	p->iWeight = GLOCK_WEIGHT;

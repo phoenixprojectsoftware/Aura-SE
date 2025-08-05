@@ -17,6 +17,7 @@
 #include "../util.h"
 #include "../cbase.h"
 #include "../weapons.h"
+#include "../weapon_hierarchy.h"
 #include "../player.h"
 
 #include "CPenguin.h"
@@ -212,8 +213,8 @@ int CPenguin::GetItemInfo(ItemInfo* p)
 	p->pszAmmo2 = nullptr;
 	p->iMaxAmmo2 = WEAPON_NOCLIP;
 	p->iMaxClip = WEAPON_NOCLIP;
-	p->iSlot = 4;
-	p->iPosition = 4;
+	p->iSlot = WPN_EXPL_SLOT;
+	p->iPosition = WPN_PENGUIN_POS;
 	p->iId = m_iId = WEAPON_PENGUIN;
 	p->iWeight = PENGUIN_WEIGHT;
 	p->iFlags = ITEM_FLAG_LIMITINWORLD | ITEM_FLAG_EXHAUSTIBLE;

@@ -12,13 +12,14 @@
 *   without written permission from Valve LLC.
 *
 ****/
-#if !defined( OEM_BUILD ) && !defined( HLDEMO_BUILD )
+#if !defined( OEM_BUILD ) && !defined( HLDEMO_BUILD ) && !defined (_HALO)
 
 #include "extdll.h"
 #include "util.h"
 #include "cbase.h"
 #include "monsters.h"
 #include "weapons.h"
+#include "weapon_hierarchy.h"
 #include "nodes.h"
 #include "player.h"
 #include "soundent.h"
@@ -456,8 +457,8 @@ int CSqueak::GetItemInfo(ItemInfo *p)
 	p->pszAmmo2 = NULL;
 	p->iMaxAmmo2 = -1;
 	p->iMaxClip = WEAPON_NOCLIP;
-	p->iSlot = 4;
-	p->iPosition = 3;
+	p->iSlot = WPN_EXPL_SLOT;
+	p->iPosition = WPN_SNARK_POS;
 	p->iId = m_iId = WEAPON_SNARK;
 	p->iWeight = SNARK_WEIGHT;
 	p->iFlags = ITEM_FLAG_LIMITINWORLD | ITEM_FLAG_EXHAUSTIBLE;

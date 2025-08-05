@@ -17,6 +17,7 @@
 #include "../util.h"
 #include "../cbase.h"
 #include "../weapons.h"
+#include "../weapon_hierarchy.h"
 #include "../player.h"
 #include "../skill.h"
 
@@ -272,8 +273,8 @@ int CKnife::GetItemInfo(ItemInfo* p)
 	p->pszAmmo2 = nullptr;
 	p->iMaxAmmo2 = WEAPON_NOCLIP;
 	p->iMaxClip = WEAPON_NOCLIP;
-	p->iSlot = 0;
-	p->iPosition = 2;
+	p->iSlot = WPN_MELEE_SLOT;
+	p->iPosition = WPN_KNIFE_POS;
 	p->iId = m_iId = WEAPON_KNIFE;
 	p->iWeight = 0;
 	return true;

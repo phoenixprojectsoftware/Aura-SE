@@ -845,5 +845,8 @@
     <ClInclude Include="..\..\dlls\agswat.h">
       <Filter>Header Files\dlls</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\dlls\weapon_hierarchy.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

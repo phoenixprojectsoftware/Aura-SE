@@ -19,6 +19,7 @@
 #include "cbase.h"
 #include "monsters.h"
 #include "weapons.h"
+#include "weapon_hierarchy.h"
 #include "nodes.h"
 #include "player.h"
 #include "soundent.h"
@@ -115,8 +116,12 @@ int CGauss::GetItemInfo(ItemInfo* p)
 	p->pszAmmo2 = NULL;
 	p->iMaxAmmo2 = -1;
 	p->iMaxClip = WEAPON_NOCLIP;
-	p->iSlot = 3;
-	p->iPosition = 1;
+#ifdef _HALO
+	p->iSlot = WPN_EXPL_SLOT;
+#else
+	p->iSlot = WPN_FOREIGN_SLOT;
+#endif
+	p->iPosition = WPN_GAUSS_POS;
 	p->iId = m_iId = WEAPON_GAUSS;
 	p->iFlags = 0;
 	p->iWeight = GAUSS_WEIGHT;

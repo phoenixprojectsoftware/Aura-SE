@@ -18,6 +18,7 @@
 #include "../player.h"
 #include "../weapons.h"
 #include "../gamerules.h"
+#include "../weapon_hierarchy.h"
 
 #include "CSniperRifle.h"
 
@@ -261,11 +262,12 @@ int CSniperRifle::GetItemInfo(ItemInfo* p)
 	p->iMaxAmmo2 = WEAPON_NOCLIP;
 #ifdef _HALO
 	p->iMaxClip = BOLT_MAX_CARRY;
+	p->iSlot = WPN_PRECISION_SLOT;
 #else
 	p->iMaxClip = SNIPERRIFLE_MAX_CLIP;
+	p->iSlot = WPN_GEARBOX1_SLOT;
 #endif
-	p->iSlot = 5;
-	p->iPosition = 2;
+	p->iPosition = WPN_SNIPERRIFLE_POS;
 	p->iFlags = 0;
 	p->iId = m_iId = WEAPON_SNIPERRIFLE;
 	p->iWeight = SNIPERRIFLE_WEIGHT;

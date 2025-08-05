@@ -20,6 +20,7 @@
 #include "../cbase.h"
 #include "../monsters.h"
 #include "../weapons.h"
+#include "../weapon_hierarchy.h"
 #include "CPipewrench.h"
 #include "../nodes.h"
 #include "../player.h"
@@ -515,8 +516,8 @@ int CPipewrench::GetItemInfo(ItemInfo* p)
 	p->pszAmmo2 = nullptr;
 	p->iMaxAmmo2 = WEAPON_NOCLIP;
 	p->iMaxClip = WEAPON_NOCLIP;
-	p->iSlot = 0;
-	p->iPosition = 1;
+	p->iSlot = WPN_MELEE_SLOT;
+	p->iPosition = WPN_PIPEWRENCH_POS;
 	p->iId = m_iId = WEAPON_PIPEWRENCH;
 	p->iWeight = PIPEWRENCH_WEIGHT;
 

@@ -523,6 +523,7 @@
     <ClInclude Include="..\..\dlls\util.h" />
     <ClInclude Include="..\..\dlls\vector.h" />
     <ClInclude Include="..\..\dlls\weapons.h" />
+    <ClInclude Include="..\..\dlls\weapon_hierarchy.h" />
     <ClInclude Include="..\..\engine\eiface.h" />
     <ClInclude Include="..\..\ministl\algo.h" />
     <ClInclude Include="..\..\pm_shared\pm_debug.h" />
