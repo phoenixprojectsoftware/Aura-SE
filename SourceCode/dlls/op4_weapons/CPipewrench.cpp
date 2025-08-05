@@ -13,6 +13,8 @@
 *
 ****/
 
+#ifndef _HALO
+
 #include "../extdll.h"
 #include "../util.h"
 #include "../cbase.h"
@@ -520,3 +522,5 @@ int CPipewrench::GetItemInfo(ItemInfo* p)
 
 	return true;
 }
+
+#endif // _HALO

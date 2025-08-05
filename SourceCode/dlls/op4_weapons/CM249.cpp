@@ -12,6 +12,7 @@
 *   without written permission from Valve LLC.
 *
 ****/
+#ifndef _HALO
 #include "../extdll.h"
 #include "../util.h"
 #include "../cbase.h"
@@ -393,3 +394,5 @@ public:
 };
 
 LINK_ENTITY_TO_CLASS(ammo_556, CAmmo556);
+
+#endif // _HALO

@@ -259,7 +259,10 @@ class CItemBattery : public CItem
 	}
 };
 
+// Remove item_battery from Halo
+#ifndef _HALO
 LINK_ENTITY_TO_CLASS(item_battery, CItemBattery);
+#endif
 
 
 class CItemAntidote : public CItem

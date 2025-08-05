@@ -12,6 +12,7 @@
 *   without written permission from Valve LLC.
 *
 ****/
+#ifndef _HALO
 #include "../extdll.h"
 #include "../util.h"
 #include "../cbase.h"
@@ -277,3 +278,5 @@ int CKnife::GetItemInfo(ItemInfo* p)
 	p->iWeight = 0;
 	return true;
 }
+
+#endif // _HALO

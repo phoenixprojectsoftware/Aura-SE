@@ -12,6 +12,7 @@
 *   without written permission from Valve LLC.
 *
 ****/
+#ifndef _HALO
 #include "../extdll.h"
 #include "../util.h"
 #include "../cbase.h"
@@ -488,3 +489,5 @@ CDisplacerBall* CDisplacerBall::CreateDisplacerBall(const Vector& vecOrigin, con
 
 	return pBall;
 }
+
+#endif // _HALO
