@@ -16,10 +16,16 @@
 #include "net_profiling.h"
 #include "eiface.h"
 #include "util.h"
+#include "cbase.h"
+#include "monsters.h"
 #include "game.h"
 
 //++ BulliT
 #include "agglobal.h"
+#include "aggamemode.h"
+
+#include <vector>
+#include "agfirefight.h"
 //-- Martin Webrant
 cvar_t	displaysoundlist = {"displaysoundlist","0"};
 
@@ -1353,6 +1359,9 @@ void GameDLLInit( void )
 	//++ BulliT
 	AgInitGame();
 	//-- Martin Webrant
+
+	if (FIREFIGHT == AgGametype())
+		g_AgFirefight.Precache();
 	SERVER_COMMAND( "exec skill.cfg\n" );
 	SERVER_COMMAND("exec skillopfor.cfg\n");
 }

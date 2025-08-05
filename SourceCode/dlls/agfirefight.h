@@ -71,6 +71,7 @@ public:
 	AgFirefight();
 	~AgFirefight();
 
+	void Precache();
 	void Think();
 
 private:
@@ -90,5 +91,7 @@ private:
 	std::vector<EHANDLE> m_Enemies;
 	AgFirefightFileCache m_FileCache;
 };
+
+extern AgFirefight g_AgFirefight;
 
 #endif // FIREFIGHT_H

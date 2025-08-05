@@ -18,6 +18,8 @@
 #include "agglobal.h"
 #include "monsters.h" // for spawning monsters
 
+AgFirefight g_AgFirefight;
+
 CBaseMonster* UTIL_SpawnMonster(const char* pszClassname, const Vector& vecOrigin, const Vector& vecAngles)
 {
 	edict_t* pent = CREATE_NAMED_ENTITY(MAKE_STRING(pszClassname));
@@ -82,10 +84,11 @@ const std::vector<AgFFWaveSpawn>& AgFirefightFileCache::GetWaveSpawns(int waveNu
 	return result;
 }
 
-extern AgFirefightFileCache g_FirefightFileCache;
+AgFirefightFileCache g_FirefightFileCache;
 
 AgFirefight::AgFirefight()
 {
+	g_FirefightFileCache.PrecacheAllMonsters(); // precache the monsters before spawning them
 	m_State = FF_WAITING;
 	m_flNextThinkTime = gpGlobals->time;
 	m_flWaveStartTime = 0.0f;
@@ -96,6 +99,12 @@ AgFirefight::AgFirefight()
 
 AgFirefight::~AgFirefight()
 {
+}
+
+void AgFirefight::Precache()
+{
+	m_FileCache.Load();
+	m_FileCache.PrecacheAllMonsters();
 }
 
 void AgFirefight::Think()

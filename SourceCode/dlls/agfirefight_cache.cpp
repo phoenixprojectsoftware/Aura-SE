@@ -44,35 +44,31 @@ void PrecacheMonsterResources(const char* pszMonsterClass)
 {
 	if (FStrEq(pszMonsterClass, "monster_hgrunt"))
 	{
-		PRECACHE_MODEL("models/hgrunt.mdl");
-
-		PRECACHE_SOUND("hgrunt/gr_mgun1.wav");
-		PRECACHE_SOUND("hgrunt/gr_mgun2.wav");
-
-		PRECACHE_SOUND("hgrunt/gr_die1.wav");
-		PRECACHE_SOUND("hgrunt/gr_die2.wav");
-		PRECACHE_SOUND("hgrunt/gr_die3.wav");
-
-		PRECACHE_SOUND("hgrunt/gr_pain1.wav");
-		PRECACHE_SOUND("hgrunt/gr_pain2.wav");
-		PRECACHE_SOUND("hgrunt/gr_pain3.wav");
-		PRECACHE_SOUND("hgrunt/gr_pain4.wav");
-		PRECACHE_SOUND("hgrunt/gr_pain5.wav");
-
-		PRECACHE_SOUND("hgrunt/gr_reload1.wav");
-
-		PRECACHE_SOUND("weapons/glauncher.wav");
-
-		PRECACHE_SOUND("weapons/sbarrel1.wav");
-
-		PRECACHE_SOUND("zombie/claw_miss2.wav");// because we use the basemonster SWIPE animation event
-
-		PRECACHE_SOUND("hgrunt/gr_kick.wav");
+		UTIL_PrecacheOther("monster_hgrunt");
 	}
 	else if (FStrEq(pszMonsterClass, "monster_alien_grunt"))
 	{
-		PRECACHE_MODEL("models/agrunt.mdl");
-		PRECACHE_SOUND("hassault/hw_shoot1.wav");
+		UTIL_PrecacheOther("monster_alien_grunt");
+	}
+	else if (FStrEq(pszMonsterClass, "monster_gargantua"))
+	{
+		UTIL_PrecacheOther("monster_gargantua");
+	}
+	else if (FStrEq(pszMonsterClass, "monster_bullchicken"))
+	{
+		UTIL_PrecacheOther("monster_bullchicken");
+	}
+	else if (FStrEq(pszMonsterClass, "monster_zombie"))
+	{
+		UTIL_PrecacheOther("monster_zombie");
+	}
+	else if (FStrEq(pszMonsterClass, "monster_zombie_torso"))
+	{
+		UTIL_PrecacheOther("monster_zombie_torso");
+	}
+	else if (FStrEq(pszMonsterClass, "monster_headcrab"))
+	{
+		UTIL_PrecacheOther("monster_headcrab");
 	}
 }
 
