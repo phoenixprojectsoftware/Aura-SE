@@ -414,6 +414,19 @@ void AgGameRules::PlayerSpawn(CBasePlayer* pPlayer)
 
             if (FIESTA == AgGametype() || FIESTAFIGHT == AgGametype())
             {
+#ifdef _HALO
+                const char* weaponList[] = {
+                    "weapon_9mmhandgun",
+                    "weapon_9mmAR",
+                    "weapon_shotgun",
+                    "weapon_hornetgun",
+                    "weapon_gauss",
+                    "weapon_m249",
+                    "weapon_crowbar",
+                    "weapon_smg",
+                    // "weapon_sword",
+                };
+#else
                 const char* weaponList[] = {
                     "weapon_9mmhandgun",
                     "weapon_357",
