@@ -343,18 +343,24 @@ void AgGameRules::PlayerSpawn(CBasePlayer* pPlayer)
                 pPlayer->GiveNamedItem("weapon_eagle");
             if (1 > ag_ban_displacer.value)
                 pPlayer->GiveNamedItem("weapon_displacer");
-            if (0 < ag_ban_grapple.value)
+            if (1 > ag_ban_grapple.value)
                 pPlayer->GiveNamedItem("weapon_grapple");
             if (1 > ag_ban_knife.value)
                 pPlayer->GiveNamedItem("weapon_knife");
-            if (0 < ag_ban_pipewrench.value)
+            if (1 > ag_ban_pipewrench.value)
                 pPlayer->GiveNamedItem("weapon_pipewrench");
             if (1 > ag_ban_shockrifle.value)
                 pPlayer->GiveNamedItem("weapon_shockrifle");
-            if (0 < ag_ban_sniperrifle.value)
+            if (1 > ag_ban_sniperrifle.value)
                 pPlayer->GiveNamedItem("weapon_sniperrifle");
             if (1 > ag_ban_sporelauncher.value)
                 pPlayer->GiveNamedItem("weapon_sporelauncher");
+#ifdef _HALO
+            if (1 > ag_ban_smg.value)
+                pPlayer->GiveNamedItem("weapon_smg");
+            if (1 > ag_ban_sword.value)
+                pPlayer->GiveNamedItem("weapon_sword");
+#endif
 
 
             if (1 > ag_ban_hgrenade.value)
@@ -423,6 +429,7 @@ void AgGameRules::PlayerSpawn(CBasePlayer* pPlayer)
                     "weapon_sniperrifle",
                     "weapon_sporelauncher",
                 };
+#endif
 
                 const int weaponCount = ARRAYSIZE(weaponList);
 
@@ -498,6 +505,12 @@ void AgGameRules::PlayerSpawn(CBasePlayer* pPlayer)
                     pPlayer->GiveNamedItem("weapon_sniperrifle");
                 if (0 < ag_start_sporelauncher.value)
                     pPlayer->GiveNamedItem("weapon_sporelauncher");
+#ifdef _HALO
+                if (0 < ag_start_smg.value)
+                    pPlayer->GiveNamedItem("weapon_smg");
+                if (0 < ag_start_sword.value)
+                    pPlayer->GiveNamedItem("weapon_sword");
+#endif
             }
 
                 if (0 < ag_start_hgrenade.value)
@@ -878,6 +891,10 @@ FILE_GLOBAL BANWEAPON s_Bans[] =
   "weapon_shockrifle", &ag_ban_shockrifle,
   "weapon_sniperrifle", &ag_ban_sniperrifle,
   "weapon_sporelauncher", &ag_ban_sporelauncher,
+#ifdef _HALO
+  "weapon_smg", &ag_ban_smg,
+  "weapon_sword", &ag_ban_sword,
+#endif
   "item_longjump",&ag_ban_longjump,
   "ammo_ARgrenades",&ag_ban_m203,
   "ammo_9mmclip",&ag_ban_9mmar,
@@ -1231,6 +1248,13 @@ void AgGameRules::RefreshSkillData(void)
     gSkillData.plrDmgShockRoachS = ag_dmg_shockrifle_s.value;
     gSkillData.plrDmgSpore = ag_dmg_spore.value;
     //-- Opposing Force Weapons
+
+    //++ Halo Weapons
+#ifdef _HALO
+    gSkillData.plrDmgMP5 = ag_dmg_smg.value;
+    // gSkillData.plrDmgSword = ag_dmg_sword.value;
+#endif
+    //-- Halo Weapons
 
     // Head
     gSkillData.plrHead = ag_headshot.value;

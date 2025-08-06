@@ -58,6 +58,9 @@
     <Filter Include="Header Files\dlls\rope">
       <UniqueIdentifier>{c1b5db1d-3fee-417a-8723-c1afb6770ee6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\dlls\halo_weapons">
+      <UniqueIdentifier>{6616a46c-fea2-4f56-8195-a33dc2b28eb8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\dlls\aflock.cpp">
@@ -533,6 +536,9 @@
     </ClCompile>
     <ClCompile Include="..\..\dlls\agfirefight_cache.cpp">
       <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\halo_weapons\smg.cpp">
+      <Filter>Source Files\dlls\halo_weapons</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

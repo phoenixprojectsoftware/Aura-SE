@@ -104,6 +104,11 @@ DLL_GLOBAL cvar_t   ag_ban_shockrifle = { "sv_aura_ban_shockrifle", "0" };
 DLL_GLOBAL cvar_t   ag_ban_sniperrifle = { "sv_aura_ban_sniper", "0" };
 DLL_GLOBAL cvar_t   ag_ban_sporelauncher = { "sv_aura_ban_sporelauncher", "0" };
 
+#ifdef _HALO
+DLL_GLOBAL cvar_t ag_ban_smg = { "sv_aura_ban_smg", "0" };
+DLL_GLOBAL cvar_t ag_ban_sword = { "sv_aura_ban_sword", "0" };
+#endif
+
 DLL_GLOBAL cvar_t	ag_ban_hgrenade = { "sv_aura_ban_hgrenade","0" };
 DLL_GLOBAL cvar_t	ag_ban_satchel = { "sv_aura_ban_satchel","0" };
 DLL_GLOBAL cvar_t	ag_ban_tripmine = { "sv_aura_ban_tripmine","0" };
@@ -135,6 +140,11 @@ DLL_GLOBAL cvar_t	ag_start_rpg = { "sv_aura_start_rpg","0" };
 DLL_GLOBAL cvar_t	ag_start_gauss = { "sv_aura_start_gauss","0" };
 DLL_GLOBAL cvar_t	ag_start_egon = { "sv_aura_start_egon","0" };
 DLL_GLOBAL cvar_t	ag_start_hornet = { "sv_aura_start_hornet","0" };
+
+#ifdef _HALO
+DLL_GLOBAL cvar_t ag_start_smg = { "sv_aura_start_smg", "0" };
+DLL_GLOBAL cvar_t ag_start_sword = { "sv_aura_start_sword", "0" };
+#endif
 
 DLL_GLOBAL cvar_t	ag_start_hgrenade = { "sv_aura_start_hgrenade","0" };
 DLL_GLOBAL cvar_t	ag_start_satchel = { "sv_aura_start_satchel","0" };
@@ -198,6 +208,12 @@ DLL_GLOBAL cvar_t ag_displacer_radius = { "sv_aura_displacer_radius", "300" }; /
 DLL_GLOBAL cvar_t ag_dmg_shockrifle_m = { "sv_aura_dmg_shockrifle_m", "15" };
 DLL_GLOBAL cvar_t ag_dmg_shockrifle_s = { "sv_aura_dmg_shockrifle_s", "15" };
 DLL_GLOBAL cvar_t ag_dmg_spore = { "sv_aura_dmg_spore", "50" };
+
+// Halo Weapons
+#ifdef _HALO
+DLL_GLOBAL cvar_t ag_dmg_smg = { "sv_aura_dmg_smg", "15" };
+DLL_GLOBAL cvar_t ag_dmg_sword = { "sv_aura_dmg_sword", "200" };
+#endif
 
 
 DLL_GLOBAL cvar_t	ag_max_spectators = { "sv_aura_max_spectators","5" };
@@ -341,6 +357,11 @@ void AgInitGame()
     CVAR_REGISTER(&ag_ban_sniperrifle);
     CVAR_REGISTER(&ag_ban_sporelauncher);
 
+#ifdef _HALO
+    CVAR_REGISTER(&ag_ban_smg);
+    CVAR_REGISTER(&ag_ban_sword);
+#endif
+
     CVAR_REGISTER(&ag_ban_hgrenade);
     CVAR_REGISTER(&ag_ban_satchel);
     CVAR_REGISTER(&ag_ban_tripmine);
@@ -382,6 +403,11 @@ void AgInitGame()
     CVAR_REGISTER(&ag_start_shockrifle);
     CVAR_REGISTER(&ag_start_sniperrifle);
     CVAR_REGISTER(&ag_start_sporelauncher);
+
+#ifdef _HALO
+    CVAR_REGISTER(&ag_start_smg);
+    CVAR_REGISTER(&ag_start_sword);
+#endif
 
     CVAR_REGISTER(&ag_start_hgrenade);
     CVAR_REGISTER(&ag_start_satchel);
@@ -435,6 +461,12 @@ void AgInitGame()
     CVAR_REGISTER(&ag_dmg_shockrifle_m);
     CVAR_REGISTER(&ag_dmg_shockrifle_s);
     CVAR_REGISTER(&ag_dmg_spore);
+
+    // Halo Weapons
+#ifdef _HALO
+    CVAR_REGISTER(&ag_dmg_smg);
+    CVAR_REGISTER(&ag_dmg_sword);
+#endif
 
     CVAR_REGISTER(&ag_allow_timeout);
 
