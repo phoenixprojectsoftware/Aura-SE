@@ -251,6 +251,7 @@ int gmsgStatusIcon = 0;
 int gmsgCTF = 0;
 int gmsgAuthID = 0;
 int gmsgCTFSound = 0;
+int gmsgDOMControlPointInfo = 0;
 int gmsgMapList = 0;
 int gmsgCTFFlag = 0;
 int gmsgCRC32 = 0;
@@ -334,6 +335,7 @@ void LinkUserMessages( void )
 	gmsgCTF = REG_USER_MSG("CTF", 2);         //CTF status
 	gmsgAuthID = REG_USER_MSG("AuthID", -1);     //Auth ID
 	gmsgCTFSound = REG_USER_MSG("CTFSound", 1);    //CTF Sound
+	gmsgDOMControlPointInfo = REG_USER_MSG("DOMCPInfo", -1); // DOM control point locale name
 	gmsgMapList = REG_USER_MSG("MapList", -1);    //MapList
 	gmsgCTFFlag = REG_USER_MSG("CTFFlag", 2);		  //Who is carrying the flags.
 	gmsgCRC32 = REG_USER_MSG("CRC32", -1);		  //Checksum, file

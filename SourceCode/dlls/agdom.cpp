@@ -23,6 +23,7 @@
 // flag model from aljosa@lovercic@siol.net then I will probably
 // make a new message if its required and add some new sounds.
 extern int gmsgCTFSound;
+extern int gmsgDOMControlPointInfo;
 enum DOMSound
 {
     YouHaveFlag = 0,
@@ -637,6 +638,13 @@ void AgDOMFileItemCache::Init()
             AgDOMControlPoint* pCP = (AgDOMControlPoint*)pEnt;
             strncpy(pCP->m_szLocation, pFileItem->m_szData1, sizeof(pCP->m_szLocation));
         }
+
+        ALERT(at_console, "Sending DOMCPInfo for ent %d with name %s\n", ENTINDEX(pEnt->edict()), pFileItem->m_szData1);
+        MESSAGE_BEGIN(MSG_ALL, gmsgDOMControlPointInfo);
+        WRITE_SHORT(ENTINDEX(pEnt->edict()));
+        WRITE_STRING(pFileItem->m_szData1);
+        MESSAGE_END();
+        ALERT(at_console, "Sending DOMCPInfo for ent %d with name %s\n", ENTINDEX(pEnt->edict()), pFileItem->m_szData1);
 
     }
 }
