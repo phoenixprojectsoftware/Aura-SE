@@ -14,6 +14,51 @@
 #include "agdom.h"
 
 #include <list>
+#include <vector>
+#include <string>
+
+extern int gmsgDOMControlPointInfo;
+
+static std::vector <std::pair<int, std::string>> g_PendingCPInfo;
+static bool g_bSentCPInfo = false;
+
+void SendControlPointInfo()
+{
+    if (g_bSentCPInfo)
+        return;
+
+    if (g_PendingCPInfo.empty())
+        return;
+
+    for (const auto& cp : g_PendingCPInfo)
+    {
+        ALERT(at_console, "Sending DOMCPInfo for ent %d with name %s\n", cp.first, cp.second.c_str());
+
+        MESSAGE_BEGIN(MSG_ALL, gmsgDOMControlPointInfo);
+        WRITE_SHORT(cp.first);
+        WRITE_STRING(cp.second.c_str());
+        MESSAGE_END();
+    }
+    g_PendingCPInfo.clear();
+    g_bSentCPInfo = true;
+}
+
+class CControlPointInfoSender : public CBaseEntity
+{
+public:
+    void Spawn()
+    {
+        SetThink(&CControlPointInfoSender::SendCPInfoThink);
+        pev->nextthink = gpGlobals->time + 5.0f;  // delay 5 seconds
+    }
+
+    void SendCPInfoThink()
+    {
+        SendControlPointInfo();
+        UTIL_Remove(this);
+    }
+};
+LINK_ENTITY_TO_CLASS(controlpoint_info_sender, CControlPointInfoSender);
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -618,6 +663,7 @@ void AgDOMFileItemCache::Init()
     if (m_bInitDone)
         return;
     m_bInitDone = true;
+
     CBaseEntity* pEnt = NULL;
 
     for (AgDOMFileItemList::iterator itrFileItems = m_lstFileItems.begin(); itrFileItems != m_lstFileItems.end(); ++itrFileItems)
@@ -627,16 +673,18 @@ void AgDOMFileItemCache::Init()
         if (g_pGameRules->IsAllowedToSpawn(pFileItem->m_szName))
             pEnt = CBaseEntity::Create(pFileItem->m_szName, pFileItem->m_vOrigin, pFileItem->m_vAngles, INDEXENT(0));
 
-        // In addition to the generic entity creation params we wish to load a location param for ControlPoints,
-        // we parse this here. Unless you can tell me a better place or more generic method in which case I'll use it :)
-        // An alternative is to add info_dom_location items with a string name for the location however this would
-        // still involve parsing the datafile for strings so unless we change the save/load routine there is no point
-        // EG parse item name then deal with special cases or generic case - May change to this later :P
         if (FStrEq("item_dom_controlpoint", pFileItem->m_szName) && pEnt)
         {
             AgDOMControlPoint* pCP = (AgDOMControlPoint*)pEnt;
             strncpy(pCP->m_szLocation, pFileItem->m_szData1, sizeof(pCP->m_szLocation));
-        }
 
+            int entIndex = ENTINDEX(pEnt->edict());
+            g_PendingCPInfo.emplace_back(entIndex, std::string(pFileItem->m_szData1));
+        }
     }
+
+    // Spawn the entity that will send the CP info after delay
+    CBaseEntity* pSender = CBaseEntity::Create("controlpoint_info_sender", Vector(0, 0, 0), Vector(0, 0, 0), INDEXENT(0));
+    if (pSender)
+        pSender->Spawn();
 }

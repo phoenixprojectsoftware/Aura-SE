@@ -687,6 +687,7 @@ extern int gmsgStatusIcon;
 extern int gmsgCTF;
 extern int gmsgAuthID;
 extern int gmsgCTFSound;
+extern int gmsgDOMControlPointInfo;
 extern int gmsgMapList;
 extern int gmsgCTFFlag;
 extern int gmsgCRC32;
