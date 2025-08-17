@@ -909,53 +909,6 @@ void AgGetPlayerInfo(char* pszDetails, int iMaxSize, int* piSize)
 #include <sys/utsname.h>
 #endif
 
-char* AgOSVersion()
-{
-#ifdef _WIN32
-    static char verbuf[256];
-#else
-    static char verbuf[4 * SYS_NMLN + 4];
-#endif
-
-#ifdef _WIN32
-    OSVERSIONINFO VersionInfo;
-
-    VersionInfo.dwOSVersionInfoSize = sizeof(VersionInfo);
-    if (GetVersionEx(&VersionInfo))
-    {
-        if (strlen(VersionInfo.szCSDVersion) > 200)
-            VersionInfo.szCSDVersion[100] = 0;
-        sprintf(verbuf, "Windows %d.%d build%d PlatformId %d SP=\"%s\"\n",
-            VersionInfo.dwMajorVersion,
-            VersionInfo.dwMinorVersion,
-            VersionInfo.dwBuildNumber,
-            VersionInfo.dwPlatformId,
-            VersionInfo.szCSDVersion);
-    }
-    else
-    {
-        strcpy(verbuf, "WINDOWS UNKNOWN\n");
-    }
-#else
-    struct utsname ubuf;
-
-    if (uname(&ubuf))
-    {
-        strcpy(verbuf, "LINUX UNKNOWN\n");
-    }
-    else
-    {
-        sprintf(verbuf, "%s %s %s %s\n",
-            ubuf.sysname,
-            ubuf.release,
-            ubuf.version,
-            ubuf.machine);
-    }
-#endif
-    return verbuf;
-}
-
-
 #ifdef _WIN32
 static LARGE_INTEGER liTimerFreq;
 void AgInitTimer()
