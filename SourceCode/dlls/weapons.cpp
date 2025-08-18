@@ -408,6 +408,10 @@ void W_Precache(void)
 
 	UTIL_PrecacheOtherWeapon("weapon_penguin");
 
+#ifdef _HALO
+	UTIL_PrecacheOtherWeapon("weapon_smg");
+#endif
+
 
 
 #if !defined( OEM_BUILD ) && !defined( HLDEMO_BUILD )
