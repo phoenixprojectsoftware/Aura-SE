@@ -1,1 +1,0 @@
-for extracting textures from .bsp to a .wad

@@ -749,7 +749,7 @@ void CHalfLifeMultiplay :: PlayerKilled( CBasePlayer *pVictim, entvars_t *pKille
 	{  // killed self
 		pKiller->frags -= 1;
 	}
-	else if ( ktmp && ktmp->IsPlayer() )
+	else if ( (ktmp && ktmp->IsPlayer()) && (CTF != AgGametype() && DOM != AgGametype()) ) // don't award points for killing players in CTF or DOM.
 	{
 		// if a player dies in a deathmatch game and the killer is a client, award the killer some points
 		pKiller->frags += IPointsForKill( peKiller, pVictim );

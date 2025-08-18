@@ -349,7 +349,7 @@ void AgCTF::PlayerKilled(CBasePlayer* pPlayer, entvars_t* pKiller)
     if (pKillerBE && CLASS_PLAYER == pKillerBE->Classify())
     {
         CBasePlayer* pKillerPlayer = ((CBasePlayer*)pKillerBE);
-        AddPointsForKill(pKillerPlayer, pPlayer);
+        // AddPointsForKill(pKillerPlayer, pPlayer);
     }
 
     bool bReturnDirectly = (0 == strcmp(STRING(pKiller->classname), "trigger_hurt"));
