@@ -722,6 +722,21 @@ void CBasePlayerWeapon::ItemPostFrame( void )
 		m_fInReload = FALSE;
 	}
 
+	// melee
+	if ((m_pPlayer->pev->button & IN_MELEE) && CanAttack(m_flNextPrimaryAttack, gpGlobals->time, UseDecrement()))
+	{
+		ALERT(at_console, "Server: melee received");
+		// cancel reload if in progress
+		if (m_fInReload)
+			m_fInReload = FALSE;
+
+		MeleeAttack();
+
+		// clear the melee button so it doesnt repeat in the same frame
+		m_pPlayer->pev->button &= ~IN_MELEE;
+		return;
+	}
+
 	if ( !(m_pPlayer->pev->button & IN_ATTACK ) )
 	{
 		m_flLastFireTime = 0.0f;
