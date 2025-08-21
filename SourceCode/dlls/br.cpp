@@ -40,7 +40,7 @@ void CBattleRifle::Precache(void)
 	PRECACHE_MODEL("models/weapons/br/p_br.mdl");
 
 	PRECACHE_SOUND("weapons/olr1.wav");
-	PRECACHE_SOUND("weapons/ol2.wav");
+	PRECACHE_SOUND("weapons/olr2.wav");
 
 	m_usOLR = PRECACHE_EVENT(1, "events/olr.sc");
 }
