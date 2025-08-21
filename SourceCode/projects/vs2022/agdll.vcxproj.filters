@@ -540,6 +540,9 @@
     <ClCompile Include="..\..\dlls\halo_weapons\smg.cpp">
       <Filter>Source Files\dlls\halo_weapons</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\dlls\br.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\dlls\doors.h">

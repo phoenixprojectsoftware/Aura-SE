@@ -1329,6 +1329,7 @@ all the ammo we have into the ammo vars.
 void CBasePlayer::TabulateAmmo()
 {
 	ammo_9mm = AmmoInventory( GetAmmoIndex( "9mm" ) );
+	ammo_br = AmmoInventory(GetAmmoIndex("ammobr"));
 	ammo_357 = AmmoInventory( GetAmmoIndex( "357" ) );
 	ammo_argrens = AmmoInventory( GetAmmoIndex( "ARgrenades" ) );
 	ammo_bolts = AmmoInventory( GetAmmoIndex( "bolts" ) );
@@ -4275,6 +4276,7 @@ void CBasePlayer::CheatImpulseCommands( int iImpulse )
 		GiveNamedItem("weapon_knife");
 		GiveNamedItem("ammo_762");
 		GiveNamedItem("weapon_m249");
+		GiveNamedItem("weapon_br");
 
 #ifdef _HALO
 		GiveNamedItem("weapon_smg");

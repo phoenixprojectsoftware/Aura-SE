@@ -98,6 +98,8 @@ public:
 #define WEAPON_SWORD 29
 #endif
 
+#define WEAPON_BATTLERIFLE 30
+
 #define WEAPON_ALLWEAPONS		(~(1<<WEAPON_SUIT))
 
 #define WEAPON_SUIT				31	// ?????
@@ -113,6 +115,7 @@ public:
 #define GLOCK_WEIGHT		10
 #define PYTHON_WEIGHT		15
 #define MP5_WEIGHT			25
+#define BR_WEIGHT 30
 #define SHOTGUN_WEIGHT		15
 #define CROSSBOW_WEIGHT		10
 #define RPG_WEIGHT			20
@@ -172,6 +175,7 @@ public:
 #define SNIPERRIFLE_MAX_CARRY 15
 #define ONE_MAX_CARRY 1
 #endif
+#define BR_MAX_CARRY 180
 #define SNARK_MAX_CARRY			15
 
 // the maximum amount of ammo each weapon's clip can hold
@@ -205,6 +209,7 @@ public:
 #define PENGUIN_MAX_CLIP 3
 #define SNIPERRIFLE_MAX_CLIP 5
 #endif
+#define BR_MAX_CLIP 36
 #define GAUSS_MAX_CLIP			WEAPON_NOCLIP
 #define EGON_MAX_CLIP			WEAPON_NOCLIP
 #define HORNETGUN_MAX_CLIP		WEAPON_NOCLIP
@@ -258,6 +263,7 @@ public:
 #define M249_DEFAULT_GIVE					100
 #define DISPLACER_DEFAULT_GIVE		40
 #endif
+#define BR_DEFAULT_GIVE BR_MAX_CLIP
 
 // The amount of ammo given to a player by an ammo item.
 #ifdef _HALO
@@ -290,6 +296,7 @@ public:
 #define AMMO_SNIPERRIFLE_GIVE 5
 #define AMMO_M249_GIVE					100
 #endif
+#define AMMO_BR_GIVE BR_MAX_CLIP
 
 // bullet types
 typedef	enum
@@ -297,6 +304,7 @@ typedef	enum
 	BULLET_NONE = 0,
 	BULLET_PLAYER_9MM, // glock
 	BULLET_PLAYER_MP5, // mp5
+	BULLET_PLAYER_OLR, // battlerifle
 	BULLET_PLAYER_357, // python
 	BULLET_PLAYER_BUCKSHOT, // shotgun
 	BULLET_PLAYER_CROWBAR, // crowbar swipe
@@ -766,6 +774,41 @@ private:
 	unsigned short m_usMP5;
 	unsigned short m_usMP52;
 };
+
+enum olr_e
+{
+	OLR_LONGIDLE = 0,
+	OLR_IDLE1,
+	OLR_LAUNCH,
+	OLR_RELOAD,
+	OLR_DEPLOY,
+	OLR_FIRE1,
+	OLR_FIRE2,
+	OLR_FIRE3,
+};
+
+
+class CBattleRifle : public CBasePlayerWeapon
+{
+public:
+	void Spawn(void);
+	void Precache(void);
+	int iItemSlot(void) { return 3; } // mid range rifle slot
+	int GetItemInfo(ItemInfo* p);
+
+	BOOL Deploy(void);
+	void PrimaryAttack(void);
+	void Reload(void);
+	void WeaponIdle(void);
+
+private:
+	unsigned short m_usOLR;
+	void FireBurstShot(void);
+	void BurstThink(void);
+
+	int m_iBurstShotsFired;
+};
+
 
 enum m7_e
 {

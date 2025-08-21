@@ -1807,6 +1807,7 @@ void UpdateClientData ( const edict_t *ent, int sendweapons, struct clientdata_s
 			cd->fuser2			= pl->m_flNextAmmoBurn;
 			cd->fuser3			= pl->m_flAmmoStartCharge;
 			cd->vuser1.x		= pl->ammo_9mm;
+			cd->vuser1.x = pl->ammo_br;
 			cd->vuser1.y		= pl->ammo_357;
 			cd->vuser1.z		= pl->ammo_argrens;
 			cd->vuser2.z		= pl->ammo_762;
