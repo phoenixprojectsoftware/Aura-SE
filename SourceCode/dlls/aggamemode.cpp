@@ -56,7 +56,7 @@ AgString AgGamename()
     if (g_pGame)
         return g_pGame->m_sName;
 
-    return "Half-Life";
+    return "Unknown";
 }
 
 const char* AgGamenameChar()
@@ -64,7 +64,7 @@ const char* AgGamenameChar()
     if (g_pGame)
         return g_pGame->m_sName.c_str();
     else
-        return "Half-Life";
+        return "Unknown";
 }
 
 AgString AgGamedescription()
@@ -72,7 +72,7 @@ AgString AgGamedescription()
     if (g_pGame)
         return g_pGame->m_sDescription;
 
-    return "Half-Life";
+    return "Unknown";
 }
 
 void  gamemode(void)
