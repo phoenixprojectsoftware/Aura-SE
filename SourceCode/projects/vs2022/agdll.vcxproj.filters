@@ -522,6 +522,9 @@
     <ClCompile Include="..\..\dlls\genericitem.cpp">
       <Filter>Source Files\dlls</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\dlls\agswat.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\dlls\doors.h">
@@ -819,6 +822,12 @@
       <Filter>Header Files\dlls\op4_weapons</Filter>
     </ClInclude>
     <ClInclude Include="..\..\dlls\aghideandseek.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\net_profiling.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\agswat.h">
       <Filter>Header Files\dlls</Filter>
     </ClInclude>
   </ItemGroup>

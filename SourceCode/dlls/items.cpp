@@ -30,6 +30,7 @@
 #include "gamerules.h"
 
 extern int gmsgItemPickup;
+extern cvar_t sv_aura_regeneration;
 
 class CWorldItem : public CBaseEntity
 {
@@ -217,41 +218,44 @@ class CItemBattery : public CItem
 	}
 	BOOL MyTouch( CBasePlayer *pPlayer )
 	{
-		if ( pPlayer->pev->deadflag != DEAD_NO )
+		if (sv_aura_regeneration.value < 1)
 		{
+			if (pPlayer->pev->deadflag != DEAD_NO)
+			{
+				return FALSE;
+			}
+
+			if ((pPlayer->pev->armorvalue < MAX_NORMAL_BATTERY) &&
+				(pPlayer->pev->weapons & (1 << WEAPON_SUIT)))
+			{
+				int pct;
+				char szcharge[64];
+
+				pPlayer->pev->armorvalue += gSkillData.batteryCapacity;
+				pPlayer->pev->armorvalue = V_min(pPlayer->pev->armorvalue, MAX_NORMAL_BATTERY);
+
+				EMIT_SOUND(pPlayer->edict(), CHAN_ITEM, "items/gunpickup2.wav", 1, ATTN_NORM); // TODO: change this sound
+
+				MESSAGE_BEGIN(MSG_ONE, gmsgItemPickup, NULL, pPlayer->pev);
+				WRITE_STRING(STRING(pev->classname));
+				MESSAGE_END();
+
+
+				// Suit reports new power level
+				// For some reason this wasn't working in release build -- round it.
+				pct = (int)((float)(pPlayer->pev->armorvalue * 100.0) * (1.0 / MAX_NORMAL_BATTERY) + 0.5);
+				pct = (pct / 5);
+				if (pct > 0)
+					pct--;
+
+				sprintf(szcharge, "!HEV_%1dP", pct);
+
+				//EMIT_SOUND_SUIT(ENT(pev), szcharge);
+				pPlayer->SetSuitUpdate(szcharge, FALSE, SUIT_NEXT_IN_30SEC);
+				return TRUE;
+			}
 			return FALSE;
 		}
-
-		if ((pPlayer->pev->armorvalue < MAX_NORMAL_BATTERY) &&
-			(pPlayer->pev->weapons & (1<<WEAPON_SUIT)))
-		{
-			int pct;
-			char szcharge[64];
-
-			pPlayer->pev->armorvalue += gSkillData.batteryCapacity;
-			pPlayer->pev->armorvalue = V_min(pPlayer->pev->armorvalue, MAX_NORMAL_BATTERY);
-
-			EMIT_SOUND( pPlayer->edict(), CHAN_ITEM, "items/gunpickup2.wav", 1, ATTN_NORM );
-
-			MESSAGE_BEGIN( MSG_ONE, gmsgItemPickup, NULL, pPlayer->pev );
-				WRITE_STRING( STRING(pev->classname) );
-			MESSAGE_END();
-
-			
-			// Suit reports new power level
-			// For some reason this wasn't working in release build -- round it.
-			pct = (int)( (float)(pPlayer->pev->armorvalue * 100.0) * (1.0/MAX_NORMAL_BATTERY) + 0.5);
-			pct = (pct / 5);
-			if (pct > 0)
-				pct--;
-		
-			sprintf( szcharge,"!HEV_%1dP", pct );
-			
-			//EMIT_SOUND_SUIT(ENT(pev), szcharge);
-			pPlayer->SetSuitUpdate(szcharge, FALSE, SUIT_NEXT_IN_30SEC);
-			return TRUE;		
-		}
-		return FALSE;
 	}
 };
 

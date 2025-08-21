@@ -92,6 +92,10 @@ bool AgGameRules::AgThink()
     {
         m_Hideandseek.Think();
     }
+    else if (SWAT == AgGametype())
+    {
+        m_SWAT.Think();
+    }
     else
     {
         //Update match status.
@@ -228,8 +232,8 @@ void AgGameRules::PlayerSpawn(CBasePlayer* pPlayer)
 
     if (pPlayer->IsProxy() || pPlayer->pev->flags & FL_FAKECLIENT)
         pPlayer->m_bDoneFirstSpawn = true;
-    //if (1 == pPlayer->pev->iuser3)
-      //pPlayer->m_bDoneFirstSpawn = true;
+    // if (1 == pPlayer->pev->iuser3)
+     // pPlayer->m_bDoneFirstSpawn = true;
     if (!pPlayer->m_bDoneFirstSpawn)
     {
         pPlayer->m_bDoneFirstSpawn = true;
@@ -241,6 +245,7 @@ void AgGameRules::PlayerSpawn(CBasePlayer* pPlayer)
         pPlayer->pev->movetype = MOVETYPE_NOCLIP;
         pPlayer->pev->modelindex = 0;
         pPlayer->m_pGoalEnt = NULL;
+        pPlayer->pev->armorvalue = 100; // HACK: fixing Shield causing overflows when people join.
 
         //Move player to info intermission spot
         edict_t* pSpot = m_InfoInterMission.GetRandomSpot();
@@ -256,6 +261,7 @@ void AgGameRules::PlayerSpawn(CBasePlayer* pPlayer)
 
         return;
     }
+   
 
     BOOL		addDefault;
     CBaseEntity* pWeaponEntity = NULL;
@@ -271,6 +277,8 @@ void AgGameRules::PlayerSpawn(CBasePlayer* pPlayer)
     }
 
     pPlayer->m_bInSpawn = true;
+
+    extern cvar_t sv_aura_regeneration;
 
     if (addDefault)
     {
@@ -375,6 +383,9 @@ void AgGameRules::PlayerSpawn(CBasePlayer* pPlayer)
         {
             //Normal spawn.
             pPlayer->pev->health = ag_start_health.value;
+            if (sv_aura_regeneration.value != 0)
+                pPlayer->pev->armorvalue = MAX_NORMAL_BATTERY;
+            else
             pPlayer->pev->armorvalue = ag_start_armour.value;
 
             if (0 < ag_start_longjump.value)
@@ -461,7 +472,7 @@ void AgGameRules::PlayerSpawn(CBasePlayer* pPlayer)
             if (0 < ag_start_ammo556.value)
                 pPlayer->GiveAmmo(ag_start_ammo556.value, "556", M249_MAX_CARRY);
             if (0 < ag_start_ammo762.value)
-                pPlayer->GiveAmmo(ag_start_ammo762.value, "762", EAGLE_MAX_CLIP);
+                pPlayer->GiveAmmo(ag_start_ammo762.value, "762", SNIPERRIFLE_MAX_CARRY);
             if (0 < ag_start_ammoSpore.value)
                 pPlayer->GiveAmmo(ag_start_ammoSpore.value, "spores", SPORELAUNCHER_MAX_CARRY);
         }
@@ -951,10 +962,6 @@ void AgGameRules::ClientUserInfoChanged(CBasePlayer* pPlayer, char* infobuffer)
     if (strlen(pszDisableSpecs))
         pPlayer->m_iDisableSpecs = atoi(pszDisableSpecs);
 
-    char* pszMusicEnabled = g_engfuncs.pfnInfoKeyValue(infobuffer, "cl_music_enabled");
-    if (strlen(pszMusicEnabled))
-        pPlayer->m_bMusicEnabled = (atoi(pszMusicEnabled) != 0) ? true : false;
-
     /*
       char* pszWeaponWeights = g_engfuncs.pfnInfoKeyValue( infobuffer, "cl_weaponweights" );
       if (strlen(pszWeaponWeights))
@@ -1134,7 +1141,7 @@ void AgGameRules::RefreshSkillData(void)
     gSkillData.plrDmgEgonWide = ag_dmg_egon_wide.value;
     gSkillData.plrDmgEgonNarrow = ag_dmg_egon_narrow.value;
 
-    // Hand Grendade
+    // Hand Grenade
     gSkillData.plrDmgHandGrenade = ag_dmg_hgrenade.value;
 
     // Satchel Charge
@@ -1145,6 +1152,21 @@ void AgGameRules::RefreshSkillData(void)
 
     // hornet
     gSkillData.plrDmgHornet = ag_dmg_hornet.value;
+
+    //++ Opposing Force Weapons
+    gSkillData.plrDmgPipewrench = ag_dmg_pipewrench.value;
+    gSkillData.plrDmgKnife = ag_dmg_knife.value;
+    gSkillData.plrDmgGrapple = ag_dmg_grapple.value;
+    gSkillData.plrDmgEagle = ag_dmg_eagle.value;
+    gSkillData.plrDmg762 = ag_dmg_762.value;
+    gSkillData.plrDmg556 = ag_dmg_556.value;
+    gSkillData.plrDmgDisplacerSelf = ag_dmg_displacer_self.value;
+    gSkillData.plrDmgDisplacerOther = ag_dmg_displacer_self.value;
+    gSkillData.plrRadiusDisplacer = ag_displacer_radius.value;
+    gSkillData.plrDmgShockRoachM = ag_dmg_shockrifle_m.value;
+    gSkillData.plrDmgShockRoachS = ag_dmg_shockrifle_s.value;
+    gSkillData.plrDmgSpore = ag_dmg_spore.value;
+    //-- Opposing Force Weapons
 
     // Head
     gSkillData.plrHead = ag_headshot.value;

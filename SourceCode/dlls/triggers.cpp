@@ -721,12 +721,6 @@ void PlayCDTrack( int iTrack )
 			ALERT(at_console, "Player %i returned null\n", i);
 			continue;
 		}
-		if (!pPlayer->m_bMusicEnabled)
-		{
-			ClientPrint(&pClient->v, HUD_PRINTCONSOLE, "Music disabled for this player!\n");
-
-			continue;
-		}
 
 		if (ARENA != AgGametype() && CTF != AgGametype() && LMS != AgGametype())
 		{
@@ -852,11 +846,6 @@ void CTargetCDAudio::Think( void )
 		if (!pPlayer)
 		{
 			ALERT(at_console, "Player %i returned null\n", i);
-			continue;
-		}
-		if (!pPlayer->m_bMusicEnabled)
-		{
-			ClientPrint(&pClient->v, HUD_PRINTCONSOLE, "[TARGET CD] Music disabled for this player!\n");
 			continue;
 		}
 	}

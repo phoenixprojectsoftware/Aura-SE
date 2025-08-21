@@ -214,7 +214,7 @@ void CM249::PrimaryAttack()
 	{
 		if (m_pPlayer->pev->button & IN_DUCK)
 		{
-			vecSpread = VECTOR_CONE_4DEGREES;
+			vecSpread = VECTOR_CONE_2DEGREES;
 		}
 		else if (m_pPlayer->pev->button & (IN_MOVERIGHT |
 			IN_MOVELEFT |
@@ -225,7 +225,7 @@ void CM249::PrimaryAttack()
 		}
 		else
 		{
-			vecSpread = VECTOR_CONE_2DEGREES;
+			vecSpread = VECTOR_CONE_4DEGREES;
 		}
 	}
 

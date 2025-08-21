@@ -4,7 +4,7 @@
 # Feb 2001 by Leon Hartwig (hartwig@valvesoftware.com)
 #
 
-MODNAME=aura
+MODNAME=aura_linux
 
 HLDLL_SRC_DIR=$(SOURCE_DIR)/dlls
 HLWPN_SRC_DIR=$(HLDLL_SRC_DIR)/wpn_shared
@@ -162,6 +162,7 @@ HLDLL_OBJS = \
 	$(HLDLL_OBJ_DIR)/agscorecache.o \
 	$(HLDLL_OBJ_DIR)/agscorelog.o \
 	$(HLDLL_OBJ_DIR)/agsettings.o \
+	$(HLDLL_OBJ_DIR)/agswat.o \
 	$(HLDLL_OBJ_DIR)/agtimer.o \
 	$(HLDLL_OBJ_DIR)/agvote.o \
 	$(HLDLL_OBJ_DIR)/agspectator.o \

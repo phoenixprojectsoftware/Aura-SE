@@ -1,0 +1,1 @@
+On Steam, the contenttest game files go here.
