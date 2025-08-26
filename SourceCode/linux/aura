@@ -4,7 +4,7 @@
 # Feb 2001 by Leon Hartwig (hartwig@valvesoftware.com)
 #
 
-MODNAME=aura_linux
+MODNAME=aura
 
 HLDLL_SRC_DIR=$(SOURCE_DIR)/dlls
 HLWPN_SRC_DIR=$(HLDLL_SRC_DIR)/wpn_shared
