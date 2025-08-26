@@ -1003,18 +1003,6 @@ void CHGrunt :: HandleAnimEvent( MonsterEvent_t *pEvent )
 //=========================================================
 void CHGrunt :: Spawn()
 {
-	// Only spawn if coopmode is enabled
-	if (CVAR_GET_FLOAT("sv_aura_coop") == 1)
-	{
-		if (FStrEq(STRING(pev->targetname), "FIREFIGHT"))
-			m_vecInitialPos = pev->origin;
-		CBaseMonster::Spawn(); // Proceed with spawning if coopmode is on
-	}
-	else
-	{
-		// Optionally, log or remove entity if coopmode is off
-		UTIL_Remove(this);
-	}
 	Precache( );
 
 	SET_MODEL(ENT(pev), "models/hgrunt.mdl");
