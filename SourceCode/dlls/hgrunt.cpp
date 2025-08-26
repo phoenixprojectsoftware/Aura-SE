@@ -191,6 +191,7 @@ public:
 };
 
 LINK_ENTITY_TO_CLASS( monster_human_grunt, CHGrunt );
+LINK_ENTITY_TO_CLASS(monster_hgrunt, CHGrunt);
 
 TYPEDESCRIPTION	CHGrunt::m_SaveData[] = 
 {
@@ -262,12 +263,6 @@ void CHGrunt :: SpeakSentence( void )
 
 void CHGrunt::Killed(entvars_t* pevAttacker, int iGib)
 {
-	if (FStrEq(STRING(pev->targetname), "FIREFIGHT")) {
-		// Set a timer to respawn after 5 seconds
-		SetThink(&CHGrunt::RespawnFirefightMonster);
-		pev->nextthink = gpGlobals->time + 5.0f;
-	}
-
 	// Call the base Killed function if the parent class has one
 	CBaseMonster::Killed(pevAttacker, iGib);
 }

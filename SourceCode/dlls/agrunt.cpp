@@ -123,6 +123,7 @@ public:
 	int		m_iLastWord;
 };
 LINK_ENTITY_TO_CLASS( monster_alien_grunt, CAGrunt );
+LINK_ENTITY_TO_CLASS(monster_agrunt, CAGrunt);
 
 TYPEDESCRIPTION	CAGrunt::m_SaveData[] = 
 {

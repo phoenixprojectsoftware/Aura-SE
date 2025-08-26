@@ -42,6 +42,7 @@ CGlobalState					gGlobalState;
 extern DLL_GLOBAL	int			gDisplayTitle;
 
 extern void W_Precache(void);
+extern void M_Precache(void);
 
 //
 // This must match the list in util.h
@@ -538,6 +539,9 @@ void CWorld :: Precache( void )
 
 // player precaches     
 	W_Precache ();									// get weapon precaches
+
+	if ((FIREFIGHT == AgGametype()) || (FIESTAFIGHT == AgGametype()))
+		M_Precache ();										// get monster precaches for firefight
 
 	ClientPrecache();
 

@@ -105,6 +105,7 @@ public:
 	int		m_iShell;
 };
 LINK_ENTITY_TO_CLASS( monster_human_assassin, CHAssassin );
+LINK_ENTITY_TO_CLASS(monster_hassassin, CHAssassin);
 
 
 TYPEDESCRIPTION	CHAssassin::m_SaveData[] = 

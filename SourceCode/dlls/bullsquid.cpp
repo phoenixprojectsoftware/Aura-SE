@@ -226,6 +226,7 @@ public:
 	float m_flNextSpitTime;// last time the bullsquid used the spit attack.
 };
 LINK_ENTITY_TO_CLASS( monster_bullchicken, CBullsquid );
+LINK_ENTITY_TO_CLASS(monster_bullsquid, CBullsquid);
 
 TYPEDESCRIPTION	CBullsquid::m_SaveData[] = 
 {

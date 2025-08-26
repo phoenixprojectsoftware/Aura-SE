@@ -81,6 +81,8 @@ private:
 	void EndRound();
 	void GameOver();
 
+	float m_flFirstWaveDelay;
+	bool m_bFirstWaveMusicPlayed;
 	float m_flNextThinkTime;
 	float m_flWaveStartTime;
 	int m_iWaveNumber;

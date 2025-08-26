@@ -458,6 +458,48 @@ void W_Precache(void)
 
 }
 
+// precache monsters for firefight - in no particular order...
+void M_Precache(void)
+{
+	UTIL_PrecacheOther("monster_hgrunt");
+	ALERT(at_console, "hgrunt precached\n");
+
+	UTIL_PrecacheOther("monster_agrunt");
+	ALERT(at_console, "agrunt precached\n");
+
+	UTIL_PrecacheOther("monster_apache");
+	ALERT(at_console, "apache precached\n");
+
+	UTIL_PrecacheOther("monster_bullsquid");
+	ALERT(at_console, "bullsquid precached\n");
+
+	UTIL_PrecacheOther("monster_bigmomma");
+	ALERT(at_console, "bigmomma precached\n");
+
+	UTIL_PrecacheOther("monster_controller");
+	ALERT(at_console, "controller precached\n");
+
+	UTIL_PrecacheOther("monster_gargantua");
+	ALERT(at_console, "gargantua precached\n");
+
+	UTIL_PrecacheOther("monster_hassassin");
+	ALERT(at_console, "assassin precached\n");
+
+	UTIL_PrecacheOther("monster_houndeye");
+	ALERT(at_console, "houndeye precached\n");
+
+	UTIL_PrecacheOther("monster_alien_slave");
+	ALERT(at_console, "alien slave precached\n");
+
+	UTIL_PrecacheOther("monster_headcrab");
+	UTIL_PrecacheOther("monster_babycrab");
+	ALERT(at_console, "headcrab precached\n");
+
+	UTIL_PrecacheOther("monster_zamnhl");
+	ALERT(at_console, "zamnhl precached\n");
+
+}
+
 
  
 

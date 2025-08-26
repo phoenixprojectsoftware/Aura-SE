@@ -87,7 +87,8 @@ AgFirefightFileCache g_FirefightFileCache;
 
 AgFirefight::AgFirefight()
 {
-	// g_FirefightFileCache.PrecacheAllMonsters(); // precache the monsters before spawning them
+	m_flFirstWaveDelay = gpGlobals->time + 40.0f;
+	m_bFirstWaveMusicPlayed = false;
 	m_State = FF_WAITING;
 	m_flNextThinkTime = gpGlobals->time;
 	m_flWaveStartTime = 0.0f;
@@ -103,7 +104,6 @@ AgFirefight::~AgFirefight()
 void AgFirefight::Precache()
 {
 	m_FileCache.Load();
-	// m_FileCache.PrecacheAllMonsters();
 }
 
 void AgFirefight::Think()
@@ -118,8 +118,34 @@ void AgFirefight::Think()
 	case FF_WAITING:
 		if (UTIL_IsMultiplayer())
 		{
-			m_iWaveNumber = 1;
-			StartNextWave();
+			int secondsLeft = (int)(m_flFirstWaveDelay - gpGlobals->time);
+
+			if (!m_bFirstWaveMusicPlayed && secondsLeft < 40) // first tick of countdown
+			{
+				// send music to all connected clients
+				for (int i = 1; i <= gpGlobals->maxClients; ++i)
+				{
+					edict_t* pPlayer = INDEXENT(i);
+					if (!FNullEnt(pPlayer) && pPlayer->v.flags & FL_CLIENT) // ensure this is a valid client
+					{
+						CLIENT_COMMAND(pPlayer, "mp3 play media/WarGamesFirefightDub.mp3\n");
+					}
+				}
+
+				m_bFirstWaveMusicPlayed = true;
+			}
+
+			if (gpGlobals->time >= m_flFirstWaveDelay)
+			{
+				m_iWaveNumber = 1;
+				StartNextWave();
+			}
+#ifdef _DEBUG // debugger for now cos this will probably cause overflows...
+			else
+			{
+				UTIL_ClientPrintAll(HUD_PRINTCENTER, UTIL_VarArgs("FIRST WAVE BEGINS IN %d - SCAVENGE WEAPONS FROM THE BATTLEFIELD", secondsLeft));
+			}
+#endif
 		}
 		break;
 
@@ -184,7 +210,7 @@ void AgFirefight::CheckWaveStatus()
 
 	for (auto& hEnt : m_Enemies)
 	{
-		CBaseEntity* pEnt = CBaseEntity::Instance(hEnt);
+		CBaseEntity* pEnt = hEnt;  // EHANDLE -> CBaseEntity*
 		if (pEnt && pEnt->IsAlive())
 		{
 			m_iEnemiesRemaining++;
