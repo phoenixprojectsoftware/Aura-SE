@@ -87,7 +87,7 @@ AgFirefightFileCache g_FirefightFileCache;
 
 AgFirefight::AgFirefight()
 {
-	m_flFirstWaveDelay = gpGlobals->time + 40.0f;
+	m_flFirstWaveDelay = gpGlobals->time + 45.0f;
 	m_bFirstWaveMusicPlayed = false;
 	m_State = FF_WAITING;
 	m_flNextThinkTime = gpGlobals->time;
@@ -128,7 +128,7 @@ void AgFirefight::Think()
 					edict_t* pPlayer = INDEXENT(i);
 					if (!FNullEnt(pPlayer) && pPlayer->v.flags & FL_CLIENT) // ensure this is a valid client
 					{
-						CLIENT_COMMAND(pPlayer, "mp3 play media/WarGamesFirefightDub.mp3\n");
+						CLIENT_COMMAND(pPlayer, "mp3 play sound/music/FirefightIntroGlue02.mp3\n");
 					}
 				}
 
