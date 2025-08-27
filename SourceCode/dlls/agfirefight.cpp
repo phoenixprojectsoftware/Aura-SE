@@ -20,7 +20,7 @@
 
 // AgFirefight g_AgFirefight;
 
-void RandomMusic()
+void AgFirefight::RandomMusic()
 {
 	m_bMusicSet1 = false;
 	m_bMusicSet2 = false;
