@@ -18,6 +18,10 @@
 #include <string>
 #include <set>
 
+bool m_bMusicSet1; // War Games
+bool m_bMusicSet2; // Set 2 (stub)
+bool m_bMusicSet3; // Set 3 (stub)
+
 enum FirefightState
 {
 	FF_WAITING,

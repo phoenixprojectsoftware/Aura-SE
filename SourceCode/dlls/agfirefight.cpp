@@ -20,6 +20,31 @@
 
 // AgFirefight g_AgFirefight;
 
+void RandomMusic()
+{
+	m_bMusicSet1 = false;
+	m_bMusicSet2 = false;
+	m_bMusicSet3 = false;
+
+	int choice = RANDOM_LONG(0, 2);
+
+	switch (choice)
+	{
+	case 0:
+		m_bMusicSet1 = true;
+		ALERT(at_console, "SET 1\n");
+		break;
+	case 1:
+		m_bMusicSet2 = true;
+		ALERT(at_console, "SET 2\n");
+		break;
+	case 2:
+		m_bMusicSet3 = true;
+		ALERT(at_console, "SET 3\n");
+		break;
+	}
+}
+
 CBaseMonster* UTIL_SpawnMonster(const char* pszClassname, const Vector& vecOrigin, const Vector& vecAngles)
 {
 	edict_t* pent = CREATE_NAMED_ENTITY(MAKE_STRING(pszClassname));
@@ -87,6 +112,7 @@ AgFirefightFileCache g_FirefightFileCache;
 
 AgFirefight::AgFirefight()
 {
+	RandomMusic();
 	m_flFirstWaveDelay = gpGlobals->time + 45.0f;
 	m_bFirstWaveMusicPlayed = false;
 	m_State = FF_WAITING;
@@ -128,7 +154,12 @@ void AgFirefight::Think()
 					edict_t* pPlayer = INDEXENT(i);
 					if (!FNullEnt(pPlayer) && pPlayer->v.flags & FL_CLIENT) // ensure this is a valid client
 					{
-						CLIENT_COMMAND(pPlayer, "mp3 play sound/music/FirefightIntroGlue02.mp3\n");
+						if (m_bMusicSet1 == true)
+							CLIENT_COMMAND(pPlayer, "mp3 play sound/music/FirefightIntroGlue02.mp3\n");
+						else if (m_bMusicSet2 == true)
+							CLIENT_COMMAND(pPlayer, "mp3 play sound/music/WarGamesFirefightDub.mp3\n");
+						else if (m_bMusicSet3 == true)
+							CLIENT_COMMAND(pPlayer, "mp3 play sound/music/FirefightIntro1.mp3\n");
 					}
 				}
 
