@@ -29,6 +29,7 @@
 #include "animation.h"
 #include "weapons.h"
 #include "func_break.h"
+#include <agglobal.h>
 
 extern DLL_GLOBAL Vector		g_vecAttackDir;
 extern DLL_GLOBAL int			g_iSkillLevel;
@@ -1026,6 +1027,8 @@ void RadiusDamage( Vector vecSrc, entvars_t *pevInflictor, entvars_t *pevAttacke
 	TraceResult	tr;
 	float		flAdjustedDamage, falloff;
 	Vector		vecSpot;
+
+	flRadius *=  ag_blastradius.value;
 
 	if ( flRadius )
 		falloff = flDamage / flRadius;
