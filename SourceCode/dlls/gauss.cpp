@@ -482,7 +482,7 @@ void CGauss::Fire(Vector vecOrigSrc, Vector vecDir, float flDamage)
 				fHasPunched = 1;
 
 				// try punching through wall if secondary attack (primary is incapable of breaking through)
-				if (!m_fPrimaryFire)
+				if (!m_fPrimaryFire && ag_wallgauss.value > 0)
 				{
 					UTIL_TraceLine(tr.vecEndPos + vecDir * 8, vecDest, dont_ignore_monsters, pentIgnore, &beam_tr);
 					if (!beam_tr.fAllSolid)
@@ -507,7 +507,7 @@ void CGauss::Fire(Vector vecOrigSrc, Vector vecDir, float flDamage)
 
 							if (g_pGameRules->IsMultiplayer())
 							{
-								damage_radius = flDamage * 1.75;  // Old code == 2.5
+								damage_radius = flDamage * 1.75 * ag_wallgauss.value;
 							}
 							else
 							{
