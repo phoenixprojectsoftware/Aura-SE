@@ -598,7 +598,7 @@ int CBasePlayer :: TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, 
 	m_lastDamageAmount = flDamage;
 
 	// Armor. 
-	if (pev->armorvalue && !(bitsDamageType & (DMG_FALL | DMG_DROWN)) )// armor doesn't protect against fall or drown damage!
+	if (pev->armorvalue && !(bitsDamageType & (DMG_FALL | DMG_DROWN | DMG_SKIPARMOR)) )// armor doesn't protect against fall or drown damage!
 	{
 		float flNew = flDamage * flRatio;
 
