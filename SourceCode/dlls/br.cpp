@@ -133,11 +133,7 @@ void CBattleRifle::Reload(void)
 	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0)
 		return;
 
-	if (DefaultReload(BR_MAX_CLIP, OLR_RELOAD, 1.5f))
-	{
-		EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_WEAPON, "weapons/olr2.wav", 1, ATTN_NORM);
-		m_pPlayer->m_flNextAttack = gpGlobals->time + 1.5f;
-	}
+	DefaultReload(MP5_MAX_CLIP, OLR_RELOAD, 2);
 }
 
 void CBattleRifle::WeaponIdle(void)
