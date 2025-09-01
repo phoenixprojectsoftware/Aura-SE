@@ -67,21 +67,38 @@ void CBattleRifle::PrimaryAttack(void)
 		return;
 	}
 
-	m_iBurstShotsFired = 0;
-	FireBurstShot();
+	if (m_iBurstShotsFired == 0)
+	{
+		m_iBurstShotsFired = 1;
+		FireBurstShot();
+	}
+}
 
-	SetThink(&CBattleRifle::BurstThink);
-	pev->nextthink = gpGlobals->time + 0.06f;
+void CBattleRifle::ItemPostFrame()
+{
+	// handle burst continuation
+	if (m_iBurstShotsFired > 0 && gpGlobals->time >= m_flNextPrimaryAttack)
+	{
+		if (m_iBurstShotsFired < 3 && m_iClip > 0)
+		{
+			m_iBurstShotsFired++;
+			FireBurstShot();
+		}
+		else
+		{
+			// reset burst after 3 shots
+			m_iBurstShotsFired = 0;
+			m_flNextPrimaryAttack = gpGlobals->time + 0.32f; // post burst delay
+		}
+	}
 
-	m_flNextPrimaryAttack = gpGlobals->time + 0.5f;
+	CBasePlayerWeapon::ItemPostFrame();
 }
 
 void CBattleRifle::FireBurstShot(void)
 {
-	if (m_iClip <= 0)
-		return;
-
 	CBasePlayer* pPlayer = (CBasePlayer*)m_pPlayer;
+
 	m_iClip--;
 
 #ifndef CLIENT_DLL
@@ -94,13 +111,22 @@ void CBattleRifle::FireBurstShot(void)
 	Legacy_Vector vecSpread = VECTOR_CONE_2DEGREES;
 #endif
 
-	pPlayer->FireBullets(1, vecSrc, vecAiming, vecSpread,
-		8192, BULLET_PLAYER_OLR, 0, 26);
+	pPlayer->FireBullets(1, vecSrc, vecAiming, vecSpread, 8192, BULLET_PLAYER_OLR, 0, 26);
 
-	PLAYBACK_EVENT_FULL(FEV_NOTHOST, pPlayer->edict(), m_usOLR,
-		0.0, (float*)&g_vecZero, (float*)&g_vecZero,
-		vecSpread.x, vecSpread.y,
-		m_iClip, 0, pev->body, 0);
+	int flags;
+#if defined(CLIENT_WEAPONS)
+	flags = FEV_NOTHOST;
+#else
+	flags = 0;
+#endif
+
+	PLAYBACK_EVENT_FULL(flags, pPlayer->edict(), m_usOLR, 0.0, (float*)&g_vecZero, (float*)&g_vecZero, vecSpread.x, vecSpread.y, m_iClip, 0, pev->body, 0);
+
+	SendWeaponAnim(OLR_FIRE1);
+
+	// short delay between burst shots
+	m_flNextPrimaryAttack = gpGlobals->time + 0.06f;
+	m_flTimeWeaponIdle = gpGlobals->time + 1.0f;
 }
 
 void CBattleRifle::BurstThink(void)
@@ -133,7 +159,7 @@ void CBattleRifle::Reload(void)
 	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0)
 		return;
 
-	DefaultReload(MP5_MAX_CLIP, OLR_RELOAD, 2);
+	DefaultReload(MP5_MAX_CLIP, OLR_RELOAD, 2.0f);
 }
 
 void CBattleRifle::WeaponIdle(void)

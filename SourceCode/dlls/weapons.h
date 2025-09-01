@@ -798,6 +798,7 @@ public:
 
 	BOOL Deploy(void);
 	void PrimaryAttack(void);
+	void ItemPostFrame();
 	void Reload(void);
 	void WeaponIdle(void);
 
