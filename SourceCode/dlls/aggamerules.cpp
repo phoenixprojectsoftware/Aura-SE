@@ -315,6 +315,8 @@ void AgGameRules::PlayerSpawn(CBasePlayer* pPlayer)
                 pPlayer->GiveNamedItem("weapon_shotgun");
             if (1 > ag_ban_mp5.value)
                 pPlayer->GiveNamedItem("weapon_9mmAR");
+            if (1 > ag_ban_br.value)
+                pPlayer->GiveNamedItem("weapon_br");
             if (1 > ag_ban_gauss.value)
                 pPlayer->GiveNamedItem("weapon_gauss");
             if (1 > ag_ban_hgrenade.value)
@@ -421,7 +423,6 @@ void AgGameRules::PlayerSpawn(CBasePlayer* pPlayer)
                     "weapon_shotgun",
                     "weapon_hornetgun",
                     "weapon_gauss",
-                    "weapon_m249",
                     "weapon_crowbar",
                     "weapon_smg",
                     // "weapon_sword",
@@ -480,6 +481,8 @@ void AgGameRules::PlayerSpawn(CBasePlayer* pPlayer)
                     pPlayer->GiveNamedItem("weapon_shotgun");
                 if (0 < ag_start_mp5.value)
                     pPlayer->GiveNamedItem("weapon_9mmAR");
+                if (0 < ag_start_br.value)
+                    pPlayer->GiveNamedItem("weapon_br");
                 if (0 < ag_start_gauss.value)
                     pPlayer->GiveNamedItem("weapon_gauss");
                 if (0 < ag_start_hgrenade.value)
@@ -885,6 +888,7 @@ FILE_GLOBAL BANWEAPON s_Bans[] =
   "weapon_crowbar",&ag_ban_crowbar,
   "weapon_9mmhandgun",&ag_ban_glock,
   "weapon_9mmAR",&ag_ban_mp5,
+  "weapon_br", &ag_ban_br,
   "weapon_shotgun",&ag_ban_shotgun,
   "weapon_crossbow",&ag_ban_crossbow,
   "weapon_357",&ag_ban_357,
@@ -1219,6 +1223,9 @@ void AgGameRules::RefreshSkillData(void)
 
     // MP5 Round
     gSkillData.plrDmgMP5 = ag_dmg_mp5.value;
+
+    // Battle Rifle / "OLR"
+    gSkillData.plrDmgOLR = ag_dmg_olr.value;
 
     // M203 grenade
     gSkillData.plrDmgM203Grenade = ag_dmg_m203.value;

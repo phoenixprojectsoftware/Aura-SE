@@ -175,6 +175,9 @@ void CHalfLifeMultiplay::RefreshSkillData( void )
 	// MP5 Round
 	gSkillData.plrDmgMP5 = 12;
 
+	// Battle Rifle / "OLR"
+	gSkillData.plrDmgOLR = 17;
+
 	// M203 grenade
 	gSkillData.plrDmgM203Grenade = 100;
 

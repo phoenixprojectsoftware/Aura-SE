@@ -41,6 +41,7 @@ void CBattleRifle::Precache(void)
 
 	PRECACHE_SOUND("weapons/olr1.wav");
 	PRECACHE_SOUND("weapons/olr2.wav");
+	PRECACHE_SOUND("weapons/olr_zoom.wav");
 
 	m_usOLR = PRECACHE_EVENT(1, "events/olr.sc");
 }
@@ -146,9 +147,52 @@ void CBattleRifle::BurstThink(void)
 	}
 }
 
+void CBattleRifle::SecondaryAttack(void)
+{
+	EMIT_SOUND_DYN(m_pPlayer->edict(), CHAN_ITEM, "weapons/olr_zoom.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
+
+	m_bInZoom = !m_bInZoom;
+
+	ToggleZoom();
+
+	pev->nextthink = 0.0 + 0.1;
+
+	m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 0.1 + 0.5;
+}
+
+void CBattleRifle::ToggleZoom()
+{
+	if (m_pPlayer->pev->fov == 0)
+	{
+		m_pPlayer->pev->fov = 45;
+		m_pPlayer->m_iFOV = 45;
+
+		m_bInZoom = true;
+	}
+	else
+	{
+		m_pPlayer->pev->fov = 0;
+		m_pPlayer->m_iFOV = 0;
+
+		m_bInZoom = false;
+	}
+}
+
 BOOL CBattleRifle::Deploy(void)
 {
 	return DefaultDeploy("models/weapons/br/v_br.mdl", "models/weapons/br/p_br.mdl", OLR_DEPLOY, "olr");
+}
+
+void CBattleRifle::Holster(int skiplocal)
+{
+	// m_fInReload = false;
+
+	if (m_bInZoom)
+		SecondaryAttack();
+
+	m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + 0.25;
+
+	// SendWeaponAnim(OLR_HOLSTER);
 }
 
 void CBattleRifle::Reload(void)
