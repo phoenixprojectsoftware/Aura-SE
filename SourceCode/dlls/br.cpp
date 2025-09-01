@@ -120,7 +120,7 @@ void CBattleRifle::FireBurstShot(void)
 	flags = 0;
 #endif
 
-	PLAYBACK_EVENT_FULL(flags, pPlayer->edict(), m_usOLR, 0.0, (float*)&g_vecZero, (float*)&g_vecZero, vecSpread.x, vecSpread.y, m_iClip, 0, pev->body, 0);
+	PLAYBACK_EVENT_FULL(0, pPlayer->edict(), m_usOLR, 0.0, (float*)&g_vecZero, (float*)&g_vecZero, vecSpread.x, vecSpread.y, m_iClip, 0, pev->body, 0);
 
 	SendWeaponAnim(OLR_FIRE1);
 
