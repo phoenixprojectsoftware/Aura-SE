@@ -109,10 +109,50 @@ BOOL CGlock::Deploy( )
 	return DefaultDeploy( "models/v_9mmhandgun.mdl", "models/p_9mmhandgun.mdl", GLOCK_DRAW, "onehanded", /*UseDecrement() ? 1 : 0*/ 0 );
 }
 
+#ifdef _HALO
+void CGlock::Holster(int skiplocal)
+{
+	if (m_bInZoom)
+		SecondaryAttack();
+}
+#endif
+
 void CGlock::SecondaryAttack( void )
 {
+#ifdef _HALO
+	// TODO: add zoom sound
+
+	m_bInZoom = !m_bInZoom;
+
+	ToggleZoom();
+
+	pev->nextthink = 0.0 + 0.1;
+
+	m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 0.6;
+#else
 	GlockFire( 0.1, 0.2, FALSE );
+#endif
 }
+
+#ifdef _HALO
+void CGlock::ToggleZoom()
+{
+	if (m_pPlayer->pev->fov == 0)
+	{
+		m_pPlayer->pev->fov = 45;
+		m_pPlayer->m_iFOV = 45;
+
+		m_bInZoom = true;
+	}
+	else
+	{
+		m_pPlayer->pev->fov = 0;
+		m_pPlayer->m_iFOV = 0;
+
+		m_bInZoom = false;
+	}
+}
+#endif
 
 void CGlock::PrimaryAttack( void )
 {
@@ -192,6 +232,10 @@ void CGlock::GlockFire( float flSpread , float flCycleTime, BOOL fUseAutoAim )
 
 void CGlock::Reload( void )
 {
+#ifdef _HALO
+	if (m_bInZoom)
+		SecondaryAttack();
+#endif
 	if ( m_pPlayer->ammo_9mm <= 0 )
 		 return;
 

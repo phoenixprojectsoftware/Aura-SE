@@ -157,7 +157,7 @@ void CBattleRifle::SecondaryAttack(void)
 
 	pev->nextthink = 0.0 + 0.1;
 
-	m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 0.1 + 0.5;
+	m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 0.6;
 }
 
 void CBattleRifle::ToggleZoom()
@@ -202,6 +202,9 @@ void CBattleRifle::Reload(void)
 
 	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0)
 		return;
+
+	if (m_bInZoom)
+		SecondaryAttack();
 
 	DefaultReload(MP5_MAX_CLIP, OLR_RELOAD, 2.0f);
 }

@@ -627,10 +627,16 @@ public:
 
 	void PrimaryAttack( void );
 	void SecondaryAttack( void );
+#ifdef _HALO
+	void Holster(int skiplocal = 0) override;
+	void ToggleZoom();
+#endif
 	void GlockFire( float flSpread, float flCycleTime, BOOL fUseAutoAim );
 	BOOL Deploy( void );
 	void Reload( void );
 	void WeaponIdle( void );
+
+	bool m_bInZoom;
 
 	virtual BOOL UseDecrement( void )
 	{ 
