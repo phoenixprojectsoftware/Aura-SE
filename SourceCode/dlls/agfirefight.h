@@ -85,6 +85,7 @@ private:
 	bool m_bMusicSet1; // War Games
 	bool m_bMusicSet2; // Set 2 (stub)
 	bool m_bMusicSet3; // Set 3 (stub)
+	bool m_bMusicSet4; // spooky01
 
 	float m_flFirstWaveDelay;
 	bool m_bFirstWaveMusicPlayed;

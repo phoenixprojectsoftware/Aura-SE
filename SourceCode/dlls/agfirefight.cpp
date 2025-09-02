@@ -25,8 +25,10 @@ void AgFirefight::RandomMusic()
 	m_bMusicSet1 = false;
 	m_bMusicSet2 = false;
 	m_bMusicSet3 = false;
+	m_bMusicSet4 = false;
 
-	int choice = RANDOM_LONG(0, 2);
+
+	int choice = RANDOM_LONG(0, 3);
 
 	switch (choice)
 	{
@@ -42,6 +44,9 @@ void AgFirefight::RandomMusic()
 		m_bMusicSet3 = true;
 		ALERT(at_console, "SET 3\n");
 		break;
+	case 3:
+		m_bMusicSet4 = true;
+		ALERT(at_console, "SET 4\n");
 	}
 }
 
@@ -160,6 +165,8 @@ void AgFirefight::Think()
 							CLIENT_COMMAND(pPlayer, "mp3 play sound/music/WarGamesFirefightDub.mp3\n");
 						else if (m_bMusicSet3 == true)
 							CLIENT_COMMAND(pPlayer, "mp3 play sound/music/FirefightIntro1.mp3\n");
+						else if (m_bMusicSet4 == true)
+							CLIENT_COMMAND(pPlayer, "mp3 play sound/music/Spooky01.mp3\n");
 					}
 				}
 
