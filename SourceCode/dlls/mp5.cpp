@@ -67,6 +67,12 @@ void CMP5::Spawn( )
 		CBaseEntity *pNewWeapon = CBaseEntity::Create( "weapon_shotgun", g_pGameRules->VecWeaponRespawnSpot( this ), pev->angles, pev->owner );
 		return;
 	}
+	else if (HLDM == AgGametype())
+	{
+		//Spawn HLDMAR instead.
+		CBaseEntity* pNewWeapon = CBaseEntity::Create("weapon_hldmar", g_pGameRules->VecWeaponRespawnSpot(this), pev->angles, pev->owner);
+		return;
+	}
 #endif
 //-- Martin Webrant
 	pev->classname = MAKE_STRING("weapon_9mmAR"); // hack to allow for old names

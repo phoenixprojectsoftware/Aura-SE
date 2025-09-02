@@ -35,6 +35,8 @@ void SetupGametype()
         g_GameType = FIESTA;
     else if (sGametype == "swat")
         g_GameType = SWAT;
+    else if (sGametype == "hldm")
+        g_GameType = HLDM;
 #ifndef AG_NO_CLIENT_DLL
     else if (sGametype == "ctf")
         g_GameType = CTF;

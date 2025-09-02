@@ -315,6 +315,8 @@ void AgGameRules::PlayerSpawn(CBasePlayer* pPlayer)
                 pPlayer->GiveNamedItem("weapon_shotgun");
             if (1 > ag_ban_mp5.value)
                 pPlayer->GiveNamedItem("weapon_9mmAR");
+            if (1 > ag_ban_hldmar.value)
+                pPlayer->GiveNamedItem("weapon_hldmar");
             if (1 > ag_ban_br.value)
                 pPlayer->GiveNamedItem("weapon_br");
             if (1 > ag_ban_gauss.value)
@@ -481,6 +483,8 @@ void AgGameRules::PlayerSpawn(CBasePlayer* pPlayer)
                     pPlayer->GiveNamedItem("weapon_shotgun");
                 if (0 < ag_start_mp5.value)
                     pPlayer->GiveNamedItem("weapon_9mmAR");
+                if (0 < ag_start_hldmar.value)
+                    pPlayer->GiveNamedItem("weapon_hldmar");
                 if (0 < ag_start_br.value)
                     pPlayer->GiveNamedItem("weapon_br");
                 if (0 < ag_start_gauss.value)
@@ -888,6 +892,7 @@ FILE_GLOBAL BANWEAPON s_Bans[] =
   "weapon_crowbar",&ag_ban_crowbar,
   "weapon_9mmhandgun",&ag_ban_glock,
   "weapon_9mmAR",&ag_ban_mp5,
+  "weapon_hldmar", &ag_ban_hldmar,
   "weapon_br", &ag_ban_br,
   "weapon_shotgun",&ag_ban_shotgun,
   "weapon_crossbow",&ag_ban_crossbow,
