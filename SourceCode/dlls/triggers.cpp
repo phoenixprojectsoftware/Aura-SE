@@ -726,7 +726,7 @@ void PlayCDTrack( int iTrack )
 		{
 			if (iTrack == -1)
 			{
-				CLIENT_COMMAND(pClient, "cd stop\n");
+				ALERT(at_console, "Do you honestly think you're fucking funny fucking with my friends?\n");
 			}
 			else
 			{
