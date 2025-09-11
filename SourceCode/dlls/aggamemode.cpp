@@ -37,14 +37,12 @@ void SetupGametype()
         g_GameType = SWAT;
     else if (sGametype == "hldm")
         g_GameType = HLDM;
-#ifndef AG_NO_CLIENT_DLL
+    else if (sGametype == "busters")
+        g_GameType = BUSTERS;
     else if (sGametype == "ctf")
         g_GameType = CTF;
-    //++ muphicks
     else if (sGametype == "dom")
         g_GameType = DOM;
-    //--muphicks
-#endif
     else if (sGametype == "lms")
         g_GameType = LMS;
     else if (sGametype == "sgbow")

@@ -1141,6 +1141,7 @@ public:
 	void Fire( const Vector &vecOrigSrc, const Vector &vecDir );
 
 	BOOL HasAmmo( void );
+	BOOL CanHolster();
 
 	void UseAmmo( int count );
 	

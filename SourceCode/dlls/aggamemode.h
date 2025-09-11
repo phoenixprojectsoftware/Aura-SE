@@ -59,7 +59,8 @@ enum enumGameType
     FIESTAFIGHT = 10,
     FIESTA = 11,
     SWAT = 12,
-    HLDM = 13
+    HLDM = 13,
+    BUSTERS = 14
 };
 //-- muphicks
 extern DLL_GLOBAL BYTE g_GameType;

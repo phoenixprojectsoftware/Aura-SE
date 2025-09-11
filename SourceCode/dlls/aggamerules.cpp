@@ -104,6 +104,10 @@ bool AgGameRules::AgThink()
     {
         m_SWAT.Think();
     }
+    else if (BUSTERS == AgGametype())
+    {
+        m_Busters.Think();
+    }
     else
     {
         //Update match status.
