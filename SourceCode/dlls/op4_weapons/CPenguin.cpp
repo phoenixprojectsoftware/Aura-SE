@@ -20,6 +20,8 @@
 #include "../weapon_hierarchy.h"
 #include "../player.h"
 
+#include "../game.h"
+
 #include "CPenguin.h"
 
 #ifndef CLIENT_DLL
@@ -189,7 +191,14 @@ void CPenguin::PrimaryAttack()
 			--m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType];
 			m_fJustThrown = true;
 
-			m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 1.9;
+#ifndef CLIENT_DLL
+			int CrazyFireRate = AbsoluteInsaneness.value;
+
+			if (CrazyFireRate != 1)
+				m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 0.3;
+			else if (CrazyFireRate >= 1)
+				m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 0.065;
+#endif
 			m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 0.8;
 		}
 	}

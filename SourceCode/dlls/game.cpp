@@ -47,6 +47,7 @@ cvar_t	defaultteam = {"mp_defaultteam","0" };
 cvar_t  coopmode = { "sv_aura_coop", "0", FCVAR_SERVER };
 cvar_t	allowmonsters={"mp_allowmonsters","0", FCVAR_SERVER };
 cvar_t  mp5_old_rate = { "sv_aura_mp5_old_rate", "1", FCVAR_SERVER };
+cvar_t AbsoluteInsaneness = { "sv_aura_brojustdont", "0", FCVAR_SERVER };
 cvar_t fire_weapons_underwater = { "sv_aura_fire_weapons_underwater", "0", FCVAR_SERVER };
 cvar_t motionsensor = { "sv_aura_motionsensor", "1", FCVAR_SERVER };
 
@@ -822,6 +823,7 @@ void GameDLLInit( void )
 	CVAR_REGISTER (&allowmonsters);
 
 	CVAR_REGISTER (&mp5_old_rate);
+	CVAR_REGISTER(&AbsoluteInsaneness);
 	CVAR_REGISTER(&fire_weapons_underwater);
 
 	CVAR_REGISTER (&mp_chattime);
