@@ -1148,7 +1148,7 @@ BOOL AgGameRules::FPlayerCanTakeDamage(CBasePlayer* pPlayer, CBaseEntity* pAttac
         {
             //This dude is instant dead!
             pPlayer->pev->health = -200;
-            pPlayer->Killed(pAttacker->pev, GIB_NEVER);
+            pPlayer->Killed(pAttacker->pev, GIB_ALWAYS);
             return FALSE;
         }
     }
