@@ -27,7 +27,7 @@
 
 bool IsBustingGame()
 {
-		return (g_GameType == BUSTERS);
+		return (AgGametype() == BUSTERS);
 }
 
 bool IsPlayerBusting(CBaseEntity* pPlayer)
