@@ -958,6 +958,8 @@ BOOL AgGameRules::CanHavePlayerItem(CBasePlayer* pPlayer, CBasePlayerItem* pItem
         return FALSE;
     if ((FIESTA == AgGametype() || FIESTAFIGHT == AgGametype()) && pPlayer->m_bFiestaLock)
         return FALSE;
+    if (BUSTERS == AgGametype())
+        return m_Busters.CanHavePlayerItem(pPlayer, pItem);
 
     if (ARENA == AgGametype() && m_Arena.CanHaveItem())
         return TRUE;
@@ -996,6 +998,9 @@ BOOL AgGameRules::CanHaveItem(CBasePlayer* pPlayer, CItem* pItem)
         return FALSE;
     if (!pPlayer->IsAlive())
         return FALSE;
+
+    if (BUSTERS == AgGametype())
+        return m_Busters.CanHaveItem(pPlayer, pItem);
 
     if (ARENA == AgGametype() && m_Arena.CanHaveItem())
         return TRUE;
