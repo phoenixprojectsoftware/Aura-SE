@@ -8,12 +8,14 @@ MODNAME=aura
 
 HLDLL_SRC_DIR=$(SOURCE_DIR)/dlls
 HLWPN_SRC_DIR=$(HLDLL_SRC_DIR)/wpn_shared
+HALO_SRC_DIR=$(HLDLL_SRC_DIR)/halo_weapons
 OP4_SRC_DIR=$(HLDLL_SRC_DIR)/op4_weapons
 ROPE_SRC_DIR=$(HLDLL_SRC_DIR)/rope
 MINISTL_SRC_DIR=$(SOURCE_DIR)/ministl
 
 HLDLL_OBJ_DIR=$(BUILD_OBJ_DIR)/auradll
 HLWPN_OBJ_DIR=$(HLDLL_OBJ_DIR)/wpn_shared
+HALO_OBJ_DIR=$(HLDLL_OBJ_DIR)/halo_weapons
 OP4_OBJ_DIR=$(HLDLL_OBJ_DIR)/op4_weapons
 ROPE_OBJ_DIR=$(HLDLL_OBJ_DIR)/rope
 PM_OBJ_DIR=$(HLDLL_OBJ_DIR)/pm_shared
@@ -31,6 +33,7 @@ CFLAGS=$(BASE_CFLAGS)  $(ARCH_CFLAGS)  -DCLIENT_WEAPONS -I/usr/include/x86_64-li
 
 HLDLL_INCLUDEDIRS=-I$(ENGINE_SRC_DIR) -I$(COMMON_SRC_DIR) -I$(PM_SRC_DIR) -I$(GAME_SHARED_SRC_DIR) -I$(MINISTL_SRC_DIR) -I$(PUBLIC_SRC_DIR)
 HLWPN_INCLUDEDIRS=-I$(HLDLL_SRC_DIR) -I$(ENGINE_SRC_DIR) -I$(COMMON_SRC_DIR) -I$(PM_SRC_DIR) -I$(PUBLIC_SRC_DIR)
+HALO_INCLUDEDIRS=-I$(HLDLL_SRC_DIR) -I$(ENGINE_SRC_DIR) -I$(COMMON_SRC_DIR) -I$(PM_SRC_DIR) -I$(PUBLIC_SRC_DIR)
 OP4_INCLUDEDIRS=-I$(HLDLL_SRC_DIR) -I$(ENGINE_SRC_DIR) -I$(COMMON_SRC_DIR) -I$(PM_SRC_DIR) -I$(PUBLIC_SRC_DIR)
 ROPE_INCLUDEDIRS=-I$(HLDLL_SRC_DIR) -I$(ENGINE_SRC_DIR) -I$(COMMON_SRC_DIR) -I$(PM_SRC_DIR) -I$(PUBLIC_SRC_DIR)
 PM_INCLUDEDIRS=-I$(COMMON_SRC_DIR)  -I$(PUBLIC_SRC_DIR)
@@ -40,6 +43,7 @@ LDFLAGS= -lm -lstdc++
 
 DO_HLDLL_CC=$(CC) $(HLDLL_INCLUDEDIRS) $(CFLAGS) -o $@ -c $<
 DO_HLWPN_CC=$(CC) $(HLWPN_INCLUDEDIRS) $(CFLAGS) -o $@ -c $<
+DO_HALO_CC=$(CC) $(HALO_INCLUDEDIRS) $(CFLAGS) -o $@ -c $<
 DO_OP4_CC=$(CC) $(OP4_INCLUDEDIRS) $(CFLAGS) -o $@ -c $<
 DO_ROPE_CC=$(CC) $(ROPE_INCLUDEDIRS) $(CFLAGS) -o $@ -c $<
 DO_PM_CC=$(CC) $(PM_INCLUDEDIRS) $(CFLAGS) -o $@ -c $<
@@ -60,6 +64,7 @@ HLDLL_OBJS = \
 	$(HLDLL_OBJ_DIR)/bigmomma.o \
 	$(HLDLL_OBJ_DIR)/bloater.o \
 	$(HLDLL_OBJ_DIR)/bmodels.o \
+	$(HLDLL_OBJ_DIR)/br.o \
 	$(HLDLL_OBJ_DIR)/bullsquid.o \
 	$(HLDLL_OBJ_DIR)/buttons.o \
 	$(HLDLL_OBJ_DIR)/cbase.o \
@@ -94,6 +99,7 @@ HLDLL_OBJS = \
 	$(HLDLL_OBJ_DIR)/headcrab.o \
 	$(HLDLL_OBJ_DIR)/healthkit.o \
 	$(HLDLL_OBJ_DIR)/hgrunt.o \
+	$(HLDLL_OBJ_DIR)/hldmar.o \
 	$(HLDLL_OBJ_DIR)/hornet.o \
 	$(HLDLL_OBJ_DIR)/hornetgun.o \
 	$(HLDLL_OBJ_DIR)/houndeye.o \
@@ -152,8 +158,13 @@ HLDLL_OBJS = \
 	$(HLDLL_OBJ_DIR)/agadmin.o \
 	$(HLDLL_OBJ_DIR)/agadmincache.o \
 	$(HLDLL_OBJ_DIR)/agarena.o \
+	$(HLDLL_OBJ_DIR)/agbusters.o \
 	$(HLDLL_OBJ_DIR)/agclient.o \
 	$(HLDLL_OBJ_DIR)/agcommand.o \
+	$(HLDLL_OBJ_DIR)/agfiesta.o \
+	$(HLDLL_OBJ_DIR)/agfirefight.o \
+	$(HLDLL_OBJ_DIR)/agfirefight_cache.o \
+	$(HLDLL_OBJ_DIR)/agfirefight_spawner.o \
 	$(HLDLL_OBJ_DIR)/aggamerules.o \
 	$(HLDLL_OBJ_DIR)/agglobal.o \
 	$(HLDLL_OBJ_DIR)/aghideandseek.o \
@@ -181,6 +192,9 @@ HLDLL_OBJS = \
 HLWPN_OBJS = \
 	$(HLWPN_OBJ_DIR)/hl_wpn_glock.o \
 	$(HLWPN_OBJ_DIR)/oitc.o
+
+HALO_OBJS = \
+	$(HALO_OBJ_DIR)/smg.o
 
 OP4_OBJS = \
 	$(OP4_OBJ_DIR)/CDisplacer.o \
@@ -222,14 +236,15 @@ dirs:
 	-mkdir $(BUILD_OBJ_DIR)
 	-mkdir $(HLDLL_OBJ_DIR)
 	-mkdir $(HLWPN_OBJ_DIR)
+	-mkdir $(HALO_OBJ_DIR)
 	-mkdir $(OP4_OBJ_DIR)
 	-mkdir $(ROPE_OBJ_DIR)
 	-mkdir $(PM_OBJ_DIR)
 	-mkdir $(GAME_SHARED_OBJ_DIR)
 	-mkdir $(MINISTL_OBJ_DIR)
 
-$(MODNAME).$(SHLIBEXT): $(HLDLL_OBJS) $(HLWPN_OBJS) $(OP4_OBJS) $(ROPE_OBJS) $(PM_OBJS) $(GAME_SHARED_OBJS) $(MINISTL_OBJS)
-	$(CC) $(LDFLAGS) $(SHLIBLDFLAGS) -o $(BUILD_DIR)/$@ $(HLDLL_OBJS) $(HLWPN_OBJS) $(OP4_OBJS) $(ROPE_OBJS) $(MINISTL_OBJS) $(PM_OBJS) $(GAME_SHARED_OBJS)
+$(MODNAME).$(SHLIBEXT): $(HLDLL_OBJS) $(HLWPN_OBJS) $(HALO_OBJS) $(OP4_OBJS) $(ROPE_OBJS) $(PM_OBJS) $(GAME_SHARED_OBJS) $(MINISTL_OBJS)
+	$(CC) $(LDFLAGS) $(SHLIBLDFLAGS) -o $(BUILD_DIR)/$@ $(HLDLL_OBJS) $(HLWPN_OBJS) $(HALO_OBJS) $(OP4_OBJS) $(ROPE_OBJS) $(MINISTL_OBJS) $(PM_OBJS) $(GAME_SHARED_OBJS)
 	bash gendbg.sh $(BUILD_DIR)/$(MODNAME).$(SHLIBEXT)
 	
 $(HLWPN_OBJ_DIR)/%.o : $(HLWPN_SRC_DIR)/%.cpp
@@ -258,6 +273,7 @@ clean:
 	-rm -rf $(GAME_SHARED_OBJ_DIR)
 	-rm -rf $(PM_OBJ_DIR)
 	-rm -rf $(HLWPN_OBJ_DIR)
+	-rm -rf $(HALO_OBJ_DIR)
 	-rm -rf $(HLDLL_OBJ_DIR)
 	-rm -rf $(OP4_OBJ_DIR)
 	-rm -rf $(ROPE_OBJ_DIR)
