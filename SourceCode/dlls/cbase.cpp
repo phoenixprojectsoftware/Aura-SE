@@ -439,7 +439,7 @@ void SaveReadFields( SAVERESTOREDATA *pSaveData, const char *pname, void *pBaseD
 }
 
 
-edict_t * EHANDLE::Get( void ) 
+edict_t * EHANDLE::Get( void )  const
 { 
 	if (m_pent)
 	{

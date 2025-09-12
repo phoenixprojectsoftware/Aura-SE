@@ -12,18 +12,20 @@
 *   without written permission from Valve LLC.
 *
 ****/
-#if !defined( OEM_BUILD ) && !defined( HLDEMO_BUILD )
+#if !defined( OEM_BUILD ) && !defined( HLDEMO_BUILD ) && !defined (_HALO)
 
 #include "extdll.h"
 #include "util.h"
 #include "cbase.h"
 #include "monsters.h"
 #include "weapons.h"
+#include "weapon_hierarchy.h"
 #include "nodes.h"
 #include "player.h"
 #include "soundent.h"
 #include "gamerules.h"
 
+#include "game.h"
 enum w_squeak_e {
 	WSQUEAK_IDLE1 = 0,
 	WSQUEAK_FIDGET,
@@ -212,12 +214,15 @@ void CSqueakGrenade::HuntThink( void )
 	pev->nextthink = gpGlobals->time + 0.1;
 
 	// explode when ready
-	if (gpGlobals->time >= m_flDie)
+	if (AbsoluteInsaneness.value < 2)
 	{
-		g_vecAttackDir = pev->velocity.Normalize( );
-		pev->health = -1;
-		Killed( pev, 0 );
-		return;
+		if (gpGlobals->time >= m_flDie)
+		{
+			g_vecAttackDir = pev->velocity.Normalize();
+			pev->health = -1;
+			Killed(pev, 0);
+			return;
+		}
 	}
 
 	// float
@@ -269,6 +274,8 @@ void CSqueakGrenade::HuntThink( void )
 	float flpitch = 155.0 - 60.0 * ((m_flDie - gpGlobals->time) / SQUEEK_DETONATE_DELAY);
 	if (flpitch < 80)
 		flpitch = 80;
+	else if (flpitch > 130)
+		flpitch = 130;
 
 	if (m_hEnemy != NULL)
 	{
@@ -339,6 +346,10 @@ void CSqueakGrenade::SuperBounceTouch( CBaseEntity *pOther )
 
 	// higher pitch as squeeker gets closer to detonation time
 	flpitch = 155.0 - 60.0 * ((m_flDie - gpGlobals->time) / SQUEEK_DETONATE_DELAY);
+	if (flpitch < 80)
+		flpitch = 80;
+	else if (flpitch > 130)
+		flpitch = 130;
 
 	if ( pOther->pev->takedamage && m_flNextAttack < gpGlobals->time )
 	{
@@ -456,8 +467,8 @@ int CSqueak::GetItemInfo(ItemInfo *p)
 	p->pszAmmo2 = NULL;
 	p->iMaxAmmo2 = -1;
 	p->iMaxClip = WEAPON_NOCLIP;
-	p->iSlot = 4;
-	p->iPosition = 3;
+	p->iSlot = WPN_EXPL_SLOT;
+	p->iPosition = WPN_SNARK_POS;
 	p->iId = m_iId = WEAPON_SNARK;
 	p->iWeight = SNARK_WEIGHT;
 	p->iFlags = ITEM_FLAG_LIMITINWORLD | ITEM_FLAG_EXHAUSTIBLE;
@@ -552,7 +563,14 @@ void CSqueak::PrimaryAttack()
 
 			m_fJustThrown = 1;
 
-			m_flNextPrimaryAttack = GetNextAttackDelay(0.3);
+#ifndef CLIENT_DLL
+			int CrazyFireRate = AbsoluteInsaneness.value;
+
+			if (CrazyFireRate != 1)
+				m_flNextPrimaryAttack = GetNextAttackDelay(0.3);
+			else if (CrazyFireRate >= 1)
+				m_flNextPrimaryAttack = GetNextAttackDelay(0.065);
+#endif
 			m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 1.0;
 		}
 	}

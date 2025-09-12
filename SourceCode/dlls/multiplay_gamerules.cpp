@@ -175,6 +175,9 @@ void CHalfLifeMultiplay::RefreshSkillData( void )
 	// MP5 Round
 	gSkillData.plrDmgMP5 = 12;
 
+	// Battle Rifle / "OLR"
+	gSkillData.plrDmgOLR = 17;
+
 	// M203 grenade
 	gSkillData.plrDmgM203Grenade = 100;
 
@@ -796,7 +799,7 @@ void CHalfLifeMultiplay :: PlayerKilled( CBasePlayer *pVictim, entvars_t *pKille
 		// let the killer paint another decal as soon as he'd like.
 		PK->m_flNextDecalTime = gpGlobals->time;
 	}
-#ifndef HLDEMO_BUILD
+#if !defined (_HALO)
 	if ( pVictim->HasNamedPlayerItem("weapon_satchel") )
 	{
 		DeactivateSatchels( pVictim );

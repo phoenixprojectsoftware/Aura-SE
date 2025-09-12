@@ -53,6 +53,8 @@ extern cvar_t	ag_ban_glock;
 extern cvar_t   ag_ban_oitc;
 extern cvar_t	ag_ban_357;
 extern cvar_t	ag_ban_mp5;
+extern cvar_t	ag_ban_hldmar;
+extern cvar_t	ag_ban_br;
 extern cvar_t	ag_ban_shotgun;
 extern cvar_t	ag_ban_crossbow;
 extern cvar_t	ag_ban_rpg;
@@ -70,6 +72,10 @@ extern cvar_t   ag_ban_shockrifle;
 extern cvar_t   ag_ban_sniperrifle;
 extern cvar_t   ag_ban_sporelauncher;
 
+#ifdef _HALO
+extern cvar_t ag_ban_smg;
+extern cvar_t ag_ban_sword;
+#endif
 
 extern cvar_t	ag_ban_hgrenade;
 extern cvar_t	ag_ban_satchel;
@@ -97,6 +103,8 @@ extern cvar_t	ag_start_glock;
 extern cvar_t   ag_start_oitc;
 extern cvar_t	ag_start_357;
 extern cvar_t	ag_start_mp5;
+extern cvar_t	ag_start_hldmar;
+extern cvar_t	ag_start_br;
 extern cvar_t	ag_start_shotgun;
 extern cvar_t	ag_start_crossbow;
 extern cvar_t	ag_start_rpg;
@@ -113,6 +121,11 @@ extern cvar_t   ag_start_pipewrench;
 extern cvar_t   ag_start_shockrifle;
 extern cvar_t   ag_start_sniperrifle;
 extern cvar_t   ag_start_sporelauncher;
+
+#ifdef _HALO
+extern cvar_t ag_start_smg;
+extern cvar_t ag_start_sword;
+#endif
 
 extern cvar_t	ag_start_hgrenade;
 extern cvar_t	ag_start_satchel;
@@ -138,6 +151,7 @@ extern cvar_t ag_dmg_crowbar;
 extern cvar_t ag_dmg_glock;
 extern cvar_t ag_dmg_357;
 extern cvar_t ag_dmg_mp5;
+extern cvar_t ag_dmg_olr;
 extern cvar_t ag_dmg_shotgun;
 extern cvar_t ag_dmg_crossbow;
 extern cvar_t ag_dmg_bolts;
@@ -163,6 +177,11 @@ extern cvar_t ag_displacer_radius;
 extern cvar_t ag_dmg_shockrifle_m;
 extern cvar_t ag_dmg_shockrifle_s;
 extern cvar_t ag_dmg_spore;
+
+#ifdef _HALO
+extern cvar_t ag_dmg_smg;
+extern cvar_t ag_dmg_sword;
+#endif
 
 extern cvar_t ag_spawn_volume;
 extern cvar_t ag_show_gibs;
@@ -250,8 +269,6 @@ void AgStripColors(char* pszString);
 
 void AgGetDetails(char* pszDetails, int iMaxSize, int* piSize);
 void AgGetPlayerInfo(char* pszPlayerInfo, int iMaxSize, int* piSize);
-
-char* AgOSVersion();
 
 AgString AgReadFile(const char* pszFile);
 

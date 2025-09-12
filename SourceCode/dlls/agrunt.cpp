@@ -123,6 +123,7 @@ public:
 	int		m_iLastWord;
 };
 LINK_ENTITY_TO_CLASS( monster_alien_grunt, CAGrunt );
+LINK_ENTITY_TO_CLASS(monster_agrunt, CAGrunt);
 
 TYPEDESCRIPTION	CAGrunt::m_SaveData[] = 
 {
@@ -574,17 +575,6 @@ void CAGrunt :: HandleAnimEvent( MonsterEvent_t *pEvent )
 //=========================================================
 void CAGrunt :: Spawn()
 {
-	// Only spawn if coopmode is enabled
-	if (CVAR_GET_FLOAT("sv_aura_coop") == 1)
-	{
-		CBaseMonster::Spawn(); // Proceed with spawning if coopmode is on
-	}
-	else
-	{
-		// Optionally, log or remove entity if coopmode is off
-		UTIL_Remove(this);
-	}
-
 	Precache( );
 
 	SET_MODEL(ENT(pev), "models/agrunt.mdl");

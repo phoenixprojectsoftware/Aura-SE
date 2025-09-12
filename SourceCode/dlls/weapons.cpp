@@ -56,6 +56,9 @@ MULTIDAMAGE gMultiDamage;
 
 #define TRACER_FREQ		4			// Tracers fire every fourth bullet
 
+extern bool IsBustingGame();
+extern bool IsPlayerBusting(CBaseEntity* pPlayer);
+
 
 //=========================================================
 // MaxAmmoCarry - pass in a name and this function will tell
@@ -332,6 +335,7 @@ void W_Precache(void)
 
 	// mp5
 	UTIL_PrecacheOtherWeapon( "weapon_9mmAR" );
+	UTIL_PrecacheOtherWeapon("weapon_hldmar");
 	UTIL_PrecacheOther( "ammo_9mmAR" );
 	UTIL_PrecacheOther( "ammo_ARgrenades" );
 
@@ -408,6 +412,13 @@ void W_Precache(void)
 
 	UTIL_PrecacheOtherWeapon("weapon_penguin");
 
+	UTIL_PrecacheOtherWeapon("weapon_br");
+
+#ifdef _HALO
+	UTIL_PrecacheOtherWeapon("weapon_sword");
+	UTIL_PrecacheOtherWeapon("weapon_smg");
+#endif
+
 
 
 #if !defined( OEM_BUILD ) && !defined( HLDEMO_BUILD )
@@ -448,6 +459,48 @@ void W_Precache(void)
 	UTIL_PrecacheOther("item_flag_team1");
 	UTIL_PrecacheOther("item_flag_team2");
 #endif
+
+}
+
+// precache monsters for firefight - in no particular order...
+void M_Precache(void)
+{
+	UTIL_PrecacheOther("monster_hgrunt");
+	ALERT(at_console, "hgrunt precached\n");
+
+	UTIL_PrecacheOther("monster_agrunt");
+	ALERT(at_console, "agrunt precached\n");
+
+	UTIL_PrecacheOther("monster_apache");
+	ALERT(at_console, "apache precached\n");
+
+	UTIL_PrecacheOther("monster_bullsquid");
+	ALERT(at_console, "bullsquid precached\n");
+
+	UTIL_PrecacheOther("monster_bigmomma");
+	ALERT(at_console, "bigmomma precached\n");
+
+	UTIL_PrecacheOther("monster_controller");
+	ALERT(at_console, "controller precached\n");
+
+	UTIL_PrecacheOther("monster_gargantua");
+	ALERT(at_console, "gargantua precached\n");
+
+	UTIL_PrecacheOther("monster_hassassin");
+	ALERT(at_console, "assassin precached\n");
+
+	UTIL_PrecacheOther("monster_houndeye");
+	ALERT(at_console, "houndeye precached\n");
+
+	UTIL_PrecacheOther("monster_alien_slave");
+	ALERT(at_console, "alien slave precached\n");
+
+	UTIL_PrecacheOther("monster_headcrab");
+	UTIL_PrecacheOther("monster_babycrab");
+	ALERT(at_console, "headcrab precached\n");
+
+	UTIL_PrecacheOther("monster_zamnhl");
+	ALERT(at_console, "zamnhl precached\n");
 
 }
 
@@ -547,6 +600,19 @@ void CBasePlayerItem::FallThink ( void )
 
 		Materialize(); 
 	}
+	else if (m_pPlayer != NULL)
+	{
+		SetThink(NULL);
+	}
+
+	// This weapon is an egon, it has no owner and we're in busting mode, so just remove it when it hits the ground.
+	if (IsBustingGame() && FNullEnt(pev->owner))
+	{
+		if (!strcmp("weapon_egon", STRING(pev->classname)))
+		{
+			UTIL_Remove(this);
+		}
+	}
 }
 
 //=========================================================
@@ -640,7 +706,23 @@ void CBasePlayerItem::DefaultTouch( CBaseEntity *pOther )
 	if ( !pOther->IsPlayer() )
 		return;
 
+	if (IsPlayerBusting(pOther))
+		return;
+
 	CBasePlayer *pPlayer = (CBasePlayer *)pOther;
+
+	// Block further pickups in Fiesta mode
+	const char* pszClass = STRING(pev->classname);
+
+	if ((FIESTA == AgGametype() || FIESTAFIGHT == AgGametype()) && pPlayer->m_bFiestaLock)
+	{
+		if (strstr(pszClass, "weapon_") && strcmp(pszClass, "weapon_handgrenande") != 0) // block all weapons except ammo and grenades
+		{
+			ClientPrint(pPlayer->pev, HUD_PRINTCENTER, "Weapon pickup disabled in Fiesta mode!\n");
+			ALERT(at_console, "Fiesta: Blocking pickup of %s\n", STRING(pev->classname));
+			return;
+		}
+	}
 
 	// can I have this?
 	if ( !g_pGameRules->CanHavePlayerItem( pPlayer, this ) )
@@ -705,6 +787,21 @@ void CBasePlayerWeapon::ItemPostFrame( void )
 		m_pPlayer->TabulateAmmo();
 
 		m_fInReload = FALSE;
+	}
+
+	// melee
+	if ((m_pPlayer->pev->button & IN_MELEE) && CanAttack(m_flNextPrimaryAttack, gpGlobals->time, UseDecrement()))
+	{
+		ALERT(at_console, "Server: melee received");
+		// cancel reload if in progress
+		if (m_fInReload)
+			m_fInReload = FALSE;
+
+		MeleeAttack();
+
+		// clear the melee button so it doesnt repeat in the same frame
+		m_pPlayer->pev->button &= ~IN_MELEE;
+		return;
 	}
 
 	if ( !(m_pPlayer->pev->button & IN_ATTACK ) )
@@ -856,6 +953,45 @@ int CBasePlayerWeapon::AddToPlayer( CBasePlayer *pPlayer )
 	if (bResult)
 		return AddWeapon( );
 	return FALSE;
+}
+
+void CBasePlayerWeapon::MeleeAttack()
+{
+	if (!m_pPlayer)
+		return;
+
+	// anim
+	SendWeaponAnim(PLAYER_ATTACK1); //stub anim 4 now
+	m_pPlayer->SetAnimation(PLAYER_ATTACK1);
+
+	// cooldown
+	m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 0.7f;
+	m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 0.7f;
+
+	// trace a short distance
+	TraceResult tr;
+	UTIL_MakeVectors(m_pPlayer->pev->v_angle);
+	Vector vecSrc = m_pPlayer->GetGunPosition();
+	Vector vecEnd = vecSrc + gpGlobals->v_forward * 64; // melee reach is 64 units
+
+	UTIL_TraceLine(vecSrc, vecEnd, dont_ignore_monsters, m_pPlayer->edict(), &tr);
+
+	if (tr.flFraction < 1.0f)
+	{
+		CBaseEntity* pEntity = CBaseEntity::Instance(tr.pHit);
+		if (pEntity)
+		{
+			// deal dmg
+			ClearMultiDamage();
+			pEntity->TraceAttack(m_pPlayer->pev, 25, gpGlobals->v_forward, &tr, DMG_CLUB);
+			ApplyMultiDamage(m_pPlayer->pev, m_pPlayer->pev);
+		}
+		// play hit snd
+		EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_WEAPON, "weapons/melee_hit.wav", 1, ATTN_NORM);
+	}
+	else
+		// miss snd
+		EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_WEAPON, "weapons/melee_miss.wav", 1, ATTN_NORM);
 }
 
 int CBasePlayerWeapon::UpdateClientData( CBasePlayer *pPlayer )
@@ -1066,7 +1202,7 @@ BOOL CBasePlayerWeapon::DefaultDeploy(char* szViewModel, char* szWeaponModel, in
 	SendWeaponAnim( iAnim, skiplocal, body );
 
 	m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + 0.5;
-	m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 1.0;
+	m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 3.0; // halflife#2495
 	m_flLastFireTime = 0.0;
 
 	return TRUE;

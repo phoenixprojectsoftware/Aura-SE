@@ -12,7 +12,7 @@
 *   without written permission from Valve LLC.
 *	NOTABLE SHIT: Egon fire rate is on line 352
 ****/
-#if !defined( OEM_BUILD ) && !defined( HLDEMO_BUILD )
+#if !defined( OEM_BUILD ) && !defined( HLDEMO_BUILD ) && !defined (_HALO)
 
 #include "extdll.h"
 #include "util.h"
@@ -20,6 +20,7 @@
 #include "player.h"
 #include "monsters.h"
 #include "weapons.h"
+#include "weapon_hierarchy.h"
 #include "nodes.h"
 #include "effects.h"
 #include "customentity.h"
@@ -31,6 +32,10 @@
 #define EGON_SOUND_OFF			"weapons/egon_off1.wav"
 #define EGON_SOUND_RUN			"weapons/egon_run3.wav"
 #define EGON_SOUND_STARTUP		"weapons/egon_windup2.wav"
+
+#ifndef CLIENT_DLL
+extern bool IsBustingGame();
+#endif
 
 #define EGON_SWITCH_NARROW_TIME			0.75			// Time it takes to switch fire modes
 #define EGON_SWITCH_WIDE_TIME			1.5
@@ -123,8 +128,8 @@ int CEgon::GetItemInfo(ItemInfo* p)
 	p->pszAmmo2 = NULL;
 	p->iMaxAmmo2 = -1;
 	p->iMaxClip = WEAPON_NOCLIP;
-	p->iSlot = 3;
-	p->iPosition = 2;
+	p->iSlot = WPN_FOREIGN_SLOT;
+	p->iPosition = WPN_EGON_POS;
 	p->iId = m_iId = WEAPON_EGON;
 	p->iFlags = 0;
 	p->iWeight = EGON_WEIGHT;
@@ -155,6 +160,10 @@ BOOL CEgon::HasAmmo(void)
 
 void CEgon::UseAmmo(int count)
 {
+#ifndef CLIENT_DLL
+	if (IsBustingGame())
+		return;
+#endif
 	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] >= count)
 		m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] -= count;
 	else
@@ -519,7 +528,15 @@ void CEgon::WeaponIdle(void)
 	m_deployed = TRUE;
 }
 
+BOOL CEgon::CanHolster()
+{
+#ifndef CLIENT_DLL
+	if (IsBustingGame())
+		return FALSE;
+#endif
 
+	return TRUE;
+}
 
 void CEgon::EndAttack(void)
 {

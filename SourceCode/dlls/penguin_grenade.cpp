@@ -23,6 +23,8 @@
 #include "decals.h"
 #include "gamerules.h"
 
+#include "game.h"
+
 #define PENGUIN_DETONATE_DELAY	15.0
 
 enum MonsterPenguinAnim
@@ -116,7 +118,11 @@ void CPenguinGrenade::SuperBounceTouch(CBaseEntity* pOther)
 		return;
 
 	// higher pitch as squeeker gets closer to detonation time
-	const float flpitch = 155.0 - 60.0 * ((m_flDie - gpGlobals->time) / PENGUIN_DETONATE_DELAY);
+	int flpitch = 155.0 - 60.0 * ((m_flDie - gpGlobals->time) / PENGUIN_DETONATE_DELAY);
+	if (flpitch < 80)
+		flpitch = 80;
+	else if (flpitch > 130)
+		flpitch = 130;
 
 	if (pOther->pev->takedamage && m_flNextAttack < gpGlobals->time)
 	{
@@ -323,13 +329,16 @@ void CPenguinGrenade::HuntThink()
 	StudioFrameAdvance();
 	pev->nextthink = gpGlobals->time + 0.1;
 
-	// explode when ready
-	if (gpGlobals->time >= m_flDie)
+	if (AbsoluteInsaneness.value < 2)
 	{
-		g_vecAttackDir = pev->velocity.Normalize();
-		pev->health = -1;
-		Killed(pev, 0);
-		return;
+		// explode when ready
+		if (gpGlobals->time >= m_flDie)
+		{
+			g_vecAttackDir = pev->velocity.Normalize();
+			pev->health = -1;
+			Killed(pev, 0);
+			return;
+		}
 	}
 
 	// float
@@ -381,6 +390,8 @@ void CPenguinGrenade::HuntThink()
 	float flpitch = 155.0 - 60.0 * ((m_flDie - gpGlobals->time) / PENGUIN_DETONATE_DELAY);
 	if (flpitch < 80)
 		flpitch = 80;
+	else if (flpitch > 130)
+		flpitch = 130;
 
 	if (m_hEnemy != NULL)
 	{

@@ -58,6 +58,9 @@
     <Filter Include="Header Files\dlls\rope">
       <UniqueIdentifier>{c1b5db1d-3fee-417a-8723-c1afb6770ee6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\dlls\halo_weapons">
+      <UniqueIdentifier>{6616a46c-fea2-4f56-8195-a33dc2b28eb8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\dlls\aflock.cpp">
@@ -522,7 +525,28 @@
     <ClCompile Include="..\..\dlls\genericitem.cpp">
       <Filter>Source Files\dlls</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\dlls\agfirefight.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\agfiesta.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\dlls\agswat.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\agfirefight_cache.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\halo_weapons\smg.cpp">
+      <Filter>Source Files\dlls\halo_weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\br.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\hldmar.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\agbusters.cpp">
       <Filter>Source Files\dlls</Filter>
     </ClCompile>
   </ItemGroup>
@@ -827,7 +851,19 @@
     <ClInclude Include="..\..\dlls\net_profiling.h">
       <Filter>Header Files\dlls</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\dlls\agfirefight.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\agfiesta.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\dlls\agswat.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\weapon_hierarchy.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\agbusters.h">
       <Filter>Header Files\dlls</Filter>
     </ClInclude>
   </ItemGroup>

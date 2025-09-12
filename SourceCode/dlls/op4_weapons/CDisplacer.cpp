@@ -12,10 +12,12 @@
 *   without written permission from Valve LLC.
 *
 ****/
+#ifndef _HALO
 #include "../extdll.h"
 #include "../util.h"
 #include "../cbase.h"
 #include "../weapons.h"
+#include "../weapon_hierarchy.h"
 #include "../player.h"
 #include "../UserMessages.h"
 
@@ -453,9 +455,11 @@ int CDisplacer::GetItemInfo(ItemInfo* p)
 	p->iMaxAmmo2 = WEAPON_NOCLIP;
 	p->iMaxClip = WEAPON_NOCLIP;
 	p->iFlags = 0;
-	p->iSlot = 5;
-	p->iPosition = 1;
+	p->iSlot = WPN_GEARBOX1_SLOT;
+	p->iPosition = WPN_DISPLACER_POS;
 	p->iId = m_iId = WEAPON_DISPLACER;
 	p->iWeight = DISPLACER_WEIGHT;
 	return 1;
 }
+
+#endif // _HALO

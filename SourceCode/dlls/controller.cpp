@@ -102,6 +102,7 @@ public:
 };
 
 LINK_ENTITY_TO_CLASS( monster_alien_controller, CController );
+LINK_ENTITY_TO_CLASS(monster_controller, CController);
 
 TYPEDESCRIPTION	CController::m_SaveData[] = 
 {
@@ -359,16 +360,6 @@ void CController :: HandleAnimEvent( MonsterEvent_t *pEvent )
 //=========================================================
 void CController :: Spawn()
 {
-	// Only spawn if coopmode is enabled
-	if (CVAR_GET_FLOAT("sv_aura_coop") == 1)
-	{
-		CBaseMonster::Spawn(); // Proceed with spawning if coopmode is on
-	}
-	else
-	{
-		// Optionally, log or remove entity if coopmode is off
-		UTIL_Remove(this);
-	}
 	Precache( );
 
 	SET_MODEL(ENT(pev), "models/controller.mdl");

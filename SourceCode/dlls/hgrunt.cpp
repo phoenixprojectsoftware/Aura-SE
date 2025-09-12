@@ -147,6 +147,9 @@ public:
 	void GibMonster( void );
 	void SpeakSentence( void );
 
+	void Killed(entvars_t* pevAttacker, int iGib) override;
+	void RespawnFirefightMonster();
+
 	int	Save( CSave &save ); 
 	int Restore( CRestore &restore );
 	
@@ -188,6 +191,7 @@ public:
 };
 
 LINK_ENTITY_TO_CLASS( monster_human_grunt, CHGrunt );
+LINK_ENTITY_TO_CLASS(monster_hgrunt, CHGrunt);
 
 TYPEDESCRIPTION	CHGrunt::m_SaveData[] = 
 {
@@ -255,6 +259,22 @@ void CHGrunt :: SpeakSentence( void )
 		SENTENCEG_PlayRndSz( ENT(pev), pGruntSentences[ m_iSentence ], HGRUNT_SENTENCE_VOLUME, GRUNT_ATTN, 0, m_voicePitch);
 		JustSpoke();
 	}
+}
+
+void CHGrunt::Killed(entvars_t* pevAttacker, int iGib)
+{
+	// Call the base Killed function if the parent class has one
+	CBaseMonster::Killed(pevAttacker, iGib);
+}
+
+void CHGrunt::RespawnFirefightMonster()
+{
+	pev->origin = m_vecInitialPos;
+	pev->health = pev->max_health;
+	pev->deadflag = DEAD_NO;
+	pev->takedamage = DAMAGE_AIM;
+
+	Spawn();
 }
 
 //=========================================================
@@ -978,16 +998,6 @@ void CHGrunt :: HandleAnimEvent( MonsterEvent_t *pEvent )
 //=========================================================
 void CHGrunt :: Spawn()
 {
-	// Only spawn if coopmode is enabled
-	if (CVAR_GET_FLOAT("sv_aura_coop") == 1)
-	{
-		CBaseMonster::Spawn(); // Proceed with spawning if coopmode is on
-	}
-	else
-	{
-		// Optionally, log or remove entity if coopmode is off
-		UTIL_Remove(this);
-	}
 	Precache( );
 
 	SET_MODEL(ENT(pev), "models/hgrunt.mdl");
@@ -997,7 +1007,7 @@ void CHGrunt :: Spawn()
 	pev->movetype		= MOVETYPE_STEP;
 	m_bloodColor		= BLOOD_COLOR_RED;
 	pev->effects		= 0;
-	pev->health			= gSkillData.hgruntHealth;
+	pev->health			= gSkillData.hgruntHealth * 4;
 	m_flFieldOfView		= 0.2;// indicates the width of this monster's forward view cone ( as a dotproduct result )
 	m_MonsterState		= MONSTERSTATE_NONE;
 	m_flNextGrenadeCheck = gpGlobals->time + 1;

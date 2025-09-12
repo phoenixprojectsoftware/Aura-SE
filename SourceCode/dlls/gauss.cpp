@@ -19,6 +19,7 @@
 #include "cbase.h"
 #include "monsters.h"
 #include "weapons.h"
+#include "weapon_hierarchy.h"
 #include "nodes.h"
 #include "player.h"
 #include "soundent.h"
@@ -115,8 +116,12 @@ int CGauss::GetItemInfo(ItemInfo* p)
 	p->pszAmmo2 = NULL;
 	p->iMaxAmmo2 = -1;
 	p->iMaxClip = WEAPON_NOCLIP;
-	p->iSlot = 3;
-	p->iPosition = 1;
+#ifdef _HALO
+	p->iSlot = WPN_EXPL_SLOT;
+#else
+	p->iSlot = WPN_FOREIGN_SLOT;
+#endif
+	p->iPosition = WPN_GAUSS_POS;
 	p->iId = m_iId = WEAPON_GAUSS;
 	p->iFlags = 0;
 	p->iWeight = GAUSS_WEIGHT;
@@ -477,7 +482,7 @@ void CGauss::Fire(Vector vecOrigSrc, Vector vecDir, float flDamage)
 				fHasPunched = 1;
 
 				// try punching through wall if secondary attack (primary is incapable of breaking through)
-				if (!m_fPrimaryFire)
+				if (!m_fPrimaryFire && ag_wallgauss.value > 0)
 				{
 					UTIL_TraceLine(tr.vecEndPos + vecDir * 8, vecDest, dont_ignore_monsters, pentIgnore, &beam_tr);
 					if (!beam_tr.fAllSolid)
@@ -502,7 +507,7 @@ void CGauss::Fire(Vector vecOrigSrc, Vector vecDir, float flDamage)
 
 							if (g_pGameRules->IsMultiplayer())
 							{
-								damage_radius = flDamage * 1.75;  // Old code == 2.5
+								damage_radius = flDamage * 1.75 * ag_wallgauss.value;
 							}
 							else
 							{
@@ -572,30 +577,28 @@ void CGauss::WeaponIdle(void)
 		m_fInAttack = 0;
 		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 2.0;
 	}
+
+	if (m_flTimeWeaponIdle > UTIL_WeaponTimeBase())
+		return;
+
+	int iAnim;
+	float flRand = UTIL_SharedRandomFloat(m_pPlayer->random_seed, 0, 1);
+	if (flRand <= 0.75)
+	{
+		iAnim = GAUSS_IDLE;
+		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 80.0 / 15.6 * (2);
+	}
+	else if (flRand <= 0.875)
+	{
+		iAnim = GAUSS_IDLE2;
+		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 80.0 / 19.0;
+	}
 	else
 	{
-		int iAnim;
-		float flRand = RANDOM_FLOAT(0, 1);
-		if (flRand <= 0.5)
-		{
-			iAnim = GAUSS_IDLE;
-			m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + UTIL_SharedRandomFloat(m_pPlayer->random_seed, 10, 15);
-		}
-		else if (flRand <= 0.75)
-		{
-			iAnim = GAUSS_IDLE2;
-			m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + UTIL_SharedRandomFloat(m_pPlayer->random_seed, 10, 15);
-		}
-		else
-		{
-			iAnim = GAUSS_FIDGET;
-			m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 3;
-		}
-
-		return;
-		SendWeaponAnim(iAnim);
-
+		iAnim = GAUSS_FIDGET;
+		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 85.0 / 15.0;
 	}
+	SendWeaponAnim(iAnim);
 }
 
 

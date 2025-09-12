@@ -5,6 +5,18 @@
       <Configuration>Debug</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="HaloDebug|Win32">
+      <Configuration>HaloDebug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="HaloRelease|Win32">
+      <Configuration>HaloRelease</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Halo|Win32">
+      <Configuration>Halo</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="Release-WSL2|Win32">
       <Configuration>Release-WSL2</Configuration>
       <Platform>Win32</Platform>
@@ -17,7 +29,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{69DDADC0-97F4-419E-86EB-C91781A0D2E0}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>agdll</RootNamespace>
+    <RootNamespace>auradll</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
     <ProjectName>Aura server</ProjectName>
   </PropertyGroup>
@@ -28,7 +40,27 @@
     <CharacterSet>NotSet</CharacterSet>
     <PlatformToolset>v143</PlatformToolset>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='HaloDebug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>NotSet</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>NotSet</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='HaloRelease|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>NotSet</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Halo|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -48,7 +80,16 @@
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='HaloDebug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='HaloRelease|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Halo|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release-WSL2|Win32'" Label="PropertySheets">
@@ -60,7 +101,24 @@
     <IntDir>$(Configuration)\$(ProjectName)\int\</IntDir>
     <TargetName>aura</TargetName>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='HaloDebug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IntDir>$(Configuration)\$(ProjectName)\int\</IntDir>
+    <TargetName>aura</TargetName>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(Configuration)\$(ProjectName)\</OutDir>
+    <IntDir>$(Configuration)\$(ProjectName)\int\</IntDir>
+    <TargetName>aura</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='HaloRelease|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(Configuration)\$(ProjectName)\</OutDir>
+    <IntDir>$(Configuration)\$(ProjectName)\int\</IntDir>
+    <TargetName>aura</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Halo|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(Configuration)\$(ProjectName)\</OutDir>
     <IntDir>$(Configuration)\$(ProjectName)\int\</IntDir>
@@ -100,6 +158,33 @@
       <Command>debug_filecopy.bat</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='HaloDebug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;_DEBUG;_WINDOWS;QUIVER;VOXEL;QUAKE2;VALVE_DLL;CLIENT_WEAPONS;_HALO;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <AdditionalIncludeDirectories>..\..\dlls;..\..\engine;..\..\common;..\..\pm_shared;..\..\game_shared;..\..\ministl;..\..\public;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <AdditionalOptions>/Zc:threadSafeInit- %(AdditionalOptions)</AdditionalOptions>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ModuleDefinitionFile>$(ProjectDir)..\..\dlls\ag.def</ModuleDefinitionFile>
+    </Link>
+    <PostBuildEvent />
+    <PostBuildEvent />
+    <CustomBuildStep>
+      <Command>copy "$(TargetPath)" "E:\Steam\steamapps\common\Half-Life\zamnhlmp\dlls\$(TargetFileName)"</Command>
+    </CustomBuildStep>
+    <PostBuildEvent>
+      <Command>halodebug_filecopy.bat</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -124,6 +209,59 @@
     </Link>
     <PostBuildEvent>
       <Command>release_filecopy.bat</Command>
+    </PostBuildEvent>
+    <PostBuildEvent />
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='HaloRelease|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;NDEBUG;_WINDOWS;QUIVER;VOXEL;QUAKE2;VALVE_DLL;CLIENT_WEAPONS;_HALO;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\dlls;..\..\engine;..\..\common;..\..\pm_shared;..\..\game_shared;..\..\ministl;..\..\public;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <AdditionalOptions>/Zc:threadSafeInit- %(AdditionalOptions)</AdditionalOptions>
+      <LanguageStandard>Default</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <ModuleDefinitionFile>$(ProjectDir)..\..\dlls\ag.def</ModuleDefinitionFile>
+    </Link>
+    <PostBuildEvent>
+      <Command>halorelease_filecopy.bat</Command>
+    </PostBuildEvent>
+    <PostBuildEvent />
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Halo|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;NDEBUG;_WINDOWS;_STEAMWORKS;_HALO;QUIVER;VOXEL;QUAKE2;VALVE_DLL;CLIENT_WEAPONS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\dlls;..\..\engine;..\..\common;..\..\pm_shared;..\..\game_shared;..\..\ministl;..\..\public;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <AdditionalOptions>/Zc:threadSafeInit- %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <ModuleDefinitionFile>$(ProjectDir)..\..\dlls\ag.def</ModuleDefinitionFile>
+    </Link>
+    <PostBuildEvent>
+      <Command>halo_filecopy.bat</Command>
     </PostBuildEvent>
     <PostBuildEvent />
   </ItemDefinitionGroup>
@@ -156,6 +294,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\dlls\aflock.cpp" />
+    <ClCompile Include="..\..\dlls\agbusters.cpp" />
+    <ClCompile Include="..\..\dlls\agfiesta.cpp" />
+    <ClCompile Include="..\..\dlls\agfirefight.cpp" />
+    <ClCompile Include="..\..\dlls\agfirefight_cache.cpp" />
     <ClCompile Include="..\..\dlls\aghideandseek.cpp" />
     <ClCompile Include="..\..\dlls\agrunt.cpp" />
     <ClCompile Include="..\..\dlls\agswat.cpp" />
@@ -168,6 +310,7 @@
     <ClCompile Include="..\..\dlls\bigmomma.cpp" />
     <ClCompile Include="..\..\dlls\bloater.cpp" />
     <ClCompile Include="..\..\dlls\bmodels.cpp" />
+    <ClCompile Include="..\..\dlls\br.cpp" />
     <ClCompile Include="..\..\dlls\bullsquid.cpp" />
     <ClCompile Include="..\..\dlls\buttons.cpp" />
     <ClCompile Include="..\..\dlls\cbase.cpp" />
@@ -192,11 +335,13 @@
     <ClCompile Include="..\..\dlls\ggrenade.cpp" />
     <ClCompile Include="..\..\dlls\globals.cpp" />
     <ClCompile Include="..\..\dlls\gman.cpp" />
+    <ClCompile Include="..\..\dlls\halo_weapons\smg.cpp" />
     <ClCompile Include="..\..\dlls\handgrenade.cpp" />
     <ClCompile Include="..\..\dlls\hassassin.cpp" />
     <ClCompile Include="..\..\dlls\headcrab.cpp" />
     <ClCompile Include="..\..\dlls\healthkit.cpp" />
     <ClCompile Include="..\..\dlls\hgrunt.cpp" />
+    <ClCompile Include="..\..\dlls\hldmar.cpp" />
     <ClCompile Include="..\..\dlls\hornet.cpp" />
     <ClCompile Include="..\..\dlls\hornetgun.cpp" />
     <ClCompile Include="..\..\dlls\houndeye.cpp" />
@@ -319,6 +464,9 @@
     <ClInclude Include="..\..\common\weaponinfo.h" />
     <ClInclude Include="..\..\dlls\activity.h" />
     <ClInclude Include="..\..\dlls\activitymap.h" />
+    <ClInclude Include="..\..\dlls\agbusters.h" />
+    <ClInclude Include="..\..\dlls\agfiesta.h" />
+    <ClInclude Include="..\..\dlls\agfirefight.h" />
     <ClInclude Include="..\..\dlls\aghideandseek.h" />
     <ClInclude Include="..\..\dlls\agswat.h" />
     <ClInclude Include="..\..\dlls\animation.h" />
@@ -380,6 +528,7 @@
     <ClInclude Include="..\..\dlls\util.h" />
     <ClInclude Include="..\..\dlls\vector.h" />
     <ClInclude Include="..\..\dlls\weapons.h" />
+    <ClInclude Include="..\..\dlls\weapon_hierarchy.h" />
     <ClInclude Include="..\..\engine\eiface.h" />
     <ClInclude Include="..\..\ministl\algo.h" />
     <ClInclude Include="..\..\pm_shared\pm_debug.h" />

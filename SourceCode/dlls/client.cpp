@@ -903,7 +903,7 @@ void ClientPrecache( void )
 	PRECACHE_SOUND("player/shield_low.wav"); // shield low sound
 	PRECACHE_SOUND("player/shield_empty.wav"); // shield empty sound
 #ifdef _HALO
-	PRECACHE_SOUND("player/shield_charge.wav"); // shield charge sound
+	PRECACHE_SOUND("player/shield_charge.wav"); // Halo GS shield charge sound
 #endif
 
 #ifndef _HALO
@@ -985,7 +985,7 @@ const char *GetGameDescription()
 	if ( g_pGameRules ) // this function may be called before the world has spawned, and the game rules initialized
 		return g_pGameRules->GetGameDescription();
 	else
-		return "Half-Life";
+		return "Aura";
 }
 
 /*
@@ -1807,6 +1807,7 @@ void UpdateClientData ( const edict_t *ent, int sendweapons, struct clientdata_s
 			cd->fuser2			= pl->m_flNextAmmoBurn;
 			cd->fuser3			= pl->m_flAmmoStartCharge;
 			cd->vuser1.x		= pl->ammo_9mm;
+			cd->vuser1.x = pl->ammo_br;
 			cd->vuser1.y		= pl->ammo_357;
 			cd->vuser1.z		= pl->ammo_argrens;
 			cd->vuser2.z		= pl->ammo_762;

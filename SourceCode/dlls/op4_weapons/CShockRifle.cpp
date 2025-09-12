@@ -12,10 +12,13 @@
 *   without written permission from Valve LLC.
 *
 ****/
+// TODO: make this into plasma weapons for halogs
+#ifndef _HALO
 #include "../extdll.h"
 #include "../util.h"
 #include "../cbase.h"
 #include "../weapons.h"
+#include "../weapon_hierarchy.h"
 #include "../player.h"
 
 #ifndef CLIENT_DLL
@@ -115,7 +118,7 @@ BOOL CShockRifle::Deploy()
 {
 	if (UTIL_IsMultiplayer())
 	{
-		m_flRechargeTime = gpGlobals->time + 0.25;
+		m_flRechargeTime = gpGlobals->time + 0.1;
 	}
 	else
 	{
@@ -303,7 +306,7 @@ void CShockRifle::RechargeAmmo(bool bLoud)
 
 		if (UTIL_IsMultiplayer())
 		{
-			m_flRechargeTime += 0.25;
+			m_flRechargeTime += 0.1;
 		}
 		else
 		{
@@ -326,9 +329,11 @@ int CShockRifle::GetItemInfo(ItemInfo* p)
 	p->iMaxAmmo2 = WEAPON_NOCLIP;
 	p->iMaxClip = WEAPON_NOCLIP;
 	p->iFlags = ITEM_FLAG_NOAUTORELOAD | ITEM_FLAG_NOAUTOSWITCHEMPTY;
-	p->iSlot = 6;
-	p->iPosition = 1;
+	p->iSlot = WPN_GEARBOX2_SLOT;
+	p->iPosition = WPN_SHOCKRIFLE_POS;
 	p->iId = m_iId = WEAPON_SHOCKRIFLE;
 	p->iWeight = SHOCKRIFLE_WEIGHT;
 	return 1;
 }
+
+#endif // _HALO

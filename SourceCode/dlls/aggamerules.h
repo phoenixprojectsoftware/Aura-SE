@@ -18,7 +18,10 @@
 #include "agclient.h"
 #include "agarena.h"
 #include "aghideandseek.h"
+#include "agfirefight.h"
+#include "agfiesta.h"
 #include "agswat.h"
+#include "agbusters.h"
 #include "aglms.h"
 #include "agctf.h"
 #include "agdom.h"
@@ -97,9 +100,12 @@ public:
     AgArena             m_Arena;
     AgHideandseek       m_Hideandseek;
     AgSwat              m_SWAT;
+    AgBusters         m_Busters;
     AgLMS               m_LMS;
     AgCTF               m_CTF;
     AgDOM               m_DOM;
+    AgFirefight         m_Firefight;
+	AgFiesta            m_Fiesta;
     AgInfoIntermission  m_InfoInterMission;
     AgSuddenDeath       m_SuddenDeath;
     AgTimeout           m_Timeout;

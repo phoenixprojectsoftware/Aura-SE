@@ -60,6 +60,8 @@ extern void SetupVisibility(edict_t *pViewEntity, edict_t *pClient, unsigned cha
 // the world node graph
 extern CGraph	WorldGraph;
 
+extern bool IsBustingGame();
+
 #define TRAIN_ACTIVE	0x80 
 #define TRAIN_NEW		0xc0
 #define TRAIN_OFF		0x00
@@ -598,7 +600,7 @@ int CBasePlayer :: TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, 
 	m_lastDamageAmount = flDamage;
 
 	// Armor. 
-	if (pev->armorvalue && !(bitsDamageType & (DMG_FALL | DMG_DROWN)) )// armor doesn't protect against fall or drown damage!
+	if (pev->armorvalue && !(bitsDamageType & (DMG_FALL | DMG_DROWN | DMG_SKIPARMOR)) )// armor doesn't protect against fall or drown damage!
 	{
 		float flNew = flDamage * flRatio;
 
@@ -617,7 +619,11 @@ int CBasePlayer :: TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, 
 		else
 			pev->armorvalue -= flArmor;
 		
-		flDamage = 0;
+		// Switch off Half-Life's damage ratio ONLY with regen on.
+		if (sv_aura_regeneration.value != 0)
+			flDamage = 0;
+		else
+			flDamage = flNew;
 	}
 
 	// this cast to INT is critical!!! If a player ends up with 0.5 health, the engine will get that
@@ -793,7 +799,9 @@ int CBasePlayer :: TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, 
 	// BlueNightHawk : Suit Energy Regeneration || after damage taken!!
 	if (sv_aura_regeneration.value != 0 && pev->armorvalue < MAX_NORMAL_BATTERY && fTookDamage)
 	{
+#ifndef _HALO
 		STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_lp.wav");
+#endif
 		if (m_fRegenOn && !isShieldEmpty)
 			EMIT_SOUND(ENT(pev), CHAN_ITEM, "items/suitchargeno1.wav", 0.85, ATTN_NORM);
 		m_fRegenOn = false;
@@ -920,23 +928,66 @@ void CBasePlayer::PackDeadPlayerItems( void )
 	iPA = 0;
 	iPW = 0;
 
-// pack the ammo
-	while ( iPackAmmo[ iPA ] != -1 )
+	if (IsBustingGame())
 	{
-		pWeaponBox->PackAmmo( MAKE_STRING( CBasePlayerItem::AmmoInfoArray[ iPackAmmo[ iPA ] ].pszName ), m_rgAmmo[ iPackAmmo[ iPA ] ] );
-		iPA++;
-	}
+		if (HasNamedPlayerItem("weapon_egon"))
+		{
+			for (i = 0; i < MAX_ITEM_TYPES; i++)
+			{
+				CBasePlayerItem* pItem = m_rgpPlayerItems[i];
 
-// now pack all of the items in the lists
-	while ( rgpPackWeapons[ iPW ] )
+				if (pItem)
+				{
+					if (!strcmp("weapon_egon", STRING(pItem->pev->classname)))
+					{
+						pWeaponBox->PackWeapon(pItem);
+
+						SET_MODEL(ENT(pWeaponBox->pev), "models/w_egon.mdl");
+
+						pWeaponBox->pev->velocity = Vector(0, 0, 0);
+						pWeaponBox->pev->renderfx = kRenderFxGlowShell;
+						pWeaponBox->pev->renderamt = 25;
+						pWeaponBox->pev->rendercolor = Vector(0, 75, 250);
+
+						break;
+					}
+				}
+			}
+		}
+	}
+	else
 	{
-		// weapon unhooked from the player. Pack it into der box.
-		pWeaponBox->PackWeapon( rgpPackWeapons[ iPW ] );
+		bool bPackItems = true;
 
-		iPW++;
+		if (iAmmoRules == GR_PLR_DROP_AMMO_ACTIVE && iWeaponRules == GR_PLR_DROP_GUN_ACTIVE)
+		{
+			if (FClassnameIs(rgpPackWeapons[0]->pev, "weapon_satchel") && (iPackAmmo[0] == -1 || (m_rgAmmo[iPackAmmo[0]] == 0)))
+			{
+				bPackItems = false;
+			}
+		}
+
+		if (bPackItems)
+		{
+			// pack the ammo
+			while (iPackAmmo[iPA] != -1)
+			{
+				pWeaponBox->PackAmmo(MAKE_STRING(CBasePlayerItem::AmmoInfoArray[iPackAmmo[iPA]].pszName), m_rgAmmo[iPackAmmo[iPA]]);
+				iPA++;
+			}
+
+			// now pack all of the items in the lists
+			while (rgpPackWeapons[iPW])
+			{
+				// weapon unhooked from the player. Pack it into der box.
+				pWeaponBox->PackWeapon(rgpPackWeapons[iPW]);
+
+				iPW++;
+			}
+		}
+
+		pWeaponBox->pev->velocity = pev->velocity * 1.2; // weaponbox has player's velocity, then some.
 	}
-
-	pWeaponBox->pev->velocity = pev->velocity * 1.2;// weaponbox has player's velocity, then some.
 
 	RemoveAllItems( TRUE );// now strip off everything that wasn't handled by the code above.
 }
@@ -1109,6 +1160,8 @@ void CBasePlayer::Killed( entvars_t *pevAttacker, int iGib )
 
 	pev->armorvalue = 0;
 	m_fRegenOn = false;
+
+	m_bFiestaLock = false; // Allow Fiesta to assign two random weapons again.
 	
 	pev->angles.x = 0;
 	pev->angles.z = 0;
@@ -1325,6 +1378,7 @@ all the ammo we have into the ammo vars.
 void CBasePlayer::TabulateAmmo()
 {
 	ammo_9mm = AmmoInventory( GetAmmoIndex( "9mm" ) );
+	ammo_br = AmmoInventory(GetAmmoIndex("ammobr"));
 	ammo_357 = AmmoInventory( GetAmmoIndex( "357" ) );
 	ammo_argrens = AmmoInventory( GetAmmoIndex( "ARgrenades" ) );
 	ammo_bolts = AmmoInventory( GetAmmoIndex( "bolts" ) );
@@ -2136,31 +2190,48 @@ void CBasePlayer::PreThink(void)
 	if ( g_fGameOver )
 		return;         // intermission or finale
 
-  //++ BulliT
-  if (IsSpectator() || ARENA == AgGametype() || LMS == AgGametype())
-    EnableControl(TRUE);
-  else
-    EnableControl(!g_bPaused);
+	//++ BulliT
+	if (IsSpectator() || ARENA == AgGametype() || LMS == AgGametype())
+		EnableControl(TRUE);
+	else
+		EnableControl(!g_bPaused);
 
-  // BlueNightHawk : Infinite Ammo
-  if (sv_aura_infinite_ammo.value != 0 && m_pActiveItem)
-  {
-	  ItemInfo p;
-	  m_pActiveItem->GetItemInfo(&p);
-	  if (sv_aura_infinite_ammo.value == 1)
-	  {
-		  ((CBasePlayerWeapon*)m_pActiveItem)->m_iClip = p.iMaxClip;
-	  }
+	// BlueNightHawk : Infinite Ammo
+	if ((sv_aura_infinite_ammo.value != 0 || FIESTA == AgGametype() || FIESTAFIGHT == AgGametype()) && m_pActiveItem)
+	{
+		ItemInfo p;
+		m_pActiveItem->GetItemInfo(&p);
 
-	  if (m_pActiveItem->PrimaryAmmoIndex() != -1 && p.iMaxAmmo1 > 0)
-		  m_rgAmmo[m_pActiveItem->PrimaryAmmoIndex()] = p.iMaxAmmo1;
-	  if (m_pActiveItem->SecondaryAmmoIndex() != -1 && p.iMaxAmmo2 > 0)
-		  m_rgAmmo[m_pActiveItem->SecondaryAmmoIndex()] = p.iMaxAmmo2;
+		if (sv_aura_infinite_ammo.value == 1)
+		{
+			// mode 1 - bottomless clip. refill every frame.
+			((CBasePlayerWeapon*)m_pActiveItem)->m_iClip = p.iMaxClip;
 
-  }
-  
-  if (m_fDisplayGamemode > 0 && m_fDisplayGamemode < gpGlobals->time)
-  {
+			if (m_pActiveItem->PrimaryAmmoIndex() != -1 && p.iMaxAmmo1 > 0)
+				m_rgAmmo[m_pActiveItem->PrimaryAmmoIndex()] = p.iMaxAmmo1;
+
+			if (m_pActiveItem->SecondaryAmmoIndex() != -1 && p.iMaxAmmo2 > 0)
+				m_rgAmmo[m_pActiveItem->SecondaryAmmoIndex()] = p.iMaxAmmo2;
+		}
+		else if (sv_aura_infinite_ammo.value == 2 || FIESTA == AgGametype() || FIESTAFIGHT == AgGametype())
+		{
+		// mode 2 - refillable clip, infinite reserve
+
+		// set reserve ammo to max and allow normal reloading
+		if (m_pActiveItem->PrimaryAmmoIndex() != -1 && p.iMaxAmmo1 > 0)
+		{
+			m_rgAmmo[m_pActiveItem->PrimaryAmmoIndex()] = p.iMaxAmmo1;
+		}
+
+		if (m_pActiveItem->SecondaryAmmoIndex() != -1 && p.iMaxAmmo2 > 0)
+		{
+			m_rgAmmo[m_pActiveItem->SecondaryAmmoIndex()] = p.iMaxAmmo2;
+		}
+	}
+}
+
+	if (m_fDisplayGamemode > 0 && m_fDisplayGamemode < gpGlobals->time)
+	{
     //Print gameinfo text.
 #ifdef AG_NO_CLIENT_DLL
       //Print gameinfo text.
@@ -3412,6 +3483,7 @@ ReturnSpot:
 
 void CBasePlayer::Spawn( void )
 {
+	m_bFiestaLock = false;
 	pev->classname		= MAKE_STRING("player");
 	pev->health			= 100;
 	pev->armorvalue		= 0;
@@ -4228,10 +4300,10 @@ void CBasePlayer::CheatImpulseCommands( int iImpulse )
 		GiveNamedItem( "ammo_buckshot" );
 		GiveNamedItem( "weapon_9mmAR" );
 		GiveNamedItem( "ammo_9mmAR" );
+		GiveNamedItem("weapon_hldmar");
 		GiveNamedItem( "ammo_ARgrenades" );
 		GiveNamedItem( "weapon_handgrenade" );
 		GiveNamedItem( "weapon_tripmine" );
-#ifndef OEM_BUILD
 		GiveNamedItem( "weapon_357" );
 		GiveNamedItem( "ammo_357" );
 		GiveNamedItem( "weapon_crossbow" );
@@ -4254,6 +4326,11 @@ void CBasePlayer::CheatImpulseCommands( int iImpulse )
 		GiveNamedItem("weapon_knife");
 		GiveNamedItem("ammo_762");
 		GiveNamedItem("weapon_m249");
+		GiveNamedItem("weapon_br");
+
+#ifdef _HALO
+		GiveNamedItem("weapon_smg");
+		GiveNamedItem("weapon_sword");
 #endif
 		gEvilImpulse101 = FALSE;
 		break;
@@ -4635,7 +4712,11 @@ void CBasePlayer::RunShieldUpdates(void)
 
 	if (sv_aura_regeneration.value != 0 && pev->armorvalue == MAX_NORMAL_BATTERY && !bAreWeMaxxed) // SHIELD AT 100%
 	{
+#ifdef _HALO
+		STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_charge.wav");
+#else
 		STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_lp.wav");
+#endif
 		bAreWeMaxxed = true;
 #ifdef _DEBUG
 		ALERT(at_console, "bAreWeMaxxed is now true\n");
@@ -4712,7 +4793,7 @@ void CBasePlayer::RunShieldUpdates(void)
 			hasShieldLowStopped = true;
 		}
 
-		// BlueNightHawk : Suit Energy Regeneration
+		// BlueNightHawk : Suit Energy Regeneration | Sounds
 		if (sv_aura_regeneration.value != 0 && pev->armorvalue < MAX_NORMAL_BATTERY
 			&& m_flNextSuitRegenTime < gpGlobals->time)
 		{
@@ -4724,16 +4805,24 @@ void CBasePlayer::RunShieldUpdates(void)
 				m_flNextSuitRegenTime = 0.0f;
 				m_fRegenOn = false;
 				STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_empty.wav");
+#ifdef _HALO
+				STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_charge.wav");
+#else
 				STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_lp.wav");
 				EMIT_SOUND(ENT(pev), CHAN_STATIC, "player/shield_finish.wav", 1, ATTN_NORM);
+#endif
 				bAreWeAt100 = true;
 				bAreWeMaxxed = true;
 			}
 			else if (!m_fRegenOn) // when shield starts recharging
 			{
 				m_fRegenOn = true;
+#ifdef _HALO
+				EMIT_SOUND(ENT(pev), CHAN_STATIC, "player/shield_charge.wav", 1, ATTN_NORM);
+#else
 				EMIT_SOUND(ENT(pev), CHAN_AUTO, "player/shield_start.wav", 1, ATTN_NORM);
 				EMIT_SOUND(ENT(pev), CHAN_STATIC, "player/shield_lp.wav", 0.85, ATTN_NORM);
+#endif
 				STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_empty.wav");
 
 			}
@@ -5680,6 +5769,33 @@ BOOL CBasePlayer::HasNamedPlayerItem( const char *pszItemName )
 	}
 
 	return FALSE;
+}
+
+//=========================================================
+// HasPlayerItemFromID
+// Just compare IDs, rather than classnames
+//=========================================================
+bool CBasePlayer::HasPlayerItemFromID(int nID)
+{
+	CBasePlayerItem* pItem;
+	int i;
+
+	for (i = 0; i < MAX_ITEM_TYPES; i++)
+	{
+		pItem = m_rgpPlayerItems[i];
+
+		while (pItem)
+		{
+			if (pItem->m_iId == nID)
+			{
+				return true;
+			}
+
+			pItem = pItem->m_pNext;
+		}
+	}
+
+	return false;
 }
 
 //=========================================================

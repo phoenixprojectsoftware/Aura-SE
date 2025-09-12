@@ -12,10 +12,12 @@
 *   without written permission from Valve LLC.
 *
 ****/
+#ifndef _HALO
 #include "../extdll.h"
 #include "../util.h"
 #include "../cbase.h"
 #include "../weapons.h"
+#include "../weapon_hierarchy.h"
 #include "../player.h"
 #include "../UserMessages.h"
 // #include "gamerules.h"
@@ -350,8 +352,8 @@ int CM249::GetItemInfo(ItemInfo* p)
 	p->pszAmmo2 = nullptr;
 	p->iMaxAmmo2 = WEAPON_NOCLIP;
 	p->iMaxClip = M249_MAX_CLIP;
-	p->iSlot = 5;
-	p->iPosition = 0;
+	p->iSlot = WPN_GEARBOX1_SLOT;
+	p->iPosition = WPN_M249_POS;
 	p->iFlags = 0;
 	p->iId = m_iId = WEAPON_M249;
 	p->iWeight = M249_WEIGHT;
@@ -393,3 +395,5 @@ public:
 };
 
 LINK_ENTITY_TO_CLASS(ammo_556, CAmmo556);
+
+#endif // _HALO

@@ -24,23 +24,25 @@ void SetupGametype()
     AgString sGametype = CVAR_GET_STRING("sv_aura_gametype");
     g_GameType = STANDARD;
     if (sGametype == "arena")
-    {
         g_GameType = ARENA;
-    }
     else if (sGametype == "arcade")
         g_GameType = ARCADE;
     else if (sGametype == "hideandseek")
         g_GameType = HIDEANDSEEK;
+    else if (sGametype == "firefight")
+        g_GameType = FIREFIGHT;
+    else if (sGametype == "fiesta")
+        g_GameType = FIESTA;
     else if (sGametype == "swat")
         g_GameType = SWAT;
-#ifndef AG_NO_CLIENT_DLL
+    else if (sGametype == "hldm")
+        g_GameType = HLDM;
+    else if (sGametype == "busters")
+        g_GameType = BUSTERS;
     else if (sGametype == "ctf")
         g_GameType = CTF;
-    //++ muphicks
     else if (sGametype == "dom")
         g_GameType = DOM;
-    //--muphicks
-#endif
     else if (sGametype == "lms")
         g_GameType = LMS;
     else if (sGametype == "sgbow")

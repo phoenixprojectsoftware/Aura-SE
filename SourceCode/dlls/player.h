@@ -293,6 +293,7 @@ public:
 	void DropPlayerItem ( char *pszItemName );
 	BOOL HasPlayerItem( CBasePlayerItem *pCheckItem );
 	BOOL HasNamedPlayerItem( const char *pszItemName );
+	bool HasPlayerItemFromID(int nID);
 	BOOL HasWeapons( void );// do I have ANY weapons?
 	void SelectPrevItem( int iItem );
 	void SelectNextItem( int iItem );
@@ -389,6 +390,7 @@ protected:
 	bool m_bSentCheatCheck;
 
 public:
+	bool m_bFiestaLock = false;
 	int  m_iVote;             //What player voted. -1 (not voted), 0 no, 1 yes.
 	bool m_bDoneFirstSpawn;   //True if player has done the first spawn.
 	bool m_bInSpawn;          //True if player is spawning.

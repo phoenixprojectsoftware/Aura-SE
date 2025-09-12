@@ -12,13 +12,14 @@
 *   without written permission from Valve LLC.
 *
 ****/
-#if !defined( OEM_BUILD ) && !defined( HLDEMO_BUILD )
+#if !defined( OEM_BUILD ) && !defined( HLDEMO_BUILD ) && !defined (_HALO)
 
 #include "extdll.h"
 #include "util.h"
 #include "cbase.h"
 #include "monsters.h"
 #include "weapons.h"
+#include "weapon_hierarchy.h"
 #include "nodes.h"
 #include "player.h"
 #include "gamerules.h"
@@ -286,8 +287,8 @@ int CCrossbow::GetItemInfo(ItemInfo *p)
 	p->pszAmmo2 = NULL;
 	p->iMaxAmmo2 = -1;
 	p->iMaxClip = CROSSBOW_MAX_CLIP;
-	p->iSlot = 2;
-	p->iPosition = 2;
+	p->iSlot = WPN_AUTO_SLOT;
+	p->iPosition = WPN_CROSSBOW_POS;
 	p->iId = WEAPON_CROSSBOW;
 	p->iFlags = 0;
 	p->iWeight = CROSSBOW_WEIGHT;

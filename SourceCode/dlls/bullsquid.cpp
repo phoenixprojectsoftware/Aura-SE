@@ -226,6 +226,7 @@ public:
 	float m_flNextSpitTime;// last time the bullsquid used the spit attack.
 };
 LINK_ENTITY_TO_CLASS( monster_bullchicken, CBullsquid );
+LINK_ENTITY_TO_CLASS(monster_bullsquid, CBullsquid);
 
 TYPEDESCRIPTION	CBullsquid::m_SaveData[] = 
 {
@@ -668,16 +669,6 @@ void CBullsquid :: HandleAnimEvent( MonsterEvent_t *pEvent )
 //=========================================================
 void CBullsquid :: Spawn()
 {
-	// Only spawn if coopmode is enabled
-	if (CVAR_GET_FLOAT("sv_aura_coop") == 1)
-	{
-		CBaseMonster::Spawn(); // Proceed with spawning if coopmode is on
-	}
-	else
-	{
-		// Optionally, log or remove entity if coopmode is off
-		UTIL_Remove(this);
-	}
 	Precache( );
 
 	SET_MODEL(ENT(pev), "models/bullsquid.mdl");

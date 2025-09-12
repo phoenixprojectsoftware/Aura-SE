@@ -350,6 +350,8 @@ public:
 	void ClearShockEffect();
 
 	inline BOOL HasConditionsRand(int iConditions, int chance) { return HasConditions(iConditions) && RANDOM_LONG(0, 99) < chance; }
+
+	vec3_t m_vecInitialPos;
 };
 
 

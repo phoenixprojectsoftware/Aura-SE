@@ -18,6 +18,7 @@
 #include "cbase.h"
 #include "monsters.h"
 #include "weapons.h"
+#include "weapon_hierarchy.h"
 #include "nodes.h"
 #include "player.h"
 #include "soundent.h"
@@ -64,6 +65,12 @@ void CMP5::Spawn( )
 	{
 		//Spawn shotgun instead.
 		CBaseEntity *pNewWeapon = CBaseEntity::Create( "weapon_shotgun", g_pGameRules->VecWeaponRespawnSpot( this ), pev->angles, pev->owner );
+		return;
+	}
+	else if (HLDM == AgGametype())
+	{
+		//Spawn HLDMAR instead.
+		CBaseEntity* pNewWeapon = CBaseEntity::Create("weapon_hldmar", g_pGameRules->VecWeaponRespawnSpot(this), pev->angles, pev->owner);
 		return;
 	}
 #endif
@@ -123,8 +130,8 @@ int CMP5::GetItemInfo(ItemInfo *p)
 	p->pszAmmo2 = "ARgrenades";
 	p->iMaxAmmo2 = M203_GRENADE_MAX_CARRY;
 	p->iMaxClip = MP5_MAX_CLIP;
-	p->iSlot = 2;
-	p->iPosition = 0;
+	p->iSlot = WPN_AUTO_SLOT;
+	p->iPosition = WPN_AR_POS;
 	p->iFlags = 0;
 	p->iId = m_iId = WEAPON_MP5;
 	p->iWeight = MP5_WEIGHT;
