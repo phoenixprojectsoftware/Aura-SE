@@ -50,7 +50,7 @@ struct entity_state_s
 	int			effects;
 	float		scale;
 
-	byte		eflags;
+	legacy_byte		eflags;
 	
 	// Render information
 	int			rendermode;
@@ -62,8 +62,8 @@ struct entity_state_s
 	float		animtime;
 	float		framerate;
 	int			body;
-	byte		controller[4];
-	byte		blending[4];
+	legacy_byte		controller[4];
+	legacy_byte		blending[4];
 	vec3_t		velocity;
 
 	// Send bbox down to client for use during prediction.

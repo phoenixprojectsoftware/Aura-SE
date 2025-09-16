@@ -29,7 +29,7 @@
 #endif
 
 
-static char *memfgets( byte *pMemFile, int fileSize, int &filePos, char *pBuffer, int bufferSize );
+static char *memfgets( legacy_byte *pMemFile, int fileSize, int &filePos, char *pBuffer, int bufferSize );
 
 
 // ==================== GENERIC AMBIENT SOUND ======================================
@@ -1284,7 +1284,7 @@ void SENTENCEG_Init()
 
 	
 	int filePos = 0, fileSize;
-	byte *pMemFile = g_engfuncs.pfnLoadFileForMe( "sound/sentences.txt", &fileSize );
+	legacy_byte *pMemFile = g_engfuncs.pfnLoadFileForMe( "sound/sentences.txt", &fileSize );
 	if ( !pMemFile )
 		return;
 
@@ -1487,7 +1487,7 @@ char grgchTextureType[CTEXTURESMAX];						// parallel array of texture types
 // save in array.  Only works first time called, 
 // ignored on subsequent calls.
 
-static char *memfgets( byte *pMemFile, int fileSize, int &filePos, char *pBuffer, int bufferSize )
+static char *memfgets( legacy_byte *pMemFile, int fileSize, int &filePos, char *pBuffer, int bufferSize )
 {
 	// Bullet-proofing
 	if ( !pMemFile || !pBuffer )
@@ -1520,7 +1520,7 @@ static char *memfgets( byte *pMemFile, int fileSize, int &filePos, char *pBuffer
 		// We read in size bytes
 		int size = i - filePos;
 		// copy it out
-		memcpy( pBuffer, pMemFile + filePos, sizeof(byte)*size );
+		memcpy( pBuffer, pMemFile + filePos, sizeof(legacy_byte)*size );
 		
 		// If the buffer isn't full, terminate (this is always true)
 		if ( size < bufferSize )
@@ -1540,7 +1540,7 @@ void TEXTURETYPE_Init()
 {
 	char buffer[512];
 	int i, j;
-	byte *pMemFile;
+	legacy_byte *pMemFile;
 	int fileSize, filePos = 0;
 
 	if (fTextureTypeInit)

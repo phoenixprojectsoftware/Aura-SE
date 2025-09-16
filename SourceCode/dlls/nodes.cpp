@@ -2319,8 +2319,8 @@ int CGraph :: FLoadGraph ( char *szMapName )
 	char	szFilename[MAX_PATH];
 	int		iVersion;
 	int     length;
-	byte    *aMemFile;
-	byte    *pMemFile;
+	legacy_byte    *aMemFile;
+	legacy_byte    *pMemFile;
 
 	// make sure the directories have been made
 	char	szDirName[MAX_PATH];

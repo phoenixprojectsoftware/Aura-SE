@@ -1366,12 +1366,12 @@ void CreateBaseline( int player, int eindex, struct entity_state_s *baseline, st
 	baseline->skin			= (short)entity->v.skin;
 
 	// render information
-	baseline->rendermode	= (byte)entity->v.rendermode;
-	baseline->renderamt		= (byte)entity->v.renderamt;
-	baseline->rendercolor.r	= (byte)entity->v.rendercolor.x;
-	baseline->rendercolor.g	= (byte)entity->v.rendercolor.y;
-	baseline->rendercolor.b	= (byte)entity->v.rendercolor.z;
-	baseline->renderfx		= (byte)entity->v.renderfx;
+	baseline->rendermode	= (legacy_byte)entity->v.rendermode;
+	baseline->renderamt		= (legacy_byte)entity->v.renderamt;
+	baseline->rendercolor.r	= (legacy_byte)entity->v.rendercolor.x;
+	baseline->rendercolor.g	= (legacy_byte)entity->v.rendercolor.y;
+	baseline->rendercolor.b	= (legacy_byte)entity->v.rendercolor.z;
+	baseline->renderfx		= (legacy_byte)entity->v.renderfx;
 
 	if ( player )
 	{
