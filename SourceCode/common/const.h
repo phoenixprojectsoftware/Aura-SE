@@ -730,7 +730,7 @@ enum
 typedef unsigned int	func_t;
 typedef unsigned int	string_t;
 
-typedef unsigned char 		byte;
+typedef unsigned char 		legacy_byte;
 typedef unsigned short 		word;
 #define _DEF_BYTE_
 
@@ -745,7 +745,7 @@ typedef int qboolean;
 
 typedef struct
 {
-	byte r, g, b;
+	legacy_byte r, g, b;
 } color24;
 
 typedef struct

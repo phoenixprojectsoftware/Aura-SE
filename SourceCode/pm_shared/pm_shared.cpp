@@ -59,9 +59,9 @@ typedef struct mplane_s
 {
 	vec3_t	normal;			// surface normal
 	float	dist;			// closest appoach to origin
-	byte	type;			// for texture axis selection and fast side tests
-	byte	signbits;		// signx + signy<<1 + signz<<1
-	byte	pad[2];
+	legacy_byte	type;			// for texture axis selection and fast side tests
+	legacy_byte	signbits;		// signx + signy<<1 + signz<<1
+	legacy_byte	pad[2];
 } mplane_t;
 
 typedef struct hull_s
@@ -197,7 +197,7 @@ void PM_InitTextureTypes()
 {
 	char buffer[512];
 	int i, j;
-	byte *pMemFile;
+	legacy_byte *pMemFile;
 	int fileSize, filePos;
 	static qboolean bTextureTypeInit = false;
 
