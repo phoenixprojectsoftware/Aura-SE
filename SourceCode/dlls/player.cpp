@@ -598,7 +598,7 @@ int CBasePlayer :: TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, 
 	m_lastDamageAmount = flDamage;
 
 	// Armor. 
-	if (pev->armorvalue && !(bitsDamageType & (DMG_FALL | DMG_DROWN)) )// armor doesn't protect against fall or drown damage!
+	if (pev->armorvalue && !(bitsDamageType & (DMG_FALL | DMG_DROWN | DMG_SKIPARMOR)) )// armor doesn't protect against fall or drown damage!
 	{
 		float flNew = flDamage * flRatio;
 
@@ -617,7 +617,11 @@ int CBasePlayer :: TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, 
 		else
 			pev->armorvalue -= flArmor;
 		
-		flDamage = 0;
+		// Switch off Half-Life's damage ratio ONLY with regen on.
+		if (sv_aura_regeneration.value != 0)
+			flDamage = 0;
+		else
+			flDamage = flNew;
 	}
 
 	// this cast to INT is critical!!! If a player ends up with 0.5 health, the engine will get that

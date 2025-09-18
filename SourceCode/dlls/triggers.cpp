@@ -852,7 +852,9 @@ void CTargetCDAudio::Think( void )
 	
 	pev->nextthink = gpGlobals->time + 0.5;
 
-	if ( (pClient->v.origin - pev->origin).Length() <= pev->scale )
+	if (gpGlobals->maxClients <= 2)
+		return;
+	else if ( (pClient->v.origin - pev->origin).Length() <= pev->scale )
 		Play();
 
 }
@@ -1068,7 +1070,7 @@ void CBaseTrigger :: HurtTouch ( CBaseEntity *pOther )
 	if ( fldmg < 0 )
 		pOther->TakeHealth( -fldmg, m_bitsDamageInflict );
 	else
-		pOther->TakeDamage( pev, pev, fldmg, m_bitsDamageInflict );
+		pOther->TakeDamage( pev, pev, fldmg, m_bitsDamageInflict | DMG_SKIPARMOR );
 
 	// Store pain time so we can get all of the other entities on this frame
 	pev->pain_finished = gpGlobals->time;
