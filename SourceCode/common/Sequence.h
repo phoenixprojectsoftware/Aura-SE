@@ -8,7 +8,7 @@
 
 
 #ifndef _DEF_BYTE_
-typedef unsigned char byte;
+typedef unsigned char legacy_byte;
 #endif
 
 //---------------------------------------------------------------------------
@@ -17,8 +17,8 @@ typedef unsigned char byte;
 typedef struct client_textmessage_s
 {
 	int		effect;
-	byte	r1, g1, b1, a1;		// 2 colors for effects
-	byte	r2, g2, b2, a2;
+	legacy_byte	r1, g1, b1, a1;		// 2 colors for effects
+	legacy_byte	r2, g2, b2, a2;
 	float	x;
 	float	y;
 	float	fadein;

@@ -201,7 +201,7 @@ typedef struct enginefuncs_s
 	void		(*pfnSetView)				(const edict_t *pClient, const edict_t *pViewent );
 	float		(*pfnTime)					( void );
 	void		(*pfnCrosshairAngle)		(const edict_t *pClient, float pitch, float yaw);
-	byte *      (*pfnLoadFileForMe)         (char *filename, int *pLength);
+	legacy_byte *      (*pfnLoadFileForMe)         (char *filename, int *pLength);
 	void        (*pfnFreeFile)              (void *buffer);
 	void        (*pfnEndSection)            (const char *pszSectionName); // trigger_endsection
 	int 		(*pfnCompareFileTime)       (char *filename1, char *filename2, int *iCompare);
@@ -210,7 +210,7 @@ typedef struct enginefuncs_s
 	void        (*pfnFadeClientVolume)      (const edict_t *pEdict, int fadePercent, int fadeOutSeconds, int holdTime, int fadeInSeconds);
 	void        (*pfnSetClientMaxspeed)     (const edict_t *pEdict, float fNewMaxspeed);
 	edict_t *	(*pfnCreateFakeClient)		(const char *netname);	// returns NULL if fake client can't be created
-	void		(*pfnRunPlayerMove)			(edict_t *fakeclient, const float *viewangles, float forwardmove, float sidemove, float upmove, unsigned short buttons, byte impulse, byte msec );
+	void		(*pfnRunPlayerMove)			(edict_t *fakeclient, const float *viewangles, float forwardmove, float sidemove, float upmove, unsigned short buttons, legacy_byte impulse, legacy_byte msec );
 	int			(*pfnNumberOfEntities)		(void);
 	char*		(*pfnGetInfoKeyBuffer)		(edict_t *e);	// passing in NULL gets the serverinfo
 	char*		(*pfnInfoKeyValue)			(char *infobuffer, char *key);
