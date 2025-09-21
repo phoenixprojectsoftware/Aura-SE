@@ -74,9 +74,9 @@ typedef struct mplane_s
 {
 	vec3_t	normal;			// surface normal
 	float	dist;			// closest appoach to origin
-	byte	type;			// for texture axis selection and fast side tests
-	byte	signbits;		// signx + signy<<1 + signz<<1
-	byte	pad[2];
+	legacy_byte	type;			// for texture axis selection and fast side tests
+	legacy_byte	signbits;		// signx + signy<<1 + signz<<1
+	legacy_byte	pad[2];
 } mplane_t;
 
 typedef struct
@@ -141,8 +141,8 @@ struct decal_s
 	short		dx;				// Offsets into surface texture (in texture coordinates, so we don't need floats)
 	short		dy;
 	short		texture;		// Decal texture
-	byte		scale;			// Pixel scale
-	byte		flags;			// Decal flags
+	legacy_byte		scale;			// Pixel scale
+	legacy_byte		flags;			// Decal flags
 
 	short		entityIndex;	// Entity this is attached to
 };
@@ -158,13 +158,13 @@ typedef struct mleaf_s
 	struct mnode_s	*parent;
 
 // leaf specific
-	byte		*compressed_vis;
+	legacy_byte		*compressed_vis;
 	struct efrag_s	*efrags;
 
 	msurface_t	**firstmarksurface;
 	int			nummarksurfaces;
 	int			key;			// BSP sequence number for leaf's contents
-	byte		ambient_sound_level[NUM_AMBIENTS];
+	legacy_byte		ambient_sound_level[NUM_AMBIENTS];
 } mleaf_t;
 
 struct msurface_s
@@ -190,7 +190,7 @@ struct msurface_s
 	mtexinfo_t	*texinfo;		
 	
 // lighting info
-	byte		styles[MAXLIGHTMAPS]; // index into d_lightstylevalue[] for animated lights 
+	legacy_byte		styles[MAXLIGHTMAPS]; // index into d_lightstylevalue[] for animated lights 
 									  // no one surface can be effected by more than 4 
 									  // animated lights.
 	color24		*samples;
@@ -282,7 +282,7 @@ typedef struct model_s
 	int			numtextures;
 	texture_t	**textures;
 
-	byte		*visdata;
+	legacy_byte		*visdata;
 
 	color24		*lightdata;
 

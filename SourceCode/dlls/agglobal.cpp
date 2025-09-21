@@ -1071,7 +1071,7 @@ bool AgIsCTFMap(const char* pszMap)
     char szMapFile[MAX_PATH];
     int iMapLength = 0;
     sprintf(szMapFile, "maps/%s.bsp", STRING(gpGlobals->mapname));
-    byte* pMapData = LOAD_FILE_FOR_ME(szMapFile, &iMapLength);
+    legacy_byte* pMapData = LOAD_FILE_FOR_ME(szMapFile, &iMapLength);
     if (!pMapData)
         return false;
 
@@ -1119,7 +1119,7 @@ bool AgIsDOMMap(const char* pszMap)
     char szMapFile[MAX_PATH];
     int iMapLength = 0;
     sprintf(szMapFile, "maps/%s.bsp", STRING(gpGlobals->mapname));
-    byte* pMapData = LOAD_FILE_FOR_ME(szMapFile, &iMapLength);
+    legacy_byte* pMapData = LOAD_FILE_FOR_ME(szMapFile, &iMapLength);
     if (!pMapData)
         return false;
 
