@@ -5638,7 +5638,7 @@ void CBasePlayer::DropPlayerItem ( char *pszItemName )
   if (FStrEq(pszItemName,"flag") && CTF == AgGametype())
     g_pGameRules->m_CTF.PlayerDropFlag(this,true);
 //-- Martin Webrant
-	if ( weaponstay.value > 0 )
+	if ( weaponstay.value > 0 || FIREFIGHT == AgGametype())
 	{
 		// no dropping in single player.
 		return;

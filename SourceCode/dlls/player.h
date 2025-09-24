@@ -28,6 +28,8 @@ class CRope;
 extern int gmsgSpectator;
 //-- Martin Webrant
 
+extern const char* killer_weapon_name;
+
 // Number of frames where -showscores will be triggered to try and fix invisible menus blocking mouse and other input
 #define INPUT_FIX_FRAMES	3
 

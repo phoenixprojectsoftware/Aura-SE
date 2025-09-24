@@ -574,6 +574,9 @@ void CBaseMonster::CallGibMonster( void )
 Killed
 ============
 */
+#include "gamerules.h"
+#include "player.h"
+extern int gmsgDeathMsg;
 void CBaseMonster :: Killed( entvars_t *pevAttacker, int iGib )
 {
 	unsigned int	cCount = 0;
@@ -621,6 +624,25 @@ void CBaseMonster :: Killed( entvars_t *pevAttacker, int iGib )
 	//pev->enemy = ENT( pevAttacker );//why? (sjb)
 	
 	m_IdealMonsterState = MONSTERSTATE_DEAD;
+
+	if (FIREFIGHT == AgGametype() || FIESTAFIGHT == AgGametype())
+	{
+
+		CBaseEntity* pAttacker = CBaseEntity::Instance(pevAttacker);
+		if (pAttacker && pAttacker->IsPlayer())
+		{
+			CBasePlayer* pPlayer = (CBasePlayer*)pAttacker;
+
+			// TODO: Add score
+
+			// report to killfeed
+			MESSAGE_BEGIN(MSG_ALL, gmsgDeathMsg);
+				WRITE_BYTE(pPlayer->entindex());
+				WRITE_STRING(killer_weapon_name);
+				WRITE_STRING("an enemy");
+			MESSAGE_END();
+		}
+	}
 }
 
 //

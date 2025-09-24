@@ -810,6 +810,8 @@ void CHalfLifeMultiplay :: PlayerKilled( CBasePlayer *pVictim, entvars_t *pKille
 	//-- Martin Webrant
 }
 
+const char* killer_weapon_name = "world";		// by default, the player is killed by the world
+
 //=========================================================
 // Deathnotice. 
 //=========================================================
@@ -821,7 +823,6 @@ void CHalfLifeMultiplay::DeathNotice( CBasePlayer *pVictim, entvars_t *pKiller, 
 	// Work out what killed the player, and send a message to all clients about it
 	CBaseEntity *Killer = CBaseEntity::Instance( pKiller );
 
-	const char *killer_weapon_name = "world";		// by default, the player is killed by the world
 	int killer_index = 0;
 	
 	// Hack to fix name change
@@ -1033,7 +1034,7 @@ void CHalfLifeMultiplay :: PlayerGotWeapon( CBasePlayer *pPlayer, CBasePlayerIte
 //=========================================================
 float CHalfLifeMultiplay :: FlWeaponRespawnTime( CBasePlayerItem *pWeapon )
 {
-	if ( weaponstay.value > 0 )
+	if ( weaponstay.value > 0 || FIREFIGHT == AgGametype())
 	{
 		// make sure it's only certain weapons
 		if ( !(pWeapon->iFlags() & ITEM_FLAG_LIMITINWORLD) )
@@ -1097,7 +1098,7 @@ int CHalfLifeMultiplay :: WeaponShouldRespawn( CBasePlayerItem *pWeapon )
 //=========================================================
 BOOL CHalfLifeMultiplay::CanHavePlayerItem( CBasePlayer *pPlayer, CBasePlayerItem *pItem )
 {
-	if ( weaponstay.value > 0 )
+	if ( weaponstay.value > 0 || FIREFIGHT == AgGametype())
 	{
 		if ( pItem->iFlags() & ITEM_FLAG_LIMITINWORLD )
 			//++ BulliT
