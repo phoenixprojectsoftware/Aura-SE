@@ -516,7 +516,7 @@ void CBasePlayer :: TraceAttack( entvars_t *pevAttacker, float flDamage, Vector 
 		{
 		case HITGROUP_GENERIC:
 			break;
-		case HITGROUP_HEAD:
+		case HITGROUP_HEAD: // TODO: HEADSHOT TRACKING
 			flDamage *= gSkillData.plrHead;
 			break;
 		case HITGROUP_CHEST:
