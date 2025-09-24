@@ -574,6 +574,11 @@ int CBasePlayer :: TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, 
 		return 0;
 	}
 
+	// Also refuse dmg on Firefight & Fiestafight.
+	if (FIREFIGHT == AgGametype() || FIESTAFIGHT == AgGametype())
+		if (pAttacker && pAttacker->IsPlayer() && this->IsPlayer())
+			return 0;
+
 	// have suit diagnose the problem - ie: report damage type
 	int bitsDamage = bitsDamageType;
 	int ffound = TRUE;
