@@ -4706,8 +4706,27 @@ void CBasePlayer::HandleArmorChanged(float oldArmorF, float newArmorF)
 // --- Regen tick ---
 void CBasePlayer::RunShieldUpdates()
 {
-	if (!IsAlive() || IsObserver() || IsSpectator()) return;
 	if (sv_aura_regeneration.value <= 0) return;
+
+	if (!IsAlive() || IsObserver() || IsSpectator())
+	{
+		if (isShieldLow)
+		{
+			STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_low.wav");
+			isShieldLow = false;
+		}
+		if (isShieldEmpty)
+		{
+			STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_empty.wav");
+			isShieldEmpty = false;
+		}
+		if (m_fRegenOn)
+		{
+			STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_lp.wav");
+			m_fRegenOn = false;
+		}
+		return;
+	}
 
 	int armorInt = (int)pev->armorvalue;
 
@@ -4715,6 +4734,7 @@ void CBasePlayer::RunShieldUpdates()
 	if (armorInt >= MAX_NORMAL_BATTERY || bAreWeMaxxed) return;
 
 	float now = gpGlobals->time;
+
 	if (now >= m_flNextSuitRegenTime)
 	{
 		AddArmor(sv_aura_regeneration_rate.value);
