@@ -528,6 +528,9 @@ public:
 
 	CBasePlayer () : isShieldLow(false), isShieldEmpty(false), lastShieldSoundTime(0.0f) {}
 
+	void SetArmor(float newArmor);
+	void AddArmor(float amount);
+	void HandleArmorChanged(float oldArmor, float newArmor);
 	void RunShieldUpdates();
 	void UpdateClientData();
 
