@@ -785,6 +785,8 @@ void ClientPrecache( void )
 	
 	PRECACHE_SOUND("player/pl_fallpain2.wav");		
 	PRECACHE_SOUND("player/pl_fallpain3.wav");		
+
+	PRECACHE_SOUND("player/h2odeath.wav");
 	
 	PRECACHE_SOUND("player/pl_step1.wav");		// walk on concrete
 	PRECACHE_SOUND("player/pl_step2.wav");
