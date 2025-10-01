@@ -797,19 +797,24 @@ int CBasePlayer :: TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, 
 	// BlueNightHawk : Suit Energy Regeneration || after damage taken!!
 	if (sv_aura_regeneration.value != 0 && pev->armorvalue < MAX_NORMAL_BATTERY && fTookDamage)
 	{
+		// stop ongoing regen sounds
 		STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_lp.wav");
+
 		if (m_fRegenOn && !isShieldEmpty)
+		{
+			// play shield "regen interrupted" tick
 			EMIT_SOUND(ENT(pev), CHAN_ITEM, "items/suitchargeno1.wav", 0.85, ATTN_NORM);
+		}
+
+		// reset regen state
 		m_fRegenOn = false;
+		bAreWeMaxxed = false;
+		bAreWeAt100 = false;
 
-		bAreWeMaxxed = false; // switch those stop sound calls back on
-#ifdef _DEBUG
-		ALERT(at_console, "bAreWeMaxxed is now false\n");
-#endif
-		bAreWeAt100 = false; // switch those stop sound calls back on
-
-		m_flNextSuitRegenTime = gpGlobals->time + 5.5 + sv_aura_regeneration_wait.value;
+		// push back regen start
+		m_flNextSuitRegenTime = gpGlobals->time + 5.5f + sv_aura_regeneration_wait.value;
 	}
+
 	return fTookDamage;
 }
 
@@ -4633,139 +4638,96 @@ void CBasePlayer::SendAmmoUpdate(void)
 	}
 }
 
-void CBasePlayer::RunShieldUpdates(void)
+// START OF SHIELD REGENERATION LOGIC ( BlueNightHawk : Suit Energy Regeneration )
+void CBasePlayer::SetArmor(float newArmor)
+{
+	float oldArmor = pev->armorvalue;
+	pev->armorvalue = V_min(newArmor, MAX_NORMAL_BATTERY);
+
+	HandleArmorChanged(oldArmor, pev->armorvalue);
+}
+
+void CBasePlayer::AddArmor(float amount)
+{
+	if (amount <= 0)
+		return;
+
+	SetArmor(pev->armorvalue + amount);
+}
+
+void CBasePlayer::HandleArmorChanged(float oldArmor, float newArmor)
 {
 	float currentTime = gpGlobals->time;
 
-	if (INSTAGIB != AgGametype() && SWAT != AgGametype())
+	// reached max
+	if (newArmor >= MAX_NORMAL_BATTERY && oldArmor < MAX_NORMAL_BATTERY)
 	{
-		if (sv_aura_regeneration.value != 0)
-		{
-		if (sv_aura_regeneration.value != 0 && pev->armorvalue == MAX_NORMAL_BATTERY && !bAreWeMaxxed) // SHIELD AT 100%
-		{
-			STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_lp.wav");
-			bAreWeMaxxed = true;
-	#ifdef _DEBUG
-			ALERT(at_console, "bAreWeMaxxed is now true\n");
-	#endif
-		}
+		STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_lp.wav");
+#ifndef _HALO
+		EMIT_SOUND(ENT(pev), CHAN_STATIC, "player/shield_finish.wav", 1.0f, ATTN_NORM);
+#endif
+		bAreWeMaxxed = true;
+		bAreWeAt100 = true;
+		m_fRegenOn = false;
+	}
+	else if (newArmor < MAX_NORMAL_BATTERY && oldArmor >= MAX_NORMAL_BATTERY)
+	{
+		bAreWeMaxxed = false;
+		bAreWeAt100 = false;
+	}
 
-		if (sv_aura_regeneration.value != 0 && IsObserver() || IsSpectator() || !IsAlive() || !m_bDoneFirstSpawn && bInitialSounds) // JUST CONNECTED - DEAD, SPECTATING, OR WELCOME CAM
-		{
-			STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_empty.wav");
-			STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_low.wav");
-	#ifdef _HALO
-			STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_charge.wav");
-	#else
-			STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_lp.wav");
-	#endif
+	// empty
+	if (newArmor < SHIELD_EMPTY_THRESHOLD && oldArmor >= SHIELD_EMPTY_THRESHOLD)
+	{
+		EMIT_SOUND(ENT(pev), CHAN_AUTO, "player/shield_empty.wav", 0.85, ATTN_NORM);
+		EMIT_SOUND(ENT(pev), CHAN_AUTO, "player/shield_depleted2.wav", 0.7, ATTN_NORM);
+		isShieldEmpty = true;
+		lastShieldSoundTime = currentTime;
+	}
+	else if (newArmor >= SHIELD_EMPTY_THRESHOLD && isShieldEmpty)
+	{
+		STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_empty.wav");
+		isShieldEmpty = false;
+	}
 
-			bInitialSounds = false;
-			isShieldLow = false;
-			m_fRegenOn = false;
-			return;
-		}
-		else if (sv_aura_regeneration.value != 0) // PLAYER HAS SPAWNED AND IS ALIVE
-		{
-			bInitialSounds = true;
-			bIsPlayerDead = false;
-			if (pev->armorvalue < SHIELD_EMPTY_THRESHOLD)
-			{
-				if (!isShieldEmpty && (currentTime - lastShieldSoundTime > 1.0f))
-				{
-					STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_low.wav");
-					EMIT_SOUND(ENT(pev), CHAN_AUTO, "player/shield_empty.wav", 0.85, ATTN_NORM);
-					EMIT_SOUND(ENT(pev), CHAN_AUTO, "player/shield_depleted2.wav", 0.7, ATTN_NORM);
-					isShieldEmpty = true;
-					lastShieldSoundTime = currentTime;
-				}
-			}
-			else
-			{
-				if (isShieldEmpty)
-				{
-					STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_empty.wav");
-					isShieldEmpty = false;
-				}
-			}
-
-			if (pev->armorvalue >= 1 && pev->armorvalue <= SHIELD_LOW_THRESHOLD)
-			{
-				if (!isShieldLow && (currentTime - lastShieldSoundTime > 1.0f)) // 1 second delay
-				{
-					EMIT_SOUND(ENT(pev), CHAN_AUTO, "player/shield_low.wav", 0.75, ATTN_NORM);
-					isShieldLow = true;
-					hasShieldLowStopped = false;
-					lastShieldSoundTime = currentTime;
-				}
-			}
-			else
-			{
-				if (isShieldLow)
-				{
-					STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_low.wav");
-					isShieldLow = false;
-				}
-			}
-
-			// SHIELD LOW SOUNDS
-			if (pev->armorvalue == SHIELD_SND_EMPTY && !hasShieldLowStopped)
-			{
-				STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_low.wav");
-				hasShieldLowStopped = true;
-			}
-			else if (pev->armorvalue > SHIELD_LOW_THRESHOLD && !hasShieldLowStopped)
-			{
-				STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_low.wav");
-				hasShieldLowStopped = true;
-			}
-
-			// BlueNightHawk : Suit Energy Regeneration
-			if (sv_aura_regeneration.value != 0 && pev->armorvalue < MAX_NORMAL_BATTERY
-				&& m_flNextSuitRegenTime < gpGlobals->time)
-			{
-				pev->armorvalue += sv_aura_regeneration_rate.value;
-				pev->armorvalue = V_min(pev->armorvalue, MAX_NORMAL_BATTERY);
-
-				if (pev->armorvalue == MAX_NORMAL_BATTERY && !bAreWeAt100) //when shield stops recharging
-				{
-					m_flNextSuitRegenTime = 0.0f;
-					m_fRegenOn = false;
-					STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_empty.wav");
-					STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_lp.wav");
-					EMIT_SOUND(ENT(pev), CHAN_STATIC, "player/shield_finish.wav", 1, ATTN_NORM);
-					bAreWeAt100 = true;
-					bAreWeMaxxed = true;
-				}
-				else if (!m_fRegenOn) // when shield starts recharging
-				{
-					m_fRegenOn = true;
-					EMIT_SOUND(ENT(pev), CHAN_AUTO, "player/shield_start.wav", 1, ATTN_NORM);
-					EMIT_SOUND(ENT(pev), CHAN_STATIC, "player/shield_lp.wav", 0.85, ATTN_NORM);
-					STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_empty.wav");
-
-				}
-				else // as it's recharging
-				{
-					STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_empty.wav");
-				}
-
-				m_flNextSuitRegenTime = gpGlobals->time + sv_aura_regeneration_wait.value;
-			}
-			else if (sv_aura_regeneration.value == 0 && !bRegenSwitchOff)
-			{
-				STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_empty.wav");
-
-				bRegenSwitchOff = true;
-				m_flNextSuitRegenTime = 0.0f;
-				m_fRegenOn = false;
-				m_fRegenOn = false;
-			}
-		}
-		}
-	} // END OF SHIELD REGENERATION SOUND LOGIC
-
+	// low
+	if (newArmor > 0 && newArmor <= SHIELD_LOW_THRESHOLD && !isShieldLow)
+	{
+		EMIT_SOUND(ENT(pev), CHAN_AUTO, "player/shield_low.wav", 0.75, ATTN_NORM);
+		isShieldLow = true;
+	}
+	else if ((newArmor == 0 || newArmor >= SHIELD_LOW_THRESHOLD) && isShieldLow)
+	{
+		STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_low.wav");
+		isShieldLow = false;
+	}
 }
+
+void CBasePlayer::RunShieldUpdates()
+{
+	if (!IsAlive() || IsObserver() || IsSpectator())
+		return;
+
+	if (sv_aura_regeneration.value <= 0)
+		return;
+
+	if (pev->armorvalue < MAX_NORMAL_BATTERY && gpGlobals->time >= m_flNextSuitRegenTime)
+	{
+		AddArmor(sv_aura_regeneration_rate.value);
+
+		if (!m_fRegenOn)
+		{
+#ifndef _HALO
+			EMIT_SOUND(ENT(pev), CHAN_AUTO, "player/shield_start.wav", 1.0f, ATTN_NORM);
+#endif
+			EMIT_SOUND(ENT(pev), CHAN_STATIC, "player/shield_lp.wav", 0.85, ATTN_NORM);
+			m_fRegenOn = true;
+		}
+
+		m_flNextSuitRegenTime = gpGlobals->time + sv_aura_regeneration_wait.value;
+	}
+}
+// END OF SHIELD REGENERATION LOGIC ( BlueNightHawk : Suit Energy Regeneration )
 
 /*
 =========================================================
