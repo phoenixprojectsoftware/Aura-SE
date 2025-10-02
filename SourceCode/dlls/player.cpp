@@ -451,6 +451,18 @@ int TrainSpeed(int iSpeed, int iMax)
 	return iRet;
 }
 
+void CBasePlayer::StopAllShieldSounds()
+{
+	if (sv_aura_regeneration.value != 0)
+	{
+		STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_empty.wav");
+		STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_low.wav");
+		STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_lp.wav");
+	}
+	else
+		return;
+}
+
 void CBasePlayer :: DeathSound( void )
 {
 	// water death sounds
@@ -479,6 +491,8 @@ void CBasePlayer :: DeathSound( void )
 	{ 
 		EMIT_GROUPNAME_SUIT(ENT(pev), "HEV_DEAD"); 
 	};
+
+	StopAllShieldSounds();
 }
 
 // override takehealth
@@ -1077,24 +1091,6 @@ void CBasePlayer::Killed( entvars_t *pevAttacker, int iGib )
 	}
 
 	DeathSound();
-
-	/*
-	// Stop All Shield Sounds
-	if (!bIsPlayerDead)
-	{
-		STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_empty.wav");
-		STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_low.wav");
-#ifndef _HALO
-		STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_lp.wav");
-#else
-		STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_charge.wav");
-#endif
-
-		bIsPlayerDead = true;
-	}
-
-	bInitialSounds = false;
-	*/
 
 	isShieldLow = false; // do we need this?
 
@@ -4709,24 +4705,7 @@ void CBasePlayer::RunShieldUpdates()
 	if (sv_aura_regeneration.value <= 0) return;
 
 	if (!IsAlive() || IsObserver() || IsSpectator())
-	{
-		if (isShieldLow)
-		{
-			STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_low.wav");
-			isShieldLow = false;
-		}
-		if (isShieldEmpty)
-		{
-			STOP_SOUND(ENT(pev), CHAN_AUTO, "player/shield_empty.wav");
-			isShieldEmpty = false;
-		}
-		if (m_fRegenOn)
-		{
-			STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_lp.wav");
-			m_fRegenOn = false;
-		}
 		return;
-	}
 
 	int armorInt = (int)pev->armorvalue;
 

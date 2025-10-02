@@ -273,6 +273,9 @@ public:
 	void			FlashlightTurnOff( void );
 	
 	void UpdatePlayerSound ( void );
+
+	void StopAllShieldSounds();
+
 	void DeathSound ( void );
 
 	int Classify ( void );
