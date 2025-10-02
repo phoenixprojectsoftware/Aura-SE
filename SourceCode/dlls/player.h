@@ -77,6 +77,12 @@ constexpr float BARELY_AUDIBLE_DIST = 1280.0;
 #define SHIELD_EMPTY_THRESHOLD 1 // not really sure we need this but whatevs.
 #define SHIELD_LOW_THRESHOLD 25 // it goes red at 25 so why not beep at 25?
 
+#ifdef _HALO
+#define SHIELD_POSTDAMAGE_DELAY 6.0f // shield delay is 6s in Excession
+#else
+#define SHIELD_POSTDAMAGE_DELAY 5.5f // time to wait after taking damage, before the shield starts recharging.
+#endif
+
 #define CSUITNOREPEAT		32
 
 #define	SOUND_FLASHLIGHT_ON		"items/flashlight1.wav"
@@ -274,6 +280,9 @@ public:
 	void			FlashlightTurnOff( void );
 	
 	void UpdatePlayerSound ( void );
+
+	void StopAllShieldSounds();
+
 	void DeathSound ( void );
 
 	int Classify ( void );
@@ -532,6 +541,7 @@ public:
 	void AddArmor(float amount);
 	void HandleArmorChanged(float oldArmor, float newArmor);
 	void RunShieldUpdates();
+	void InterruptShieldRegenOnDamage();
 	void UpdateClientData();
 
 private:
