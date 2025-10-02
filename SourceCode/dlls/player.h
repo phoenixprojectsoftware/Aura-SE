@@ -527,6 +527,12 @@ public:
 	Vector m_DisplacerReturn;
 	float m_flDisplacerSndRoomtype;
 
+	bool bIsPlayerDead = false; // switch for when the player is dead
+	bool bAreWeMaxxed = false; // switch to stop the sound of regeneration when we spawn
+	bool bAreWeAt100 = false; // switch to stop the sound of regeneration when we are at 100 energy
+	bool bInitialSounds = false; // switch to stop the initial sounds when we connect
+	bool bRegenSwitchOff = false; // switch to stop the sounds when regen becomes turned off
+	bool hasShieldLowStopped = false; // switch for the shield low sound to prevent overflows
 	bool isShieldLow;
 	bool isShieldEmpty;
 	float lastShieldSoundTime;
