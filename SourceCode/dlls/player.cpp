@@ -4645,7 +4645,9 @@ void CBasePlayer::HandleArmorChanged(float oldArmorF, float newArmorF)
 		STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_lp.wav");
 		STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_low.wav");
 		STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_empty.wav");
+#ifndef _HALO
 		EMIT_SOUND(ENT(pev), CHAN_STATIC, "player/shield_finish.wav", 1.0f, ATTN_NORM);
+#endif
 
 		bAreWeMaxxed = true;
 		bAreWeAt100 = true;
@@ -4725,11 +4727,15 @@ void CBasePlayer::RunShieldUpdates()
 			bAreWeMaxxed = true;
 			m_fRegenOn = false;
 			STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_lp.wav");
+#ifndef _HALO
 			EMIT_SOUND(ENT(pev), CHAN_STATIC, "player/shield_finish.wav", 1.0f, ATTN_NORM);
+#endif
 		}
 		else if (!m_fRegenOn)
 		{
+#ifndef _HALO
 			EMIT_SOUND(ENT(pev), CHAN_AUTO, "player/shield_start.wav", 1.0f, ATTN_NORM);
+#endif
 			EMIT_SOUND(ENT(pev), CHAN_STATIC, "player/shield_lp.wav", 0.85f, ATTN_NORM);
 			m_fRegenOn = true;
 		}
