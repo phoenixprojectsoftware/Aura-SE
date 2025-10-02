@@ -4709,6 +4709,13 @@ void CBasePlayer::RunShieldUpdates()
 	if (!IsAlive() || IsObserver() || IsSpectator())
 		return;
 
+	switch (AgGametype())
+	{
+	case SWAT:
+	case INSTAGIB:
+		return;
+	}
+
 	int armorInt = (int)pev->armorvalue;
 
 	// Prevent adding when fully maxed
