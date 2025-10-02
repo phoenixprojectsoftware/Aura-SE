@@ -4789,6 +4789,7 @@ void CBasePlayer::RunShieldUpdates()
 	{
 	case SWAT:
 	case INSTAGIB:
+	case HLDM:
 		return;
 	}
 
