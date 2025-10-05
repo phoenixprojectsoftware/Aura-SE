@@ -160,13 +160,13 @@ void AgFirefight::Think()
 					if (!FNullEnt(pPlayer) && pPlayer->v.flags & FL_CLIENT) // ensure this is a valid client
 					{
 						if (m_bMusicSet1 == true)
-							CLIENT_COMMAND(pPlayer, "mp3 play sound/music/FirefightIntroGlue02.mp3\n");
+							CLIENT_COMMAND(pPlayer, "mp3 play sound/music/MX_SK_GLU02.mp3\n");
 						else if (m_bMusicSet2 == true)
-							CLIENT_COMMAND(pPlayer, "mp3 play sound/music/WarGamesFirefightDub.mp3\n");
+							CLIENT_COMMAND(pPlayer, "mp3 play sound/music/MX_C4_DUB.mp3\n");
 						else if (m_bMusicSet3 == true)
-							CLIENT_COMMAND(pPlayer, "mp3 play sound/music/FirefightIntro1.mp3\n");
+							CLIENT_COMMAND(pPlayer, "mp3 play sound/music/MX_SK_INT.mp3\n");
 						else if (m_bMusicSet4 == true)
-							CLIENT_COMMAND(pPlayer, "mp3 play sound/music/Spooky01.mp3\n");
+							CLIENT_COMMAND(pPlayer, "mp3 play sound/music/MX_SPACEY02_DUB.mp3\n");
 					}
 				}
 
