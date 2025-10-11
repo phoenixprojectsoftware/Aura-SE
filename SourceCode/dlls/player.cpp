@@ -451,6 +451,7 @@ void CBasePlayer::StopAllShieldSounds()
 {
 	if (sv_aura_regeneration.value != 0)
 	{
+		ALERT(at_console, "[Shield] StopAllShieldSounds() called\n");
 		STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_empty.wav");
 		STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_low.wav");
 		STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_lp.wav");
@@ -1050,6 +1051,8 @@ entvars_t *g_pevLastInflictor;  // Set in combat.cpp.  Used to pass the damage i
 
 void CBasePlayer::Killed( entvars_t *pevAttacker, int iGib )
 {
+	StopAllShieldSounds();
+
   //++ BulliT
   if (pev)
     m_vKilled = pev->origin;
@@ -1133,7 +1136,6 @@ void CBasePlayer::Killed( entvars_t *pevAttacker, int iGib )
 	}
 
 	DeathSound();
-	StopAllShieldSounds();
 
 	// isShieldLow = false; // do we need this?
 
@@ -4813,13 +4815,9 @@ void CBasePlayer::RunShieldUpdates()
 	if (!IsAlive() || IsObserver() || IsSpectator())
 		return;
 
-	switch (AgGametype())
-	{
-	case SWAT:
-	case INSTAGIB:
-	case HLDM:
+	// Gametypes not allowed to run shield updates.
+	if (HLDM == AgGametype() || SWAT == AgGametype() || INSTAGIB == AgGametype())
 		return;
-	}
 
 	int armorInt = (int)pev->armorvalue;
 

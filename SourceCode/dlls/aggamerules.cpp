@@ -387,6 +387,8 @@ void AgGameRules::PlayerSpawn(CBasePlayer* pPlayer)
                 pPlayer->GiveAmmo(URANIUM_MAX_CARRY, "uranium", URANIUM_MAX_CARRY);
             if (1 > ag_ban_glock.value && 1 > ag_ban_9mmar.value)
                 pPlayer->GiveAmmo(_9MM_MAX_CARRY, "9mm", _9MM_MAX_CARRY);
+            if (1 > ag_ban_brammo.value && 1 > ag_ban_br.value)
+				pPlayer->GiveAmmo(BR_MAX_CARRY, "brammo", BR_MAX_CARRY);
             if (1 > ag_ban_357.value)
                 pPlayer->GiveAmmo(_357_MAX_CARRY, "357", _357_MAX_CARRY);
             if (1 > ag_ban_shotgun.value)
@@ -554,7 +556,9 @@ void AgGameRules::PlayerSpawn(CBasePlayer* pPlayer)
                 if (0 < ag_start_uranium.value)
                     pPlayer->GiveAmmo(ag_start_uranium.value, "uranium", URANIUM_MAX_CARRY);
                 if (0 < ag_start_9mmar.value)
-                    pPlayer->GiveAmmo(ag_start_9mmar.value, "9mm", _9MM_MAX_CARRY);
+                    pPlayer->GiveAmmo(ag_start_9mmar.value, "9mm", BR_MAX_CARRY);
+                if (0 < ag_start_brammo.value)
+					pPlayer->GiveAmmo(ag_start_brammo.value, "brammo", _9MM_MAX_CARRY);
                 if (0 < ag_start_357ammo.value)
                     pPlayer->GiveAmmo(ag_start_357ammo.value, "357", _357_MAX_CARRY);
                 if (0 < ag_start_bockshot.value)
@@ -805,6 +809,8 @@ int AgGameRules::IPointsForKill(CBasePlayer* pAttacker, CBasePlayer* pKilled)
             //As a reward for your kill you get full health and ammo.
             pAttacker->pev->armorvalue = MAX_NORMAL_BATTERY;
             pAttacker->pev->health = MAX_NORMAL_BATTERY;
+            if (pAttacker->isShieldEmpty || pAttacker->isShieldLow)
+                pAttacker->StopAllShieldSounds();
 
             //Fill clip in all weapons weapon
             for (int i = 0; i < MAX_ITEM_TYPES; i++)
@@ -838,6 +844,8 @@ int AgGameRules::IPointsForKill(CBasePlayer* pAttacker, CBasePlayer* pKilled)
                 pAttacker->GiveAmmo(ag_start_uranium.value, "uranium", URANIUM_MAX_CARRY);
             if (0 < ag_start_9mmar.value)
                 pAttacker->GiveAmmo(ag_start_9mmar.value, "9mm", _9MM_MAX_CARRY);
+			if (0 < ag_start_brammo.value)
+				pAttacker->GiveAmmo(ag_start_brammo.value, "brammo", BR_MAX_CARRY);
 #ifndef _HALO
             if (0 < ag_start_oitc.value)
                 pAttacker->GiveAmmo(ag_start_oitc.value, "weapon_one", ONE_MAX_CARRY);
@@ -929,6 +937,7 @@ FILE_GLOBAL BANWEAPON s_Bans[] =
   "ammo_9mmAR",&ag_ban_9mmar,
   "ammo_mp5clip",&ag_ban_9mmar,
   "ammo_9mmbox",&ag_ban_9mmar,
+  "ammo_br", &ag_ban_brammo,
   "ammo_buckshot",&ag_ban_bockshot,
   "ammo_gaussclip",&ag_ban_uranium,
   "ammo_crossbow",&ag_ban_bolts,
