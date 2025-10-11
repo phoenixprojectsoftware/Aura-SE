@@ -708,6 +708,8 @@ int AgGameRules::IPointsForKill(CBasePlayer* pAttacker, CBasePlayer* pKilled)
             //As a reward for your kill you get full health and ammo.
             pAttacker->pev->armorvalue = MAX_NORMAL_BATTERY;
             pAttacker->pev->health = MAX_NORMAL_BATTERY;
+            if (pAttacker->isShieldEmpty || pAttacker->isShieldLow)
+                pAttacker->StopAllShieldSounds();
 
             //Fill clip in all weapons weapon
             for (int i = 0; i < MAX_ITEM_TYPES; i++)
