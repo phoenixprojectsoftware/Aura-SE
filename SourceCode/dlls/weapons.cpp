@@ -451,7 +451,10 @@ void W_Precache(void)
 	PRECACHE_SOUND ("weapons/bullet_hit1.wav");	// hit by bullet
 	PRECACHE_SOUND ("weapons/bullet_hit2.wav");	// hit by bullet
 
-	PRECACHE_SOUND("player/hitsound.wav");
+	PRECACHE_SOUND("player/hitsound01.wav");
+	PRECACHE_SOUND("player/hitsound02.wav");
+	PRECACHE_SOUND("player/hitsound03.wav");
+	PRECACHE_SOUND("player/hitsound04.wav");
 	
 	PRECACHE_SOUND ("items/weapondrop1.wav");// weapon falls to the ground
 
