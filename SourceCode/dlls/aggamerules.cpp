@@ -13,6 +13,7 @@
 #include "agvote.h"
 #include "agclient.h"
 #include "aggamerules.h"
+#include "music.h"
 #ifdef AGSTATS
 #include "agstats.h"
 #endif
@@ -121,6 +122,19 @@ bool AgGameRules::AgThink()
 
     //Check gamemode
     GameMode.Think();
+    
+    // Summon music system and give the client ample time to play the match start music first
+    if (!m_bMusicSystemEngaged && gpGlobals->time > 17.0f)
+    {
+        g_MusicSystem.Init();
+		g_MusicSystem.Play();
+        m_bMusicSystemEngaged = true;
+    }
+    else if (m_bMusicSystemEngaged && gpGlobals->time < 17.0f)
+    {
+        g_MusicSystem.Stop();
+        m_bMusicSystemEngaged = false;
+	}
     return true;
 }
 
@@ -734,6 +748,8 @@ BOOL AgGameRules::ClientConnected(edict_t* pEntity, const char* pszName, const c
             m_mapIPAddress.insert(AgIPAddress::value_type(ENTINDEX(pEntity), pszAddress));
         else
             (*itrIPAddress).second = ENTINDEX(pEntity);
+
+		g_MusicSystem.OnClientConnect(pEntity);
     }
     return TRUE;
 }

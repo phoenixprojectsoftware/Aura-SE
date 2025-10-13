@@ -78,6 +78,7 @@ public:
     virtual const char* GetGameDescription(void) { return AgGamenameChar(); }  // this is the game name that gets seen in the server browser
     //New
     bool    AgThink();
+	bool    m_bMusicSystemEngaged = false; // is the music system engaged?
     void    Start(const AgString& sSpawn);
     void    ChangeNextLevel();
     void    ResendScoreBoard();
