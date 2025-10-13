@@ -4945,8 +4945,9 @@ void CBasePlayer :: UpdateClientData( void )
 		m_iClientHideHUD = m_iHideHUD;
 	}
 
-	// BlueNightHawk : Suit Energy Regeneration | Sounds
-	RunShieldUpdates();
+	// BlueNightHawk : Suit Energy Regeneration
+	if (SWAT != AgGametype() && INSTAGIB != AgGametype())
+		RunShieldUpdates();
 //++ BulliT
   CBasePlayer* pPlayerTarget = NULL;
   if (m_hSpectateTarget != NULL && m_hSpectateTarget->pev != NULL)
