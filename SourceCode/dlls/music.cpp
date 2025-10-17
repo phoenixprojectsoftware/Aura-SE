@@ -50,12 +50,12 @@ void CMusicSystem::Init()
 	char* pszGametype = AgGametypeName(AgGametype());
 
 	// try gametype file first
-	snprintf(szPath, sizeof(szPath), "mus/%s.mus", pszGametype);
+	snprintf(szPath, sizeof(szPath), "mus/GAMETYPE/%s.mus", pszGametype);
 	ALERT(at_console, "CMusicSystem: loading music file for gametype %s\n", pszGametype);
 	if (!LOAD_FILE_FOR_ME(szPath, nullptr))
 	{
 		// try map
-		snprintf(szPath, sizeof(szPath), "mus/%s.mus", STRING(gpGlobals->mapname));
+		snprintf(szPath, sizeof(szPath), "mus/LEVEL/%s.mus", STRING(gpGlobals->mapname));
 		ALERT(at_console, "CMusicSystem: failed to load music file for gametype %s, trying map %s\n", pszGametype, STRING(gpGlobals->mapname));
 		if (!LOAD_FILE_FOR_ME(szPath, nullptr))
 		{
