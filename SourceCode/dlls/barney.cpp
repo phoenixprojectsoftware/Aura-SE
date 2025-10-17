@@ -28,6 +28,10 @@
 #include	"weapons.h"
 #include	"soundent.h"
 
+#include "gamerules.h"
+#include "agglobal.h"
+#include "aggamerules.h"
+
 #define		BARNEY_EXTRA_HEALTH	30.0
 
 //=========================================================
@@ -510,6 +514,9 @@ static BOOL IsFacing( entvars_t *pevTest, const Vector &reference )
 
 int CBarney :: TakeDamage( entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
 {
+	if (CHILL == AgGametype())
+		return 0;
+
 	// make sure friends talk about it if player hurts talkmonsters...
 	int ret = CTalkMonster::TakeDamage(pevInflictor, pevAttacker, flDamage, bitsDamageType);
 	if ( !IsAlive() || pev->deadflag == DEAD_DYING )
