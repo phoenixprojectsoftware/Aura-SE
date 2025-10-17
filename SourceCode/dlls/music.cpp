@@ -21,6 +21,7 @@ CMusicSystem g_MusicSystem;
 
 char* AgGametypeName(float gametype)
 {
+	/*
 	if (ARENA == AgGametype())
 		return "arena";
 	if (CTF == AgGametype())
@@ -49,6 +50,28 @@ char* AgGametypeName(float gametype)
 		return "hldm";
 	if (BUSTERS == AgGametype())
 		return "busters";
+		*/
+
+	switch (AgGametype())
+	{
+	case ARENA: return "arena";
+	case CTF: return "ctf";
+	case LMS: return "lms";
+	case ARCADE: return "arcade";
+	case SGBOW: return "sgbow";
+	case INSTAGIB: return "instagib";
+	case DOM: return "dom";
+	case HIDEANDSEEK: return "hideandseek";
+	case FIREFIGHT: return "firefight";
+	case FIESTAFIGHT: return "fiestafight";
+	case FIESTA: return "fiesta";
+	case SWAT: return "swat";
+	case HLDM: return "hldm";
+	case BUSTERS: return "busters";
+	case STANDARD:
+	default:
+		return "none";
+	}
 }
 
 void CMusicSystem::Init()
