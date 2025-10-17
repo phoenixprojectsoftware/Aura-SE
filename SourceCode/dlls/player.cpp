@@ -582,7 +582,7 @@ int CBasePlayer :: TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, 
 	}
 
 	// Also refuse dmg on Firefight & Fiestafight.
-	if (FIREFIGHT == AgGametype() || FIESTAFIGHT == AgGametype())
+	if (FIREFIGHT == AgGametype() || FIESTAFIGHT == AgGametype() || CHILL == AgGametype())
 		if (pAttacker && pAttacker->IsPlayer() && this->IsPlayer())
 			return 0;
 

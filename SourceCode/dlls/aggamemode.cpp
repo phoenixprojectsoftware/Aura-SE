@@ -39,6 +39,8 @@ void SetupGametype()
         g_GameType = HLDM;
     else if (sGametype == "busters")
         g_GameType = BUSTERS;
+    else if (sGametype == "chill")
+        g_GameType = CHILL;
     else if (sGametype == "ctf")
         g_GameType = CTF;
     else if (sGametype == "dom")

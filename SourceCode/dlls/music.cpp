@@ -21,37 +21,6 @@ CMusicSystem g_MusicSystem;
 
 char* AgGametypeName(float gametype)
 {
-	/*
-	if (ARENA == AgGametype())
-		return "arena";
-	if (CTF == AgGametype())
-		return "ctf";
-	if (LMS == AgGametype())
-		return "lms";
-	if (ARCADE == AgGametype())
-		return "arcade";
-	if (SGBOW == AgGametype())
-		return "sgbow";
-	if (INSTAGIB == AgGametype())
-		return "instagib";
-	if (DOM == AgGametype())
-		return "dom";
-	if (HIDEANDSEEK == AgGametype())
-		return "hideandseek";
-	if (FIREFIGHT == AgGametype())
-		return "firefight";
-	if (FIESTAFIGHT == AgGametype())
-		return "fiestafight";
-	if (FIESTA == AgGametype())
-		return "fiesta";
-	if (SWAT == AgGametype())
-		return "swat";
-	if (HLDM == AgGametype())
-		return "hldm";
-	if (BUSTERS == AgGametype())
-		return "busters";
-		*/
-
 	switch (AgGametype())
 	{
 	case ARENA: return "arena";
@@ -68,6 +37,7 @@ char* AgGametypeName(float gametype)
 	case SWAT: return "swat";
 	case HLDM: return "hldm";
 	case BUSTERS: return "busters";
+	case CHILL: return "chill";
 	case STANDARD:
 	default:
 		return "none";
