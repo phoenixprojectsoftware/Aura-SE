@@ -20,6 +20,8 @@
 
 */
 
+#define AURA_VERSION "3.0"
+
 #include "extdll.h"
 #include "util.h"
 
@@ -2198,7 +2200,7 @@ void CBasePlayer::PreThink(void)
       WRITE_BYTE((int)CVAR_GET_FLOAT("mp_fraglimit"));
       WRITE_BYTE((int)CVAR_GET_FLOAT("mp_friendlyfire"));
       WRITE_BYTE((int)CVAR_GET_FLOAT("mp_weaponstay"));
-      WRITE_STRING(CVAR_GET_STRING("sv_aura_version"));
+      WRITE_STRING(AURA_VERSION);
       WRITE_STRING(CVAR_GET_STRING("sv_aura_wallgauss"));
       WRITE_STRING(CVAR_GET_STRING("sv_aura_headshot"));
       WRITE_STRING(CVAR_GET_STRING("sv_aura_blastradius"));

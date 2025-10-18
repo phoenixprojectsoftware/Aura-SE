@@ -25,12 +25,6 @@
 
 void AgInitTimer();
 
-#ifdef AG_NO_CLIENT_DLL
-DLL_GLOBAL cvar_t	ag_version = { "sv_aura_version","EX", FCVAR_SERVER };
-#else
-DLL_GLOBAL cvar_t	ag_version = { "sv_aura_version","EX", FCVAR_SERVER };
-#endif
-
 DLL_GLOBAL cvar_t	ag_gamemode = { "sv_aura_gamemode","ffa", FCVAR_SERVER }; //The current gamemode
 DLL_GLOBAL cvar_t	ag_gamemode_auto = { "sv_aura_gamemode_auto","1", FCVAR_SERVER }; // Detect the gamemode based on the map and switch gamemode automatically
 DLL_GLOBAL cvar_t	ag_allowed_gamemodes = { "sv_aura_allowed_gamemodes","" };
@@ -323,7 +317,6 @@ void AgInitGame()
 {
     AgInitTimer();
 
-    CVAR_REGISTER(&ag_version);
     CVAR_REGISTER(&ag_gamemode);
     CVAR_REGISTER(&ag_gamemode_auto);
     CVAR_REGISTER(&ag_allowed_gamemodes);
