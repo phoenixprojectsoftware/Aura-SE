@@ -294,7 +294,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\dlls\aflock.cpp" />
-    <ClCompile Include="..\..\dlls\agbusters.cpp" />
     <ClCompile Include="..\..\dlls\agfiesta.cpp" />
     <ClCompile Include="..\..\dlls\agfirefight.cpp" />
     <ClCompile Include="..\..\dlls\agfirefight_cache.cpp" />
@@ -465,7 +464,6 @@
     <ClInclude Include="..\..\common\weaponinfo.h" />
     <ClInclude Include="..\..\dlls\activity.h" />
     <ClInclude Include="..\..\dlls\activitymap.h" />
-    <ClInclude Include="..\..\dlls\agbusters.h" />
     <ClInclude Include="..\..\dlls\agfiesta.h" />
     <ClInclude Include="..\..\dlls\agfirefight.h" />
     <ClInclude Include="..\..\dlls\aghideandseek.h" />

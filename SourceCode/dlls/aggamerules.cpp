@@ -105,10 +105,6 @@ bool AgGameRules::AgThink()
     {
         m_SWAT.Think();
     }
-    else if (BUSTERS == AgGametype())
-    {
-        m_Busters.Think();
-    }
     else
     {
         //Update match status.
@@ -983,8 +979,6 @@ BOOL AgGameRules::CanHavePlayerItem(CBasePlayer* pPlayer, CBasePlayerItem* pItem
         return FALSE;
     if ((FIESTA == AgGametype() || FIESTAFIGHT == AgGametype()) && pPlayer->m_bFiestaLock)
         return FALSE;
-    if (BUSTERS == AgGametype())
-        return m_Busters.CanHavePlayerItem(pPlayer, pItem);
 
     if (ARENA == AgGametype() && m_Arena.CanHaveItem())
         return TRUE;
@@ -1023,9 +1017,6 @@ BOOL AgGameRules::CanHaveItem(CBasePlayer* pPlayer, CItem* pItem)
         return FALSE;
     if (!pPlayer->IsAlive())
         return FALSE;
-
-    if (BUSTERS == AgGametype())
-        return m_Busters.CanHaveItem(pPlayer, pItem);
 
     if (ARENA == AgGametype() && m_Arena.CanHaveItem())
         return TRUE;
@@ -1178,7 +1169,7 @@ BOOL AgGameRules::FPlayerCanTakeDamage(CBasePlayer* pPlayer, CBaseEntity* pAttac
         {
             //This dude is instant dead!
             pPlayer->pev->health = -200;
-            pPlayer->Killed(pAttacker->pev, GIB_ALWAYS);
+            pPlayer->Killed(pAttacker->pev, GIB_NEVER);
             return FALSE;
         }
     }

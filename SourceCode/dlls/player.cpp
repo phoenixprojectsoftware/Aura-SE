@@ -60,8 +60,6 @@ extern void SetupVisibility(edict_t *pViewEntity, edict_t *pClient, unsigned cha
 // the world node graph
 extern CGraph	WorldGraph;
 
-extern bool IsBustingGame();
-
 #define TRAIN_ACTIVE	0x80 
 #define TRAIN_NEW		0xc0
 #define TRAIN_OFF		0x00
@@ -925,66 +923,23 @@ void CBasePlayer::PackDeadPlayerItems( void )
 	iPA = 0;
 	iPW = 0;
 
-	if (IsBustingGame())
+// pack the ammo
+	while ( iPackAmmo[ iPA ] != -1 )
 	{
-		if (HasNamedPlayerItem("weapon_egon"))
-		{
-			for (i = 0; i < MAX_ITEM_TYPES; i++)
-			{
-				CBasePlayerItem* pItem = m_rgpPlayerItems[i];
-
-				if (pItem)
-				{
-					if (!strcmp("weapon_egon", STRING(pItem->pev->classname)))
-					{
-						pWeaponBox->PackWeapon(pItem);
-
-						SET_MODEL(ENT(pWeaponBox->pev), "models/w_egon.mdl");
-
-						pWeaponBox->pev->velocity = Vector(0, 0, 0);
-						pWeaponBox->pev->renderfx = kRenderFxGlowShell;
-						pWeaponBox->pev->renderamt = 25;
-						pWeaponBox->pev->rendercolor = Vector(0, 75, 250);
-
-						break;
-					}
-				}
-			}
-		}
+		pWeaponBox->PackAmmo( MAKE_STRING( CBasePlayerItem::AmmoInfoArray[ iPackAmmo[ iPA ] ].pszName ), m_rgAmmo[ iPackAmmo[ iPA ] ] );
+		iPA++;
 	}
-	else
+
+// now pack all of the items in the lists
+	while ( rgpPackWeapons[ iPW ] )
 	{
-		bool bPackItems = true;
+		// weapon unhooked from the player. Pack it into der box.
+		pWeaponBox->PackWeapon( rgpPackWeapons[ iPW ] );
 
-		if (iAmmoRules == GR_PLR_DROP_AMMO_ACTIVE && iWeaponRules == GR_PLR_DROP_GUN_ACTIVE)
-		{
-			if (FClassnameIs(rgpPackWeapons[0]->pev, "weapon_satchel") && (iPackAmmo[0] == -1 || (m_rgAmmo[iPackAmmo[0]] == 0)))
-			{
-				bPackItems = false;
-			}
-		}
-
-		if (bPackItems)
-		{
-			// pack the ammo
-			while (iPackAmmo[iPA] != -1)
-			{
-				pWeaponBox->PackAmmo(MAKE_STRING(CBasePlayerItem::AmmoInfoArray[iPackAmmo[iPA]].pszName), m_rgAmmo[iPackAmmo[iPA]]);
-				iPA++;
-			}
-
-			// now pack all of the items in the lists
-			while (rgpPackWeapons[iPW])
-			{
-				// weapon unhooked from the player. Pack it into der box.
-				pWeaponBox->PackWeapon(rgpPackWeapons[iPW]);
-
-				iPW++;
-			}
-		}
-
-		pWeaponBox->pev->velocity = pev->velocity * 1.2; // weaponbox has player's velocity, then some.
+		iPW++;
 	}
+
+	pWeaponBox->pev->velocity = pev->velocity * 1.2;// weaponbox has player's velocity, then some.
 
 	RemoveAllItems( TRUE );// now strip off everything that wasn't handled by the code above.
 }
@@ -5872,33 +5827,6 @@ BOOL CBasePlayer::HasNamedPlayerItem( const char *pszItemName )
 	}
 
 	return FALSE;
-}
-
-//=========================================================
-// HasPlayerItemFromID
-// Just compare IDs, rather than classnames
-//=========================================================
-bool CBasePlayer::HasPlayerItemFromID(int nID)
-{
-	CBasePlayerItem* pItem;
-	int i;
-
-	for (i = 0; i < MAX_ITEM_TYPES; i++)
-	{
-		pItem = m_rgpPlayerItems[i];
-
-		while (pItem)
-		{
-			if (pItem->m_iId == nID)
-			{
-				return true;
-			}
-
-			pItem = pItem->m_pNext;
-		}
-	}
-
-	return false;
 }
 
 //=========================================================
