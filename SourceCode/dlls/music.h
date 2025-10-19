@@ -20,6 +20,7 @@ public:
 	void Stop();
 	void OnClientConnect(edict_t* pPlayer);
 
+	bool m_bMapMusic = false; // Can the map play its own music?
 private:
 	void LoadFile(char* pszPath);
 	void BroadcastCommand(char* pszCmd);

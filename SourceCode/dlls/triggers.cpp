@@ -656,214 +656,56 @@ void CTriggerMonsterJump :: Touch( CBaseEntity *pOther )
 
 //=====================================
 //
-// trigger_cdaudio - starts/stops cd audio tracks
+// trigger_music
 //
-class CTriggerCDAudio : public CBaseTrigger
+
+#include "music.h"
+
+class CTriggerMusic : public CBaseEntity
 {
 public:
-	void Spawn( void );
+	void KeyValue(KeyValueData* pkvd) override;
+	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
 
-	virtual void Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
-	void PlayTrack( void );
-	void Touch ( CBaseEntity *pOther );
+private:
+	string_t m_iszTrack; // store track name
 };
 
-LINK_ENTITY_TO_CLASS( trigger_cdaudio, CTriggerCDAudio );
+LINK_ENTITY_TO_CLASS(trigger_music, CTriggerMusic);
 
-//
-// Changes tracks or stops CD when player touches
-//
-// !!!HACK - overloaded HEALTH to avoid adding new field
-void CTriggerCDAudio :: Touch ( CBaseEntity *pOther )
+void CTriggerMusic::KeyValue(KeyValueData* pkvd)
 {
-	PlayTrack();
-}
-
-void CTriggerCDAudio :: Spawn( void )
-{
-	InitTrigger();
-}
-
-void CTriggerCDAudio::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value )
-{
-	PlayTrack();
-}
-
-
-// BlueNightHawk : Play music for all players
-void PlayCDTrack( int iTrack )
-{
-	edict_t *pClient;
-
-	if (iTrack < -1 || iTrack > 30)
+	if (FStrEq(pkvd->szKeyName, "track"))
 	{
-		ALERT(at_console, "TriggerCDAudio - Track %d out of range\n");
-	}
-
-	// find all the players. 
-	for (int i = 1; i < gpGlobals->maxClients + 1; i++)
-	{
-		pClient = g_engfuncs.pfnPEntityOfEntIndex(i);
-
-		// Can't play if the client is not connected!
-		if (!pClient)
-			break;
-
-		if (!(pClient->v.flags & FL_CLIENT))
-		{
-			break;
-		}
-
-		CBasePlayer* pPlayer = (CBasePlayer *)CBaseEntity::Instance(pClient);
-
-		if (!pPlayer)
-		{
-			ALERT(at_console, "Player %i returned null\n", i);
-			continue;
-		}
-
-		if (ARENA != AgGametype() && CTF != AgGametype() && LMS != AgGametype() && FIREFIGHT != AgGametype() && FIESTAFIGHT != AgGametype())
-		{
-			if (iTrack == -1)
-			{
-				ALERT(at_console, "Do you honestly think you're fucking funny fucking with my friends?\n");
-			}
-			else
-			{
-				char string[64];
-
-				sprintf(string, "cd play %3d\n", iTrack);
-				CLIENT_COMMAND(pClient, string);
-			}
-		}
-		else
-		{
-			ClientPrint(&pClient->v, HUD_PRINTCONSOLE, "Map music unavailable in this gamemode\n");
-		}
-
-		if (ARENA == AgGametype())
-		{
-			if (iTrack == -1)
-			{
-
-				CLIENT_COMMAND(pClient, "cd play 5\n");
-				// TODO: make this random CLIENT_COMMAND(pClient, "cd play 3\n");
-			}
-			else
-			{
-				CLIENT_COMMAND(pClient, "echo ZEKE WAS HERE\n");
-			}
-		}
-
-		if (CTF == AgGametype())
-		{
-			if (iTrack == -1)
-			{
-				CLIENT_COMMAND(pClient, "echo CTF Music Not Made Yet Pal\n");
-			}
-			else
-			{
-				CLIENT_COMMAND(pClient, "echo ZEKE WAS HERE\n");
-			}
-		}
-	}
-}
-
-
-// only plays for ONE client, so only use in single play!
-void CTriggerCDAudio :: PlayTrack( void )
-{
-	PlayCDTrack( (int)pev->health );
-	
-	SetTouch( NULL );
-	UTIL_Remove( this );
-}
-
-
-// This plays a CD track when fired or when the player enters it's radius
-class CTargetCDAudio : public CPointEntity
-{
-public:
-	void			Spawn( void );
-	void			KeyValue( KeyValueData *pkvd );
-
-	virtual void	Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
-	void			Think( void );
-	void			Play( void );
-};
-
-LINK_ENTITY_TO_CLASS( target_cdaudio, CTargetCDAudio );
-
-void CTargetCDAudio :: KeyValue( KeyValueData *pkvd )
-{
-	if (FStrEq(pkvd->szKeyName, "radius"))
-	{
-		pev->scale = atof(pkvd->szValue);
+		m_iszTrack = ALLOC_STRING(pkvd->szValue);
 		pkvd->fHandled = TRUE;
 	}
 	else
-		CPointEntity::KeyValue( pkvd );
+		CBaseEntity::KeyValue(pkvd);
 }
 
-void CTargetCDAudio :: Spawn( void )
+void CTriggerMusic::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
 {
-	pev->solid = SOLID_NOT;
-	pev->movetype = MOVETYPE_NONE;
+	if (!g_MusicSystem.m_bMapMusic)
+		return; // don't override gamemode music
 
-	if ( pev->scale > 0 )
-		pev->nextthink = gpGlobals->time + 1.0;
-}
+	const char* track = STRING(m_iszTrack);
 
-void CTargetCDAudio::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value )
-{
-	Play();
+	char cmd[256];
+	snprintf(cmd, sizeof(cmd), "mp3 play sound/music/%s.mp3\n", track);
 
-	// this should make target_cdaudio usable more than once.
-	pev->nextthink = gpGlobals->time + 0.5;
-}
-
-// only plays for ONE client, so only use in single play!
-void CTargetCDAudio::Think( void )
-{
-	edict_t *pClient;
-	
-	// find all the players. 
-	for (int i = 1; i < gpGlobals->maxClients + 1; i++)
+	// send the play command to all connected clients
+	for (int i = 1; i <= gpGlobals->maxClients; i++)
 	{
-		pClient = g_engfuncs.pfnPEntityOfEntIndex(i);
+		edict_t* pPlayer = INDEXENT(i);
+		if (!FNullEnt(pPlayer) && pPlayer->v.flags & FL_CLIENT)
+			CLIENT_COMMAND(pPlayer, cmd);
 
-		// Can't play if the client is not connected!
-		if (!pClient)
-			break;
-
-		if (!(pClient->v.flags & FL_CLIENT))
-		{
-			break;
-		}
-
-		CBasePlayer* pPlayer = (CBasePlayer*)CBaseEntity::Instance(pClient);
-
-		if (!pPlayer)
-		{
-			ALERT(at_console, "Player %i returned null\n", i);
-			continue;
-		}
+		ALERT(at_console, "Sending to %d: %s", i, cmd);
 	}
-	
-	pev->nextthink = gpGlobals->time + 0.5;
-
-	if (gpGlobals->maxClients <= 2)
-		return;
-	else if ( (pClient->v.origin - pev->origin).Length() <= pev->scale )
-		Play();
-
 }
 
-void CTargetCDAudio::Play( void ) 
-{ 
-	PlayCDTrack( (int)pev->health ); 
-}
-
+// 
 //=====================================
 
 //

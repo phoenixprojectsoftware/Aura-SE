@@ -57,6 +57,8 @@ void CMusicSystem::Init()
 		// try map
 		snprintf(szPath, sizeof(szPath), "mus/LEVEL/%s.mus", STRING(gpGlobals->mapname));
 		ALERT(at_console, "CMusicSystem: failed to load music file for gametype %s, trying map %s\n", pszGametype, STRING(gpGlobals->mapname));
+		m_bMapMusic = true;
+		ALERT(at_console, "CMusicSystem: Map music enabled, using map music\n");
 		if (!LOAD_FILE_FOR_ME(szPath, nullptr))
 		{
 			//fallback to default

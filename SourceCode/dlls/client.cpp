@@ -61,8 +61,6 @@ extern int g_teamplay;
 
 void LinkUserMessages( void );
 
-void PlayCDTrack(int iTrack);
-
 /*
  * used by kill command and disconnect command
  * ROBIN: Moved here from player.cpp, to allow multiple player models
@@ -564,10 +562,6 @@ void ClientCommand( edict_t *pEntity )
 	else if ( g_pGameRules->ClientCommand( GetClassPtr((CBasePlayer *)pev), pcmd ) )
 	{
 		// MenuSelect returns true only if the command is properly handled,  so don't print a warning
-	}
-	else if (FStrEq(pcmd, "cdplayall"))
-	{
-		PlayCDTrack(atoi(CMD_ARGV(1)));
 	}
 	else
 	{
