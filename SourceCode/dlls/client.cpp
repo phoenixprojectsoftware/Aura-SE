@@ -903,6 +903,8 @@ void ClientPrecache( void )
 #ifndef _HALO
 	PRECACHE_SOUND("player/shield_start.wav"); // shield start sound
 	PRECACHE_SOUND("player/shield_finish.wav"); // shield finish sound
+
+	PRECACHE_SOUND("buttons/button6.wav");
 #endif
 
 	PRECACHE_SOUND("player/spawn.wav");

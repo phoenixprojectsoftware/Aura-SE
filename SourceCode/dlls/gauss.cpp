@@ -54,6 +54,11 @@ float CGauss::GetFullChargeTime(void)
 		return gauss_charge_time.value;
 }
 
+bool CGauss::IsTauGuysGame()
+{
+	return TAUGUYS == AgGametype();
+}
+
 #ifdef CLIENT_DLL
 extern int g_irunninggausspred;
 #endif
@@ -127,6 +132,7 @@ int CGauss::GetItemInfo(ItemInfo* p)
 
 BOOL CGauss::Deploy()
 {
+	m_bHasPlayedSnd = false;
 	m_pPlayer->m_flPlayAftershock = 0.0;
 	return DefaultDeploy("models/v_gauss.mdl", "models/p_gauss.mdl", GAUSS_DRAW, "gauss");
 }
@@ -265,19 +271,25 @@ void CGauss::SecondaryAttack()
 			m_pPlayer->m_flNextAmmoBurn = 1000;
 		}
 
-		float chargeFrac = (gpGlobals->time - m_pPlayer->m_flStartCharge) / GetFullChargeTime();
+		int pitch = (gpGlobals->time - m_pPlayer->m_flStartCharge) * (150 / GetFullChargeTime()) + 100;
+		int fullCharge = 250;
+		int maxPitch = IsTauGuysGame() ? 320 : fullCharge;
 
-		if (chargeFrac > 1.0f)
-			chargeFrac = 1.0f;
+		if (pitch > maxPitch)
+			pitch = maxPitch;
 
-		int pitch = 100 + (chargeFrac * 150);
+		if (pitch >= maxPitch && !m_bHasPlayedSnd)
+		{
+			EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_AUTO, "buttons/button6.wav", VOL_NORM, ATTN_NORM);
+			m_bHasPlayedSnd = true;
+		}
 
 		ALERT( at_console, "%d %d %d\n", m_fInAttack, m_iSoundState, pitch );
 
 		if (m_iSoundState == 0)
 			ALERT(at_console, "sound state %d\n", m_iSoundState);
 
-		PLAYBACK_EVENT_FULL(FEV_NOTHOST, m_pPlayer->edict(), m_usGaussSpin, 0.0, (float*)&g_vecZero, (float*)&g_vecZero, 0.0, 0.0, pitch, 0, (m_iSoundState == SND_CHANGE_PITCH) ? 1 : 0, 0);
+		PLAYBACK_EVENT_FULL(FEV_NOTHOST, m_pPlayer->edict(), m_usGaussSpin, 0.0, (float*)&g_vecZero, (float*)&g_vecZero, GetFullChargeTime(), 0.0, pitch, 0, (m_iSoundState == SND_CHANGE_PITCH) ? 1 : 0, 0);
 
 		m_iSoundState = SND_CHANGE_PITCH; // hack for going through level transitions
 
@@ -294,10 +306,11 @@ void CGauss::SecondaryAttack()
 			m_fInAttack = 0;
 			m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 1.0;
 			m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + 1.0;
+			m_bHasPlayedSnd = false;
 
 #ifndef CLIENT_DLL
 			float flTauChargeDmg;
-			if (TAUGUYS == AgGametype())
+			if (IsTauGuysGame())
 				flTauChargeDmg = 2000;
 			else
 				flTauChargeDmg = 50;
@@ -321,6 +334,8 @@ void CGauss::SecondaryAttack()
 void CGauss::StartFire(void)
 {
 	float flDamage;
+
+	m_bHasPlayedSnd = false;
 
 	UTIL_MakeVectors(m_pPlayer->pev->v_angle + m_pPlayer->pev->punchangle);
 	Vector vecAiming = gpGlobals->v_forward;

@@ -1082,10 +1082,12 @@ public:
 	void StartFire( void );
 	void Fire( Vector vecOrigSrc, Vector vecDirShooting, float flDamage );
 	float GetFullChargeTime( void );
+	bool IsTauGuysGame();
 	int m_iBalls;
 	int m_iGlow;
 	int m_iBeam;
 	int m_iSoundState; // don't save this
+	bool m_bHasPlayedSnd = false;
 
 	// was this weapon just fired primary or secondary?
 	// we need to know so we can pick the right set of effects. 
