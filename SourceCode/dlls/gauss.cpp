@@ -48,7 +48,10 @@ LINK_ENTITY_TO_CLASS(weapon_gauss, CGauss);
 
 float CGauss::GetFullChargeTime(void)
 {
-	return gauss_charge_time.value;
+	if (TAUGUYS == AgGametype())
+		return 20;
+	else
+		return gauss_charge_time.value;
 }
 
 #ifdef CLIENT_DLL
