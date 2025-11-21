@@ -12,7 +12,7 @@
 *   without written permission from Valve LLC.
 *
 ****/
-#if !defined( OEM_BUILD ) && !defined( HLDEMO_BUILD )
+#ifndef _HALO
 
 #include "extdll.h"
 #include "util.h"
@@ -297,7 +297,12 @@ void CGauss::SecondaryAttack()
 			m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + 1.0;
 
 #ifndef CLIENT_DLL
-			m_pPlayer->TakeDamage(VARS(eoNullEntity), VARS(eoNullEntity), 50, DMG_SHOCK);
+			float flTauChargeDmg;
+			if (TAUGUYS == AgGametype())
+				flTauChargeDmg = 2000;
+			else
+				flTauChargeDmg = 50;
+			m_pPlayer->TakeDamage(VARS(eoNullEntity), VARS(eoNullEntity), flTauChargeDmg, DMG_SHOCK);
 			UTIL_ScreenFade(m_pPlayer, Vector(255, 128, 0), 2, 0.5, 128, FFADE_IN);
 #endif
 			SendWeaponAnim(GAUSS_IDLE);

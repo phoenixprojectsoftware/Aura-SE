@@ -61,7 +61,8 @@ enum enumGameType
     SWAT,
     HLDM,
     BUSTERS,
-    CHILL
+    CHILL,
+    TAUGUYS
 };
 //-- muphicks
 extern DLL_GLOBAL BYTE g_GameType;

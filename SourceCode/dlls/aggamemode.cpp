@@ -51,6 +51,8 @@ void SetupGametype()
         g_GameType = SGBOW;
     else if (sGametype == "instagib")
         g_GameType = INSTAGIB;
+    else if (sGametype == "tauguys")
+        g_GameType = TAUGUYS;
 }
 
 AgString AgGamename()
