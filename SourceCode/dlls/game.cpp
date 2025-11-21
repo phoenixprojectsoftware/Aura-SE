@@ -50,6 +50,7 @@ cvar_t  mp5_old_rate = { "sv_aura_mp5_old_rate", "1", FCVAR_SERVER };
 cvar_t AbsoluteInsaneness = { "sv_aura_brojustdont", "0", FCVAR_SERVER };
 cvar_t fire_weapons_underwater = { "sv_aura_fire_weapons_underwater", "0", FCVAR_SERVER };
 cvar_t motionsensor = { "sv_aura_motionsensor", "1", FCVAR_SERVER };
+cvar_t gauss_charge_time = { "sv_aura_gauss_charge_time", "1.5", FCVAR_SERVER };
 
 // mp_chattime is like the minimum intermission time, you can't skip it, it's meant
 // to have some time for saying gg, etc. before changing map, it's part of the intermission
@@ -825,6 +826,7 @@ void GameDLLInit( void )
 	CVAR_REGISTER (&mp5_old_rate);
 	CVAR_REGISTER(&AbsoluteInsaneness);
 	CVAR_REGISTER(&fire_weapons_underwater);
+	CVAR_REGISTER(&gauss_charge_time);
 
 	CVAR_REGISTER (&mp_chattime);
 	CVAR_REGISTER (&mp_intermission_time);

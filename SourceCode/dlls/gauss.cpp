@@ -30,6 +30,8 @@
 #define	GAUSS_PRIMARY_CHARGE_VOLUME	256// how loud gauss is while charging
 #define GAUSS_PRIMARY_FIRE_VOLUME	450// how loud gauss is when discharged
 
+extern cvar_t gauss_charge_time;
+
 enum gauss_e {
 	GAUSS_IDLE = 0,
 	GAUSS_IDLE2,
@@ -46,16 +48,7 @@ LINK_ENTITY_TO_CLASS(weapon_gauss, CGauss);
 
 float CGauss::GetFullChargeTime(void)
 {
-#ifdef CLIENT_DLL
-	if (bIsMultiplayer())
-#else
-	if (g_pGameRules->IsMultiplayer())
-#endif
-	{
-		return 1.5;
-	}
-
-	return 4;
+	return gauss_charge_time.value;
 }
 
 #ifdef CLIENT_DLL
@@ -269,11 +262,14 @@ void CGauss::SecondaryAttack()
 			m_pPlayer->m_flNextAmmoBurn = 1000;
 		}
 
-		int pitch = (gpGlobals->time - m_pPlayer->m_flStartCharge) * (150 / GetFullChargeTime()) + 100;
-		if (pitch > 250)
-			pitch = 250;
+		float chargeFrac = (gpGlobals->time - m_pPlayer->m_flStartCharge) / GetFullChargeTime();
 
-		// ALERT( at_console, "%d %d %d\n", m_fInAttack, m_iSoundState, pitch );
+		if (chargeFrac > 1.0f)
+			chargeFrac = 1.0f;
+
+		int pitch = 100 + (chargeFrac * 150);
+
+		ALERT( at_console, "%d %d %d\n", m_fInAttack, m_iSoundState, pitch );
 
 		if (m_iSoundState == 0)
 			ALERT(at_console, "sound state %d\n", m_iSoundState);
@@ -285,7 +281,7 @@ void CGauss::SecondaryAttack()
 		m_pPlayer->m_iWeaponVolume = GAUSS_PRIMARY_CHARGE_VOLUME;
 
 		// m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 0.1;
-		if (m_pPlayer->m_flStartCharge < gpGlobals->time - 10)
+		if (GetFullChargeTime() + m_pPlayer->m_flStartCharge < gpGlobals->time - 10)
 		{
 			// Player charged up too long. Zap him.
 			STOP_SOUND(ENT(m_pPlayer->pev), CHAN_WEAPON, "ambience/pulsemachine.wav");
