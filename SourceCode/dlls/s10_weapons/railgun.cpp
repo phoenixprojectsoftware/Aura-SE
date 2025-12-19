@@ -50,7 +50,7 @@ void CRailgun::Precache(void)
 
 	UTIL_PrecacheOther("railgun_ray");
 
-	m_usRailgun = PRECACHE_EVENT(1, "events/railgun.sc");
+	m_usRailgun = PRECACHE_EVENT(1, "events/tf_rail.sc");
 }
 
 int CRailgun::GetItemInfo(ItemInfo* p)
