@@ -96,7 +96,7 @@ void CRailgun::Fire(void)
 #endif
 
 #ifndef CLIENT_DLL
-	CBaseEntity* pRay = CBaseEntity::Create("raingun_ray", vecSrc, m_pPlayer->pev->v_angle, m_pPlayer->edict());
+	CBaseEntity* pRay = CBaseEntity::Create("railgun_ray", vecSrc, m_pPlayer->pev->v_angle, m_pPlayer->edict());
 	pRay->pev->velocity = pRay->pev->vuser1 = vecDir * 2000;
 	pRay->pev->angles = UTIL_VecToAngles(pRay->pev->velocity);
 #endif
