@@ -106,26 +106,26 @@ void CRailgun::Fire(void)
 
 void CRailgun::PrimaryAttack(void)
 {
-	if (m_flNextPrimaryAttack > UTIL_WeaponTimeBase())
+	if (m_flNextPrimaryAttack > gpGlobals->time)
 	{
 		return;
 	}
 
 	Fire();
 
-	m_flNextPrimaryAttack = m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 0.5;
+	m_flNextPrimaryAttack = m_flNextSecondaryAttack = gpGlobals->time + 0.5;
 }
 
 void CRailgun::SecondaryAttack(void)
 {
-	if (m_flNextSecondaryAttack > UTIL_WeaponTimeBase())
+	if (m_flNextSecondaryAttack > gpGlobals->time)
 	{
 		return;
 	}
 
 	Fire();
 
-	m_flNextPrimaryAttack = m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 0.5;
+	m_flNextPrimaryAttack = m_flNextSecondaryAttack = gpGlobals->time + 0.5;
 
 }
 
@@ -136,7 +136,7 @@ BOOL CRailgun::Deploy()
 
 void CRailgun::Holster(int skiplocal)
 {
-	m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + 0.5;
+	m_pPlayer->m_flNextAttack = gpGlobals->time + 0.5;
 	SendWeaponAnim(RAILGUN_HOLSTER);
 }
 
@@ -145,11 +145,11 @@ void CRailgun::WeaponIdle(void)
 	m_pPlayer->GetAutoaimVector(AUTOAIM_2DEGREES);
 	ResetEmptySound();
 
-	if (m_flTimeWeaponIdle > UTIL_WeaponTimeBase())
+	if (m_flTimeWeaponIdle > gpGlobals->time)
 		return;
 
 	SendWeaponAnim(RAILGUN_IDLE);
-	m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + UTIL_WeaponTimeBase() + 31.0 / 10.0;
+	m_flTimeWeaponIdle = gpGlobals->time + gpGlobals->time + 31.0 / 10.0;
 }
 
 #endif // _HALO
