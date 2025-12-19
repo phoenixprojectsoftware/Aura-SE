@@ -44,7 +44,7 @@ void CRailgun::Precache(void)
 {
 	PRECACHE_MODEL("models/w_railgun.mdl");
 	PRECACHE_MODEL("models/p_railgun.mdl");
-	PRECACHE_MODEL("models/v_railgun");
+	PRECACHE_MODEL("models/v_railgun.mdl");
 
 	PRECACHE_SOUND("weapons/railgun.wav");
 
