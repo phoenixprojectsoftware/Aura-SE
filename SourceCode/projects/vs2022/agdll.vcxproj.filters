@@ -61,6 +61,12 @@
     <Filter Include="Source Files\dlls\halo_weapons">
       <UniqueIdentifier>{6616a46c-fea2-4f56-8195-a33dc2b28eb8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\dlls\s10_weapons">
+      <UniqueIdentifier>{0807ac84-99ea-41a6-9291-073101674102}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\dlls\s10_weapons">
+      <UniqueIdentifier>{936b4b40-e7b5-4839-adc0-8301a3e5c509}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\dlls\aflock.cpp">
@@ -549,6 +555,12 @@
     <ClCompile Include="..\..\dlls\music.cpp">
       <Filter>Source Files\dlls</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\dlls\s10_weapons\railgun.cpp">
+      <Filter>Source Files\dlls\s10_weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\s10_weapons\ray.cpp">
+      <Filter>Source Files\dlls\s10_weapons</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\dlls\doors.h">
@@ -865,6 +877,9 @@
     </ClInclude>
     <ClInclude Include="..\..\dlls\music.h">
       <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\s10_weapons\ray.h">
+      <Filter>Header Files\dlls\s10_weapons</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

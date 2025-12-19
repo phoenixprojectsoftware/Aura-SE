@@ -394,6 +394,8 @@
     <ClCompile Include="..\..\dlls\rope\CRopeSample.cpp" />
     <ClCompile Include="..\..\dlls\rope\CRopeSegment.cpp" />
     <ClCompile Include="..\..\dlls\rpg.cpp" />
+    <ClCompile Include="..\..\dlls\s10_weapons\railgun.cpp" />
+    <ClCompile Include="..\..\dlls\s10_weapons\ray.cpp" />
     <ClCompile Include="..\..\dlls\satchel.cpp" />
     <ClCompile Include="..\..\dlls\schedule.cpp" />
     <ClCompile Include="..\..\dlls\scientist.cpp" />
@@ -511,6 +513,7 @@
     <ClInclude Include="..\..\dlls\rope\CRope.h" />
     <ClInclude Include="..\..\dlls\rope\CRopeSample.h" />
     <ClInclude Include="..\..\dlls\rope\CRopeSegment.h" />
+    <ClInclude Include="..\..\dlls\s10_weapons\ray.h" />
     <ClInclude Include="..\..\dlls\saverestore.h" />
     <ClInclude Include="..\..\dlls\schedule.h" />
     <ClInclude Include="..\..\dlls\scripted.h" />
