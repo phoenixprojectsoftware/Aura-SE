@@ -106,6 +106,9 @@ void CMusicSystem::LoadFile(char* pszPath)
 
 void CMusicSystem::BroadcastCommand(char* pszCmd)
 {
+	if (FIREFIGHT == AgGametype() || FIESTAFIGHT == AgGametype())
+		return;
+
 	if (!pszCmd || !*pszCmd)
 		return;
 

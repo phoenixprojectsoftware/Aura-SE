@@ -66,6 +66,10 @@ FILE_GLOBAL char* s_szCommands[] =
   "dropitems - Drops flag in CTF mode",
 };
 
+static void GetFFPath(char* out, size_t size)
+{
+    snprintf(out, size, "%s/ff/%s.ff", AgGetDirectory(), STRING(gpGlobals->mapname));
+}
 
 bool AgClient::HandleCommand(CBasePlayer* pPlayer)
 {
@@ -364,6 +368,81 @@ bool AgClient::HandleCommand(CBasePlayer* pPlayer)
     }
     //-- muphicks
 #endif
+
+    // ++ FIREFIGHT
+#ifdef _DEBUG
+    else if (FStrEq(CMD_ARGV(0), "phx_set_wave"))
+#else
+    else if (FStrEq(CMD_ARGV(0), "phx_set_wave") && g_bLangame)
+#endif
+    {
+        if (AgGametype() != FIREFIGHT && AgGametype() != FIESTAFIGHT)
+        {
+            AgConsole("phx_set_wave: Firefight only\n", pPlayer);
+            return true;
+        }
+
+        if (CMD_ARGC() != 2)
+        {
+            AgConsole("Usage: phx_set_wave <number>\n", pPlayer);
+            return true;
+        }
+
+        int wave = atoi(CMD_ARGV(1));
+        if (wave < 1)
+        {
+            AgConsole("Wave must be >= 1\n", pPlayer);
+            return true;
+        }
+
+        g_pGameRules->m_Firefight.SetAuthoringWave(wave);
+
+        AgConsole(UTIL_VarArgs("Firefight authoring wave set to %d\n", wave), pPlayer);
+
+        return true;
+    }
+#ifdef _DEBUG
+    else if (FStrEq(CMD_ARGV(0), "phx_add_spawn"))
+#else
+    else if (FStrEq(CMD_ARGV(0), "phx_add_spawn"))
+#endif
+    {
+        if (AgGametype() != FIREFIGHT && AgGametype() != FIESTAFIGHT)
+        {
+            AgConsole("this command is firefight only\n", pPlayer);
+            return true;
+        }
+
+        //AgFirefight* pFF = static_cast<AgFirefight*>(g_pGameRules);
+
+        Vector org = pPlayer->pev->origin;
+
+        char path[MAX_PATH];
+        GetFFPath(path, sizeof(path));
+
+        FILE* f = fopen(path, "a");
+        if (!f)
+        {
+            AgConsole("Failed to open .ff file for writing\n", pPlayer);
+            return true;
+        }
+
+        fprintf(f, "%d %.1f %1.f %.1f\n", g_pGameRules->m_Firefight.GetAuthoringWave(), org.x, org.y, org.z);
+
+        fclose(f);
+
+        AgConsole(
+            UTIL_VarArgs(
+                "Added FF spawn (wave %d) at %.1f %1.f %1.f\n",
+                g_pGameRules->m_Firefight.GetAuthoringWave(),
+                org.x, org.y, org.z),
+            pPlayer
+        );
+
+        return true;
+    }
+    // -- FIREFIGHT
+
     else if (FStrEq(CMD_ARGV(0), "changeteam"))
     {
 #define MENU_TEAM 					2

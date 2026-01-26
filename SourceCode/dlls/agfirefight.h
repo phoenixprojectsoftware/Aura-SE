@@ -31,9 +31,6 @@ struct AgFFWaveSpawn
 {
 	int waveNumber;
 	Vector origin;
-	Vector angles;
-	char monsterClass[64];
-	int difficulty;
 };
 
 class AgFirefightFileItem
@@ -74,7 +71,12 @@ public:
 	void Precache();
 	void Think();
 
+	void SetAuthoringWave(int wave);
+	int GetAuthoringWave() const { return m_iAuthoringWave; }
+
 private:
+	Vector RandomMonsterAngles();
+	const char* PickRandomMonster();
 	void RandomMusic();
 	void StartNextWave();
 	void SpawnWaveEnemies();
@@ -93,6 +95,8 @@ private:
 	float m_flWaveStartTime;
 	int m_iWaveNumber;
 	int m_iEnemiesRemaining;
+
+	int m_iAuthoringWave = 1;
 
 	FirefightState m_State;
 

@@ -509,6 +509,11 @@ void M_Precache(void)
 	UTIL_PrecacheOther("monster_zamnhl");
 	ALERT(at_console, "zamnhl precached\n");
 
+	UTIL_PrecacheOther("monster_zombie");
+	ALERT(at_console, "zombie precached\n");
+
+	UTIL_PrecacheOther("monster_cockroach");
+	ALERT(at_console, "roach precached\n");
 }
 
 

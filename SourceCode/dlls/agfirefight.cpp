@@ -1,6 +1,6 @@
 /****
 * 
-* Copyright (c) 2021-2025 The Phoenix Project Software. Some Rights Reserved.
+* Copyright (c) 2021-2026 The Phoenix Project Software. Some Rights Reserved.
 * 
 * AURA
 * 
@@ -19,6 +19,21 @@
 #include "monsters.h" // for spawning monsters
 
 // AgFirefight g_AgFirefight;
+
+const char* easyMonsters[] = {
+	"monster_zombie",
+	"monster_headcrab",
+	"monster_alien_slave",
+	"monster_bullsquid",
+	"monster_zamnhl",
+	"monster_hgrunt"
+};
+const char* hardMonsters[] = {
+	"monster_hgrunt",
+	"monster_hassassin",
+	"monster_agrunt",
+	"monster_controller"
+};
 
 void AgFirefight::RandomMusic()
 {
@@ -87,12 +102,40 @@ void AgFirefightFileCache::Load()
 			continue;
 
 		AgFFWaveSpawn spawn;
-		sscanf(line, "%d %f %f %f %f %f %f %s %d", &spawn.waveNumber, &spawn.origin.x, &spawn.origin.y, &spawn.origin.z, &spawn.angles.x, &spawn.angles.y, &spawn.angles.z, spawn.monsterClass, &spawn.difficulty);
-
+		sscanf(line, "%d %f %f %f", &spawn.waveNumber, &spawn.origin.x, &spawn.origin.y, &spawn.origin.z);
 		m_spawnPoints.push_back(spawn);
 	}
 
 	fclose(pFile);
+}
+
+Vector AgFirefight::RandomMonsterAngles()
+{
+	return Vector(0.0f, RANDOM_FLOAT(0.0f, 360.0f), 0.0f);
+}
+
+const char* AgFirefight::PickRandomMonster()
+{
+	bool bHard = (m_iWaveNumber >= 5);
+
+	if (!bHard)
+	{
+		int count = ARRAYSIZE(easyMonsters);
+		return easyMonsters[RANDOM_LONG(0, count - 1)];
+	}
+	else
+	{
+		int count = ARRAYSIZE(hardMonsters);
+		return hardMonsters[RANDOM_LONG(0, count - 1)];
+	}
+}
+
+void AgFirefight::SetAuthoringWave(int wave)
+{
+	if (wave < 0)
+		wave = 0;
+
+	m_iAuthoringWave = wave;
 }
 
 const std::vector<AgFFWaveSpawn>& AgFirefightFileCache::GetWaveSpawns(int waveNumber) const
@@ -230,7 +273,11 @@ void AgFirefight::SpawnWaveEnemies()
 
 	for (const auto& spawn : spawns)
 	{
-		CBaseMonster* pMonster = UTIL_SpawnMonster(spawn.monsterClass, spawn.origin, spawn.angles);
+		const char* pszMonster = PickRandomMonster();
+		Vector vecAngles = RandomMonsterAngles();
+
+		CBaseMonster* pMonster = UTIL_SpawnMonster(pszMonster, spawn.origin, vecAngles);
+
 		if (pMonster)
 		{
 			EHANDLE h;
