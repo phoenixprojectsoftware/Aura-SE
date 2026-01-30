@@ -20,6 +20,39 @@
 
 // AgFirefight g_AgFirefight;
 
+bool IsSpawnBlockedByPlayer(const Vector& origin)
+{
+	const float radius = 64.0f;
+
+	for (int i = 1; i <= gpGlobals->maxClients; ++i)
+	{
+		edict_t* pPlayer = INDEXENT(i);
+		if (FNullEnt(pPlayer))
+			continue;
+
+		if (!(pPlayer->v.flags & FL_CLIENT))
+			continue;
+
+		if (!pPlayer->v.deadflag)
+		{
+			if ((pPlayer->v.origin - origin).Length() < radius)
+				return true;
+		}
+	}
+
+	return false;
+}
+
+void FF_SpawnTeleportEffect(const Vector& origin)
+{
+	MESSAGE_BEGIN(MSG_PVS, SVC_TEMPENTITY, origin);
+		WRITE_BYTE(TE_TELEPORT);
+		WRITE_COORD(origin.x);
+		WRITE_COORD(origin.y);
+		WRITE_COORD(origin.z);
+	MESSAGE_END();
+}
+
 const char* easyMonsters[] = {
 	"monster_zombie",
 	"monster_headcrab",
@@ -79,6 +112,8 @@ CBaseMonster* UTIL_SpawnMonster(const char* pszClassname, const Vector& vecOrigi
 	pEnt->pev->angles = vecAngles;
 
 	DispatchSpawn(pEnt->edict());
+	FF_SpawnTeleportEffect(vecOrigin);
+	EMIT_SOUND(pEnt->edict(), CHAN_BODY, "player/friend_online.wav", VOL_NORM, ATTN_NORM);
 
 	return pEnt->MyMonsterPointer(); // returns null if not a monster
 }
@@ -161,14 +196,20 @@ AgFirefightFileCache g_FirefightFileCache;
 AgFirefight::AgFirefight()
 {
 	RandomMusic();
-	m_flFirstWaveDelay = gpGlobals->time + 45.0f;
+	m_flFirstWaveDelay = gpGlobals->time + 30.0f;
 	m_bFirstWaveMusicPlayed = false;
 	m_State = FF_WAITING;
 	m_flNextThinkTime = gpGlobals->time;
 	m_flWaveStartTime = 0.0f;
 	m_iWaveNumber = 0;
 	m_iEnemiesRemaining = 0;
+	m_iAliveMonsters = 0;
 	m_FileCache.Load();
+}
+
+int AgFirefight::GetSpawnsPerPoint(int wave) const
+{
+	return 2 + (wave / 2);
 }
 
 AgFirefight::~AgFirefight()
@@ -224,14 +265,14 @@ void AgFirefight::Think()
 #ifdef _DEBUG // debugger for now cos this will probably cause overflows...
 			else
 			{
-				UTIL_ClientPrintAll(HUD_PRINTCENTER, UTIL_VarArgs("FIRST WAVE BEGINS IN %d - SCAVENGE WEAPONS FROM THE BATTLEFIELD", secondsLeft));
+				UTIL_ClientPrintAll(HUD_PRINTCENTER, UTIL_VarArgs("FIRST WAVE BEGINS IN %d", secondsLeft));
 			}
 #endif
 		}
 		break;
 
 	case FF_SPAWNING:
-		SpawnWaveEnemies();
+		TrySpawnNext();
 		m_State = FF_FIGHTING;
 		break;
 
@@ -253,13 +294,58 @@ void AgFirefight::Think()
 	}
 }
 
+void AgFirefight::TrySpawnNext()
+{
+	for (auto& sp : m_ActiveSpawns)
+	{
+		if (sp.remaining <= 0)
+			continue;
+
+		if (IsSpawnBlockedByPlayer(sp.origin))
+			continue;
+
+		const char* pszMonster = PickRandomMonster();
+		Vector angles = RandomMonsterAngles();
+
+		CBaseMonster* pMonster = UTIL_SpawnMonster(pszMonster, sp.origin, angles);
+
+		if (!pMonster)
+			continue;
+
+		EHANDLE h;
+		h = pMonster;
+		m_Enemies.push_back(h);
+
+		sp.remaining--;
+		m_iAliveMonsters++;
+		return; // one spawn per tick.
+	}
+}
+
 void AgFirefight::StartNextWave()
 {
 	m_Enemies.clear();
+	m_ActiveSpawns.clear();
+	m_iAliveMonsters = 0;
 	m_State = FF_SPAWNING;
 	m_flWaveStartTime = gpGlobals->time;
 
-	// g_FirefightFileCache.PrecacheAllMonsters(); // precache the monsters before spawning them
+	const auto& spawns = m_FileCache.GetWaveSpawns(m_iWaveNumber);
+	int repeats = GetSpawnsPerPoint(m_iWaveNumber);
+
+	for (const auto& s : spawns)
+	{
+		ActiveSpawn sp;
+		sp.origin = s.origin;
+		sp.remaining = repeats;
+		m_ActiveSpawns.push_back(sp);
+	}
+
+	for (int i = 0; i < 2; ++i)
+		TrySpawnNext();
+
+	m_State = FF_FIGHTING;
+	m_flWaveStartTime = gpGlobals->time;
 
 	// could add dynamic difficulty based on wave number
 	UTIL_ClientPrintAll(HUD_PRINTCENTER, UTIL_VarArgs("Wave %d starting", m_iWaveNumber));
@@ -289,25 +375,36 @@ void AgFirefight::SpawnWaveEnemies()
 	m_iEnemiesRemaining = m_Enemies.size();
 }
 
+void AgFirefight::OnMonsterKilled(CBaseMonster* pMonster)
+{
+	m_iAliveMonsters--;
+	if (m_iAliveMonsters < 0)
+		m_iAliveMonsters = 0;
+
+#ifdef _DEBUG
+	ALERT(at_console, "Firefight monster killed\n");
+#endif
+
+	TrySpawnNext();
+}
+
 void AgFirefight::CheckWaveStatus()
 {
-	m_iEnemiesRemaining = 0;
+	TrySpawnNext();
 
-	for (auto& hEnt : m_Enemies)
+	if (m_iAliveMonsters > 0)
+		return;
+
+	for (const auto& sp : m_ActiveSpawns)
 	{
-		CBaseEntity* pEnt = hEnt;  // EHANDLE -> CBaseEntity*
-		if (pEnt && pEnt->IsAlive())
-		{
-			m_iEnemiesRemaining++;
-		}
+		if (sp.remaining > 0)
+			return;
 	}
 
-	if (m_iEnemiesRemaining == 0)
-	{
-		UTIL_ClientPrintAll(HUD_PRINTCENTER, UTIL_VarArgs("Wave %d cleared", m_iWaveNumber));
-		m_State = FF_ROUND_OVER;
-		m_flWaveStartTime = gpGlobals->time;
-	}
+	UTIL_ClientPrintAll(HUD_PRINTCENTER, UTIL_VarArgs("Wave %d cleared", m_iWaveNumber));
+
+	m_State = FF_ROUND_OVER;
+	m_flWaveStartTime = gpGlobals->time;
 }
 
 void AgFirefight::GameOver()

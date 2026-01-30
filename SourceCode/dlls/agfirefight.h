@@ -33,6 +33,12 @@ struct AgFFWaveSpawn
 	Vector origin;
 };
 
+struct ActiveSpawn
+{
+	Vector origin;
+	int remaining;
+};
+
 class AgFirefightFileItem
 {
 public:
@@ -74,12 +80,17 @@ public:
 	void SetAuthoringWave(int wave);
 	int GetAuthoringWave() const { return m_iAuthoringWave; }
 
+	bool m_bAuthoring = false;
+
 private:
+	int GetSpawnsPerPoint(int wave) const;
 	Vector RandomMonsterAngles();
 	const char* PickRandomMonster();
 	void RandomMusic();
 	void StartNextWave();
 	void SpawnWaveEnemies();
+	void TrySpawnNext();
+	void OnMonsterKilled(CBaseMonster* pMonster);
 	void CheckWaveStatus();
 	void EndRound();
 	void GameOver();
@@ -102,6 +113,9 @@ private:
 
 	std::vector<EHANDLE> m_Enemies;
 	AgFirefightFileCache m_FileCache;
+
+	std::vector<ActiveSpawn> m_ActiveSpawns;
+	int m_iAliveMonsters;
 };
 
 extern AgFirefight g_AgFirefight;

@@ -882,6 +882,8 @@ void ClientPrecache( void )
 	PRECACHE_SOUND("common/wpn_moveselect.wav");
 	PRECACHE_SOUND("common/wpn_select.wav");
 	PRECACHE_SOUND("common/wpn_denyselect.wav");
+	PRECACHE_SOUND("UI/wpn_accept.wav");
+	PRECACHE_SOUND("UI/wpn_rollover.wav");
 
 
 	// geiger sounds
@@ -908,6 +910,7 @@ void ClientPrecache( void )
 #endif
 
 	PRECACHE_SOUND("player/spawn.wav");
+	PRECACHE_SOUND("player/friend_online.wav");
 
 	// BlueNightHawk : Suit Energy Regeneration
 	PRECACHE_SOUND("buttons/blip1.wav");

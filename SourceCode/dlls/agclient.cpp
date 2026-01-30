@@ -441,6 +441,14 @@ bool AgClient::HandleCommand(CBasePlayer* pPlayer)
 
         return true;
     }
+#ifdef _DEBUG
+    else if (FStrEq(CMD_ARGV(0), "phx_ff_authoring"))
+    {
+        g_pGameRules->m_Firefight.m_bAuthoring = !g_pGameRules->m_Firefight.m_bAuthoring;
+        AgConsole(UTIL_VarArgs("Firefight authoring: %s", g_pGameRules->m_Firefight.m_bAuthoring ? "ON" : "OFF"), pPlayer);
+        return true;
+        }
+#endif
     // -- FIREFIGHT
 
     else if (FStrEq(CMD_ARGV(0), "changeteam"))
