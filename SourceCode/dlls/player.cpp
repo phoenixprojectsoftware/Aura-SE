@@ -631,9 +631,28 @@ int CBasePlayer :: TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, 
 		else
 			pev->armorvalue -= flArmor;
 		
-		// Switch off Half-Life's damage ratio ONLY with regen on.
+		// Switch off Half-Life's damage ratio ONLY with regen on. also do the sound
 		if (sv_aura_regeneration.value != 0)
+		{
 			flDamage = 0;
+
+			int randomsoundmate = RANDOM_LONG(0, 3);
+			switch (randomsoundmate)
+			{
+			case 0:
+				EMIT_SOUND(ENT(pev), CHAN_AUTO, "player/hitsound01.wav", VOL_NORM, ATTN_NORM);
+				break;
+			case 1:
+				EMIT_SOUND(ENT(pev), CHAN_AUTO, "player/hitsound02.wav", VOL_NORM, ATTN_NORM);
+				break;
+			case 2:
+				EMIT_SOUND(ENT(pev), CHAN_AUTO, "player/hitsound03.wav", VOL_NORM, ATTN_NORM);
+				break;
+			case 3:
+				EMIT_SOUND(ENT(pev), CHAN_AUTO, "player/hitsound04.wav", VOL_NORM, ATTN_NORM);
+				break;
+			}
+		}
 		else
 			flDamage = flNew;
 	}

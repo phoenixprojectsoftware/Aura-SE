@@ -196,7 +196,7 @@ AgFirefightFileCache g_FirefightFileCache;
 AgFirefight::AgFirefight()
 {
 	RandomMusic();
-	m_flFirstWaveDelay = gpGlobals->time + 30.0f;
+	m_flFirstWaveDelay = gpGlobals->time + 45.0f;
 	m_bFirstWaveMusicPlayed = false;
 	m_State = FF_WAITING;
 	m_flNextThinkTime = gpGlobals->time;
