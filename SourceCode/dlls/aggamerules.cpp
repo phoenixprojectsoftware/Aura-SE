@@ -449,7 +449,7 @@ void AgGameRules::PlayerSpawn(CBasePlayer* pPlayer)
 #else
                 const char* weaponList[] = {
                     "weapon_9mmhandgun",
-                    "weapon_357",
+                    "weapon_railgun",
                     "weapon_shotgun",
                     "weapon_9mmAR",
                     "weapon_crossbow",
