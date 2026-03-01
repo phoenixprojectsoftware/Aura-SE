@@ -640,21 +640,38 @@ int CBasePlayer :: TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, 
 			switch (randomsoundmate)
 			{
 			case 0:
-				EMIT_SOUND(ENT(pev), CHAN_AUTO, "player/hitsound01.wav", VOL_NORM, ATTN_NORM);
+				EMIT_SOUND(ENT(pev), CHAN_AUTO, "player/hitsound01.wav", 0.55, ATTN_NORM);
 				break;
 			case 1:
-				EMIT_SOUND(ENT(pev), CHAN_AUTO, "player/hitsound02.wav", VOL_NORM, ATTN_NORM);
+				EMIT_SOUND(ENT(pev), CHAN_AUTO, "player/hitsound02.wav", 0.55, ATTN_NORM);
 				break;
 			case 2:
-				EMIT_SOUND(ENT(pev), CHAN_AUTO, "player/hitsound03.wav", VOL_NORM, ATTN_NORM);
+				EMIT_SOUND(ENT(pev), CHAN_AUTO, "player/hitsound03.wav", 0.55, ATTN_NORM);
 				break;
 			case 3:
-				EMIT_SOUND(ENT(pev), CHAN_AUTO, "player/hitsound04.wav", VOL_NORM, ATTN_NORM);
+				EMIT_SOUND(ENT(pev), CHAN_AUTO, "player/hitsound04.wav", 0.55, ATTN_NORM);
 				break;
 			}
 		}
 		else
-			flDamage = flNew;
+		{
+			flDamage = flNew; // halflife damage ratio
+		}
+
+		if (sv_aura_regeneration.value < 1 || pev->armorvalue <= 0)
+		{
+			//do the sound
+			int randomhealthsnd = RANDOM_LONG(0, 1);
+			switch (randomhealthsnd)
+			{
+			case 0:
+				EMIT_SOUND(ENT(pev), CHAN_AUTO, "weapons/bullet_hit1.wav", 1, ATTN_NORM);
+				break;
+			case 1:
+				EMIT_SOUND(ENT(pev), CHAN_AUTO, "weapons/bullet_hit2.wav", 1, ATTN_NORM);
+				break;
+			}
+		}
 	}
 
 	// this cast to INT is critical!!! If a player ends up with 0.5 health, the engine will get that
