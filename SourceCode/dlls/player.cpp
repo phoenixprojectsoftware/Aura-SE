@@ -4302,6 +4302,7 @@ void CBasePlayer::CheatImpulseCommands( int iImpulse )
 		GiveNamedItem("weapon_m249");
 		GiveNamedItem("weapon_br");
 		GiveNamedItem("weapon_railgun");
+		GiveNamedItem("weapon_healer");
 
 #ifdef _HALO
 		GiveNamedItem("weapon_smg");

@@ -413,6 +413,8 @@ void W_Precache(void)
 
 	UTIL_PrecacheOtherWeapon("weapon_railgun");
 
+	UTIL_PrecacheOtherWeapon("weapon_healer");
+
 #ifdef _HALO
 	UTIL_PrecacheOtherWeapon("weapon_sword");
 	UTIL_PrecacheOtherWeapon("weapon_smg");

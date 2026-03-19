@@ -634,6 +634,16 @@ void CBarney::Killed( entvars_t *pevAttacker, int iGib )
 
 	SetUse( NULL );	
 	CTalkMonster::Killed( pevAttacker, iGib );
+	if (iGib == GIB_NEVER || iGib == GIB_NORMAL)
+	{
+		pev->iuser1 = 1;
+		pev->iuser2 = 0;
+	}
+	else
+	{
+		pev->iuser1 = 0;
+		pev->iuser2 = 1;
+	}
 }
 
 //=========================================================

@@ -561,6 +561,9 @@
     <ClCompile Include="..\..\dlls\s10_weapons\ray.cpp">
       <Filter>Source Files\dlls\s10_weapons</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\dlls\s10_weapons\wpn_healer.cpp">
+      <Filter>Source Files\dlls\s10_weapons</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\dlls\doors.h">
