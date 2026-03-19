@@ -658,7 +658,7 @@ int CBasePlayer :: TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, 
 			flDamage = flNew; // halflife damage ratio
 		}
 
-		if (sv_aura_regeneration.value < 1 || pev->armorvalue <= 0)
+		if (sv_aura_regeneration.value < 1 || pev->armorvalue <= 0 || HLDM == AgGametype())
 		{
 			//do the sound
 			int randomhealthsnd = RANDOM_LONG(0, 1);
