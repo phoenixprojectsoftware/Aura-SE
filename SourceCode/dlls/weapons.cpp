@@ -377,6 +377,9 @@ void W_Precache(void)
 	// hand grenade
 	UTIL_PrecacheOtherWeapon("weapon_handgrenade");
 
+	// horse fruit
+	UTIL_PrecacheOtherWeapon("weapon_fruit");
+
 #if !defined( OEM_BUILD ) && !defined( HLDEMO_BUILD )
 	// squeak grenade
 	UTIL_PrecacheOtherWeapon( "weapon_snark" );

@@ -182,6 +182,7 @@
     <ClCompile Include="..\..\dlls\egon.cpp" />
     <ClCompile Include="..\..\dlls\explode.cpp" />
     <ClCompile Include="..\..\dlls\flyingmonster.cpp" />
+    <ClCompile Include="..\..\dlls\fruit.cpp" />
     <ClCompile Include="..\..\dlls\func_break.cpp" />
     <ClCompile Include="..\..\dlls\func_tank.cpp" />
     <ClCompile Include="..\..\dlls\game.cpp" />
