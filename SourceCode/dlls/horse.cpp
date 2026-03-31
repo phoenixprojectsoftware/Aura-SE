@@ -26,6 +26,8 @@
 #include	"decals.h"
 #include	"soundent.h"
 #include	"game.h"
+#include "player.h"
+#include "weapons.h"
 
 #define		SQUID_SPRINT_DIST	256 // how close the squid has to get before starting to sprint and refusing to swerve
 
@@ -45,12 +47,26 @@ enum
 	SCHED_SQUID_WALLOW,
 };
 
+enum horse_anim
+{
+	HORSE_IDLE1 = 0,
+	HORSE_IDLE2,
+	HORSE_WALK,
+	HORSE_RUN,
+	HORSE_TURNLEFT,
+	HORSE_TURNRIGHT,
+	HORSE_REAR,
+	HORSE_KICK,
+	HORSE_DIESIMPLE,
+	HORSE_NODDING
+};
+
 //=========================================================
 // monster-specific tasks
 //=========================================================
 enum 
 {
-	TASK_SQUID_HOPTURN = LAST_COMMON_TASK + 1,
+	TASK_SQUID_HOPTURN = LAST_COMMON_TASK + 1
 };
 
 //=========================================================
@@ -206,6 +222,8 @@ public:
 	BOOL CheckMeleeAttack2 ( float flDot, float flDist );
 	BOOL CheckRangeAttack1 ( float flDot, float flDist );
 	void RunAI( void );
+	int ObjectCaps(void) { return CBaseMonster::ObjectCaps() | FCAP_IMPULSE_USE; }
+	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 	BOOL FValidateHintType ( short sHint );
 	Schedule_t *GetSchedule( void );
 	Schedule_t *GetScheduleOfType ( int Type );
@@ -224,14 +242,20 @@ public:
 
 	float m_flLastHurtTime;// we keep track of this, because if something hurts a squid, it will forget about its love of headcrabs for a while.
 	float m_flNextSpitTime;// last time the bullsquid used the spit attack.
+	float m_flNextFeedTime;//the next time the player can feed the horse.
+	float m_flNextFart;
+
+	EHANDLE m_hFollowingPlayer;
 };
 LINK_ENTITY_TO_CLASS( monster_horse, CHorse );
 
-TYPEDESCRIPTION	CHorse::m_SaveData[] = 
+TYPEDESCRIPTION	CHorse::m_SaveData[] =
 {
-	DEFINE_FIELD( CHorse, m_fCanThreatDisplay, FIELD_BOOLEAN ),
-	DEFINE_FIELD( CHorse, m_flLastHurtTime, FIELD_TIME ),
-	DEFINE_FIELD( CHorse, m_flNextSpitTime, FIELD_TIME ),
+	DEFINE_FIELD(CHorse, m_fCanThreatDisplay, FIELD_BOOLEAN),
+	DEFINE_FIELD(CHorse, m_flLastHurtTime, FIELD_TIME),
+	DEFINE_FIELD(CHorse, m_flNextSpitTime, FIELD_TIME),
+	DEFINE_FIELD(CHorse, m_flNextFeedTime, FIELD_TIME),
+	DEFINE_FIELD(CHorse, m_hFollowingPlayer, FIELD_EHANDLE),
 };
 
 IMPLEMENT_SAVERESTORE( CHorse, CBaseMonster );
@@ -268,6 +292,10 @@ int CHorse::IgnoreConditions ( void )
 //=========================================================
 int CHorse::IRelationship ( CBaseEntity *pTarget )
 {
+	// never treat the followed player as an enemy
+	if (m_hFollowingPlayer != NULL && pTarget == m_hFollowingPlayer)
+		return R_AL;
+
 	if ( gpGlobals->time - m_flLastHurtTime < 5 && FClassnameIs ( pTarget->pev, "monster_headcrab" ) )
 	{
 		// if squid has been hurt in the last 5 seconds, and is getting relationship for a headcrab, 
@@ -434,7 +462,7 @@ int	CHorse :: Classify ( void )
 #define SQUID_ATTN_IDLE	(float)1.5
 void CHorse :: IdleSound ( void )
 {
-	switch ( RANDOM_LONG(0,4) )
+	switch ( RANDOM_LONG(0,6) )
 	{
 	case 0:	
 		EMIT_SOUND( ENT(pev), CHAN_VOICE, "horse/bc_idle1.wav", 1, SQUID_ATTN_IDLE );	
@@ -450,6 +478,12 @@ void CHorse :: IdleSound ( void )
 		break;
 	case 4:	
 		EMIT_SOUND( ENT(pev), CHAN_VOICE, "horse/bc_idle5.wav", 1, SQUID_ATTN_IDLE );	
+		break;
+	case 5:
+		EMIT_SOUND(ENT(pev), CHAN_VOICE, "horse/bc_idle6.wav", 1, SQUID_ATTN_IDLE);
+		break;
+	case 6:
+		EMIT_SOUND(ENT(pev), CHAN_VOICE, "horse/bc_idle7.wav", 1, SQUID_ATTN_IDLE);
 		break;
 	}
 }
@@ -671,13 +705,16 @@ void CHorse :: Spawn()
 	Precache( );
 
 	SET_MODEL(ENT(pev), "models/horse.mdl");
-	UTIL_SetSize( pev, Vector( -32, -32, 0 ), Vector( 32, 32, 64 ) );
+	//UTIL_SetSize( pev, Vector( -32, -32, 0 ), Vector( 32, 32, 64 ) );
+	UTIL_SetSize(pev, Vector(-40, -40, 0), Vector(40, 40, 80));
 
 	pev->solid			= SOLID_SLIDEBOX;
 	pev->movetype		= MOVETYPE_STEP;
-	m_bloodColor		= BLOOD_COLOR_GREEN;
+	m_bloodColor		= BLOOD_COLOR_ORANGE;
 	pev->effects		= 0;
 	pev->health			= gSkillData.bullsquidHealth * 500;
+	pev->flags |= FL_MONSTER;
+	SetUse(&CHorse::Use);
 	m_flFieldOfView		= 0.2;// indicates the width of this monster's forward view cone ( as a dotproduct result )
 	m_MonsterState		= MONSTERSTATE_NONE;
 
@@ -712,7 +749,9 @@ void CHorse :: Precache()
 	PRECACHE_SOUND("horse/bc_idle3.wav");
 	PRECACHE_SOUND("horse/bc_idle4.wav");
 	PRECACHE_SOUND("horse/bc_idle5.wav");
-	
+	PRECACHE_SOUND("horse/bc_idle6.wav");
+	PRECACHE_SOUND("horse/bc_idle7.wav");
+
 	PRECACHE_SOUND("horse/bc_pain1.wav");
 	PRECACHE_SOUND("horse/bc_pain2.wav");
 	PRECACHE_SOUND("horse/bc_pain3.wav");
@@ -729,6 +768,9 @@ void CHorse :: Precache()
 
 	PRECACHE_SOUND("bullchicken/bc_spithit1.wav");
 	PRECACHE_SOUND("bullchicken/bc_spithit2.wav");
+
+	PRECACHE_SOUND("horse/gallop.wav");
+	PRECACHE_SOUND("horse/chomp.wav");
 
 }	
 
@@ -797,6 +839,59 @@ void CHorse :: RunAI ( void )
 		}
 	}
 
+	if (m_hFollowingPlayer != NULL)
+	{
+		m_hEnemy = m_hFollowingPlayer;
+	}
+}
+
+void CHorse::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
+{
+#ifdef _DEBUG
+	ALERT(at_console, "HORSE USED\n");
+#endif
+	if (!pActivator || !pActivator->IsPlayer())
+		return;
+
+	CBasePlayer* pPlayer = (CBasePlayer*)pActivator;
+
+	CBasePlayerItem* pWeapon = pPlayer->m_pActiveItem;
+
+	// fruit
+	if (pWeapon && FClassnameIs(pWeapon->pev, "weapon_fruit"))
+	{
+		if (gpGlobals->time < m_flNextFeedTime)
+			return;
+		int ammoIndex = pPlayer->GetAmmoIndex("Fruit Grenade");
+
+		if (ammoIndex != -1 && pPlayer->m_rgAmmo[ammoIndex] > 0)
+		{
+			pPlayer->m_rgAmmo[ammoIndex]--;
+
+			SetSequenceByName("nodding");
+			pev->frame = 0;
+			ResetSequenceInfo();
+		}
+
+		m_flNextFeedTime = gpGlobals->time + 1.0f;
+		EMIT_SOUND(ENT(pev), CHAN_VOICE, "horse/chomp.wav", 1.0, ATTN_NORM);
+
+		return; // don't follow if fed.
+	}
+
+	// follow toggle
+	if (m_hFollowingPlayer == pPlayer)
+	{
+		m_hFollowingPlayer = NULL;
+		m_hEnemy = NULL;
+		ClearSchedule();
+	}
+	else
+	{
+		m_hFollowingPlayer = pPlayer;
+		m_MonsterState = MONSTERSTATE_ALERT;
+		ClearSchedule();
+	}
 }
 
 //========================================================
@@ -1021,6 +1116,29 @@ IMPLEMENT_CUSTOM_SCHEDULES( CHorse, CBaseMonster );
 //=========================================================
 Schedule_t *CHorse :: GetSchedule( void )
 {
+	if (m_hFollowingPlayer != NULL)
+	{
+		CBaseEntity* pFollow = m_hFollowingPlayer;
+
+		if (pFollow)
+		{
+			float dist2D = (pev->origin - pFollow->pev->origin).Length2D();
+			float zDiff = fabs(pev->origin.z - pFollow->pev->origin.z);
+
+			// only move if not already close
+			if (dist2D > 130 || zDiff > 64)
+			{
+				m_hEnemy = pFollow; // reuse chase system
+				return GetScheduleOfType(SCHED_CHASE_ENEMY);
+			}
+			else
+			{
+				m_hEnemy = NULL;
+				return GetScheduleOfType(SCHED_IDLE_STAND);
+			}
+		}
+	}
+
 	switch	( m_MonsterState )
 	{
 	case MONSTERSTATE_ALERT:
@@ -1192,18 +1310,34 @@ void CHorse :: StartTask ( Task_t *pTask )
 			break;
 		}
 	case TASK_GET_PATH_TO_ENEMY:
+	{
+		if (!m_hEnemy)
 		{
-			if ( BuildRoute ( m_hEnemy->pev->origin, bits_MF_TO_ENEMY, m_hEnemy ) )
-			{
-				m_iTaskStatus = TASKSTATUS_COMPLETE;
-			}
-			else
-			{
-				ALERT ( at_aiconsole, "GetPathToEnemy failed!!\n" );
-				TaskFail();
-			}
+			TaskFail();
 			break;
 		}
+
+		Vector vecTarget = m_hEnemy->pev->origin;
+
+		TraceResult tr;
+		UTIL_TraceLine(vecTarget, vecTarget - Vector(0, 0, 128), ignore_monsters, ENT(pev), &tr);
+
+		if (tr.flFraction < 1.0f)
+		{
+			vecTarget = tr.vecEndPos;
+		}
+
+		if (BuildRoute(vecTarget, bits_MF_TO_ENEMY, m_hEnemy))
+		{
+			m_iTaskStatus = TASKSTATUS_COMPLETE;
+		}
+		else
+		{
+			TaskFail();
+		}
+
+		break;
+	}	
 	default:
 		{
 			CBaseMonster :: StartTask ( pTask );
