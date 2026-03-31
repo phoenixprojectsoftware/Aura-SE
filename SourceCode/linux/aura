@@ -74,6 +74,7 @@ HLDLL_OBJS = \
 	$(HLDLL_OBJ_DIR)/egon.o \
 	$(HLDLL_OBJ_DIR)/explode.o \
 	$(HLDLL_OBJ_DIR)/flyingmonster.o \
+	$(HLDLL_OBJ_DIR)/fruit.o \
 	$(HLDLL_OBJ_DIR)/func_break.o \
 	$(HLDLL_OBJ_DIR)/func_tank.o \
 	$(HLDLL_OBJ_DIR)/game.o \
@@ -96,6 +97,7 @@ HLDLL_OBJS = \
 	$(HLDLL_OBJ_DIR)/hgrunt.o \
 	$(HLDLL_OBJ_DIR)/hornet.o \
 	$(HLDLL_OBJ_DIR)/hornetgun.o \
+	$(HLDLL_OBJ_DIR)/horse.o \
 	$(HLDLL_OBJ_DIR)/houndeye.o \
 	$(HLDLL_OBJ_DIR)/ichthyosaur.o \
 	$(HLDLL_OBJ_DIR)/islave.o \
