@@ -273,7 +273,7 @@ void CGauss::SecondaryAttack()
 
 		int pitch = (gpGlobals->time - m_pPlayer->m_flStartCharge) * (150 / GetFullChargeTime()) + 100;
 		int fullCharge = 250;
-		int maxPitch = IsTauGuysGame() ? 320 : fullCharge;
+		int maxPitch = IsTauGuysGame() ? 250 : fullCharge;
 
 		if (pitch > maxPitch)
 			pitch = maxPitch;
