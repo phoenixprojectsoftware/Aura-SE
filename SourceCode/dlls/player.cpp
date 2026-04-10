@@ -2171,12 +2171,12 @@ void CBasePlayer::PreThink(void)
 		EnableControl(!g_bPaused);
 
 	// BlueNightHawk : Infinite Ammo
-	if ((sv_aura_infinite_ammo.value != 0 || FIESTA == AgGametype() || FIESTAFIGHT == AgGametype()) && m_pActiveItem)
+	if ((sv_aura_infinite_ammo.value != 0 && m_pActiveItem)
 	{
 		ItemInfo p;
 		m_pActiveItem->GetItemInfo(&p);
 
-		if (sv_aura_infinite_ammo.value == 1)
+		if (sv_aura_infinite_ammo.value == 1 || TAUGUYS == AgGametype())
 		{
 			// mode 1 - bottomless clip. refill every frame.
 			((CBasePlayerWeapon*)m_pActiveItem)->m_iClip = p.iMaxClip;
