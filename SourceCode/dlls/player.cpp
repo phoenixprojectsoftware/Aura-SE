@@ -2171,7 +2171,7 @@ void CBasePlayer::PreThink(void)
 		EnableControl(!g_bPaused);
 
 	// BlueNightHawk : Infinite Ammo
-	if ((sv_aura_infinite_ammo.value != 0 && m_pActiveItem)
+	if (sv_aura_infinite_ammo.value != 0 && m_pActiveItem)
 	{
 		ItemInfo p;
 		m_pActiveItem->GetItemInfo(&p);
