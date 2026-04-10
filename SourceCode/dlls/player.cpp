@@ -3459,7 +3459,12 @@ void CBasePlayer::Spawn( void )
 {
 	m_bFiestaLock = false;
 	pev->classname		= MAKE_STRING("player");
-	pev->health			= 100;
+
+	if (TAUGUYS != AgGametype())
+		pev->health = 100;
+	else
+		pev->health = 200;
+
 	pev->armorvalue		= 0;
 	pev->takedamage		= DAMAGE_AIM;
 	pev->solid			= SOLID_SLIDEBOX;
