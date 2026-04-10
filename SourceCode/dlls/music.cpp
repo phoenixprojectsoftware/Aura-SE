@@ -9,6 +9,7 @@
 *
 ****/
 
+#if 0
 #include "extdll.h"
 #include "util.h"
 #include "cbase.h"
@@ -150,3 +151,4 @@ void CMusicSystem::OnClientConnect(edict_t* pPlayer)
 	if (m_bIsPlaying && !m_Command.empty())
 		SendToClient(pPlayer, (char*)m_Command.c_str());
 }
+#endif

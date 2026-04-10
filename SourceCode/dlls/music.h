@@ -8,6 +8,7 @@
 *
 *
 ****/
+#if 0
 #pragma once
 #include <string>
 #include <map>
@@ -31,3 +32,4 @@ private:
 };
 
 extern CMusicSystem g_MusicSystem;
+#endif

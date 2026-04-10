@@ -686,8 +686,8 @@ void CTriggerMusic::KeyValue(KeyValueData* pkvd)
 
 void CTriggerMusic::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
 {
-	if (!g_MusicSystem.m_bMapMusic)
-		return; // don't override gamemode music
+	//if (!g_MusicSystem.m_bMapMusic)
+		//return; // don't override gamemode music
 
 	const char* track = STRING(m_iszTrack);
 

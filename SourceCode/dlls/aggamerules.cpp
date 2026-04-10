@@ -122,13 +122,13 @@ bool AgGameRules::AgThink()
     // Summon music system and give the client ample time to play the match start music first
     if (!m_bMusicSystemEngaged && gpGlobals->time > 17.0f)
     {
-        g_MusicSystem.Init();
-		g_MusicSystem.Play();
+        //g_MusicSystem.Init();
+		//g_MusicSystem.Play();
         m_bMusicSystemEngaged = true;
     }
     else if (m_bMusicSystemEngaged && gpGlobals->time < 17.0f)
     {
-        g_MusicSystem.Stop();
+        //g_MusicSystem.Stop();
         m_bMusicSystemEngaged = false;
 	}
     return true;
@@ -754,7 +754,7 @@ BOOL AgGameRules::ClientConnected(edict_t* pEntity, const char* pszName, const c
         else
             (*itrIPAddress).second = ENTINDEX(pEntity);
 
-		g_MusicSystem.OnClientConnect(pEntity);
+		//g_MusicSystem.OnClientConnect(pEntity);
     }
     return TRUE;
 }
