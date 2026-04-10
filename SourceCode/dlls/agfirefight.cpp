@@ -58,8 +58,7 @@ const char* easyMonsters[] = {
 	"monster_headcrab",
 	"monster_alien_slave",
 	"monster_bullsquid",
-	"monster_zamnhl",
-	"monster_hgrunt"
+	"monster_zamnhl"
 };
 const char* hardMonsters[] = {
 	"monster_hgrunt",
@@ -120,6 +119,8 @@ CBaseMonster* UTIL_SpawnMonster(const char* pszClassname, const Vector& vecOrigi
 
 void AgFirefightFileCache::Load()
 {
+	m_spawnPoints.clear();
+
 	char szFile[MAX_PATH];
 	sprintf(szFile, "%s/ff/%s.ff", AgGetDirectory(), STRING(gpGlobals->mapname));
 
@@ -133,12 +134,14 @@ void AgFirefightFileCache::Load()
 	char line[256];
 	while (fgets(line, sizeof(line), pFile))
 	{
-		if (line[0] == '#' || line[0] == '\n') // skip comments & empty lines
+		if (line[0] == '#' || line[0] == '\n')
 			continue;
 
 		AgFFWaveSpawn spawn;
-		sscanf(line, "%d %f %f %f", &spawn.waveNumber, &spawn.origin.x, &spawn.origin.y, &spawn.origin.z);
-		m_spawnPoints.push_back(spawn);
+		if (sscanf(line, "%d %f %f %f", &spawn.waveNumber, &spawn.origin.x, &spawn.origin.y, &spawn.origin.z) == 4)
+		{
+			m_spawnPoints.push_back(spawn);
+		}
 	}
 
 	fclose(pFile);
@@ -204,7 +207,7 @@ AgFirefight::AgFirefight()
 	m_iWaveNumber = 0;
 	m_iEnemiesRemaining = 0;
 	m_iAliveMonsters = 0;
-	m_FileCache.Load();
+	m_FileCache.Load(); // no duplicate needed. maybe.
 }
 
 int AgFirefight::GetSpawnsPerPoint(int wave) const
@@ -218,7 +221,7 @@ AgFirefight::~AgFirefight()
 
 void AgFirefight::Precache()
 {
-	m_FileCache.Load();
+	// m_FileCache.Load();
 }
 
 void AgFirefight::Think()

@@ -627,7 +627,6 @@ void CBaseMonster :: Killed( entvars_t *pevAttacker, int iGib )
 
 	if (FIREFIGHT == AgGametype() || FIESTAFIGHT == AgGametype())
 	{
-
 		CBaseEntity* pAttacker = CBaseEntity::Instance(pevAttacker);
 		if (pAttacker && pAttacker->IsPlayer())
 		{
@@ -642,6 +641,8 @@ void CBaseMonster :: Killed( entvars_t *pevAttacker, int iGib )
 				WRITE_STRING("an enemy");
 			MESSAGE_END();
 		}
+
+		g_pGameRules->m_Firefight.OnMonsterKilled(this);
 	}
 }
 

@@ -80,6 +80,9 @@ public:
 	void SetAuthoringWave(int wave);
 	int GetAuthoringWave() const { return m_iAuthoringWave; }
 
+	void OnMonsterKilled(CBaseMonster* pMonster);
+
+
 	bool m_bAuthoring = false;
 
 private:
@@ -90,7 +93,6 @@ private:
 	void StartNextWave();
 	void SpawnWaveEnemies();
 	void TrySpawnNext();
-	void OnMonsterKilled(CBaseMonster* pMonster);
 	void CheckWaveStatus();
 	void EndRound();
 	void GameOver();
