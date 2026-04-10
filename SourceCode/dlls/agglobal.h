@@ -72,6 +72,10 @@ extern cvar_t   ag_ban_shockrifle;
 extern cvar_t   ag_ban_sniperrifle;
 extern cvar_t   ag_ban_sporelauncher;
 
+#ifndef _HALO
+extern cvar_t ag_ban_healer;
+#endif
+
 #ifdef _HALO
 extern cvar_t ag_ban_smg;
 extern cvar_t ag_ban_sword;
@@ -122,6 +126,10 @@ extern cvar_t   ag_start_pipewrench;
 extern cvar_t   ag_start_shockrifle;
 extern cvar_t   ag_start_sniperrifle;
 extern cvar_t   ag_start_sporelauncher;
+
+#ifndef _HALO
+extern cvar_t ag_start_healer;
+#endif
 
 #ifdef _HALO
 extern cvar_t ag_start_smg;

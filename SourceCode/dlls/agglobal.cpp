@@ -124,6 +124,10 @@ DLL_GLOBAL cvar_t   ag_ban_ammo556 = { "sv_aura_ban_ammo_556","0" };
 DLL_GLOBAL cvar_t   ag_ban_ammo762 = { "sv_aura_ban_ammo_762","0" };
 DLL_GLOBAL cvar_t   ag_ban_ammoSpore = { "sv_aura_ban_ammo_spore","0" };
 
+#ifndef _HALO
+DLL_GLOBAL cvar_t ag_ban_healer = { "sv_aura_ban_healer", "0" };
+#endif
+
 DLL_GLOBAL cvar_t	ag_ban_armour = { "sv_aura_ban_armour","0" };
 DLL_GLOBAL cvar_t	ag_ban_health = { "sv_aura_ban_health","0" };
 DLL_GLOBAL cvar_t	ag_ban_recharg = { "sv_aura_ban_recharg","0" };
@@ -177,6 +181,11 @@ DLL_GLOBAL cvar_t	ag_start_health = { "sv_aura_start_health","100" };
 DLL_GLOBAL cvar_t   ag_start_ammo556 = { "sv_aura_start_ammo_556", "0" }; // this should be 200 in gamemodes
 DLL_GLOBAL cvar_t   ag_start_ammo762 = { "sv_aura_start_ammo_762", "0" }; // this should be 15 in gamemodes
 DLL_GLOBAL cvar_t   ag_start_ammoSpore = { "sv_aura_start_ammo_spore", "0" }; // this should be 20 in gamemodes
+
+// Season 10 Team Healer.
+#ifndef _HALO
+DLL_GLOBAL cvar_t ag_start_healer = { "sv_aura_start_healer", "0" };
+#endif
 
 // Half-Life Weapons
 DLL_GLOBAL cvar_t	ag_dmg_crowbar = { "sv_aura_dmg_crowbar","25" };
@@ -361,6 +370,10 @@ void AgInitGame()
     CVAR_REGISTER(&ag_ban_sniperrifle);
     CVAR_REGISTER(&ag_ban_sporelauncher);
 
+#ifndef _HALO
+    CVAR_REGISTER(&ag_ban_healer);
+#endif
+
 #ifdef _HALO
     CVAR_REGISTER(&ag_ban_smg);
     CVAR_REGISTER(&ag_ban_sword);
@@ -410,6 +423,10 @@ void AgInitGame()
     CVAR_REGISTER(&ag_start_shockrifle);
     CVAR_REGISTER(&ag_start_sniperrifle);
     CVAR_REGISTER(&ag_start_sporelauncher);
+
+#ifndef _HALO
+    CVAR_REGISTER(&ag_start_healer);
+#endif
 
 #ifdef _HALO
     CVAR_REGISTER(&ag_start_smg);
