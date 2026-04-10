@@ -81,6 +81,8 @@ void CGauss::Precache(void)
 	PRECACHE_MODEL("models/v_gauss.mdl");
 	PRECACHE_MODEL("models/p_gauss.mdl");
 
+	PRECACHE_MODEL("models/weapons/hldmtau/v_hldmtau.mdl");
+
 	PRECACHE_SOUND("items/9mmclip1.wav");
 
 	PRECACHE_SOUND("weapons/gauss2.wav");
@@ -134,7 +136,10 @@ BOOL CGauss::Deploy()
 {
 	m_bHasPlayedSnd = false;
 	m_pPlayer->m_flPlayAftershock = 0.0;
-	return DefaultDeploy("models/v_gauss.mdl", "models/p_gauss.mdl", GAUSS_DRAW, "gauss");
+	if (HLDM == AgGametype())
+		return DefaultDeploy("models/wepaons/hldmtau/v_hldmtau.mdl", "models/p_gauss.mdl", GAUSS_DRAW, "gauss");
+	else
+		return DefaultDeploy("models/v_gauss.mdl", "models/p_gauss.mdl", GAUSS_DRAW, "gauss");
 }
 
 void CGauss::Holster(int skiplocal /* = 0 */)
