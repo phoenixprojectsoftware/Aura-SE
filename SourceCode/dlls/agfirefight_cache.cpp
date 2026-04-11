@@ -42,34 +42,7 @@ AgFirefightFileCache::~AgFirefightFileCache()
 
 void PrecacheMonsterResources(const char* pszMonsterClass)
 {
-	if (FStrEq(pszMonsterClass, "monster_hgrunt"))
-	{
-		UTIL_PrecacheOther("monster_hgrunt");
-	}
-	else if (FStrEq(pszMonsterClass, "monster_alien_grunt"))
-	{
-		UTIL_PrecacheOther("monster_alien_grunt");
-	}
-	else if (FStrEq(pszMonsterClass, "monster_gargantua"))
-	{
-		UTIL_PrecacheOther("monster_gargantua");
-	}
-	else if (FStrEq(pszMonsterClass, "monster_bullchicken"))
-	{
-		UTIL_PrecacheOther("monster_bullchicken");
-	}
-	else if (FStrEq(pszMonsterClass, "monster_zombie"))
-	{
-		UTIL_PrecacheOther("monster_zombie");
-	}
-	else if (FStrEq(pszMonsterClass, "monster_zombie_torso"))
-	{
-		UTIL_PrecacheOther("monster_zombie_torso");
-	}
-	else if (FStrEq(pszMonsterClass, "monster_headcrab"))
-	{
-		UTIL_PrecacheOther("monster_headcrab");
-	}
+	UTIL_PrecacheOther(pszMonsterClass);
 }
 
 void AgFirefightFileCache::PrecacheAllMonsters()
@@ -87,4 +60,17 @@ void AgFirefightFileCache::PrecacheAllMonsters()
 			m_PrecachedMonsters.insert(monsterClass);
 		}
 	}
+}
+
+int AgFirefightFileCache::GetMaxWave() const
+{
+	int maxWave = 0;
+
+	for (const auto& sp : m_spawnPoints)
+	{
+		if (sp.waveNumber > maxWave)
+			maxWave = sp.waveNumber;
+	}
+
+	return maxWave;
 }

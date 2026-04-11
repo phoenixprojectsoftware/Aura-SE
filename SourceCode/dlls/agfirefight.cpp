@@ -58,7 +58,7 @@ const char* easyMonsters[] = {
 	"monster_headcrab",
 	"monster_alien_slave",
 	"monster_bullsquid",
-	"monster_zamnhl"
+	"monster_houndeye"
 };
 const char* hardMonsters[] = {
 	"monster_hgrunt",
@@ -212,7 +212,7 @@ AgFirefight::AgFirefight()
 
 int AgFirefight::GetSpawnsPerPoint(int wave) const
 {
-	return 2 + (wave / 2);
+	return 1;
 }
 
 AgFirefight::~AgFirefight()
@@ -332,6 +332,15 @@ void AgFirefight::StartNextWave()
 	m_iAliveMonsters = 0;
 	m_State = FF_SPAWNING;
 	m_flWaveStartTime = gpGlobals->time;
+
+	// if we are out of waves in the .ff file, go back to the start.
+	int maxWave = m_FileCache.GetMaxWave();
+
+	if (m_iWaveNumber > maxWave)
+	{
+		ALERT(at_console, "FF: looping waves (%d -> 1)\n", m_iWaveNumber);
+		m_iWaveNumber = 1;
+	}
 
 	const auto& spawns = m_FileCache.GetWaveSpawns(m_iWaveNumber);
 	int repeats = GetSpawnsPerPoint(m_iWaveNumber);

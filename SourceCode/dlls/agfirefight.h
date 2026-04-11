@@ -60,6 +60,7 @@ public:
 	void Load();
 	void PrecacheAllMonsters();
 	const std::vector<AgFFWaveSpawn>& GetWaveSpawns(int waveNumber) const;
+	int GetMaxWave() const;
 
 private:
 	std::vector<AgFirefightFileItem*> m_lstFileItems;
