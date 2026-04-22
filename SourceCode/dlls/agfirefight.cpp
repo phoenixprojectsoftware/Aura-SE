@@ -397,6 +397,9 @@ void AgFirefight::OnMonsterKilled(CBaseMonster* pMonster)
 	ALERT(at_console, "Firefight monster killed\n");
 #endif
 
+	pMonster->GibMonster();
+	//pMonster->FadeMonster();
+
 	TrySpawnNext();
 }
 
