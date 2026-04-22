@@ -25,6 +25,8 @@
 
 #include "CDisplacerBall.h"
 
+float DISPLACER_BALL_SPEED_YEAH_BABY_SHAGADELIC = 750;
+
 namespace
 {
 	//TODO: can probably be smarter - Solokiller
@@ -481,7 +483,10 @@ CDisplacerBall* CDisplacerBall::CreateDisplacerBall(const Vector& vecOrigin, con
 
 	UTIL_MakeVectors(vecAngles);
 
-	pBall->pev->velocity = gpGlobals->v_forward * 500;
+	if (FIESTA == AgGametype())
+		DISPLACER_BALL_SPEED_YEAH_BABY_SHAGADELIC = 850;
+
+	pBall->pev->velocity = gpGlobals->v_forward * DISPLACER_BALL_SPEED_YEAH_BABY_SHAGADELIC;
 
 	pBall->pev->owner = pOwner->edict();
 
