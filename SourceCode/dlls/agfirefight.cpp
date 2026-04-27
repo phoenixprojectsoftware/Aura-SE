@@ -236,29 +236,7 @@ void AgFirefight::Think()
 	case FF_WAITING:
 		if (UTIL_IsMultiplayer())
 		{
-			int secondsLeft = (int)(m_flFirstWaveDelay - gpGlobals->time);
-
-			if (!m_bFirstWaveMusicPlayed && secondsLeft < 40) // first tick of countdown
-			{
-				// send music to all connected clients
-				for (int i = 1; i <= gpGlobals->maxClients; ++i)
-				{
-					edict_t* pPlayer = INDEXENT(i);
-					if (!FNullEnt(pPlayer) && pPlayer->v.flags & FL_CLIENT) // ensure this is a valid client
-					{
-						if (m_bMusicSet1 == true)
-							CLIENT_COMMAND(pPlayer, "mp3 play sound/music/MX_SK_GLU02.mp3\n");
-						else if (m_bMusicSet2 == true)
-							CLIENT_COMMAND(pPlayer, "mp3 play sound/music/MX_C4_DUB.mp3\n");
-						else if (m_bMusicSet3 == true)
-							CLIENT_COMMAND(pPlayer, "mp3 play sound/music/MX_SK_INT.mp3\n");
-						else if (m_bMusicSet4 == true)
-							CLIENT_COMMAND(pPlayer, "mp3 play sound/music/MX_SPACEY02_DUB.mp3\n");
-					}
-				}
-
-				m_bFirstWaveMusicPlayed = true;
-			}
+			PlayMusic(FirefightState::FF_WAITING);
 
 			if (gpGlobals->time >= m_flFirstWaveDelay)
 			{
@@ -295,6 +273,42 @@ void AgFirefight::Think()
 		// do intermission here?
 		break;
 	}
+}
+
+void AgFirefight::SendCommand(const char* cmd, ...)
+{
+	char* szFmt = (char*)cmd;
+
+	for (int i = 1; i <= gpGlobals->maxClients; ++i)
+	{
+		edict_t* pPlayer = INDEXENT(i);
+
+		if (!FNullEnt(pPlayer) && pPlayer->v.flags & FL_CLIENT)
+			CLIENT_COMMAND(pPlayer, szFmt);
+	}
+}
+
+void AgFirefight::PlayMusic(int state)
+{
+	int secondsLeft = (int)(m_flFirstWaveDelay - gpGlobals->time);
+	if (state == FirefightState::FF_WAITING)
+	{
+		if (!m_bFirstWaveMusicPlayed && secondsLeft < 40) // first tick of countdown
+		{
+			if (m_bMusicSet1 == true)
+				SendCommand("mp3 play sound/music/MX_SK_GLU02.mp3\n");
+			else if (m_bMusicSet2 == true)
+				SendCommand("mp3 play sound/music/MX_C4_DUB.mp3\n");
+			else if (m_bMusicSet3 == true)
+				SendCommand("mp3 play sound/music/MX_SK_INT.mp3\n");
+			else if (m_bMusicSet4 == true)
+				SendCommand("mp3 play sound/music/MX_SPACEY02_DUB.mp3\n");
+			m_bFirstWaveMusicPlayed = true;
+		}
+	}
+
+	if (state == 5)
+		SendCommand("mp3 play sound/music/MX_OFF2_P2_FULL.mp3\n");
 }
 
 void AgFirefight::TrySpawnNext()
@@ -361,6 +375,9 @@ void AgFirefight::StartNextWave()
 
 	// could add dynamic difficulty based on wave number
 	UTIL_ClientPrintAll(HUD_PRINTCENTER, UTIL_VarArgs("Wave %d starting", m_iWaveNumber));
+
+	if (m_iWaveNumber == 5)
+		PlayMusic(5);
 }
 
 void AgFirefight::SpawnWaveEnemies()

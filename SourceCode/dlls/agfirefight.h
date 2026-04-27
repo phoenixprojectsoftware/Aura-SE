@@ -78,6 +78,9 @@ public:
 	void Precache();
 	void Think();
 
+	void SendCommand(const char* cmd,  ...);
+	void PlayMusic(int state);
+
 	void SetAuthoringWave(int wave);
 	int GetAuthoringWave() const { return m_iAuthoringWave; }
 
