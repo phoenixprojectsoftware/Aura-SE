@@ -484,10 +484,7 @@ void CBasePlayer :: DeathSound( void )
 	}
 
 	// play one of the suit death alarms
-	if (INSTAGIB != AgGametype() && SWAT != AgGametype())
-	{ 
-		EMIT_GROUPNAME_SUIT(ENT(pev), "HEV_DEAD"); 
-	};
+	EMIT_GROUPNAME_SUIT(ENT(pev), "HEV_DEAD"); 
 }
 
 // override takehealth
