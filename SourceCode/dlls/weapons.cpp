@@ -1152,6 +1152,9 @@ BOOL CBasePlayerWeapon :: IsUseable( void )
 		{
 			return TRUE;
 		}
+
+		if (m_pPlayer->m_rgAmmo[SecondaryAmmoIndex()] > 0)
+			return TRUE;
 	}
 
 	// clip is empty innit?
