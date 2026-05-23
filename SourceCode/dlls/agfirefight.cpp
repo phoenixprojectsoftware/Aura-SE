@@ -55,7 +55,7 @@ void FF_SpawnTeleportEffect(const Vector& origin)
 
 const char* easyMonsters[] = {
 	"monster_zombie",
-	"monster_headcrab",
+//	"monster_headcrab", // these things are too small to find
 	"monster_alien_slave",
 	"monster_bullsquid",
 	"monster_houndeye"
