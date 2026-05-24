@@ -882,8 +882,6 @@ void ClientPrecache( void )
 	PRECACHE_SOUND("common/wpn_moveselect.wav");
 	PRECACHE_SOUND("common/wpn_select.wav");
 	PRECACHE_SOUND("common/wpn_denyselect.wav");
-	PRECACHE_SOUND("UI/wpn_accept.wav");
-	PRECACHE_SOUND("UI/wpn_rollover.wav");
 
 
 	// geiger sounds
