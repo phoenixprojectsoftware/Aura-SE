@@ -105,7 +105,7 @@ bool AgClient::HandleCommand(CBasePlayer* pPlayer)
     }
     else if (FStrEq(CMD_ARGV(0), "drop"))
     {
-        if (ARENA != AgGametype() && ARCADE != AgGametype() && INSTAGIB != AgGametype() && FIESTA != AgGametype() && FIESTAFIGHT != AgGametype())
+        if (ARENA != AgGametype() && ARCADE != AgGametype() && INSTAGIB != AgGametype() && FIESTA != AgGametype() && FIESTAFIGHT != AgGametype() && OITC != AgGametype())
         {
             // player is dropping an item.
             pPlayer->DropPlayerItem((char*)CMD_ARGV(1));

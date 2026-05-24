@@ -823,7 +823,7 @@ int AgGameRules::IPointsForKill(CBasePlayer* pAttacker, CBasePlayer* pKilled)
     if (!pAttacker || !pKilled)
         return 1;
 
-    if (ARCADE == AgGametype() || INSTAGIB == AgGametype())
+    if (ARCADE == AgGametype() || INSTAGIB == AgGametype() || OITC == AgGametype())
     {
         if (pAttacker && pKilled && pAttacker != pKilled && pAttacker->IsAlive() && pAttacker->pev)
         {
@@ -1169,7 +1169,7 @@ BOOL AgGameRules::FPlayerCanTakeDamage(CBasePlayer* pPlayer, CBaseEntity* pAttac
     if (!pPlayer->pev)
         return FALSE;
 
-    if (!g_bPaused && INSTAGIB == AgGametype())
+    if (INSTAGIB == AgGametype() || OITC == AgGametype())
     {
         ASSERT(NULL != pAttacker);
         if (!pAttacker)

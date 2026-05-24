@@ -4813,7 +4813,7 @@ void CBasePlayer::RunShieldUpdates()
 		return;
 
 	// Gametypes not allowed to run shield updates.
-	if (HLDM == AgGametype() || SWAT == AgGametype() || INSTAGIB == AgGametype())
+	if (HLDM == AgGametype() || SWAT == AgGametype() || INSTAGIB == AgGametype() || OITC == AgGametype())
 		return;
 
 	int armorInt = (int)pev->armorvalue;

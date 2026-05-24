@@ -51,7 +51,10 @@ void CGlock::Spawn( )
 	m_iId = WEAPON_GLOCK;
 	SET_MODEL(ENT(pev), "models/w_9mmhandgun.mdl");
 
-	m_iDefaultAmmo = GLOCK_DEFAULT_GIVE;
+	if (OITC != AgGametype())
+		m_iDefaultAmmo = GLOCK_DEFAULT_GIVE;
+	else
+		m_iDefaultAmmo = ONE_DEFAULT_GIVE;
 
 	FallInit();// get ready to fall down.
 }
@@ -85,11 +88,24 @@ void CGlock::Precache( void )
 int CGlock::GetItemInfo(ItemInfo *p)
 {
 	p->pszName = STRING(pev->classname);
-	p->pszAmmo1 = "9mm";
-	p->iMaxAmmo1 = _9MM_MAX_CARRY;
-	p->pszAmmo2 = NULL;
-	p->iMaxAmmo2 = -1;
-	p->iMaxClip = GLOCK_MAX_CLIP;
+
+	if (OITC != AgGametype())
+	{
+		p->pszAmmo1 = "9mm";
+		p->iMaxAmmo1 = _9MM_MAX_CARRY;
+		p->pszAmmo2 = NULL;
+		p->iMaxAmmo2 = -1;
+		p->iMaxClip = GLOCK_MAX_CLIP;
+	}
+	else
+	{
+		p->pszAmmo1 = "9mm";
+		p->iMaxAmmo1 = ONE_MAX_CARRY;
+		p->pszAmmo2 = NULL;
+		p->iMaxAmmo2 = -1;
+		p->iMaxClip = 1;
+	}
+
 #ifdef _HALO
 	p->iSlot = WPN_MAGNUM_SLOT;
 #else
@@ -241,10 +257,15 @@ void CGlock::Reload( void )
 
 	int iResult;
 
-	if (m_iClip < 1)
-		iResult = DefaultReload( 17, GLOCK_RELOAD, 1.5 );
+	if (OITC != AgGametype())
+	{
+		if (m_iClip < 1)
+			iResult = DefaultReload(17, GLOCK_RELOAD, 1.5);
+		else
+			iResult = DefaultReload(18, GLOCK_RELOAD_NOT_EMPTY, 1.5);
+	}
 	else
-		iResult = DefaultReload( 18, GLOCK_RELOAD_NOT_EMPTY, 1.5 );
+		iResult = DefaultReload(1, GLOCK_RELOAD, 1.5);
 
 	if (iResult)
 	{

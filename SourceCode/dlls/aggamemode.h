@@ -62,7 +62,8 @@ enum enumGameType
     HLDM,
     BUSTERS,
     CHILL,
-    TAUGUYS
+    TAUGUYS,
+    OITC
 };
 //-- muphicks
 extern DLL_GLOBAL BYTE g_GameType;
