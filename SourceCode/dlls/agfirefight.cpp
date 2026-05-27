@@ -243,12 +243,6 @@ void AgFirefight::Think()
 				m_iWaveNumber = 1;
 				StartNextWave();
 			}
-#ifdef _DEBUG // debugger for now cos this will probably cause overflows...
-			else
-			{
-				UTIL_ClientPrintAll(HUD_PRINTCENTER, UTIL_VarArgs("FIRST WAVE BEGINS IN %d", secondsLeft));
-			}
-#endif
 		}
 		break;
 
