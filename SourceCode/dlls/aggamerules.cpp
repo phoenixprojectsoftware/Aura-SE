@@ -437,7 +437,7 @@ void AgGameRules::PlayerSpawn(CBasePlayer* pPlayer)
                 pPlayer->OnPickupLongjump();
             }
 
-            if (FIESTA == AgGametype() || FIESTAFIGHT == AgGametype())
+            if (FIESTA == AgGametype() || FIESTAFIGHT == AgGametype()) // Fiesta Weapon List
             {
 #ifdef _HALO
                 const char* weaponList[] = {
@@ -454,7 +454,6 @@ void AgGameRules::PlayerSpawn(CBasePlayer* pPlayer)
 #else
                 const char* weaponList[] = {
                     "weapon_9mmhandgun",
-                    "weapon_railgun",
                     "weapon_shotgun",
                     "weapon_9mmAR",
                     "weapon_crossbow",
