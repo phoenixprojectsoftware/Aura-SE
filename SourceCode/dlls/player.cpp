@@ -2134,7 +2134,15 @@ void SetPunchAngle(int index, int axis, float punch)
 	}
 }
 
+bool IsFiesta()
+{
+	return FIESTA == AgGametype() || FIESTAFIGHT == AgGametype();
+}
 
+bool IsTauGuys()
+{
+	return TAUGUYS == AgGametype();
+}
 
 #define CLIMB_SHAKE_FREQUENCY	22	// how many frames in between screen shakes when climbing
 #define	MAX_CLIMB_SPEED			200	// fastest vertical climbing speed possible
@@ -2168,12 +2176,11 @@ void CBasePlayer::PreThink(void)
 		EnableControl(!g_bPaused);
 
 	// BlueNightHawk : Infinite Ammo
-	if (sv_aura_infinite_ammo.value != 0 && m_pActiveItem)
+	if (m_pActiveItem && (sv_aura_infinite_ammo.value != 0 || IsFiesta() || IsTauGuys()))
 	{
 		ItemInfo p;
 		m_pActiveItem->GetItemInfo(&p);
-
-		if (sv_aura_infinite_ammo.value == 1 || TAUGUYS == AgGametype())
+		if (sv_aura_infinite_ammo.value == 1 || IsTauGuys())
 		{
 			// mode 1 - bottomless clip. refill every frame.
 			((CBasePlayerWeapon*)m_pActiveItem)->m_iClip = p.iMaxClip;
@@ -2184,7 +2191,7 @@ void CBasePlayer::PreThink(void)
 			if (m_pActiveItem->SecondaryAmmoIndex() != -1 && p.iMaxAmmo2 > 0)
 				m_rgAmmo[m_pActiveItem->SecondaryAmmoIndex()] = p.iMaxAmmo2;
 		}
-		else if (sv_aura_infinite_ammo.value == 2 || FIESTA == AgGametype() || FIESTAFIGHT == AgGametype())
+		else if (sv_aura_infinite_ammo.value == 2 || IsFiesta())
 		{
 		// mode 2 - refillable clip, infinite reserve
 
