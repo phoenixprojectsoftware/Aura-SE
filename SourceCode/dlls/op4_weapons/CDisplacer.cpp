@@ -145,6 +145,26 @@ void CDisplacer::WeaponIdle()
 
 void CDisplacer::PrimaryAttack()
 {
+	if (FIESTA == g_pGameType)
+	{
+		if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] >= 20)
+		{
+			FireThink();
+
+			m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 0.5;
+			m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 0.065;
+			m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 0.25;
+		}
+		else
+		{
+			EMIT_SOUND(m_pPlayer->edict(), CHAN_WEAPON, "buttons/button11.wav", RANDOM_FLOAT(0.8, 0.9), ATTN_NORM);
+
+			m_flNextPrimaryAttack = m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 0.5;
+		}
+
+		return;
+	}
+
 	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] >= 20)
 	{
 		SetThink(&CDisplacer::SpinupThink);

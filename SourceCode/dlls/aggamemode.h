@@ -72,5 +72,7 @@ inline BYTE AgGametype()
     return g_GameType;
 };
 
+#define g_pGameType AgGametype() // for client conversion.
+
 #endif // !defined(AFX_AGGAMEMODES_H__B6D8EF5B_9423_4422_B935_1D71B6146DCA__INCLUDED_)
 //-- Martin Webrant
