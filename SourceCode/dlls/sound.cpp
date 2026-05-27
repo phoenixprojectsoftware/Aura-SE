@@ -1749,10 +1749,11 @@ float TEXTURETYPE_PlaySound(TraceResult *ptr,  Vector vecSrc, Vector vecEnd, int
 		cnt = 3;
 		break;
 	case CHAR_TEX_FLESH:
+		fvol = 1.0;	fvolbar = 0.2;
+		return 0.0;
+#ifdef _HALO
 		if (iBulletType == BULLET_PLAYER_CROWBAR)
 			return 0.0; // crowbar already makes this sound
-		fvol = 1.0;	fvolbar = 0.2;
-#ifdef _HALO
 		rgsz[0] = "player/hitsound.wav";
 		fattn = 1.0;
 		cnt = 1;
