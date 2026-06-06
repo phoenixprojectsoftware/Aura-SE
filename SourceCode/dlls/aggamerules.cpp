@@ -466,6 +466,7 @@ void AgGameRules::PlayerSpawn(CBasePlayer* pPlayer)
                     "weapon_sniperrifle",
                     "weapon_sporelauncher",
                     "weapon_br",
+                    "weapon_thumper"
                 };
 #endif
 

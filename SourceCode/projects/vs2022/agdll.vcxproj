@@ -396,6 +396,7 @@
     <ClCompile Include="..\..\dlls\rpg.cpp" />
     <ClCompile Include="..\..\dlls\s10_weapons\railgun.cpp" />
     <ClCompile Include="..\..\dlls\s10_weapons\ray.cpp" />
+    <ClCompile Include="..\..\dlls\s10_weapons\thumper.cpp" />
     <ClCompile Include="..\..\dlls\s10_weapons\wpn_healer.cpp" />
     <ClCompile Include="..\..\dlls\satchel.cpp" />
     <ClCompile Include="..\..\dlls\schedule.cpp" />

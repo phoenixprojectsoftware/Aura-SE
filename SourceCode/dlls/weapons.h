@@ -102,6 +102,7 @@ public:
 #define WEAPON_HLDMAR 32
 #define WEAPON_RAILGUN 33
 #define WEAPON_HEALER 34
+#define WEAPON_THUMPER 35
 
 #define WEAPON_ALLWEAPONS		(~(1<<WEAPON_SUIT))
 
@@ -139,6 +140,7 @@ public:
 #define M249_WEIGHT					20
 #define DISPLACER_WEIGHT	10
 #define PENGUIN_WEIGHT		5
+#define THUMPER_WEIGHT 25
 
 #ifdef _HALO
 #define M7_WEIGHT 7
@@ -224,7 +226,7 @@ public:
 #define SATCHEL_MAX_CLIP		WEAPON_NOCLIP
 #define TRIPMINE_MAX_CLIP		WEAPON_NOCLIP
 #define SNARK_MAX_CLIP			WEAPON_NOCLIP
-
+#define THUMPER_MAX_CLIP 1
 
 // the default amount of ammo that comes with each gun when it spawns
 #ifdef _HALO
@@ -271,6 +273,7 @@ public:
 #define M249_DEFAULT_GIVE					100
 #define DISPLACER_DEFAULT_GIVE		40
 #define RAILGUN_DEFAULT_GIVE 20
+#define THUMPER_DEFAULT_GIVE 3
 #endif
 #define BR_DEFAULT_GIVE BR_MAX_CLIP
 
@@ -936,6 +939,30 @@ enum m7_e
 	M7_FIRE2,
 	M7_FIRE3,
 };
+
+class CThumper : public CBasePlayerWeapon
+{
+public:
+	void Spawn() override;
+	void Precache() override;
+	// int iItemSlot?
+	int GetItemInfo(ItemInfo* p) override;
+	// BOOL Deploy() override;
+	void PrimaryAttack() override;
+	void Reload() override;
+	void WeaponIdle() override;
+
+private:
+	unsigned short m_usThumper;
+};
+
+enum thumper_e
+{
+	THUMPER_IDLE,
+	THUMPER_FIRE,
+	THUMPER_RELOAD
+};
+
 
 #ifdef _HALO
 class CSMG : public CBasePlayerWeapon
