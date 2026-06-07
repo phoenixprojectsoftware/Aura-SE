@@ -74,6 +74,7 @@ extern cvar_t   ag_ban_sporelauncher;
 
 #ifndef _HALO
 extern cvar_t ag_ban_healer;
+extern cvar_t ag_ban_thumper;
 #endif
 
 #ifdef _HALO
@@ -129,6 +130,7 @@ extern cvar_t   ag_start_sporelauncher;
 
 #ifndef _HALO
 extern cvar_t ag_start_healer;
+extern cvar_t ag_start_thumper;
 #endif
 
 #ifdef _HALO

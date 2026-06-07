@@ -376,6 +376,8 @@ void AgGameRules::PlayerSpawn(CBasePlayer* pPlayer)
 #ifndef _HALO
             if (1 > ag_ban_healer.value)
                 pPlayer->GiveNamedItem("weapon_healer");
+            if (1 > ag_ban_thumper.value)
+                pPlayer->GiveNamedItem("weapon_thumper");
 #endif
 
 #ifdef _HALO
@@ -551,6 +553,8 @@ void AgGameRules::PlayerSpawn(CBasePlayer* pPlayer)
 #ifndef _HALO
                 if (0 < ag_start_healer.value)
                     pPlayer->GiveNamedItem("weapon_healer");
+                if (0 < ag_start_thumper.value)
+                    pPlayer->GiveNamedItem("weapon_thumper");
 #endif
 #ifdef _HALO
                 if (0 < ag_start_smg.value)
@@ -950,6 +954,7 @@ FILE_GLOBAL BANWEAPON s_Bans[] =
   "weapon_sporelauncher", &ag_ban_sporelauncher,
 #ifndef _HALO
   "weapon_healer", &ag_ban_healer,
+  "weapon_thumper", &ag_ban_thumper,
 #endif
 
 #ifdef _HALO

@@ -126,6 +126,7 @@ DLL_GLOBAL cvar_t   ag_ban_ammoSpore = { "sv_aura_ban_ammo_spore","0" };
 
 #ifndef _HALO
 DLL_GLOBAL cvar_t ag_ban_healer = { "sv_aura_ban_healer", "0" };
+DLL_GLOBAL cvar_t ag_ban_thumper = { "sv_aura_ban_thumper", "0" };
 #endif
 
 DLL_GLOBAL cvar_t	ag_ban_armour = { "sv_aura_ban_armour","0" };
@@ -185,6 +186,7 @@ DLL_GLOBAL cvar_t   ag_start_ammoSpore = { "sv_aura_start_ammo_spore", "0" }; //
 // Season 10 Team Healer.
 #ifndef _HALO
 DLL_GLOBAL cvar_t ag_start_healer = { "sv_aura_start_healer", "0" };
+DLL_GLOBAL cvar_t ag_start_thumper = { "sv_aura_start_thumper", "0" };
 #endif
 
 // Half-Life Weapons
@@ -372,6 +374,7 @@ void AgInitGame()
 
 #ifndef _HALO
     CVAR_REGISTER(&ag_ban_healer);
+    CVAR_REGISTER(&ag_ban_thumper);
 #endif
 
 #ifdef _HALO
@@ -426,6 +429,7 @@ void AgInitGame()
 
 #ifndef _HALO
     CVAR_REGISTER(&ag_start_healer);
+    CVAR_REGISTER(&ag_start_thumper);
 #endif
 
 #ifdef _HALO
