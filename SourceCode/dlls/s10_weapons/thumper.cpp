@@ -90,6 +90,8 @@ void CThumper::Holster(int skiplocal)
 
 void CThumper::PrimaryAttack()
 {
+	CBasePlayer* pPlayer = (CBasePlayer*)m_pPlayer;
+
 	if (m_fInReload)
 		return;
 
@@ -112,7 +114,7 @@ void CThumper::PrimaryAttack()
 
 	CGrenade::ShootContact(m_pPlayer->pev, vecSrc, vecVelocity);
 
-	PLAYBACK_EVENT_FULL(0, edict(), m_usThumper, 0.0, (float*)&g_vecZero, (float*)&g_vecZero, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+	PLAYBACK_EVENT_FULL(0, pPlayer->edict(), m_usThumper, 0.0, (float*)&g_vecZero, (float*)&g_vecZero, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 
 	SendWeaponAnim(THUMPER_FIRE1);
 
