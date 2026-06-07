@@ -19,6 +19,17 @@
 #include "weapon_hierarchy.h"
 #include "gamerules.h"
 
+#ifndef CLIENT_DLL
+TYPEDESCRIPTION CThumper::m_SaveData[] =
+{
+	DEFINE_FIELD(CThumper, m_flReloadStartTime, FIELD_FLOAT),
+	DEFINE_FIELD(CThumper, m_flReloadStart, FIELD_FLOAT),
+	DEFINE_FIELD(CThumper, m_bReloading, FIELD_BOOLEAN),
+};
+
+IMPLEMENT_SAVERESTORE(CThumper, CBasePlayerWeapon);
+#endif
+
 LINK_ENTITY_TO_CLASS(weapon_thumper, CThumper);
 
 void CThumper::Spawn()
@@ -63,8 +74,25 @@ int CThumper::GetItemInfo(ItemInfo* p)
 	return 1;
 }
 
+BOOL CThumper::Deploy()
+{
+	return DefaultDeploy("models/weapons/thumper/v_rock2.mdl", "models/weapons/thumper/p_rock2.mdl", THUMPER_IDLE1, "mp5");
+}
+
+void CThumper::Holster(int skiplocal)
+{
+	SendWeaponAnim(THUMPER_HOLSTER);
+	m_bReloading = false;
+	m_fInReload = false;
+	m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + 0.5;
+	m_flTimeWeaponIdle = UTIL_SharedRandomFloat(m_pPlayer->random_seed, 10.0, 15.0);
+}
+
 void CThumper::PrimaryAttack()
 {
+	if (m_fInReload)
+		return;
+
 	if (m_iClip <= 0)
 	{
 		PlayEmptySound();
@@ -80,13 +108,13 @@ void CThumper::PrimaryAttack()
 
 	Vector vecSrc = m_pPlayer->GetGunPosition() + gpGlobals->v_forward * 16 + gpGlobals->v_right * 6 - gpGlobals->v_up * 4;
 
-	Vector vecVelocity = gpGlobals->v_forward * 900;
+	Vector vecVelocity = gpGlobals->v_forward * 1250;
 
 	CGrenade::ShootContact(m_pPlayer->pev, vecSrc, vecVelocity);
 
 	PLAYBACK_EVENT_FULL(0, edict(), m_usThumper, 0.0, (float*)&g_vecZero, (float*)&g_vecZero, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 
-	SendWeaponAnim(THUMPER_FIRE);
+	SendWeaponAnim(THUMPER_FIRE1);
 
 	m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 1.0f;
 	m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 1.5f;
@@ -100,7 +128,16 @@ void CThumper::Reload()
 	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0)
 		return;
 
-	DefaultReload(1, THUMPER_RELOAD, 2.0f);
+	if (DefaultReload(1, THUMPER_RELOAD1, 2.0, 0))
+	{
+		m_bReloading = true;
+
+		m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + (0.60 + 0.60);
+
+		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + (0.60 + 0.60);
+
+		m_flReloadStart = gpGlobals->time;
+	}
 }
 
 void CThumper::WeaponIdle()
@@ -109,10 +146,16 @@ void CThumper::WeaponIdle()
 
 	m_pPlayer->GetAutoaimVector(AUTOAIM_5DEGREES);
 
+	if (m_bReloading && gpGlobals->time >= m_flReloadStart + 2.0)
+	{
+		m_bReloading = false;
+		SendWeaponAnim(THUMPER_RELOAD2);
+	}
+
 	if (m_flTimeWeaponIdle > UTIL_WeaponTimeBase())
 		return;
 
-	SendWeaponAnim(THUMPER_IDLE);
+	SendWeaponAnim(THUMPER_IDLE1);
 	m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + RANDOM_FLOAT(10.0f, 15.0f);
 }
 #endif //_HALO

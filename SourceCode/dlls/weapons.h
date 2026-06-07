@@ -945,22 +945,40 @@ class CThumper : public CBasePlayerWeapon
 public:
 	void Spawn() override;
 	void Precache() override;
-	// int iItemSlot?
 	int GetItemInfo(ItemInfo* p) override;
-	// BOOL Deploy() override;
+	BOOL Deploy() override;
+	void Holster(int skiplocal) override;
 	void PrimaryAttack() override;
 	void Reload() override;
 	void WeaponIdle() override;
 
+#ifndef CLIENT_DLL
+	int Save(CSave& save) override;
+	int Restore(CRestore& restore) override;
+	static TYPEDESCRIPTION m_SaveData[];
+#endif
+
 private:
 	unsigned short m_usThumper;
+	BOOL m_bReloading;
+	float m_flReloadStartTime;
+	float m_flReloadStart;
 };
 
 enum thumper_e
 {
-	THUMPER_IDLE,
-	THUMPER_FIRE,
-	THUMPER_RELOAD
+	THUMPER_IDLE1,
+	THUMPER_IDLE2,
+	THUMPER_FIRE1,
+	THUMPER_FIRE2,
+	THUMPER_RELOAD1,
+	THUMPER_RELOAD2,
+	THUMPER_RELOAD3,
+	THUMPER_RELOAD4,
+	THUMPER_DRAW,
+	THUMPER_DRAW2,
+	THUMPER_HOLSTER,
+	THUMPER_HOLSTER2
 };
 
 
