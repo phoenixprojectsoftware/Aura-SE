@@ -952,11 +952,14 @@ public:
 	BOOL Deploy() override;
 	void Holster(int skiplocal) override;
 	void PrimaryAttack() override;
+	void SecondaryAttack() override;
+	void ToggleZoom();
 	void Reload() override;
 	void WeaponIdle() override;
 
 private:
 	unsigned short m_usThumper;
+	bool m_bInZoom;
 };
 
 enum thumper_e

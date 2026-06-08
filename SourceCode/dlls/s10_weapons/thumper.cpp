@@ -19,6 +19,8 @@
 #include "weapon_hierarchy.h"
 #include "gamerules.h"
 
+#define THUMPER_ZOOM_LEVEL 50
+
 LINK_ENTITY_TO_CLASS(weapon_thumper, CThumper);
 
 void CThumper::Spawn()
@@ -71,6 +73,10 @@ BOOL CThumper::Deploy()
 void CThumper::Holster(int skiplocal)
 {
 	SendWeaponAnim(THUMPER_HOLSTER);
+
+	if (m_bInZoom)
+		SecondaryAttack();
+
 	m_fInReload = false;
 	m_pPlayer->m_flNextAttack = gpGlobals->time + 0.5;
 	m_flTimeWeaponIdle = UTIL_SharedRandomFloat(m_pPlayer->random_seed, 10.0, 15.0);
@@ -123,6 +129,33 @@ void CThumper::PrimaryAttack()
 	m_flTimeWeaponIdle = gpGlobals->time + 1.5f;
 }
 
+void CThumper::SecondaryAttack()
+{
+	m_bInZoom = !m_bInZoom;
+
+	ToggleZoom();
+
+	m_flNextSecondaryAttack = gpGlobals->time + 0.6f;
+}
+
+void CThumper::ToggleZoom()
+{
+	if (m_pPlayer->pev->fov == 0)
+	{
+		m_pPlayer->pev->fov = THUMPER_ZOOM_LEVEL;
+		m_pPlayer->m_iFOV = THUMPER_ZOOM_LEVEL;
+
+		m_bInZoom = true;
+	}
+	else
+	{
+		m_pPlayer->pev->fov = 0;
+		m_pPlayer->m_iFOV = 0;
+
+		m_bInZoom = false;
+	}
+}
+
 void CThumper::Reload()
 {
 	if (m_iClip >= THUMPER_MAX_CLIP)
@@ -130,6 +163,9 @@ void CThumper::Reload()
 
 	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0)
 		return;
+
+	if (m_bInZoom)
+		SecondaryAttack();
 
 	DefaultReload(1, THUMPER_RELOAD1, 1.0);
 }
