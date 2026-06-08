@@ -23,6 +23,7 @@
 #include "cbase.h"
 #include "monsters.h"
 #include "weapons.h"
+#include "player.h"
 #include "nodes.h"
 #include "soundent.h"
 #include "decals.h"
@@ -194,6 +195,11 @@ void CGrenade::ExplodeTouch( CBaseEntity *pOther )
 	vecSpot = pev->origin - pev->velocity.Normalize() * 32;
 	UTIL_TraceLine( vecSpot, vecSpot + pev->velocity.Normalize() * 64, ignore_monsters, ENT(pev), &tr );
 
+	if (m_bThumperGrenade)
+	{
+		ApplyThumperBoost();
+	}
+
 	Explode( &tr, DMG_BLAST );
 }
 
@@ -353,8 +359,9 @@ void CGrenade:: Spawn( void )
 
 	pev->dmg = 100;
 	m_fRegisteredSound = FALSE;
-}
 
+	m_bThumperGrenade = false;
+}
 
 CGrenade *CGrenade::ShootContact( entvars_t *pevOwner, Vector vecStart, Vector vecVelocity )
 {
@@ -382,6 +389,45 @@ CGrenade *CGrenade::ShootContact( entvars_t *pevOwner, Vector vecStart, Vector v
 	return pGrenade;
 }
 
+void CGrenade::ApplyThumperBoost()
+{
+	if (!pev->owner)
+		return;
+
+	CBaseEntity* pOwnerEnt = CBaseEntity::Instance(pev->owner);
+
+	if (!pOwnerEnt || !pOwnerEnt->IsPlayer())
+		return;
+
+	CBasePlayer* pPlayer = (CBasePlayer*)pOwnerEnt;
+
+	if (!pPlayer->IsAlive())
+		return;
+
+	Vector vecFromExplosion = pPlayer->pev->origin - pev->origin;
+	float flDistance = vecFromExplosion.Length();
+
+	if (flDistance <= 0.0f)
+		return;
+
+	const float flBoostRadius = 220.0f;
+
+	if (flDistance > flBoostRadius)
+		return;
+
+	vecFromExplosion = vecFromExplosion.Normalize();
+
+	float flScale = 1.0f - (flDistance / flBoostRadius);
+
+	const float flBaseBoost = 650.0f;
+
+	Vector vecBoost = vecFromExplosion * flBaseBoost * flScale;
+
+	if (vecBoost.z < 250.0f)
+		vecBoost.z = 250.0f * flScale;
+
+	pPlayer->pev->velocity = pPlayer->pev->velocity + vecBoost;
+}
 
 CGrenade * CGrenade:: ShootTimed( entvars_t *pevOwner, Vector vecStart, Vector vecVelocity, float time )
 {

@@ -55,6 +55,9 @@ public:
 	virtual void Killed( entvars_t *pevAttacker, int iGib );
 
 	BOOL m_fRegisteredSound;// whether or not this grenade has issued its DANGER sound to the world sound list yet.
+	bool m_bThumperGrenade;
+
+	void ApplyThumperBoost();
 };
 #endif
 
@@ -951,8 +954,6 @@ public:
 	void PrimaryAttack() override;
 	void Reload() override;
 	void WeaponIdle() override;
-
-	void ApplyVelocityBoost();
 
 private:
 	unsigned short m_usThumper;
