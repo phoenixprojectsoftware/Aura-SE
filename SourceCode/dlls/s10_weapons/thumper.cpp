@@ -19,17 +19,6 @@
 #include "weapon_hierarchy.h"
 #include "gamerules.h"
 
-#ifndef CLIENT_DLL
-TYPEDESCRIPTION CThumper::m_SaveData[] =
-{
-	DEFINE_FIELD(CThumper, m_flReloadStartTime, FIELD_FLOAT),
-	DEFINE_FIELD(CThumper, m_flReloadStart, FIELD_FLOAT),
-	DEFINE_FIELD(CThumper, m_bReloading, FIELD_BOOLEAN),
-};
-
-IMPLEMENT_SAVERESTORE(CThumper, CBasePlayerWeapon);
-#endif
-
 LINK_ENTITY_TO_CLASS(weapon_thumper, CThumper);
 
 void CThumper::Spawn()
@@ -82,7 +71,6 @@ BOOL CThumper::Deploy()
 void CThumper::Holster(int skiplocal)
 {
 	SendWeaponAnim(THUMPER_HOLSTER);
-	m_bReloading = false;
 	m_fInReload = false;
 	m_pPlayer->m_flNextAttack = gpGlobals->time + 0.5;
 	m_flTimeWeaponIdle = UTIL_SharedRandomFloat(m_pPlayer->random_seed, 10.0, 15.0);
@@ -124,22 +112,13 @@ void CThumper::PrimaryAttack()
 
 void CThumper::Reload()
 {
-	if (m_iClip >= 1)
+	if (m_iClip >= THUMPER_MAX_CLIP)
 		return;
 
 	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0)
 		return;
 
-	if (DefaultReload(1, THUMPER_RELOAD1, 2.0, 0))
-	{
-		m_bReloading = true;
-
-		m_flNextPrimaryAttack = gpGlobals->time + (0.60 + 0.60);
-
-		m_flTimeWeaponIdle = gpGlobals->time + (0.60 + 0.60);
-
-		m_flReloadStart = gpGlobals->time;
-	}
+	DefaultReload(1, THUMPER_RELOAD1, 1.0);
 }
 
 void CThumper::WeaponIdle()
@@ -147,12 +126,6 @@ void CThumper::WeaponIdle()
 	ResetEmptySound();
 
 	m_pPlayer->GetAutoaimVector(AUTOAIM_5DEGREES);
-
-	if (m_bReloading && gpGlobals->time >= m_flReloadStart + 2.0)
-	{
-		m_bReloading = false;
-		SendWeaponAnim(THUMPER_RELOAD2);
-	}
 
 	if (m_flTimeWeaponIdle > gpGlobals->time)
 		return;

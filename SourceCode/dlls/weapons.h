@@ -226,7 +226,7 @@ public:
 #define SATCHEL_MAX_CLIP		WEAPON_NOCLIP
 #define TRIPMINE_MAX_CLIP		WEAPON_NOCLIP
 #define SNARK_MAX_CLIP			WEAPON_NOCLIP
-#define THUMPER_MAX_CLIP 3
+#define THUMPER_MAX_CLIP 1
 
 // the default amount of ammo that comes with each gun when it spawns
 #ifdef _HALO
@@ -952,17 +952,8 @@ public:
 	void Reload() override;
 	void WeaponIdle() override;
 
-#ifndef CLIENT_DLL
-	int Save(CSave& save) override;
-	int Restore(CRestore& restore) override;
-	static TYPEDESCRIPTION m_SaveData[];
-#endif
-
 private:
 	unsigned short m_usThumper;
-	BOOL m_bReloading;
-	float m_flReloadStartTime;
-	float m_flReloadStart;
 };
 
 enum thumper_e
