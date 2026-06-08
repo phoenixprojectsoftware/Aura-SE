@@ -111,6 +111,7 @@ void CThumper::PrimaryAttack()
 	Vector vecVelocity = gpGlobals->v_forward * 2000;
 
 	CGrenade::ShootContact(m_pPlayer->pev, vecSrc, vecVelocity);
+	ApplyVelocityBoost();
 
 	PLAYBACK_EVENT_FULL(0, pPlayer->edict(), m_usThumper, 0.0, (float*)&g_vecZero, (float*)&g_vecZero, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 
@@ -118,6 +119,23 @@ void CThumper::PrimaryAttack()
 
 	m_flNextPrimaryAttack = gpGlobals->time + 1.0f;
 	m_flTimeWeaponIdle = gpGlobals->time + 1.5f;
+}
+
+void CThumper::ApplyVelocityBoost()
+{
+	if (!g_pGameRules->IsMultiplayer())
+		return;
+
+	UTIL_MakeVectors(m_pPlayer->pev->v_angle + m_pPlayer->pev->punchangle);
+
+	const float flBoost = 420.0f;
+
+	Vector vecBoost = -gpGlobals->v_forward * flBoost;
+
+	if (vecBoost.z > 0)
+		vecBoost.z *= 1.25f;
+
+	m_pPlayer->pev->velocity = m_pPlayer->pev->velocity + vecBoost;
 }
 
 void CThumper::Reload()

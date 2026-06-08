@@ -952,6 +952,8 @@ public:
 	void Reload() override;
 	void WeaponIdle() override;
 
+	void ApplyVelocityBoost();
+
 private:
 	unsigned short m_usThumper;
 };
