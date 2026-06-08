@@ -110,7 +110,7 @@ void CThumper::PrimaryAttack()
 
 	Vector vecSrc = m_pPlayer->GetGunPosition() + gpGlobals->v_forward * 16 + gpGlobals->v_right * 6 - gpGlobals->v_up * 4;
 
-	Vector vecVelocity = gpGlobals->v_forward * 1250;
+	Vector vecVelocity = gpGlobals->v_forward * 2000;
 
 	CGrenade::ShootContact(m_pPlayer->pev, vecSrc, vecVelocity);
 
