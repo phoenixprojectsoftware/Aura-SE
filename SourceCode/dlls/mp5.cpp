@@ -228,8 +228,6 @@ void CMP5::PrimaryAttack()
 		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + UTIL_SharedRandomFloat(m_pPlayer->random_seed, 10, 15);
 	}
 
-
-
 void CMP5::SecondaryAttack(void)
 {
 		// don't fire underwater
