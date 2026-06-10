@@ -628,6 +628,9 @@ void CBaseMonster :: Killed( entvars_t *pevAttacker, int iGib )
 	// Firefight kill logic.
 	if (FIREFIGHT == AgGametype() || FIESTAFIGHT == AgGametype())
 	{
+		if (!g_pGameRules->m_Firefight.IsFirefightMonster(this))
+			return;
+
 		CBaseEntity* pAttacker = CBaseEntity::Instance(pevAttacker);
 		if (pAttacker && pAttacker->IsPlayer())
 		{

@@ -89,6 +89,9 @@ public:
 
 	bool m_bAuthoring = false;
 
+	bool IsFirefightMonster(CBaseMonster* pMonster) const;
+	const char* GetWaveMonsterName() const;
+
 private:
 	int GetSpawnsPerPoint(int wave) const;
 	Vector RandomMonsterAngles();

@@ -63,8 +63,7 @@ const char* easyMonsters[] = {
 const char* hardMonsters[] = {
 	"monster_hgrunt",
 	"monster_hassassin",
-	"monster_agrunt",
-	"monster_controller"
+	"monster_agrunt"
 };
 
 void AgFirefight::RandomMusic()
@@ -323,6 +322,8 @@ void AgFirefight::TrySpawnNext()
 		if (!pMonster)
 			continue;
 
+		pMonster->pev->targetname = ALLOC_STRING(GetWaveMonsterName());
+
 		EHANDLE h;
 		h = pMonster;
 		m_Enemies.push_back(h);
@@ -412,6 +413,24 @@ void AgFirefight::OnMonsterKilled(CBaseMonster* pMonster)
 	//pMonster->FadeMonster();
 
 	TrySpawnNext();
+}
+
+const char* AgFirefight::GetWaveMonsterName() const
+{
+	static char szName[32];
+	snprintf(szName, sizeof(szName), "mon_wave%d", m_iWaveNumber);
+	return szName;
+}
+
+bool AgFirefight::IsFirefightMonster(CBaseMonster* pMonster) const
+{
+	if (!pMonster)
+		return false;
+
+	if (FStringNull(pMonster->pev->targetname))
+		return false;
+
+	return FStrEq(STRING(pMonster->pev->targetname), GetWaveMonsterName());
 }
 
 void AgFirefight::CheckWaveStatus()
