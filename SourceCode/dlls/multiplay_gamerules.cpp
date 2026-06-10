@@ -314,7 +314,7 @@ void CHalfLifeMultiplay :: Think ( void )
 	float flFragLimit = fraglimit.value;
 	//-- Martin Webrant
 
-	if ( flFragLimit )
+	if ( flFragLimit && FIREFIGHT != AgGametype() && FIESTAFIGHT != AgGametype() )
 	{
 		int bestfrags = 9999;
 		int remain;
@@ -750,6 +750,7 @@ void CHalfLifeMultiplay :: PlayerKilled( CBasePlayer *pVictim, entvars_t *pKille
 
 	if ( pVictim->pev == pKiller )  
 	{  // killed self
+		if (INSTAGIB != AgGametype())
 		pKiller->frags -= 1;
 	}
 	else if ( (ktmp && ktmp->IsPlayer()) && (CTF != AgGametype() && DOM != AgGametype()) ) // don't award points for killing players in CTF or DOM.
@@ -761,11 +762,9 @@ void CHalfLifeMultiplay :: PlayerKilled( CBasePlayer *pVictim, entvars_t *pKille
 	}
 	else
 	{  // killed by the world
-//++ BulliT
-		//pKiller->frags -= 1;
 		if (pVictim->pev)
+			if (INSTAGIB != AgGametype())
 			pVictim->pev->frags -= 1;
-		//-- Martin Webrant
 	}
 
 	// update the scores

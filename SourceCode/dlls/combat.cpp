@@ -632,7 +632,7 @@ void CBaseMonster :: Killed( entvars_t *pevAttacker, int iGib )
 		{
 			CBasePlayer* pPlayer = (CBasePlayer*)pAttacker;
 
-			// TODO: Add score
+			pPlayer->AddPoints(1, TRUE);
 
 			// report to killfeed
 			MESSAGE_BEGIN(MSG_ALL, gmsgDeathMsg);
