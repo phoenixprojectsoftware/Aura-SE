@@ -207,6 +207,9 @@ class CItemBattery : public CItem
 {
 	void Spawn( void )
 	{ 
+		if (sv_aura_regeneration.value != 0)
+			return;
+
 		Precache( );
 		SET_MODEL(ENT(pev), "models/w_battery.mdl");
 		CItem::Spawn( );
