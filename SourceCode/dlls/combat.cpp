@@ -625,6 +625,7 @@ void CBaseMonster :: Killed( entvars_t *pevAttacker, int iGib )
 	
 	m_IdealMonsterState = MONSTERSTATE_DEAD;
 
+	// Firefight kill logic.
 	if (FIREFIGHT == AgGametype() || FIESTAFIGHT == AgGametype())
 	{
 		CBaseEntity* pAttacker = CBaseEntity::Instance(pevAttacker);
@@ -634,11 +635,19 @@ void CBaseMonster :: Killed( entvars_t *pevAttacker, int iGib )
 
 			pPlayer->AddPoints(1, TRUE);
 
+			const char* pszWeapon = "world"; // weapon is world by default
+
+			if (pPlayer->m_pActiveItem)
+				pszWeapon = pPlayer->m_pActiveItem->pszName();
+
+			if (strncmp(pszWeapon, "weapon_", 7) == 0)
+				pszWeapon += 7;
+
 			// report to killfeed
 			MESSAGE_BEGIN(MSG_ALL, gmsgDeathMsg);
-				WRITE_BYTE(pPlayer->entindex());
-				WRITE_STRING(killer_weapon_name);
-				WRITE_STRING("an enemy");
+				WRITE_BYTE(pPlayer->entindex()); // killer
+				WRITE_BYTE(ENTINDEX(ENT(pev))); // no player victim
+				WRITE_STRING(pszWeapon); // weapon/icon string
 			MESSAGE_END();
 		}
 
