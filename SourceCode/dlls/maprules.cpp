@@ -821,4 +821,66 @@ void CGamePlayerTeam::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TY
 	}
 }
 
+extern int gmsgAchievement;
 
+/*
+* CGameAchievement / game_achievement
+* sends an achievement unlock request to the activating client.
+* 
+* KEYVALUES:
+* "achievement" or "message" = steam achievement API name
+*/
+
+class CGameAchievement : public CRulePointEntity
+{
+public:
+	void Spawn(void);
+	void KeyValue(KeyValueData* pkvd);
+	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+
+	inline const char* AchievementName(void)
+	{
+		return STRING(pev->message);
+	}
+};
+
+LINK_ENTITY_TO_CLASS(game_achievement, CGameAchievement);
+
+void CGameAchievement::Spawn(void)
+{
+	CRulePointEntity::Spawn();
+}
+
+void CGameAchievement::KeyValue(KeyValueData* pkvd)
+{
+	if (FStrEq(pkvd->szKeyName, "achievement"))
+	{
+		pev->message = ALLOC_STRING(pkvd->szValue);
+		pkvd->fHandled = TRUE;
+	}
+	else if (FStrEq(pkvd->szKeyName, "message"))
+	{
+		pev->message = ALLOC_STRING(pkvd->szValue);
+		pkvd->fHandled = TRUE;
+	}
+	else
+		CRulePointEntity::KeyValue(pkvd);
+}
+
+void CGameAchievement::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
+{
+	if (!CanFireForActivator(pActivator))
+		return;
+
+	if (!pActivator || !pActivator->IsPlayer())
+		return;
+
+	if (FStringNull(pev->message) || !AchievementName()[0])
+		return;
+
+	CBasePlayer* pPlayer = (CBasePlayer*)pActivator;
+
+	MESSAGE_BEGIN(MSG_ONE, gmsgAchievement, NULL, pPlayer->edict());
+		WRITE_STRING(AchievementName());
+	MESSAGE_END();
+}

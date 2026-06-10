@@ -254,6 +254,8 @@ int gmsgCRC32 = 0;
 
 int gmsgLaserSpot = 0;
 
+int gmsgAchievement = 0;
+
 extern int g_teamplay;
 #ifdef AGSTATS
 #include "agstats.h"
@@ -337,6 +339,8 @@ void LinkUserMessages( void )
 	gmsgCRC32 = REG_USER_MSG("CRC32", -1);		  //Checksum, file
 
 	gmsgLaserSpot = REG_USER_MSG("LaserSpot", -1);
+
+	gmsgAchievement = REG_USER_MSG("Achievement", -1); // game achievement unlock
   //-- Martin Webrant
 #ifdef AG_NO_CLIENT_DLL
 	gmsgStatusText = REG_USER_MSG("StatusText", -1);
