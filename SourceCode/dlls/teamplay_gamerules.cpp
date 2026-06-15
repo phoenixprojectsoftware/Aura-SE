@@ -333,13 +333,13 @@ void CHalfLifeTeamplay::InitHUD( CBasePlayer *pPlayer )
 			MESSAGE_END();
 		}
 	}
-//++ BulliT
-  if (CTF == AgGametype())
-    m_CTF.PlayerInitHud(pPlayer);
-  //++ muphicks
-  else if (DOM == AgGametype())
-    m_DOM.PlayerInitHud(pPlayer);
-  //-- muphicks
+	// Gametype conditionals.
+	if (CTF == AgGametype())
+		m_CTF.PlayerInitHud(pPlayer);
+	else if (DOM == AgGametype())
+		m_DOM.PlayerInitHud(pPlayer);
+	else if (KING == AgGametype())
+		m_King.PlayerInitHud(pPlayer);
 
 #define MENU_TEAM 					2
   if (strlen(m_szTeamList))

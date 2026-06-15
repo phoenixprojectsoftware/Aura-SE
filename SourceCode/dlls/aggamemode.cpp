@@ -55,6 +55,8 @@ void SetupGametype()
         g_GameType = TAUGUYS;
     else if (sGametype == "oitc")
         g_GameType = OITC;
+    else if (sGametype == "king" || sGametype == "koth")
+        g_GameType = KING;
 }
 
 AgString AgGamename()

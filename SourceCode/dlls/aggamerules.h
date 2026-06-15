@@ -24,6 +24,7 @@
 #include "aglms.h"
 #include "agctf.h"
 #include "agdom.h"
+#include "agking.h"
 #include "aginfointermission.h"
 #include "agsuddendeath.h"
 #include "agtimeout.h"
@@ -105,6 +106,7 @@ public:
     AgDOM               m_DOM;
     AgFirefight         m_Firefight;
 	AgFiesta            m_Fiesta;
+    AgKing              m_King;
     AgInfoIntermission  m_InfoInterMission;
     AgSuddenDeath       m_SuddenDeath;
     AgTimeout           m_Timeout;

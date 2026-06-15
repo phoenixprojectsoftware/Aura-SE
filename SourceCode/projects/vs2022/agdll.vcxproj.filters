@@ -567,6 +567,9 @@
     <ClCompile Include="..\..\dlls\s10_weapons\thumper.cpp">
       <Filter>Source Files\dlls\s10_weapons</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\dlls\agking.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\dlls\doors.h">
@@ -886,6 +889,9 @@
     </ClInclude>
     <ClInclude Include="..\..\dlls\s10_weapons\ray.h">
       <Filter>Header Files\dlls\s10_weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\agking.h">
+      <Filter>Header Files\dlls</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

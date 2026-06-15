@@ -63,7 +63,8 @@ enum enumGameType
     BUSTERS,
     CHILL,
     TAUGUYS,
-    OITC
+    OITC,
+    KING
 };
 //-- muphicks
 extern DLL_GLOBAL BYTE g_GameType;
