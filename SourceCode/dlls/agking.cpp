@@ -27,7 +27,7 @@ extern int gmsgTeamScore;
 FILE_GLOBAL int s_iKOTHTeam1Score;
 FILE_GLOBAL int s_iKOTHTeam2Score;
 
-#define MAXHILLS 4
+#define MAXHILLS 32
 #define HILLTIME 60
 #define SCOREINTERVAL 1
 #define POINTS 1
