@@ -38,6 +38,7 @@ public:
 	AgKing();
 	virtual ~AgKing();
 
+	bool CanWeTrustThisChap(CBasePlayer* pPlayer);
 	void Precache();
 	void Think();
 	void Load();

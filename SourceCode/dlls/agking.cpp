@@ -153,6 +153,11 @@ void AgKing::Load()
 		SetActiveHill(0);
 }
 
+bool AgKing::CanWeTrustThisChap(CBasePlayer* pPlayer)
+{
+	return pPlayer && pPlayer->IsAlive() && !pPlayer->IsSpectator();
+}
+
 void AgKing::Precache()
 {
 	m_iBeamSprite = PRECACHE_MODEL("sprites/laserbeam.spr");
@@ -250,13 +255,7 @@ void AgKing::RotateHill()
 
 bool AgKing::IsPlayerInsideHill(CBasePlayer* pPlayer, const AgKingFile& hill)
 {
-	if (!pPlayer)
-		return false;
-
-	if (!pPlayer->pev)
-		return false;
-
-	if (!pPlayer->IsAlive())
+	if (!CanWeTrustThisChap(pPlayer))
 		return false;
 
 	Vector pos = pPlayer->pev->origin;
@@ -289,7 +288,7 @@ int AgKing::GetControllingTeam(bool& bContested)
 	{
 		CBasePlayer* pPlayer = (CBasePlayer*)UTIL_PlayerByIndex(i);
 
-		if (!pPlayer || !pPlayer->pev || !pPlayer->IsAlive())
+		if (!CanWeTrustThisChap(pPlayer))
 			continue;
 
 		if (!IsPlayerInsideHill(pPlayer, hill))
@@ -360,7 +359,7 @@ void AgKing::GiveHillPointsToPlayers(const char* pszTeamName, int points)
 	{
 		CBasePlayer* pPlayer = (CBasePlayer*)UTIL_PlayerByIndex(i);
 
-		if (!pPlayer || !pPlayer->pev || !pPlayer->IsAlive())
+		if (!CanWeTrustThisChap(pPlayer))
 			continue;
 
 		if (!FStrEq(pPlayer->m_szTeamName, pszTeamName))

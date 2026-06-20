@@ -230,6 +230,8 @@ public:
 	int m_nCustomSprayFrames;// Custom clan logo frames for this player
 	float	m_flNextDecalTime;// next time this player can spray a decal
 
+	float m_flNextChangeTeamCommand; // the next time the player can change team. THEY ALL NEED TO STOP DOING IT !!!
+
 	char m_szTeamName[TEAM_NAME_LENGTH];
 
 	virtual void Spawn( void );

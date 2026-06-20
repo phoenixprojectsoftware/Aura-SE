@@ -151,6 +151,7 @@ bool AgClient::HandleCommand(CBasePlayer* pPlayer)
             const char* pszTeamName = "";
             const char* pszTeamNumber = CMD_ARGV(1);
             int iTeam = atoi(pszTeamNumber) - 1;
+
             if (5 == iTeam && g_teamplay)
             {
                 if (!g_pGameRules->IsValidTeam(pPlayer->TeamID()))
@@ -160,13 +161,30 @@ bool AgClient::HandleCommand(CBasePlayer* pPlayer)
                 }
             }
             else
+            {
                 pszTeamName = g_pGameRules->GetIndexedTeamName(iTeam);
+            }
+
             if (strlen(pszTeamName))
-                g_pGameRules->ChangePlayerTeam(pPlayer, pszTeamName, TRUE, TRUE);
+            {
+                if (pPlayer->IsSpectator())
+                {
+                    // Do NOT kill spectators while changing team.
+                    g_pGameRules->ChangePlayerTeam(pPlayer, pszTeamName, FALSE, FALSE);
+
+                    // Normal team modes should allow the player to re-enter immediately.
+                    if (ARENA != AgGametype() && LMS != AgGametype())
+                        pPlayer->SetIngame(true);
+
+                    pPlayer->Spectate_Stop();
+                }
+                else
+                {
+                    g_pGameRules->ChangePlayerTeam(pPlayer, pszTeamName, TRUE, TRUE);
+                }
+            }
         }
 
-        if (pPlayer->IsSpectator())
-            pPlayer->Spectate_Stop();
         return true;
     }
     else if (FStrEq(CMD_ARGV(0), "timeleft"))
@@ -450,27 +468,21 @@ bool AgClient::HandleCommand(CBasePlayer* pPlayer)
         }
 #endif
     // -- FIREFIGHT
-
-    else if (FStrEq(CMD_ARGV(0), "changeteam"))
-    {
 #define MENU_TEAM 					2
+    else if (FStrEq(CMD_ARGV(0), "changeteam") || FStrEq(CMD_ARGV(0), "jointeam"))
+    {
+        if (!pPlayer)
+            return true;
+
+        if (gpGlobals->time < pPlayer->m_flNextChangeTeamCommand)
+        {
+            ClientPrint(pPlayer->pev, HUD_PRINTCENTER, "YOU MUST WAIT BEFORE CHANGING TEAM AGAIN");
+            return true;
+        }
+        pPlayer->m_flNextChangeTeamCommand = gpGlobals->time + 180.0f;
         pPlayer->ShowVGUI(MENU_TEAM);
         return true;
     }
-    /*
-    else if (FStrEq(CMD_ARGV(0), "agosinfo"))
-    {
-        AgConsole(AgOSVersion(), pPlayer);
-        return true;
-    }
-    */
-#ifndef AG_NO_CLIENT_DLL
-    else if (FStrEq(CMD_ARGV(0), "maplist"))
-    {
-        g_pGameRules->SendMapListToClient(pPlayer, true);
-        return true;
-    }
-#endif
 #ifdef AGMSGSTAT
     else if (FStrEq(CMD_ARGV(0), "agmsgstat"))
     {

@@ -3234,29 +3234,54 @@ void CBasePlayer::PostThink()
   
   
   //Remove observe mode if using attack or use.
-  if ((pev->button & IN_ATTACK) && (pev->effects == EF_NODRAW) 
-    ||(pev->button & IN_USE) && (pev->effects == EF_NODRAW))
-  {
-    if (DEAD_NO == pev->deadflag 
-      || DEAD_RESPAWNABLE == pev->deadflag)
-    {
-      pev->button = 0;
-      m_iRespawnFrames = 0;
-      pev->effects &= ~EF_NODRAW;
-      
-      pev->takedamage = DAMAGE_YES;
-      pev->flags &= ~FL_SPECTATOR;
-      pev->movetype = MOVETYPE_WALK;
+// Remove initial hidden/spectator state if using attack or use.
+	if (((pev->button & IN_ATTACK) || (pev->button & IN_USE)) && (pev->effects & EF_NODRAW))
+	{
+		pev->button = 0;
+		m_iRespawnFrames = 0;
 
-      Spawn();
-    }
-  }
-  else
-  {
+		// Real observer/spectator path.
+		if (IsSpectator())
+		{
+			if (g_pGameRules && g_pGameRules->FPlayerCanRespawn(this))
+				Spectate_Stop();
+
+			return;
+		}
+
+		// Initial join splash/intermission path.
+		// This state has EF_NODRAW/FL_SPECTATOR but iuser1 == OBS_NONE,
+		// so IsSpectator() is false.
+		if (g_pGameRules && g_pGameRules->FPlayerCanRespawn(this))
+		{
+			pev->iuser1 = OBS_NONE;
+			pev->iuser2 = 0;
+			m_hSpectateTarget = NULL;
+
+			pev->effects &= ~EF_NODRAW;
+			pev->flags &= ~FL_SPECTATOR;
+			pev->flags &= ~FL_NOTARGET;
+
+			ClearBits(m_afPhysicsFlags, PFLAG_OBSERVER);
+			ClearBits(m_afPhysicsFlags, PFLAG_DUCKING);
+			ClearBits(pev->flags, FL_DUCKING);
+
+			pev->solid = SOLID_SLIDEBOX;
+			pev->takedamage = DAMAGE_AIM;
+			pev->movetype = MOVETYPE_WALK;
+			pev->view_ofs = VEC_VIEW;
+
+			Spawn();
+		}
+
+		return;
+	}
+	else
+	{
 		if (0 < ag_lj_timer.value)
 			LongjumpThink();
-  }
-  //-- Martin Webrant
+	}
+
 pt_end:
 //++ BulliT
   // Track button info so we can detect 'pressed' and 'released' buttons next frame
