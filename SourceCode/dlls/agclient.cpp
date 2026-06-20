@@ -477,6 +477,7 @@ bool AgClient::HandleCommand(CBasePlayer* pPlayer)
         if (gpGlobals->time < pPlayer->m_flNextChangeTeamCommand)
         {
             ClientPrint(pPlayer->pev, HUD_PRINTCENTER, "YOU MUST WAIT BEFORE CHANGING TEAM AGAIN");
+            CLIENT_COMMAND(pPlayer->edict(), "play no.wav\n");
             return true;
         }
         pPlayer->m_flNextChangeTeamCommand = gpGlobals->time + 180.0f;
