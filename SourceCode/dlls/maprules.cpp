@@ -884,3 +884,92 @@ void CGameAchievement::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TY
 		WRITE_STRING(AchievementName());
 	MESSAGE_END();
 }
+
+extern int gmsgPlayVideo;
+/*
+* CGamePlayVideo / game_playvideo
+*
+* Sends a fullscreen video playback request to the activating player's client.
+*
+* KEYVALUES:
+* "video" or "message" = video file name, relative to moddir/video/
+* "audio"              = optional Vorbis audio file name, relative to moddir/video/
+*
+* Example:
+* video = intro.ogv
+* audio = intro.ogg
+*/
+
+class CGamePlayVideo : public CRulePointEntity
+{
+public:
+	using BaseClass = CRulePointEntity;
+	void Spawn(void);
+	void KeyValue(KeyValueData* pkvd);
+	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+
+	inline const char* VideoName(void)
+	{
+		return STRING(pev->message);
+	}
+
+	inline const char* AudioName(void)
+	{
+		return STRING(m_iszAudio);
+	}
+
+private:
+	string_t m_iszAudio = 0;
+};
+
+LINK_ENTITY_TO_CLASS(game_playvideo, CGamePlayVideo);
+
+void CGamePlayVideo::Spawn(void)
+{
+	BaseClass::Spawn();
+}
+
+void CGamePlayVideo::KeyValue(KeyValueData* pkvd)
+{
+	if (FStrEq(pkvd->szKeyName, "video"))
+	{
+		pev->message = ALLOC_STRING(pkvd->szValue);
+		pkvd->fHandled = TRUE;
+	}
+	else if (FStrEq(pkvd->szKeyName, "audio"))
+	{
+		m_iszAudio = ALLOC_STRING(pkvd->szValue);
+		pkvd->fHandled = TRUE;
+	}
+	else
+	{
+		CRulePointEntity::KeyValue(pkvd);
+	}
+}
+
+void CGamePlayVideo::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
+{
+	if (!CanFireForActivator(pActivator))
+		return;
+
+	if (!pActivator || !pActivator->IsPlayer())
+		return;
+
+	if (FStringNull(pev->message) || !VideoName()[0])
+		return;
+
+	const char* pszVideo = VideoName();
+	const char* pszAudio = "";
+
+	if (!FStringNull(m_iszAudio) && AudioName()[0])
+		pszAudio = AudioName();
+
+	ALERT(at_console, "game_playvideo: video='%s' audio='%s'\n", pszVideo, pszAudio);
+
+	CBasePlayer* pPlayer = (CBasePlayer*)pActivator;
+
+	MESSAGE_BEGIN(MSG_ONE, gmsgPlayVideo, NULL, pPlayer->edict());
+	WRITE_STRING(pszVideo);
+	WRITE_STRING(pszAudio);
+	MESSAGE_END();
+}

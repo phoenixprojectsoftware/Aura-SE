@@ -256,6 +256,8 @@ int gmsgLaserSpot = 0;
 
 int gmsgAchievement = 0;
 
+int gmsgPlayVideo = 0;
+
 extern int g_teamplay;
 #ifdef AGSTATS
 #include "agstats.h"
@@ -341,6 +343,8 @@ void LinkUserMessages( void )
 	gmsgLaserSpot = REG_USER_MSG("LaserSpot", -1);
 
 	gmsgAchievement = REG_USER_MSG("Achievement", -1); // game achievement unlock
+
+	gmsgPlayVideo = REG_USER_MSG("PlayVideo", -1); // server tells client to play a fullscreen video
   //-- Martin Webrant
 #ifdef AG_NO_CLIENT_DLL
 	gmsgStatusText = REG_USER_MSG("StatusText", -1);
