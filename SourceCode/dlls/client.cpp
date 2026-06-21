@@ -555,10 +555,6 @@ void ClientCommand( edict_t *pEntity )
 	{
 		// just ignore it
 	}
-	else if (FStrEq(pcmd, "VModEnable"))
-	{
-		// ignore, handled by the voice manager
-	}
 	else if ( g_pGameRules->ClientCommand( GetClassPtr((CBasePlayer *)pev), pcmd ) )
 	{
 		// MenuSelect returns true only if the command is properly handled,  so don't print a warning
