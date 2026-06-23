@@ -167,7 +167,7 @@ void CThumper::Reload()
 	if (m_bInZoom)
 		SecondaryAttack();
 
-	DefaultReload(1, THUMPER_RELOAD1, 1.0);
+	DefaultReload(1, THUMPER_RELOAD1, 1.70);
 }
 
 void CThumper::WeaponIdle()
