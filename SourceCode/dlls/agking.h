@@ -53,6 +53,7 @@ private:
 	void RotateHill();
 	void SetActiveHill(int index);
 	void UpdateHillControl();
+	void SendActiveHill(CBasePlayer* pPlayer = nullptr);
 
 	bool IsPlayerInsideHill(CBasePlayer* pPlayer, const AgKingFile& hill);
 	int GetControllingTeam(bool& contested);

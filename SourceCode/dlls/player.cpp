@@ -251,6 +251,7 @@ int gmsgDOMControlPointInfo = 0;
 int gmsgMapList = 0;
 int gmsgCTFFlag = 0;
 int gmsgCRC32 = 0;
+int gmsgKOTHHill = 0;
 
 int gmsgLaserSpot = 0;
 
@@ -339,6 +340,7 @@ void LinkUserMessages( void )
 	gmsgMapList = REG_USER_MSG("MapList", -1);    //MapList
 	gmsgCTFFlag = REG_USER_MSG("CTFFlag", 2);		  //Who is carrying the flags.
 	gmsgCRC32 = REG_USER_MSG("CRC32", -1);		  //Checksum, file
+	gmsgKOTHHill = REG_USER_MSG("KothHill", -1); // active KOTH hill name + origin.
 
 	gmsgLaserSpot = REG_USER_MSG("LaserSpot", -1);
 

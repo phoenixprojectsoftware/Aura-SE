@@ -23,6 +23,7 @@
 #include <string.h>
 
 extern int gmsgTeamScore;
+extern int gmsgKOTHHill;
 
 FILE_GLOBAL int s_iKOTHTeam1Score;
 FILE_GLOBAL int s_iKOTHTeam2Score;
@@ -237,6 +238,8 @@ void AgKing::SetActiveHill(int index)
 	AgConsole(szText);
 	UTIL_ClientPrintAll(HUD_PRINTCENTER, szText);
 
+	SendActiveHill();
+
 	ALERT(at_console, "KING: Active hill is now '%s'\n", hill.m_szName);
 }
 
@@ -342,6 +345,54 @@ void AgKing::UpdateHillControl()
 	}
 }
 
+void AgKing::SendActiveHill(CBasePlayer* pPlayer)
+{
+	if (m_iActiveHill < 0 || m_iActiveHill >= (int)m_Hills.size())
+	{
+		if (pPlayer)
+		{
+			MESSAGE_BEGIN(MSG_ONE, gmsgKOTHHill, NULL, pPlayer->edict());
+				WRITE_STRING("");
+				WRITE_COORD(0);
+				WRITE_COORD(0);
+				WRITE_COORD(0);
+			MESSAGE_END();
+		}
+		else
+		{
+			MESSAGE_BEGIN(MSG_ALL, gmsgKOTHHill);
+				WRITE_STRING("");
+				WRITE_COORD(0);
+				WRITE_COORD(0);
+				WRITE_COORD(0);
+			MESSAGE_END();
+		}
+
+		return;
+	}
+
+	AgKingFile& hill = m_Hills[m_iActiveHill];
+
+	if (pPlayer)
+	{
+		MESSAGE_BEGIN(MSG_ONE, gmsgKOTHHill, NULL, pPlayer->edict());
+			WRITE_STRING(hill.m_szName);
+			WRITE_COORD(hill.m_vOrigin.x);
+			WRITE_COORD(hill.m_vOrigin.y);
+			WRITE_COORD(hill.m_vOrigin.z);
+		MESSAGE_END();
+	}
+	else
+	{
+		MESSAGE_BEGIN(MSG_ALL, gmsgKOTHHill);
+			WRITE_STRING(hill.m_szName);
+			WRITE_COORD(hill.m_vOrigin.x);
+			WRITE_COORD(hill.m_vOrigin.y);
+			WRITE_COORD(hill.m_vOrigin.z);
+		MESSAGE_END();
+	}
+}
+
 void AgKing::GiveHillPointsToPlayers(const char* pszTeamName, int points)
 {
 	if (!pszTeamName)
@@ -424,6 +475,8 @@ void AgKing::PlayerInitHud(CBasePlayer* pPlayer)
 		char szText[192];
 		snprintf(szText, sizeof(szText), "Hill active: %s", m_Hills[m_iActiveHill].m_szName);
 		ClientPrint(pPlayer->pev, HUD_PRINTCENTER, szText);
+
+		SendActiveHill(pPlayer);
 	}
 }
 
