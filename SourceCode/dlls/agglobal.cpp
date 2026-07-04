@@ -35,6 +35,8 @@ DLL_GLOBAL cvar_t	ag_pure = { "sv_aura_pure","0",FCVAR_SERVER };     //Default o
 
 DLL_GLOBAL cvar_t	ag_match_running = { "sv_aura_match_running","0",FCVAR_SERVER | FCVAR_UNLOGGED };          //Default not match. Protects players from wondering into the server.
 
+DLL_GLOBAL cvar_t ag_autobalance = { "sv_aura_autobalance", "1", FCVAR_SERVER }; // Team auto-balancing is enabled by default.
+
 DLL_GLOBAL cvar_t	ag_oldphysics = { "sv_aura_oldphysics","1" };
 
 DLL_GLOBAL cvar_t	ag_allow_timeout = { "sv_aura_allow_timeout","1" };       //Allow timeout.
@@ -337,6 +339,8 @@ void AgInitGame()
     CVAR_REGISTER(&ag_allow_vote);
     CVAR_REGISTER(&ag_pure);
     CVAR_REGISTER(&ag_match_running);
+
+    CVAR_REGISTER(&ag_autobalance);
 
     CVAR_REGISTER(&ag_oldphysics);
 

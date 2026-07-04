@@ -36,6 +36,29 @@ static int num_teams = 0;
 static char s_szLeastPlayers[MAX_TEAMNAME_LENGTH];
 //-- Martin Webrant
 
+extern cvar_t ag_autobalance;
+
+static float s_flNextAutoBalanceCheck = 0.0f;
+static float s_flAutoBalanceExecuteTime[MAX_CLIENTS + 1];
+static char s_szAutoBalanceTargetTeam[MAX_CLIENTS + 1][TEAM_NAME_LENGTH];
+
+static void ClearAutoBalanceSlot(int index)
+{
+	if (index < 1 || index > MAX_CLIENTS)
+		return;
+
+	s_flAutoBalanceExecuteTime[index] = 0.0f;
+	s_szAutoBalanceTargetTeam[index][0] = '\0';
+}
+
+static bool HasPendingAutoBalance(int index)
+{
+	if (index < 1 || index > MAX_CLIENTS)
+		return false;
+
+	return s_flAutoBalanceExecuteTime[index] > 0.0f && s_szAutoBalanceTargetTeam[index][0] != '\0';
+}
+
 extern DLL_GLOBAL BOOL		g_fGameOver;
 
 CHalfLifeTeamplay :: CHalfLifeTeamplay()
@@ -78,6 +101,11 @@ CHalfLifeTeamplay :: CHalfLifeTeamplay()
 		m_teamLimit = FALSE;
 
 	RecountTeams();
+
+	s_flNextAutoBalanceCheck = 0.0f;
+
+	for (int i = 1; i <= MAX_CLIENTS; ++i)
+		ClearAutoBalanceSlot(i);
 }
 
 extern cvar_t timeleft, fragsleft;
@@ -105,6 +133,8 @@ void CHalfLifeTeamplay :: Think ( void )
 		CHalfLifeMultiplay::Think();
 		return;
 	}
+
+	AutoBalanceThink();
 
 //++ BulliT
   /*
@@ -189,6 +219,227 @@ void CHalfLifeTeamplay :: Think ( void )
 
 	last_frags = frags_remaining;
 	last_time  = time_remaining;
+}
+
+void CHalfLifeTeamplay::AutoBalanceThink()
+{
+	if (ag_autobalance.value <= 0.0f)
+		return;
+
+	if (!g_teamplay || !IsTeamplay())
+		return;
+
+	if (g_fGameOver)
+		return;
+
+	if (gpGlobals->time < s_flNextAutoBalanceCheck)
+		return;
+
+	s_flNextAutoBalanceCheck = gpGlobals->time + 1.0f;
+
+	RecountTeams();
+
+	if (num_teams < 2)
+		return;
+
+	int teamCount[MAX_TEAMS];
+	memset(teamCount, 0, sizeof(teamCount));
+
+	// count real players
+	for (int i = 1; i <= gpGlobals->maxClients; ++i)
+	{
+		CBasePlayer* pPlayer = AgPlayerByIndex(i);
+
+		if (!pPlayer)
+			continue;
+
+		if (pPlayer->IsSpectator())
+			continue;
+
+		const int team = GetTeamIndex(pPlayer->TeamID());
+
+		if (team >= 0 && team < num_teams)
+			teamCount[team]++;
+	}
+
+	// apply pending moves as future counts so we do not over-schedule
+	for (int i = 1; i <= gpGlobals->maxClients; ++i)
+	{
+		if (!HasPendingAutoBalance(i))
+			continue;
+
+		CBasePlayer* pPlayer = AgPlayerByIndex(i);
+
+		if (!pPlayer)
+		{
+			ClearAutoBalanceSlot(i);
+			continue;
+		}
+
+		if (pPlayer->IsSpectator())
+		{
+			ClearAutoBalanceSlot(i);
+			continue;
+		}
+
+		const int fromTeam = GetTeamIndex(pPlayer->TeamID());
+		const int toTeam = GetTeamIndex(s_szAutoBalanceTargetTeam[i]);
+
+		if (fromTeam < 0 || toTeam < 0 || fromTeam == toTeam)
+		{
+			ClearAutoBalanceSlot(i);
+			continue;
+		}
+
+		if (fromTeam < num_teams && toTeam < num_teams)
+		{
+			teamCount[fromTeam]--;
+			teamCount[toTeam]++;
+		}
+	}
+
+	// execute pending moves whose warning timer has expired
+	for (int i = 1; i <= gpGlobals->maxClients; ++i)
+	{
+		if (!HasPendingAutoBalance(i))
+			continue;
+
+		if (gpGlobals->time < s_flAutoBalanceExecuteTime[i])
+			continue;
+
+		CBasePlayer* pPlayer = AgPlayerByIndex(i);
+
+		if (!pPlayer || pPlayer->IsSpectator())
+		{
+			ClearAutoBalanceSlot(i);
+			continue;
+		}
+
+		char szTargetTeam[TEAM_NAME_LENGTH];
+		strncpy(szTargetTeam, s_szAutoBalanceTargetTeam[i], sizeof(szTargetTeam) - 1);
+		szTargetTeam[sizeof(szTargetTeam) - 1] = '\0';
+
+		ClearAutoBalanceSlot(i);
+
+		if (!IsValidTeam(szTargetTeam))
+			continue;
+
+		if (!stricmp(pPlayer->TeamID(), szTargetTeam))
+			continue;
+
+		UTIL_ClientPrintAll(HUD_PRINTTALK, UTIL_VarArgs("* Autobalance moved %s to team '%s'\n", STRING(pPlayer->pev->netname), szTargetTeam));
+
+		ChangePlayerTeam(pPlayer, szTargetTeam, TRUE, TRUE);
+
+		return;
+	}
+
+	// find current largest and smallest teams after counting for pending moves
+	int largestTeam = -1;
+	int smallestTeam = -1;
+	int largestCount = -1;
+	int smallestCount = 9999;
+
+	for (int i = 0; i < num_teams; ++i)
+	{
+		if (teamCount[i] > largestCount)
+		{
+			largestCount = teamCount[i];
+			largestTeam = i;
+		}
+
+		if (teamCount[i] < smallestCount)
+		{
+			smallestCount = teamCount[i];
+			smallestTeam = i;
+		}
+	}
+
+	if (largestTeam < 0 || smallestTeam < 0 || largestTeam == smallestTeam)
+		return;
+
+	if (largestCount - smallestCount <= 1)
+		return;
+
+	/**
+	* pick a player from the largest team.
+	* prefer the lowest-scoring player, which is less disruptive than moving the top scorer or flag carrier.
+	**/
+	CBasePlayer* pBestPlayer = nullptr;
+	float bestFrags = 999999.0f;
+	int bestDeaths = -1;
+
+	for (int i = 1; i <= gpGlobals->maxClients; ++i)
+	{
+		CBasePlayer* pPlayer = AgPlayerByIndex(i);
+
+		if (!pPlayer)
+			continue;
+
+		if (pPlayer->IsSpectator())
+			continue;
+
+		if (HasPendingAutoBalance(i))
+			continue;
+
+		if (GetTeamIndex(pPlayer->TeamID()) != largestTeam)
+			continue;
+
+		// do not move CTF clag carriers if possible
+		if (CTF == AgGametype() && (pPlayer->m_bFlagTeam1 || pPlayer->m_bFlagTeam2))
+			continue;
+
+		if (pPlayer->pev->frags < bestFrags || (pPlayer->pev->frags == bestFrags && pPlayer->m_iDeaths > bestDeaths))
+		{
+			pBestPlayer = pPlayer;
+			bestFrags = pPlayer->pev->frags;
+			bestDeaths = pPlayer->m_iDeaths;
+		}
+	}
+
+	// if everyone on the larger team is a flag carrier somehow, allow any player
+	if (!pBestPlayer)
+	{
+		for (int i = 1; i <= gpGlobals->maxClients; ++i)
+		{
+			CBasePlayer* pPlayer = AgPlayerByIndex(i);
+
+			if (!pPlayer)
+				continue;
+
+			if (pPlayer->IsSpectator())
+				continue;
+
+			if (HasPendingAutoBalance(i))
+				continue;
+
+			if (GetTeamIndex(pPlayer->TeamID()) != largestTeam)
+				continue;
+
+			pBestPlayer = pPlayer;
+			break;
+		}
+	}
+
+	if (!pBestPlayer)
+		return;
+
+	const int playerIndex = pBestPlayer->entindex();
+
+	strncpy(s_szAutoBalanceTargetTeam[playerIndex], team_names[smallestTeam], TEAM_NAME_LENGTH - 1);
+
+	s_szAutoBalanceTargetTeam[playerIndex][TEAM_NAME_LENGTH - 1] = '\0';
+	s_flAutoBalanceExecuteTime[playerIndex] = gpGlobals->time + 5.0f;
+
+	ClientPrint(pBestPlayer->pev, HUD_PRINTCENTER, UTIL_VarArgs("YOU WILL BE MOVED TO TEAM '%s' IN 5 SECONDS.\n", s_szAutoBalanceTargetTeam[playerIndex]));
+	ClientPrint(pBestPlayer->pev, HUD_PRINTTALK, UTIL_VarArgs("YOU WILL BE MOVED TO TEAM '%s' IN 5 SECONDS.\n", s_szAutoBalanceTargetTeam[playerIndex]));
+}
+
+void CHalfLifeTeamplay::ClearAutoBalanceForPlayer(CBasePlayer* pPlayer)
+{
+	if (!pPlayer)
+		return;
+	ClearAutoBalanceSlot(pPlayer->entindex());
 }
 
 //=========================================================
@@ -361,6 +612,8 @@ void CHalfLifeTeamplay::ChangePlayerTeam( CBasePlayer *pPlayer, const char *pTea
 	{
 		damageFlags |= DMG_ALWAYSGIB;
 	}
+
+	ClearAutoBalanceForPlayer(pPlayer);
 
 	if ( bKill )
 	{

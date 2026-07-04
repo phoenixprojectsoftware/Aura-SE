@@ -47,6 +47,10 @@ public:
 	virtual void UpdateGameMode( CBasePlayer *pPlayer );  // the client needs to be informed of the current game mode
 	virtual void PlayerKilled( CBasePlayer *pVictim, entvars_t *pKiller, entvars_t *pInflictor );
 	virtual void Think ( void );
+
+	void AutoBalanceThink();
+	void ClearAutoBalanceForPlayer(CBasePlayer* pPlayer);
+
 	virtual int GetTeamIndex( const char *pTeamName );
 	virtual const char *GetIndexedTeamName( int teamIndex );
 	virtual BOOL IsValidTeam( const char *pTeamName );

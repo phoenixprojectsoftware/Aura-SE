@@ -40,6 +40,7 @@ extern cvar_t	ag_spec_enable_disable;
 extern cvar_t	ag_pure;
 extern cvar_t	ag_allow_vote;
 extern cvar_t	ag_match_running;
+extern cvar_t	ag_autobalance;
 extern cvar_t	ag_player_id;
 extern cvar_t	ag_lj_timer;
 extern cvar_t	ag_auto_admin;
