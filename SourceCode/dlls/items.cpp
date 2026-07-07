@@ -259,6 +259,8 @@ class CItemBattery : public CItem
 			}
 			return FALSE;
 		}
+
+		return TRUE;
 	}
 };
 
