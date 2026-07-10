@@ -134,6 +134,13 @@ void ClientDisconnect( edict_t *pEntity )
 	pEntity->v.solid = SOLID_NOT;// nonsolid
 	UTIL_SetOrigin ( &pEntity->v, pEntity->v.origin );
 
+	auto pPlayer = reinterpret_cast<CBasePlayer*>(GET_PRIVATE(pEntity));
+
+	if (pPlayer)
+	{
+		pPlayer->m_bIsConnected = false;
+	}
+
 	g_pGameRules->ClientDisconnected( pEntity );
 }
 
@@ -753,6 +760,9 @@ void ParmsChangeLevel( void )
 //
 // GLOBALS ASSUMED SET:  g_ulFrameCount
 //
+
+static float g_LastBotUpdateTime = 0;
+
 void StartFrame( void )
 {
 	if ( g_pGameRules )
@@ -763,6 +773,45 @@ void StartFrame( void )
 
 	gpGlobals->teamplay = teamplay.value;
 	g_ulFrameCount++;
+
+	// handle level changes and other problematic time changes
+	float frametime = gpGlobals->time - g_LastBotUpdateTime;
+
+	if (frametime > 0.25f || frametime < 0)
+	{
+		frametime = 0;
+	}
+
+	const legacy_byte msec = legacy_byte(frametime * 1000);
+
+	g_LastBotUpdateTime = gpGlobals->time;
+
+	for (int i = 1; i <= gpGlobals->maxClients; ++i)
+	{
+		auto player = static_cast<CBasePlayer*>(UTIL_PlayerByIndex(i));
+
+		if (!player)
+		{
+			continue;
+		}
+
+		if (!player->m_bIsConnected)
+		{
+			continue;
+		}
+
+		if ((player->pev->flags & FL_FAKECLIENT) == 0)
+		{
+			continue;
+		}
+
+		// if bot is newly created finish setup here
+
+		// run bot think here
+
+		// now update the bot
+		g_engfuncs.pfnRunPlayerMove(player->edict(), player->pev->angles, 0, 0, 0, player->pev->button, player->pev->impulse, msec);
+	}
 }
 
 

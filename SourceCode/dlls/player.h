@@ -257,6 +257,11 @@ public:
 	virtual	BOOL IsPlayer( void ) { return !IsSpectator(); }			// Spectators should return FALSE for this, they aren't "players" as far as game logic is concerned
 //-- Martin Webrant
 
+	/**
+	* @brief True if the player is currently connected to the server.
+	* Should only be false in MP games, for players that have disconnected.
+	*/
+	bool m_bIsConnected = true;
 	virtual BOOL IsNetClient( void ) { return TRUE; }		// Bots should return FALSE for this, they can't receive NET messages
 															// Spectators should return TRUE for this
 	virtual const char *TeamID( void );

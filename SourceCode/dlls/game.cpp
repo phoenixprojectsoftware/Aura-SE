@@ -22,6 +22,7 @@
 #include "agglobal.h"
 #include "aggamemode.h"
 
+#include "client.h"
 
 //-- Martin Webrant
 cvar_t	displaysoundlist = {"displaysoundlist","0"};
@@ -800,6 +801,32 @@ void GameDLLInit( void )
 	g_psv_aim = CVAR_GET_POINTER( "sv_aim" );
 	g_psv_allow_autoaim = CVAR_GET_POINTER("sv_allow_autoaim");
 	g_footsteps = CVAR_GET_POINTER( "mp_footsteps" );
+
+	g_engfuncs.pfnAddServerCommand("sv_addbot", []()
+		{
+			if (CMD_ARGC() != 2)
+			{
+				g_engfuncs.pfnServerPrint("Usage: sv_addbot <bot_name>\n");
+			}
+
+			const char* name = CMD_ARGV(1);
+
+			const auto fakeClient = g_engfuncs.pfnCreateFakeClient(name);
+
+			if (!fakeClient)
+				return;
+
+			char reject[128];
+			if (0 == ClientConnect(fakeClient, STRING(fakeClient->v.netname), "127.0.0.1", reject))
+			{
+				SERVER_COMMAND(UTIL_VarArgs("kick %s\n", STRING(fakeClient->v.netname)));
+				return;
+			}
+
+			ClientPutInServer(fakeClient);
+
+			// remaining logic to come later...
+		});
 
 	CVAR_REGISTER (&displaysoundlist);
 
