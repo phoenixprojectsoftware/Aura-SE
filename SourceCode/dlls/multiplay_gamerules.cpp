@@ -314,7 +314,8 @@ void CHalfLifeMultiplay :: Think ( void )
 	float flFragLimit = fraglimit.value;
 	//-- Martin Webrant
 
-	if ( flFragLimit && FIREFIGHT != AgGametype() && FIESTAFIGHT != AgGametype() )
+	// frag limit logic
+	if ( flFragLimit && FIREFIGHT != AgGametype() && FIESTAFIGHT != AgGametype() &&  KING != AgGametype())
 	{
 		int bestfrags = 9999;
 		int remain;
