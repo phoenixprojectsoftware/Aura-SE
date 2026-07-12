@@ -733,7 +733,7 @@ int CHalfLifeMultiplay :: IPointsForKill( CBasePlayer *pAttacker, CBasePlayer *p
 }
 
 // returns true if the gametype is not Instagib, Firefight, or Fiestafight.
-bool ShouldNegateScore()
+bool SuicidePenalty()
 {
 	return INSTAGIB != AgGametype() && FIREFIGHT != AgGametype() && FIESTAFIGHT != AgGametype();
 }
@@ -756,7 +756,7 @@ void CHalfLifeMultiplay :: PlayerKilled( CBasePlayer *pVictim, entvars_t *pKille
 
 	if ( pVictim->pev == pKiller )  
 	{  // killed self
-		if (ShouldNegateScore())
+		if (SuicidePenalty())
 		pKiller->frags -= 1;
 	}
 	else if (ktmp && ktmp->IsPlayer()) // don't award points for killing players in CTF or DOM.
@@ -771,7 +771,7 @@ void CHalfLifeMultiplay :: PlayerKilled( CBasePlayer *pVictim, entvars_t *pKille
 	else
 	{  // killed by the world
 		if (pVictim->pev)
-			if (ShouldNegateScore())
+			if (SuicidePenalty())
 			pVictim->pev->frags -= 1;
 	}
 
