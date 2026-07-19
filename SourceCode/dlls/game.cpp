@@ -368,6 +368,11 @@ cvar_t	sk_zombie_dmg_both_slash1 = {"sk_zombie_dmg_both_slash1","0"};
 cvar_t	sk_zombie_dmg_both_slash2 = {"sk_zombie_dmg_both_slash2","0"};
 cvar_t	sk_zombie_dmg_both_slash3 = {"sk_zombie_dmg_both_slash3","0"};
 
+// Fast Zombie
+DECLARE_SKILL_CVARS(fast_zombie_health);
+DECLARE_SKILL_CVARS(fast_zombie_dmg_one_slash);
+DECLARE_SKILL_CVARS(fast_zombie_dmg_both_slash);
+
 
 // Zombie Barney
 DECLARE_SKILL_CVARS(zombie_barney_health);
@@ -1109,6 +1114,11 @@ void GameDLLInit( void )
 	CVAR_REGISTER ( &sk_zombie_dmg_both_slash1 );// {"sk_zombie_dmg_both_slash1","0"};
 	CVAR_REGISTER ( &sk_zombie_dmg_both_slash2 );// {"sk_zombie_dmg_both_slash2","0"};
 	CVAR_REGISTER ( &sk_zombie_dmg_both_slash3 );// {"sk_zombie_dmg_both_slash3","0"};
+
+	// Fast Zombie
+	REGISTER_SKILL_CVARS(fast_zombie_health);
+	REGISTER_SKILL_CVARS(fast_zombie_dmg_one_slash);
+	REGISTER_SKILL_CVARS(fast_zombie_dmg_both_slash);
 
 
 	// Zombie Barney
