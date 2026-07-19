@@ -125,14 +125,7 @@ void CGameRules::RefreshSkillData ( void )
 	iSkill = (int)CVAR_GET_FLOAT("skill");
 	g_iSkillLevel = iSkill;
 
-	if ( iSkill < 1 )
-	{
-		iSkill = 1;
-	}
-	else if ( iSkill > 3 )
-	{
-		iSkill = 3; 
-	}
+	iSkill = 3; // always hard
 
 	gSkillData.iSkillLevel = iSkill;
 
