@@ -654,6 +654,10 @@ void CBaseMonster :: Killed( entvars_t *pevAttacker, int iGib )
 			MESSAGE_END();
 		}
 
+		// fade out monster
+		SetThink(&CBaseMonster::SUB_StartFadeOut);
+		pev->nextthink = gpGlobals->time + 0.1f;
+
 		g_pGameRules->m_Firefight.OnMonsterKilled(this);
 	}
 }

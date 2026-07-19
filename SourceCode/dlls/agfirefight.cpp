@@ -406,11 +406,13 @@ void AgFirefight::OnMonsterKilled(CBaseMonster* pMonster)
 		m_iAliveMonsters = 0;
 
 #ifdef _DEBUG
-	ALERT(at_console, "Firefight monster killed\n");
+	ALERT(
+		at_console,
+		"Firefight monster killed: %s alive=%d\n",
+		STRING(pMonster->pev->classname),
+		m_iAliveMonsters
+	);
 #endif
-
-	pMonster->GibMonster();
-	//pMonster->FadeMonster();
 
 	TrySpawnNext();
 }
