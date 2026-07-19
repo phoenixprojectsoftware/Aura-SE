@@ -264,7 +264,7 @@ void CZamnZombie::Spawn()
 {
 	Precache();
 
-	SET_MODEL(ENT(pev), "models/zamnzombie.mdl");
+	SET_MODEL(ENT(pev), "models/zombie_fast.mdl");
 	UTIL_SetSize(pev, VEC_HUMAN_HULL_MIN, VEC_HUMAN_HULL_MAX);
 
 	pev->solid = SOLID_SLIDEBOX;
@@ -286,7 +286,7 @@ void CZamnZombie::Precache()
 {
 	int i;
 
-	PRECACHE_MODEL("models/zamnzombie.mdl");
+	PRECACHE_MODEL("models/zombie_fast.mdl");
 
 	for (i = 0; i < ARRAYSIZE(pAttackHitSounds); i++)
 		PRECACHE_SOUND((char*)pAttackHitSounds[i]);
