@@ -18,6 +18,8 @@
 #include "agglobal.h"
 #include "monsters.h" // for spawning monsters
 
+extern cvar_t only_zobies;
+
 // AgFirefight g_AgFirefight;
 
 bool IsSpawnBlockedByPlayer(const Vector& origin)
@@ -153,6 +155,9 @@ Vector AgFirefight::RandomMonsterAngles()
 
 const char* AgFirefight::PickRandomMonster()
 {
+	if (only_zobies.value > 0)
+		return "monster_zamnhl";
+
 	bool bHard = (m_iWaveNumber >= 5);
 
 	if (!bHard)
