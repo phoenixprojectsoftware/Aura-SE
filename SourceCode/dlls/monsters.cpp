@@ -33,6 +33,7 @@
 #include "decals.h"
 #include "soundent.h"
 #include "gamerules.h"
+#include "aggamerules.h"
 
 #define MONSTER_CUT_CORNER_DIST		8 // 8 means the monster's bounding box is contained without the box of the node in WC
 
@@ -2199,6 +2200,27 @@ int CBaseMonster::TaskIsRunning( void )
 //=========================================================
 int CBaseMonster::IRelationship ( CBaseEntity *pTarget )
 {
+	if ((FIREFIGHT == AgGametype() || FIESTAFIGHT == AgGametype()) && g_pGameRules && g_pGameRules->m_Firefight.IsFirefightMonster(this))
+	{
+		if (!pTarget || !pTarget->pev)
+			return R_NO;
+
+		if (pTarget->IsPlayer())
+		{
+			if (pTarget->IsAlive() && !FBitSet(pTarget->pev->flags, FL_NOTARGET))
+			{
+				return R_HT;
+			}
+
+			return R_NO;
+		}
+
+		if (pTarget->pev->flags & FL_MONSTER)
+			return R_NO;
+
+		return R_NO;
+	}
+
 	static int iEnemy[14][14] =
 	{			 //   NONE	 MACH	 PLYR	 HPASS	 HMIL	 AMIL	 APASS	 AMONST	APREY	 APRED	 INSECT	PLRALY	PBWPN	ABWPN
 	/*NONE*/		{ R_NO	,R_NO	,R_NO	,R_NO	,R_NO	,R_NO	,R_NO	,R_NO	,R_NO	,R_NO	,R_NO	,R_NO,	R_NO,	R_NO	},

@@ -649,7 +649,7 @@ void CBaseMonster :: Killed( entvars_t *pevAttacker, int iGib )
 			// report to killfeed
 			MESSAGE_BEGIN(MSG_ALL, gmsgDeathMsg);
 				WRITE_BYTE(pPlayer->entindex()); // killer
-				WRITE_BYTE(ENTINDEX(ENT(pev))); // no player victim
+				WRITE_BYTE(-1); // no player victim
 				WRITE_STRING(pszWeapon); // weapon/icon string
 			MESSAGE_END();
 		}
@@ -659,6 +659,7 @@ void CBaseMonster :: Killed( entvars_t *pevAttacker, int iGib )
 		pev->nextthink = gpGlobals->time + 0.1f;
 
 		g_pGameRules->m_Firefight.OnMonsterKilled(this);
+		UTIL_Remove(this);
 	}
 }
 

@@ -17,6 +17,7 @@
 #include "aggamerules.h"
 #include "agglobal.h"
 #include "monsters.h" // for spawning monsters
+#include "player.h"
 
 extern cvar_t only_zobies;
 
@@ -100,22 +101,55 @@ void AgFirefight::RandomMusic()
 
 CBaseMonster* UTIL_SpawnMonster(const char* pszClassname, const Vector& vecOrigin, const Vector& vecAngles)
 {
+	if (!pszClassname || !pszClassname[0])
+		return nullptr;
+
 	edict_t* pent = CREATE_NAMED_ENTITY(MAKE_STRING(pszClassname));
-	if (!pent)
+
+	if (FNullEnt(pent))
 		return nullptr;
 
 	CBaseEntity* pEnt = CBaseEntity::Instance(pent);
-	if (!pEnt)
+
+	if (!pEnt || !pEnt->pev)
+	{
+		REMOVE_ENTITY(pent);
 		return nullptr;
+	}
 
 	pEnt->pev->origin = vecOrigin;
 	pEnt->pev->angles = vecAngles;
 
 	DispatchSpawn(pEnt->edict());
+
+	// DispatchSpawn may fail/remove/change the entity.
+	if (FNullEnt(pent) || pent->free)
+		return nullptr;
+
+	pEnt = CBaseEntity::Instance(pent);
+
+	if (!pEnt || !pEnt->pev)
+		return nullptr;
+
+	CBaseMonster* pMonster = pEnt->MyMonsterPointer();
+
+	if (!pMonster)
+	{
+		UTIL_Remove(pEnt);
+		return nullptr;
+	}
+
+	if (pMonster->pev->deadflag != DEAD_NO)
+	{
+		UTIL_Remove(pMonster);
+		return nullptr;
+	}
+
+	// Keep Firefight spawn presentation, but only after the monster is confirmed valid.
 	FF_SpawnTeleportEffect(vecOrigin);
 	EMIT_SOUND(pEnt->edict(), CHAN_BODY, "player/friend_online.wav", VOL_NORM, ATTN_NORM);
 
-	return pEnt->MyMonsterPointer(); // returns null if not a monster
+	return pMonster;
 }
 
 void AgFirefightFileCache::Load()
@@ -271,6 +305,8 @@ void AgFirefight::Think()
 		// do intermission here?
 		break;
 	}
+
+	UpdateMonsterTargets();
 }
 
 void AgFirefight::SendCommand(const char* cmd, ...)
@@ -335,6 +371,17 @@ void AgFirefight::TrySpawnNext()
 
 		sp.remaining--;
 		m_iAliveMonsters++;
+
+		CBasePlayer* pNearestPlayer = FindNearestPlayer(pMonster->pev->origin);
+
+		if (pNearestPlayer)
+		{
+			pMonster->m_hEnemy = pNearestPlayer;
+			pMonster->m_vecEnemyLKP = pNearestPlayer->pev->origin;
+			pMonster->m_IdealMonsterState = MONSTERSTATE_COMBAT;
+			pMonster->SetConditions(bits_COND_NEW_ENEMY);
+		}
+
 		return; // one spawn per tick.
 	}
 }
@@ -418,8 +465,10 @@ void AgFirefight::OnMonsterKilled(CBaseMonster* pMonster)
 		m_iAliveMonsters
 	);
 #endif
-
-	TrySpawnNext();
+	//static float time = gpGlobals->time;
+	//static float delay = gpGlobals->time + 0.25f;
+	//if (time == delay)
+	//	TrySpawnNext();
 }
 
 const char* AgFirefight::GetWaveMonsterName() const
@@ -469,4 +518,102 @@ void AgFirefight::EndRound()
 {
 	// do we need more cleanup here??
 	m_State = FF_ROUND_OVER;
+}
+
+bool AgFirefight::IsValidFirefightTarget(CBaseEntity* pEnt) const
+{
+	if (!pEnt)
+		return false;
+
+	if (!pEnt->pev)
+		return false;
+
+	if (!pEnt->IsPlayer())
+		return false;
+
+	if (!pEnt->IsAlive())
+		return false;
+
+	if (FBitSet(pEnt->pev->flags, FL_NOTARGET))
+		return false;
+
+	CBasePlayer* pPlayer = (CBasePlayer*)pEnt;
+
+	if (pPlayer->IsSpectator())
+		return false;
+
+	return true;
+}
+
+CBasePlayer* AgFirefight::FindNearestPlayer(const Vector& origin) const
+{
+	CBasePlayer* pBestPlayer = nullptr;
+	float flBestDistSqr = 999999999.0f;
+
+	for (int i = 1; i <= gpGlobals->maxClients; ++i)
+	{
+		CBasePlayer* pPlayer = AgPlayerByIndex(i);
+
+		if (!IsValidFirefightTarget(pPlayer))
+			continue;
+
+		const Vector delta = pPlayer->pev->origin - origin;
+		const float distSqr = DotProduct(delta, delta);
+
+		if (distSqr < flBestDistSqr)
+		{
+			flBestDistSqr = distSqr;
+			pBestPlayer = pPlayer;
+		}
+	}
+
+	return pBestPlayer;
+}
+
+void AgFirefight::UpdateMonsterTargets()
+{
+	if (m_State != FF_FIGHTING && m_State != FF_SPAWNING)
+		return;
+
+	for (auto it = m_Enemies.begin(); it != m_Enemies.end();)
+	{
+		CBaseEntity* pEnt = *it;
+
+		if (!pEnt || !pEnt->pev)
+		{
+			it = m_Enemies.erase(it);
+			continue;
+		}
+
+		CBaseMonster* pMonster = pEnt->MyMonsterPointer();
+
+		if (!pMonster || pMonster->pev->deadflag != DEAD_NO)
+		{
+			it = m_Enemies.erase(it);
+			continue;
+		}
+
+		CBasePlayer* pNearestPlayer = FindNearestPlayer(pMonster->pev->origin);
+
+		if (pNearestPlayer)
+		{
+			if (pMonster->m_hEnemy != pNearestPlayer)
+			{
+				pMonster->m_hEnemy = pNearestPlayer;
+				pMonster->SetConditions(bits_COND_NEW_ENEMY);
+			}
+
+			pMonster->m_vecEnemyLKP = pNearestPlayer->pev->origin;
+			pMonster->m_IdealMonsterState = MONSTERSTATE_COMBAT;
+			pMonster->MakeIdealYaw(pNearestPlayer->pev->origin);
+		}
+		else
+		{
+			pMonster->m_hEnemy = NULL;
+		}
+
+		++it;
+	}
+
+	m_iAliveMonsters = (int)m_Enemies.size();
 }
