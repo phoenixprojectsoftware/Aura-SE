@@ -261,10 +261,20 @@ void CHLDMAR::SecondaryAttack(void)
 
 void CHLDMAR::Reload(void)
 {
-	if (m_pPlayer->ammo_9mm <= 0)
+	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0)
 		return;
 
-	DefaultReload(HLDMAR_MAX_CLIP, MP5_RELOAD, 1.5);
+	if (m_iClip >= HLDMAR_MAX_CLIP)
+		return;
+
+	if (DefaultReload(HLDMAR_MAX_CLIP, MP5_RELOAD, 1.5))
+	{
+#ifndef CLIENT_DLL
+		// HLDMAR shares the MP5 reload enum and can hit the same skipped
+		// prediction path, so force the animation to the owning client.
+		SendWeaponAnim(MP5_RELOAD, 0, pev->body);
+#endif
+	}
 }
 
 void CHLDMAR::WeaponIdle(void)
