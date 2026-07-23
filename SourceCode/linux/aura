@@ -69,7 +69,7 @@ HLDLL_OBJS = \
 	$(HLDLL_OBJ_DIR)/br.o \
 	$(HLDLL_OBJ_DIR)/bullsquid.o \
 	$(HLDLL_OBJ_DIR)/buttons.o \
-	$(HLDLL_OBJ_DIR)/burger_bap.cpp \
+	$(HLDLL_OBJ_DIR)/burger_bap.o \
 	$(HLDLL_OBJ_DIR)/cbase.o \
 	$(HLDLL_OBJ_DIR)/client.o \
 	$(HLDLL_OBJ_DIR)/combat.o \
@@ -188,7 +188,7 @@ HLDLL_OBJS = \
 	$(HLDLL_OBJ_DIR)/agctf.o \
 	$(HLDLL_OBJ_DIR)/aglms.o \
 	$(HLDLL_OBJ_DIR)/agdom.o \
-	$(HLDLL_OBJ_DIR)/agking.cpp \
+	$(HLDLL_OBJ_DIR)/agking.o \
 	$(HLDLL_OBJ_DIR)/spawnchooser.o \
 	$(HLDLL_OBJ_DIR)/genericitem.o
 
@@ -223,8 +223,8 @@ ROPE_OBJS = \
 	$(ROPE_OBJ_DIR)/CRopeSegment.o
 
 UPLINK_OBJS = \
-	$(UPLINK_OBJ_DIR)/thumper.cpp \
-	$(UPLINK_OBJ_DIR)/wpn_healer.cpp
+	$(UPLINK_OBJ_DIR)/thumper.o \
+	$(UPLINK_OBJ_DIR)/wpn_healer.o
 
 PM_OBJS = \
 	$(PM_OBJ_DIR)/pm_shared.o \
