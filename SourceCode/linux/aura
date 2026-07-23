@@ -223,7 +223,7 @@ ROPE_OBJS = \
 	$(ROPE_OBJ_DIR)/CRopeSegment.o
 
 UPLINK_OBJS = \
-	$(UPLINK_OBJ_DIR)/thumper.cpp
+	$(UPLINK_OBJ_DIR)/thumper.cpp \
 	$(UPLINK_OBJ_DIR)/wpn_healer.cpp
 
 PM_OBJS = \
