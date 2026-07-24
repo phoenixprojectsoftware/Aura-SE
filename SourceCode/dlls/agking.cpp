@@ -156,7 +156,7 @@ void AgKing::Load()
 
 bool AgKing::CanWeTrustThisChap(CBasePlayer* pPlayer)
 {
-	return pPlayer && pPlayer->IsAlive() && !pPlayer->IsSpectator();
+	return pPlayer && pPlayer->IsAlive() && !pPlayer->IsSpectator() && pPlayer->pev->movetype != MOVETYPE_NOCLIP;
 }
 
 void AgKing::Precache()
