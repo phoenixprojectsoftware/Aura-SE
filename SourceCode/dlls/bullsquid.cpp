@@ -26,6 +26,8 @@
 #include	"decals.h"
 #include	"soundent.h"
 #include	"game.h"
+#include "gamerules.h"
+#include "aggamerules.h"
 
 #define		SQUID_SPRINT_DIST	256 // how close the squid has to get before starting to sprint and refusing to swerve
 
@@ -267,16 +269,24 @@ int CBullsquid::IgnoreConditions ( void )
 // IRelationship - overridden for bullsquid so that it can
 // be made to ignore its love of headcrabs for a while.
 //=========================================================
-int CBullsquid::IRelationship ( CBaseEntity *pTarget )
+int CBullsquid::IRelationship(CBaseEntity* pTarget)
 {
-	if ( gpGlobals->time - m_flLastHurtTime < 5 && FClassnameIs ( pTarget->pev, "monster_headcrab" ) )
+	if ((FIREFIGHT == AgGametype() || FIESTAFIGHT == AgGametype()) &&
+		g_pGameRules &&
+		g_pGameRules->m_Firefight.IsFirefightMonster(this))
 	{
-		// if squid has been hurt in the last 5 seconds, and is getting relationship for a headcrab, 
-		// tell squid to disregard crab. 
+		if (pTarget && pTarget->IsPlayer() && pTarget->IsAlive() && !FBitSet(pTarget->pev->flags, FL_NOTARGET))
+			return R_HT;
+
 		return R_NO;
 	}
 
-	return CBaseMonster :: IRelationship ( pTarget );
+	if (gpGlobals->time - m_flLastHurtTime < 5 && FClassnameIs(pTarget->pev, "monster_headcrab"))
+	{
+		return R_NO;
+	}
+
+	return CBaseMonster::IRelationship(pTarget);
 }
 
 //=========================================================

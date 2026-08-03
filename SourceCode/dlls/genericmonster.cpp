@@ -30,6 +30,7 @@
 
 class CGenericMonster : public CBaseMonster
 {
+	using BaseClass = CBaseMonster;
 public:
 	void Spawn( void );
 	void Precache( void );
@@ -37,8 +38,25 @@ public:
 	int  Classify ( void );
 	void HandleAnimEvent( MonsterEvent_t *pEvent );
 	int ISoundMask ( void );
+	void KeyValue(KeyValueData* pkvd);
+
+private:
+	int m_iCustomHealth = 0;
 };
 LINK_ENTITY_TO_CLASS( monster_generic, CGenericMonster );
+
+void CGenericMonster::KeyValue(KeyValueData* pkvd)
+{
+	if (FStrEq(pkvd->szKeyName, "health"))
+	{
+		m_iCustomHealth = atof(pkvd->szValue);
+		pkvd->fHandled = TRUE;
+	}
+	else
+	{
+		BaseClass::KeyValue(pkvd);
+	}
+}
 
 //=========================================================
 // Classify - indicates this monster's place in the 
@@ -114,7 +132,8 @@ void CGenericMonster :: Spawn()
 	pev->solid			= SOLID_SLIDEBOX;
 	pev->movetype		= MOVETYPE_STEP;
 	m_bloodColor		= BLOOD_COLOR_RED;
-	pev->health			= 8;
+	pev->health = (m_iCustomHealth > 0) ? m_iCustomHealth : 8;
+	pev->max_health = pev->health;
 	m_flFieldOfView		= 0.5;// indicates the width of this monster's forward view cone ( as a dotproduct result )
 	m_MonsterState		= MONSTERSTATE_NONE;
 

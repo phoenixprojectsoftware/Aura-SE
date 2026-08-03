@@ -41,6 +41,8 @@
 #include	"soundent.h"
 #include	"effects.h"
 #include	"customentity.h"
+#include "gamerules.h"
+#include "aggamerules.h"
 
 int g_fGruntQuestion;				// true if an idle grunt asked a question. Cleared when someone answers.
 
@@ -281,14 +283,24 @@ void CHGrunt::RespawnFirefightMonster()
 // IRelationship - overridden because Alien Grunts are 
 // Human Grunt's nemesis.
 //=========================================================
-int CHGrunt::IRelationship ( CBaseEntity *pTarget )
+int CHGrunt::IRelationship(CBaseEntity* pTarget)
 {
-	if ( FClassnameIs( pTarget->pev, "monster_alien_grunt" ) || ( FClassnameIs( pTarget->pev,  "monster_gargantua" ) ) )
+	if ((FIREFIGHT == AgGametype() || FIESTAFIGHT == AgGametype()) &&
+		g_pGameRules &&
+		g_pGameRules->m_Firefight.IsFirefightMonster(this))
+	{
+		if (pTarget && pTarget->IsPlayer() && pTarget->IsAlive() && !FBitSet(pTarget->pev->flags, FL_NOTARGET))
+			return R_HT;
+
+		return R_NO;
+	}
+
+	if (FClassnameIs(pTarget->pev, "monster_alien_grunt") || (FClassnameIs(pTarget->pev, "monster_gargantua")))
 	{
 		return R_NM;
 	}
 
-	return CSquadMonster::IRelationship( pTarget );
+	return CSquadMonster::IRelationship(pTarget);
 }
 
 //=========================================================

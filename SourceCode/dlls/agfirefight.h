@@ -92,6 +92,10 @@ public:
 	bool IsFirefightMonster(CBaseMonster* pMonster) const;
 	const char* GetWaveMonsterName() const;
 
+	void UpdateMonsterTargets();
+	bool IsValidFirefightTarget(CBaseEntity* pEnt) const;
+	CBasePlayer* FindNearestPlayer(const Vector& origin) const;
+
 private:
 	int GetSpawnsPerPoint(int wave) const;
 	Vector RandomMonsterAngles();

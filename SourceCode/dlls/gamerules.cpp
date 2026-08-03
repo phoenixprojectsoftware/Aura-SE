@@ -125,14 +125,7 @@ void CGameRules::RefreshSkillData ( void )
 	iSkill = (int)CVAR_GET_FLOAT("skill");
 	g_iSkillLevel = iSkill;
 
-	if ( iSkill < 1 )
-	{
-		iSkill = 1;
-	}
-	else if ( iSkill > 3 )
-	{
-		iSkill = 3; 
-	}
+	iSkill = 3; // always hard
 
 	gSkillData.iSkillLevel = iSkill;
 
@@ -220,6 +213,11 @@ void CGameRules::RefreshSkillData ( void )
 	gSkillData.zombieHealth = GetSkillCvar( "sk_zombie_health");
 	gSkillData.zombieDmgOneSlash = GetSkillCvar( "sk_zombie_dmg_one_slash");
 	gSkillData.zombieDmgBothSlash = GetSkillCvar( "sk_zombie_dmg_both_slash");
+
+	// Fast Zombie
+	gSkillData.fastZombieHealth = GetSkillCvar("sk_fast_zombie_health");
+	gSkillData.fastZombieDmgOneSlash = GetSkillCvar("sk_fast_zombie_dmg_one_slash");
+	gSkillData.fastZombieDmgBothSlash = GetSkillCvar("sk_fast_zombie_dmg_both_slash");
 
 	//Turret
 	gSkillData.turretHealth = GetSkillCvar( "sk_turret_health");

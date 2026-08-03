@@ -300,12 +300,22 @@ void CMP5::SecondaryAttack(void)
 #endif
 }
 
-void CMP5::Reload( void )
+void CMP5::Reload(void)
 {
-	if ( m_pPlayer->ammo_9mm <= 0 )
+	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0)
 		return;
 
-	DefaultReload( MP5_MAX_CLIP, MP5_RELOAD, 1.5 );
+	if (m_iClip >= MP5_MAX_CLIP)
+		return;
+
+	if (DefaultReload(MP5_MAX_CLIP, MP5_RELOAD, 1.5))
+	{
+#ifndef CLIENT_DLL
+		// MP5 reload anim sometimes gets lost through prediction/skiplocal.
+		// Force it to the owning client so the visual state matches the server reload.
+		SendWeaponAnim(MP5_RELOAD, 0, pev->body);
+#endif
+	}
 }
 
 

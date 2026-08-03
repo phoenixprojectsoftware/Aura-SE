@@ -52,6 +52,7 @@ cvar_t AbsoluteInsaneness = { "sv_aura_brojustdont", "0", FCVAR_SERVER };
 cvar_t fire_weapons_underwater = { "sv_aura_fire_weapons_underwater", "0", FCVAR_SERVER };
 cvar_t motionsensor = { "sv_aura_motionsensor", "1", FCVAR_SERVER };
 cvar_t gauss_charge_time = { "sv_aura_gauss_charge_time", "1.5", FCVAR_SERVER };
+cvar_t only_zobies = { "_ogduffy", "0", FCVAR_SERVER | FCVAR_UNLOGGED };
 
 // mp_chattime is like the minimum intermission time, you can't skip it, it's meant
 // to have some time for saying gg, etc. before changing map, it's part of the intermission
@@ -368,6 +369,11 @@ cvar_t	sk_zombie_dmg_one_slash3 = {"sk_zombie_dmg_one_slash3","0"};
 cvar_t	sk_zombie_dmg_both_slash1 = {"sk_zombie_dmg_both_slash1","0"};
 cvar_t	sk_zombie_dmg_both_slash2 = {"sk_zombie_dmg_both_slash2","0"};
 cvar_t	sk_zombie_dmg_both_slash3 = {"sk_zombie_dmg_both_slash3","0"};
+
+// Fast Zombie
+DECLARE_SKILL_CVARS(fast_zombie_health);
+DECLARE_SKILL_CVARS(fast_zombie_dmg_one_slash);
+DECLARE_SKILL_CVARS(fast_zombie_dmg_both_slash);
 
 
 // Zombie Barney
@@ -863,6 +869,8 @@ void GameDLLInit( void )
 	CVAR_REGISTER (&sploading);
 	CVAR_REGISTER (&spgausscharging);
 
+	CVAR_REGISTER(&only_zobies);
+
 // REGISTER CVARS FOR SKILL LEVEL STUFF
 	// Agrunt
 	CVAR_REGISTER ( &sk_agrunt_health1 );// {"sk_agrunt_health1","0"};
@@ -1136,6 +1144,11 @@ void GameDLLInit( void )
 	CVAR_REGISTER ( &sk_zombie_dmg_both_slash1 );// {"sk_zombie_dmg_both_slash1","0"};
 	CVAR_REGISTER ( &sk_zombie_dmg_both_slash2 );// {"sk_zombie_dmg_both_slash2","0"};
 	CVAR_REGISTER ( &sk_zombie_dmg_both_slash3 );// {"sk_zombie_dmg_both_slash3","0"};
+
+	// Fast Zombie
+	REGISTER_SKILL_CVARS(fast_zombie_health);
+	REGISTER_SKILL_CVARS(fast_zombie_dmg_one_slash);
+	REGISTER_SKILL_CVARS(fast_zombie_dmg_both_slash);
 
 
 	// Zombie Barney

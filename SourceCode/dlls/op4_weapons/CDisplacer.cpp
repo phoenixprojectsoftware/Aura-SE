@@ -152,7 +152,7 @@ void CDisplacer::PrimaryAttack()
 			FireThink();
 
 			m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 0.5;
-			m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 0.065;
+			m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 0.2;
 			m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 0.25;
 		}
 		else

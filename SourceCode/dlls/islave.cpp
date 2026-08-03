@@ -25,6 +25,8 @@
 #include	"effects.h"
 #include	"weapons.h"
 #include	"soundent.h"
+#include "gamerules.h"
+#include "aggamerules.h"
 
 extern DLL_GLOBAL int		g_iSkillLevel;
 
@@ -151,12 +153,23 @@ int	CISlave :: Classify ( void )
 }
 
 
-int CISlave::IRelationship( CBaseEntity *pTarget )
+int CISlave::IRelationship(CBaseEntity* pTarget)
 {
-	if ( (pTarget->IsPlayer()) )
-		if ( (pev->spawnflags & SF_MONSTER_WAIT_UNTIL_PROVOKED ) && ! (m_afMemory & bits_MEMORY_PROVOKED ))
+	if ((FIREFIGHT == AgGametype() || FIESTAFIGHT == AgGametype()) &&
+		g_pGameRules &&
+		g_pGameRules->m_Firefight.IsFirefightMonster(this))
+	{
+		if (pTarget && pTarget->IsPlayer() && pTarget->IsAlive() && !FBitSet(pTarget->pev->flags, FL_NOTARGET))
+			return R_HT;
+
+		return R_NO;
+	}
+
+	if ((pTarget->IsPlayer()))
+		if ((pev->spawnflags & SF_MONSTER_WAIT_UNTIL_PROVOKED) && !(m_afMemory & bits_MEMORY_PROVOKED))
 			return R_NO;
-	return CBaseMonster::IRelationship( pTarget );
+
+	return CBaseMonster::IRelationship(pTarget);
 }
 
 

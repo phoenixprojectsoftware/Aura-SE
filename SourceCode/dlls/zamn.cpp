@@ -187,7 +187,7 @@ void CZamnZombie::HandleAnimEvent(MonsterEvent_t* pEvent)
 	{
 		// do stuff for this event.
 //		ALERT( at_console, "Slash right!\n" );
-		CBaseEntity* pHurt = CheckTraceHullAttack(70, gSkillData.zombieDmgOneSlash, DMG_SLASH);
+		CBaseEntity* pHurt = CheckTraceHullAttack(70, gSkillData.fastZombieDmgOneSlash, DMG_SLASH);
 		if (pHurt)
 		{
 			if (pHurt->pev->flags & (FL_MONSTER | FL_CLIENT))
@@ -211,7 +211,7 @@ void CZamnZombie::HandleAnimEvent(MonsterEvent_t* pEvent)
 	{
 		// do stuff for this event.
 //		ALERT( at_console, "Slash left!\n" );
-		CBaseEntity* pHurt = CheckTraceHullAttack(70, gSkillData.zombieDmgOneSlash, DMG_SLASH);
+		CBaseEntity* pHurt = CheckTraceHullAttack(70, gSkillData.fastZombieDmgOneSlash, DMG_SLASH);
 		if (pHurt)
 		{
 			if (pHurt->pev->flags & (FL_MONSTER | FL_CLIENT))
@@ -233,7 +233,7 @@ void CZamnZombie::HandleAnimEvent(MonsterEvent_t* pEvent)
 	case ZOMBIE_AE_ATTACK_BOTH:
 	{
 		// do stuff for this event.
-		CBaseEntity* pHurt = CheckTraceHullAttack(70, gSkillData.zombieDmgBothSlash, DMG_SLASH);
+		CBaseEntity* pHurt = CheckTraceHullAttack(70, gSkillData.fastZombieDmgBothSlash, DMG_SLASH);
 		if (pHurt)
 		{
 			if (pHurt->pev->flags & (FL_MONSTER | FL_CLIENT))
@@ -264,13 +264,13 @@ void CZamnZombie::Spawn()
 {
 	Precache();
 
-	SET_MODEL(ENT(pev), "models/zamnzombie.mdl");
+	SET_MODEL(ENT(pev), "models/zombie_fast.mdl");
 	UTIL_SetSize(pev, VEC_HUMAN_HULL_MIN, VEC_HUMAN_HULL_MAX);
 
 	pev->solid = SOLID_SLIDEBOX;
 	pev->movetype = MOVETYPE_STEP;
 	m_bloodColor = BLOOD_COLOR_GREEN;
-	pev->health = gSkillData.zombieHealth;
+	pev->health = gSkillData.fastZombieHealth;
 	pev->view_ofs = VEC_VIEW;// position of the eyes relative to monster's origin.
 	m_flFieldOfView = 0.5;// indicates the width of this monster's forward view cone ( as a dotproduct result )
 	m_MonsterState = MONSTERSTATE_NONE;
@@ -286,7 +286,7 @@ void CZamnZombie::Precache()
 {
 	int i;
 
-	PRECACHE_MODEL("models/zamnzombie.mdl");
+	PRECACHE_MODEL("models/zombie_fast.mdl");
 
 	for (i = 0; i < ARRAYSIZE(pAttackHitSounds); i++)
 		PRECACHE_SOUND((char*)pAttackHitSounds[i]);
