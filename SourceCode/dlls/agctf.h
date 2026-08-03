@@ -36,6 +36,7 @@ class AgCTFFileItemCache
     typedef list<AgCTFFileItem*>  AgCTFFileItemList;
     AgCTFFileItemList m_lstFileItems;
 
+    void Clear();
     void Load(CBasePlayer* pPlayer = NULL);
     void Save(CBasePlayer* pPlayer = NULL);
 

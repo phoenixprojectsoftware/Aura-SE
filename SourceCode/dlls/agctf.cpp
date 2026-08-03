@@ -1342,7 +1342,6 @@ LINK_ENTITY_TO_CLASS(info_player_ctf_red, AgCTFSpawn); //HLE CTF map compatibili
 
 class AgCTFFileItemCache;
 
-
 AgCTFFileItem::AgCTFFileItem()
 {
     m_vOrigin = Vector(0, 0, 0);
@@ -1362,7 +1361,16 @@ void AgCTFFileItem::Show()
     pSpot->LiveForTime(5.0);
 }
 
+void AgCTFFileItemCache::Clear()
+{
+    for (AgCTFFileItemList::iterator itr = m_lstFileItems.begin(); itr != m_lstFileItems.end(); ++itr)
+    {
+        delete* itr;
+    }
 
+    m_lstFileItems.clear();
+    m_bInitDone = false;
+}
 
 AgCTFFileItemCache::AgCTFFileItemCache()
 {
@@ -1372,10 +1380,7 @@ AgCTFFileItemCache::AgCTFFileItemCache()
 
 AgCTFFileItemCache::~AgCTFFileItemCache()
 {
-    //Delete all.
-    for (AgCTFFileItemList::iterator itrFileItems = m_lstFileItems.begin(); itrFileItems != m_lstFileItems.end(); ++itrFileItems)
-        delete* itrFileItems;
-    m_lstFileItems.clear();
+    Clear();
 }
 
 void AgCTFFileItemCache::Add(const AgString& sFileItem, CBasePlayer* pPlayer)
@@ -1391,7 +1396,8 @@ void AgCTFFileItemCache::Add(const AgString& sFileItem, CBasePlayer* pPlayer)
         return;
 
     AgCTFFileItem* pFileItem = new AgCTFFileItem;
-    strcpy(pFileItem->m_szName, sFileItem.c_str());
+    strncpy(pFileItem->m_szName, sFileItem.c_str(), sizeof(pFileItem->m_szName) - 1);
+    pFileItem->m_szName[sizeof(pFileItem->m_szName) - 1] = '\0';
     pFileItem->m_vOrigin = pPlayer->pev->origin;
     pFileItem->m_vAngles = pPlayer->pev->angles;
 
@@ -1416,8 +1422,16 @@ void AgCTFFileItemCache::Del(CBasePlayer* pPlayer)
         return;
 
     AgCTFFileItem* pFileItem = m_lstFileItems.back();
-    AgConsole(UTIL_VarArgs("Deleted last item - %s.", pFileItem->m_szName, pPlayer));
+
+    AgConsole(
+        UTIL_VarArgs(
+            "Deleted last item - %s.",
+            pFileItem->m_szName),
+        pPlayer);
+
     m_lstFileItems.pop_back();
+    delete pFileItem;
+
     Save(pPlayer);
 }
 
@@ -1439,34 +1453,98 @@ void AgCTFFileItemCache::List(CBasePlayer* pPlayer)
 
 void AgCTFFileItemCache::Load(CBasePlayer* pPlayer)
 {
-    for (AgCTFFileItemList::iterator itrFileItems = m_lstFileItems.begin(); itrFileItems != m_lstFileItems.end(); ++itrFileItems)
-        delete* itrFileItems;
-    m_lstFileItems.clear();
+    Clear();
 
+    char szFile[MAX_PATH];
 
-    char	szFile[MAX_PATH];
-    char	szData[20000];
-    sprintf(szFile, "%s/ctf/%s.ctf", AgGetDirectory(), STRING(gpGlobals->mapname));
+    snprintf(
+        szFile,
+        sizeof(szFile),
+        "%s/ctf/%s.ctf",
+        AgGetDirectory(),
+        STRING(gpGlobals->mapname));
+
+    szFile[sizeof(szFile) - 1] = '\0';
+
     FILE* pFile = fopen(szFile, "r");
+
     if (!pFile)
     {
-        // file error
         return;
     }
 
-    int iRead = fread(szData, sizeof(char), sizeof(szData) - 2, pFile);
-    fclose(pFile);
-    if (0 >= iRead)
-        return;
-    szData[iRead] = '\0';
+    char szLine[512];
+    int iLineNumber = 0;
+    int iLoadedItems = 0;
+    int iRejectedItems = 0;
 
-    char* pszCTFString = strtok(szData, "\n");
-    while (pszCTFString != NULL)
+    while (fgets(szLine, sizeof(szLine), pFile))
     {
+        ++iLineNumber;
+
+        // Ignore blank lines and simple comment lines.
+        char* pszLine = szLine;
+
+        while (*pszLine == ' ' || *pszLine == '\t' ||
+            *pszLine == '\r' || *pszLine == '\n')
+        {
+            ++pszLine;
+        }
+
+        if (*pszLine == '\0' ||
+            *pszLine == '\r' ||
+            *pszLine == '\n' ||
+            *pszLine == '#' ||
+            *pszLine == ';')
+        {
+            continue;
+        }
+
         AgCTFFileItem* pFileItem = new AgCTFFileItem;
-        sscanf(pszCTFString, "%s %f %f %f %f %f %f\n", pFileItem->m_szName, &pFileItem->m_vOrigin.x, &pFileItem->m_vOrigin.y, &pFileItem->m_vOrigin.z, &pFileItem->m_vAngles.x, &pFileItem->m_vAngles.y, &pFileItem->m_vAngles.z);
+
+        const int iParsedFields = sscanf(
+            pszLine,
+            "%31s %f %f %f %f %f %f",
+            pFileItem->m_szName,
+            &pFileItem->m_vOrigin.x,
+            &pFileItem->m_vOrigin.y,
+            &pFileItem->m_vOrigin.z,
+            &pFileItem->m_vAngles.x,
+            &pFileItem->m_vAngles.y,
+            &pFileItem->m_vAngles.z);
+
+        if (iParsedFields != 7)
+        {
+            delete pFileItem;
+            ++iRejectedItems;
+
+            ALERT(
+                at_warning,
+                "Rejected malformed CTF entry in %s at line %d.\n",
+                szFile,
+                iLineNumber);
+
+            continue;
+        }
+
         m_lstFileItems.push_back(pFileItem);
-        pszCTFString = strtok(NULL, "\n");
+        ++iLoadedItems;
+    }
+
+    fclose(pFile);
+
+    ALERT(
+        at_console,
+        "Loaded %d CTF configuration entries from %s.\n",
+        iLoadedItems,
+        szFile);
+
+    if (iRejectedItems > 0)
+    {
+        ALERT(
+            at_warning,
+            "Rejected %d malformed CTF configuration entries.\n",
+            iRejectedItems);
     }
 }
 
@@ -1502,7 +1580,6 @@ void AgCTFFileItemCache::Init()
 {
     if (m_bInitDone)
         return;
-    m_bInitDone = true;
 
     for (AgCTFFileItemList::iterator itrFileItems = m_lstFileItems.begin(); itrFileItems != m_lstFileItems.end(); ++itrFileItems)
     {
@@ -1511,6 +1588,8 @@ void AgCTFFileItemCache::Init()
         if (g_pGameRules->IsAllowedToSpawn(pFileItem->m_szName))
             CBaseEntity::Create(pFileItem->m_szName, pFileItem->m_vOrigin, pFileItem->m_vAngles, INDEXENT(0));
     }
+
+    m_bInitDone = true;
 }
 
 //-- Martin Webrant

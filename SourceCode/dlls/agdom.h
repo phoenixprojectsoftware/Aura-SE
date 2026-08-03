@@ -39,6 +39,7 @@ class AgDOMFileItemCache
     typedef list<AgDOMFileItem*>  AgDOMFileItemList;
     AgDOMFileItemList m_lstFileItems;
 
+    void Clear();
     void Load(CBasePlayer* pPlayer = NULL);
     void Save(CBasePlayer* pPlayer = NULL);
 
