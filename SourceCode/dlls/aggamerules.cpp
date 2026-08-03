@@ -53,6 +53,7 @@ AgGameRules::AgGameRules()
     m_bInvalidMapChangeRequested = false;
     m_flInvalidMapChangeTime = 0.0f;
     m_iLastInvalidMapCountdown = -1;
+    m_bNativeSpawnValidationDone = false;
 }
 
 AgGameRules::~AgGameRules()
@@ -171,6 +172,13 @@ bool AgGameRules::AgThink()
 
     // invalid maps completely suspend normal gamemode processing.
     if (ThinkInvalidMapSequence())
+        return false;
+
+    // Validate the map's native spawn entities once
+    ValidateNativeMapOnce();
+
+    // Validation may have started the invalid-map sequence
+    if (IsCurrentMapInvalid())
         return false;
 
     //Check if game over.
@@ -1646,3 +1654,69 @@ void AgGameRules::SendMapListToClient(CBasePlayer* pPlayer, bool bStart)
 }
 
 //-- Martin Webrant
+
+bool AgGameRules::UsesNativeDeathmatchSpawns() const
+{
+    switch (AgGametype())
+    {
+    case CTF:
+    case DOM:
+        return false;
+    default:
+        return true;
+    }
+}
+
+int AgGameRules::CountNativeDeathmatchSpawns() const
+{
+    int iSpawnCount = 0;
+    CBaseEntity* pSpawn = NULL;
+
+    while ((pSpawn = UTIL_FindEntityByClassname(pSpawn, "info_player_deathmatch")) != NULL)
+    {
+        ++iSpawnCount;
+    }
+
+    return iSpawnCount;
+}
+
+AgMapValidationResult AgGameRules::ValidateNativeDeathmatchSpawns() const
+{
+    if (!UsesNativeDeathmatchSpawns())
+        return AgMapValidationResult();
+
+    int iRequiredSpawns = 16;
+
+    if (iRequiredSpawns <= 0)
+        return AgMapValidationResult();
+
+    const int iSpawnCount = CountNativeDeathmatchSpawns();
+
+    if (iSpawnCount < iRequiredSpawns)
+    {
+        return AgMapValidationResult(AG_MAP_TOO_FEW_DEATHMATCH_SPAWNS, UTIL_VarArgs("This map requires at least %d player spawn points, but only contains %d.", iRequiredSpawns, iSpawnCount), iSpawnCount, iRequiredSpawns);
+    }
+
+    return AgMapValidationResult();
+}
+
+void AgGameRules::ValidateNativeMapOnce()
+{
+    if (m_bNativeSpawnValidationDone)
+        return;
+
+    m_bNativeSpawnValidationDone = true;
+
+    const AgMapValidationResult validationResult = ValidateNativeDeathmatchSpawns();
+
+    if (!validationResult.IsValid())
+    {
+        BeginInvalidMapSequence(validationResult);
+        return;
+    }
+
+    if (UsesNativeDeathmatchSpawns())
+    {
+        ALERT(at_console, "Map validation padded: found %d native deathmatch spawn points; required %d.\n", CountNativeDeathmatchSpawns(), max(0, 16));
+    }
+}
