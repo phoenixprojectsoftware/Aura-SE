@@ -231,6 +231,9 @@ void AgCTF::Think()
 
     m_FileItemCache.Init();
 
+    if (g_pGameRules->IsCurrentMapInvalid())
+        return;
+
     RoundBasedThink();
 }
 
@@ -1581,15 +1584,116 @@ void AgCTFFileItemCache::Init()
     if (m_bInitDone)
         return;
 
-    for (AgCTFFileItemList::iterator itrFileItems = m_lstFileItems.begin(); itrFileItems != m_lstFileItems.end(); ++itrFileItems)
-    {
-        AgCTFFileItem* pFileItem = *itrFileItems;
+    const AgMapValidationResult validationResult =
+        Validate();
 
-        if (g_pGameRules->IsAllowedToSpawn(pFileItem->m_szName))
-            CBaseEntity::Create(pFileItem->m_szName, pFileItem->m_vOrigin, pFileItem->m_vAngles, INDEXENT(0));
+    if (!validationResult.IsValid())
+    {
+        if (g_pGameRules)
+        {
+            g_pGameRules->BeginInvalidMapSequence(
+                validationResult);
+        }
+
+        // Prevent this cache from performing validation every frame.
+        m_bInitDone = true;
+        return;
+    }
+
+    for (AgCTFFileItemList::iterator itr =
+        m_lstFileItems.begin();
+        itr != m_lstFileItems.end();
+        ++itr)
+    {
+        AgCTFFileItem* pFileItem = *itr;
+
+        if (!pFileItem)
+            continue;
+
+        if (g_pGameRules->IsAllowedToSpawn(
+            pFileItem->m_szName))
+        {
+            CBaseEntity::Create(
+                pFileItem->m_szName,
+                pFileItem->m_vOrigin,
+                pFileItem->m_vAngles,
+                INDEXENT(0));
+        }
     }
 
     m_bInitDone = true;
+}
+
+int AgCTFFileItemCache::GetItemCount(const char* pszClassname) const
+{
+    if (!pszClassname || !pszClassname[0])
+        return 0;
+
+    int iCount = 0;
+
+    for (AgCTFFileItemList::const_iterator itr = m_lstFileItems.begin(); itr != m_lstFileItems.end(); ++itr)
+    {
+        const AgCTFFileItem* pFileItem = *itr;
+
+        if (!pFileItem)
+            continue;
+
+        if (FStrEq(pFileItem->m_szName, pszClassname))
+            ++iCount;
+    }
+
+    return iCount;
+}
+
+int AgCTFFileItemCache::GetSpawnCount() const
+{
+    return GetItemCount("info_player_team1") + GetItemCount("info_player_team2");
+}
+
+AgMapValidationResult AgCTFFileItemCache::Validate() const
+{
+    const int iBlueSpawns = GetItemCount("info_player_team1");
+    const int iRedSpawns = GetItemCount("info_player_team2");
+
+    const int iTotalSpawns = iBlueSpawns + iRedSpawns;
+
+    const int iBlueFlags = GetItemCount("item_flag_team1");
+    const int iRedFlags = GetItemCount("item_flag_team2");
+
+    if (iTotalSpawns < 8)
+    {
+        return AgMapValidationResult(AG_MAP_INVALID_CTF_CONFIG, UTIL_VarArgs("CTF requires at least 8 total team spawn points; this configuration contains %d.", iTotalSpawns), iTotalSpawns, 8);
+    }
+
+    if (iBlueSpawns < 1)
+    {
+        return AgMapValidationResult(AG_MAP_INVALID_CTF_CONFIG, "CTF requires at least one blue-team spawn point.", iBlueSpawns, 1);
+    }
+
+    if (iRedSpawns < 1)
+    {
+        return AgMapValidationResult(AG_MAP_INVALID_CTF_CONFIG, "CTF requires at least one red-team spawn point.", iRedSpawns, 1);
+    }
+
+    if (iBlueFlags < 1)
+    {
+        return AgMapValidationResult(
+            AG_MAP_INVALID_CTF_CONFIG,
+            "CTF requires a blue-team flag.",
+            iBlueFlags,
+            1);
+    }
+
+    if (iRedFlags < 1)
+    {
+        return AgMapValidationResult(
+            AG_MAP_INVALID_CTF_CONFIG,
+            "CTF requires a red-team flag.",
+            iRedFlags,
+            1);
+    }
+
+    return AgMapValidationResult();
 }
 
 //-- Martin Webrant

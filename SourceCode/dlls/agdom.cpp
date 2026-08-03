@@ -222,8 +222,10 @@ void AgDOM::Think()
         // Could check whether a team has all the control points and if so play DOMINATION sound?
     }
 
-
     m_FileItemCache.Init();
+
+    if (g_pGameRules->IsCurrentMapInvalid())
+        return;
 }
 
 void AgDOM::ClientConnected(CBasePlayer* pPlayer)
@@ -492,6 +494,26 @@ LINK_ENTITY_TO_CLASS(item_dom_controlpoint, AgDOMControlPoint);
 //
 ///////////////////////////////////////////////////////////////////////////////////
 
+static bool AgIsEmptyString(const char* pszText)
+{
+    if (!pszText)
+        return true;
+
+    while (*pszText)
+    {
+        if (*pszText != ' ' &&
+            *pszText != '\t' &&
+            *pszText != '\r' &&
+            *pszText != '\n')
+        {
+            return false;
+        }
+
+        ++pszText;
+    }
+
+    return true;
+}
 
 #include "vector.h"
 
@@ -743,18 +765,39 @@ void AgDOMFileItemCache::Init()
 {
     if (m_bInitDone)
         return;
-    
+
+    const AgMapValidationResult validationResult =
+        Validate();
+
+    if (!validationResult.IsValid())
+    {
+        if (g_pGameRules)
+        {
+            g_pGameRules->BeginInvalidMapSequence(
+                validationResult);
+        }
+
+        m_bInitDone = true;
+        return;
+    }
+
     g_PendingCPInfo.clear();
     g_bSentCPInfo = false;
 
-    for (AgDOMFileItemList::iterator itrFileItems = m_lstFileItems.begin();
-        itrFileItems != m_lstFileItems.end();
-        ++itrFileItems)
+    for (AgDOMFileItemList::iterator itr =
+        m_lstFileItems.begin();
+        itr != m_lstFileItems.end();
+        ++itr)
     {
-        AgDOMFileItem* pFileItem = *itrFileItems;
+        AgDOMFileItem* pFileItem = *itr;
+
+        if (!pFileItem)
+            continue;
+
         CBaseEntity* pEnt = NULL;
 
-        if (g_pGameRules->IsAllowedToSpawn(pFileItem->m_szName))
+        if (g_pGameRules->IsAllowedToSpawn(
+            pFileItem->m_szName))
         {
             pEnt = CBaseEntity::Create(
                 pFileItem->m_szName,
@@ -763,7 +806,9 @@ void AgDOMFileItemCache::Init()
                 INDEXENT(0));
         }
 
-        if (FStrEq("item_dom_controlpoint", pFileItem->m_szName) &&
+        if (FStrEq(
+            "item_dom_controlpoint",
+            pFileItem->m_szName) &&
             pEnt)
         {
             AgDOMControlPoint* pCP =
@@ -786,10 +831,105 @@ void AgDOMFileItemCache::Init()
         }
     }
 
-    // Spawn the entity that will send the CP info after delay
-    CBaseEntity* pSender = CBaseEntity::Create("controlpoint_info_sender", Vector(0, 0, 0), Vector(0, 0, 0), INDEXENT(0));
+    CBaseEntity* pSender = CBaseEntity::Create(
+        "controlpoint_info_sender",
+        Vector(0, 0, 0),
+        Vector(0, 0, 0),
+        INDEXENT(0));
+
     if (pSender)
         pSender->Spawn();
 
     m_bInitDone = true;
+}
+
+int AgDOMFileItemCache::GetItemCount(
+    const char* pszClassname) const
+{
+    if (!pszClassname || !pszClassname[0])
+        return 0;
+
+    int iCount = 0;
+
+    for (AgDOMFileItemList::const_iterator itr =
+        m_lstFileItems.begin();
+        itr != m_lstFileItems.end();
+        ++itr)
+    {
+        const AgDOMFileItem* pFileItem = *itr;
+
+        if (!pFileItem)
+            continue;
+
+        if (FStrEq(pFileItem->m_szName, pszClassname))
+            ++iCount;
+    }
+
+    return iCount;
+}
+
+int AgDOMFileItemCache::GetSpawnCount() const
+{
+    return GetItemCount("info_player_deathmatch");
+}
+
+int AgDOMFileItemCache::GetControlPointCount() const
+{
+    return GetItemCount("item_dom_controlpoint");
+}
+
+AgMapValidationResult AgDOMFileItemCache::Validate() const
+{
+    const int iSpawnCount =
+        GetSpawnCount();
+
+    const int iControlPointCount =
+        GetControlPointCount();
+
+    if (iSpawnCount < 8)
+    {
+        return AgMapValidationResult(
+            AG_MAP_INVALID_DOM_CONFIG,
+            UTIL_VarArgs(
+                "DOM requires at least 8 player spawn points; this configuration contains %d.",
+                iSpawnCount),
+            iSpawnCount,
+            8);
+    }
+
+    if (iControlPointCount < 1)
+    {
+        return AgMapValidationResult(
+            AG_MAP_INVALID_DOM_CONFIG,
+            "DOM requires at least one control point.",
+            iControlPointCount,
+            1);
+    }
+
+    for (AgDOMFileItemList::const_iterator itr =
+        m_lstFileItems.begin();
+        itr != m_lstFileItems.end();
+        ++itr)
+    {
+        const AgDOMFileItem* pFileItem = *itr;
+
+        if (!pFileItem)
+            continue;
+
+        if (!FStrEq(
+            pFileItem->m_szName,
+            "item_dom_controlpoint"))
+        {
+            continue;
+        }
+
+        if (AgIsEmptyString(pFileItem->m_szData1))
+        {
+            return AgMapValidationResult(
+                AG_MAP_INVALID_DOM_CONFIG,
+                "Every DOM control point must have a display name.");
+        }
+    }
+
+    return AgMapValidationResult();
 }

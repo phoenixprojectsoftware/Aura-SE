@@ -9,6 +9,8 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
+#include "agmapvalidation.h"
+
 #define CTF_TEAM1_NAME "blue"
 #define CTF_TEAM2_NAME "red"
 
@@ -50,6 +52,11 @@ public:
     void     Add(const AgString& sItem, CBasePlayer* pPlayer);
     void     Del(CBasePlayer* pPlayer);
     void     List(CBasePlayer* pPlayer);
+
+    int GetItemCount(const char* pszClassname) const;
+    int GetSpawnCount() const;
+
+    AgMapValidationResult Validate() const;
 };
 
 
