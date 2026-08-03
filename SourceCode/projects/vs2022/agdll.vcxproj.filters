@@ -896,5 +896,8 @@
     <ClInclude Include="..\..\dlls\agking.h">
       <Filter>Header Files\dlls</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\dlls\agmapvalidation.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

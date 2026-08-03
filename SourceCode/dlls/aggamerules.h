@@ -10,6 +10,7 @@
 #include "agscorecache.h"
 #include "agadmincache.h"
 #include "agglobal.h"
+#include "agmapvalidation.h"
 #include "agsettings.h"
 #include "agtimer.h"
 #include "agmatch.h"
@@ -39,6 +40,13 @@ protected:
     AgString m_sHostname;
     typedef map<int, AgString, less<int> > AgIPAddress;
     AgIPAddress			     m_mapIPAddress;
+
+    AgMapValidationResult m_MapValidationResult;
+
+    bool m_bInvalidMapSequenceActive;
+    bool m_bInvalidMapChangeRequested;
+    float m_flInvalidMapChangeTime;
+    int m_iLastInvalidMapCountdown;
 
 public:
     AgGameRules();
@@ -86,7 +94,17 @@ public:
     //AgString GetTeamWithFewestPlayers();
     virtual BOOL IsAllowedToSpawn(const char* pszClass);
 
+    void BeginInvalidMapSequence(const AgMapValidationResult& reuslt);
+    bool ThinkInvalidMapSequence();
+
+    bool IsCurrentMapInvalid() const;
+    const AgMapValidationResult& GetMapValidationResult() const;
+
+    void SendInvalidMapState(CBasePlayer* pPlayer);
+
     void SendMapListToClient(CBasePlayer* pPlayer, bool bStart);
+
+    void TestInvalidSequence();
 
     const char* GetIPAddress(edict_t* pEntity);
     bool    m_bProxyConnected;

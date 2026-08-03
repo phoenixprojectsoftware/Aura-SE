@@ -48,6 +48,11 @@ AgGameRules::AgGameRules()
 #ifdef AGSTATS
     Stats.Reset();
 #endif
+
+    m_bInvalidMapSequenceActive = false;
+    m_bInvalidMapChangeRequested = false;
+    m_flInvalidMapChangeTime = 0.0f;
+    m_iLastInvalidMapCountdown = -1;
 }
 
 AgGameRules::~AgGameRules()
@@ -55,11 +60,117 @@ AgGameRules::~AgGameRules()
     AdminCache.Save();
 }
 
+bool AgGameRules::IsCurrentMapInvalid() const
+{
+    return m_bInvalidMapSequenceActive;
+}
+
+const AgMapValidationResult& AgGameRules::GetMapValidationResult() const
+{
+    return m_MapValidationResult;
+}
+
+void AgGameRules::SendInvalidMapState(CBasePlayer* pPlayer)
+{
+    if (!pPlayer || !pPlayer->edict())
+        return;
+
+    MESSAGE_BEGIN(MSG_ONE, SVC_INTERMISSION, NULL, pPlayer->edict());
+    MESSAGE_END();
+
+    const int iSecondsRemaining = max(0, (int)ceil(m_flInvalidMapChangeTime - gpGlobals->time));
+
+    ClientPrint(pPlayer->pev, HUD_PRINTCENTER, UTIL_VarArgs("INVALID MAP CONFIG\n%s\nChanging map in %d seconds.", m_MapValidationResult.m_sDescription.c_str(), iSecondsRemaining));
+}
+
+void AgGameRules::BeginInvalidMapSequence(const AgMapValidationResult& result)
+{
+    if (result.IsValid())
+        return;
+
+    if (m_bInvalidMapSequenceActive)
+        return;
+
+    m_MapValidationResult = result;
+
+    m_bInvalidMapSequenceActive = true;
+    m_bInvalidMapChangeRequested = false;
+    m_flInvalidMapChangeTime = gpGlobals->time + 10.0f;
+    m_iLastInvalidMapCountdown = -1;
+
+    // stop ordinary gameplay
+    g_bPaused = true;
+
+    ALERT(at_console, "Map validation failed on '%s' : '%s'\n", STRING(gpGlobals->mapname), m_MapValidationResult.m_sDescription.c_str());
+
+    if (m_MapValidationResult.m_iRequiredCount > 0)
+    {
+        ALERT(at_console, "Found %d; required %d.\n", m_MapValidationResult.m_iActualCount, m_MapValidationResult.m_iRequiredCount);
+    }
+
+    ALERT(at_console, "\nChanging to the next map in 10 seconds.\n");
+
+    for (int i = 1; i <= gpGlobals->maxClients; ++i)
+    {
+        CBasePlayer* pPlayer = AgPlayerByIndex(i);
+
+        if (!pPlayer)
+            continue;
+
+        SendInvalidMapState(pPlayer);
+    }
+
+    UTIL_ClientPrintAll(HUD_PRINTTALK, UTIL_VarArgs("* map rejected: %s\n", m_MapValidationResult.m_sDescription.c_str()));
+}
+
+bool AgGameRules::ThinkInvalidMapSequence()
+{
+    if (!m_bInvalidMapSequenceActive)
+        return false;
+
+    const float flRemaining = m_flInvalidMapChangeTime - gpGlobals->time;
+
+    const int iSecondsRemaining = max(0, (int)ceil(flRemaining));
+
+    if (iSecondsRemaining != m_iLastInvalidMapCountdown)
+    {
+        m_iLastInvalidMapCountdown = iSecondsRemaining;
+
+        if (iSecondsRemaining > 0)
+        {
+            UTIL_ClientPrintAll(HUD_PRINTCENTER, UTIL_VarArgs("INVALID MAP CONFIG\n%s\nCHANING MAP IN %d SECONDS.", m_MapValidationResult.m_sDescription.c_str(), iSecondsRemaining));
+        }
+    }
+
+    if (flRemaining > 0.0f)
+        return true;
+
+    if (!m_bInvalidMapChangeRequested)
+    {
+        m_bInvalidMapChangeRequested = true;
+
+        ALERT(at_console, "Invalid map grace period ended. Changing to the next map.\n");
+
+        ChangeNextLevel();
+    }
+
+    return true;
+}
+
+void AgGameRules::TestInvalidSequence()
+{
+    BeginInvalidMapSequence(AgMapValidationResult(AG_MAP_TOO_FEW_DEATHMATCH_SPAWNS, "Development test: map contains too few spawns.", 6, 16));
+}
+
 bool AgGameRules::AgThink()
 {
     //Check if gamerules are correct.
     if (!m_Settings.Think())
         //Dont do anything more.
+        return false;
+
+    // invalid maps completely suspend normal gamemode processing.
+    if (ThinkInvalidMapSequence())
         return false;
 
     //Check if game over.
@@ -197,6 +308,9 @@ int AgGameRules::DeadPlayerAmmo(CBasePlayer* pPlayer)
 
 BOOL AgGameRules::FPlayerCanRespawn(CBasePlayer* pPlayer)
 {
+    if (IsCurrentMapInvalid())
+        return FALSE;
+
     ASSERT(NULL != pPlayer);
     if (!pPlayer)
         return FALSE;
@@ -1155,6 +1269,9 @@ void AgGameRules::InitHUD(CBasePlayer* pPlayer)
         MESSAGE_END();
     }
 #endif //AG_USE_CHEATPROTECTION
+
+    if (IsCurrentMapInvalid())
+        SendInvalidMapState(pPlayer);
 }
 
 void AgGameRules::GoToIntermission()

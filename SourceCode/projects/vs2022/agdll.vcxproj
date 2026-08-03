@@ -474,6 +474,7 @@
     <ClInclude Include="..\..\dlls\agfirefight.h" />
     <ClInclude Include="..\..\dlls\aghideandseek.h" />
     <ClInclude Include="..\..\dlls\agking.h" />
+    <ClInclude Include="..\..\dlls\agmapvalidation.h" />
     <ClInclude Include="..\..\dlls\agswat.h" />
     <ClInclude Include="..\..\dlls\animation.h" />
     <ClInclude Include="..\..\dlls\basemonster.h" />

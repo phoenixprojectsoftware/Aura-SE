@@ -20,7 +20,7 @@
 
 */
 
-#define AURA_VERSION "3.0"
+#define AURA_VERSION "3.1"
 
 #include "extdll.h"
 #include "util.h"
