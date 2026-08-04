@@ -1260,6 +1260,9 @@ void AgGameRules::InitHUD(CBasePlayer* pPlayer)
     MESSAGE_END();
 #endif
 
+    if (AgGametype() == FIREFIGHT || AgGametype() == FIESTAFIGHT)
+        m_Firefight.InitHUD(pPlayer);
+
 #ifdef AG_USE_CHEATPROTECTION
     const char* pszModel = g_engfuncs.pfnInfoKeyValue(g_engfuncs.pfnGetInfoKeyBuffer(pPlayer->edict()), "model");
     if (pszModel && strlen(pszModel))

@@ -72,5 +72,6 @@ extern int gmsgOldWeapon;
 extern int gmsgCustomIcon;
 
 extern int gmsgFirefightKill;
+extern int gmsgFirefightTargets;
 
 void LinkUserMessages();
