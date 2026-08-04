@@ -71,4 +71,6 @@ extern int gmsgTeamFull;
 extern int gmsgOldWeapon;
 extern int gmsgCustomIcon;
 
+extern int gmsgFirefightKill;
+
 void LinkUserMessages();
