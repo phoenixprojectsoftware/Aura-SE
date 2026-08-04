@@ -48,8 +48,6 @@ protected:
     float m_flInvalidMapChangeTime;
     int m_iLastInvalidMapCountdown;
 
-    bool m_bNativeSpawnValidationDone;
-
 public:
     AgGameRules();
     virtual ~AgGameRules();
@@ -107,12 +105,6 @@ public:
     void SendMapListToClient(CBasePlayer* pPlayer, bool bStart);
 
     void TestInvalidSequence();
-
-    bool UsesNativeDeathmatchSpawns() const;
-    int CountNativeDeathmatchSpawns() const;
-
-    AgMapValidationResult ValidateNativeDeathmatchSpawns() const;
-    void ValidateNativeMapOnce();
 
     const char* GetIPAddress(edict_t* pEntity);
     bool    m_bProxyConnected;
