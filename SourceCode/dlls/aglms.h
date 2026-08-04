@@ -9,6 +9,17 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
+#ifndef FINAL_DUEL_QUOTA
+#define FINAL_DUEL_QUOTA 2
+#endif
+
+#if FINAL_DUEL_QUOTA < 2
+#error FINAL_DUEL_QUOTA must be at least 2.
+#endif
+
+#include "agrounddeadline.h"
+#include "agroundresult.h"
+
 class AgLMS
 {
     enum LMSStatus { Waiting, Countdown, Spawning, Playing };
@@ -17,6 +28,26 @@ class AgLMS
     float m_fMatchStart;
     float m_fNextSay;
     AgString m_sWinner;
+
+    AgRoundDeadline m_FinalDuelDeadline;
+
+    AgRoundDeadline m_FinalStageDeadline;
+
+    bool m_bFinalStageActive;
+    bool m_bFinalStageExpired;
+
+    int m_iPreviousAlivePlayerCount;
+
+    void UpdateFinalStageDeadline(
+        const std::vector<CBasePlayer*>& alivePlayers);
+
+    void StartFinalStageDeadline(int iAliveCount);
+    void CancelFinalStageDeadline();
+
+    void OnFinalStageDeadlineExpired();
+
+    bool IsFinalStageActive() const;
+    bool HasFinalStageDeadlineExpired() const;
 
 public:
     AgLMS();

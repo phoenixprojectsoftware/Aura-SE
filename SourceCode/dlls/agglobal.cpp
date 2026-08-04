@@ -74,6 +74,7 @@ DLL_GLOBAL cvar_t	ag_headshot = { "sv_aura_headshot","3" };            //Default
 DLL_GLOBAL cvar_t	ag_blastradius = { "sv_aura_blastradius","1" };         //Default 1 = Standard radius
 
 DLL_GLOBAL cvar_t ag_arena_round_timelimit = { "sv_aura_arena_round_timelimit", "120", FCVAR_SERVER };
+DLL_GLOBAL cvar_t ag_lms_final_timelimit = { "sv_aura_lms_final_timelimit", "120", FCVAR_SERVER };
 
 
 DLL_GLOBAL cvar_t	ag_ban_crowbar = { "sv_aura_ban_crowbar","0" };
@@ -350,6 +351,7 @@ void AgInitGame()
     CVAR_REGISTER(&ag_blastradius);
 
     CVAR_REGISTER(&ag_arena_round_timelimit);
+    CVAR_REGISTER(&ag_lms_final_timelimit);
 
     CVAR_REGISTER(&ag_ban_crowbar);
     CVAR_REGISTER(&ag_ban_glock);

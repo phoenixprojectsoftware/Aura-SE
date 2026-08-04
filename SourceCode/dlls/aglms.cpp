@@ -22,13 +22,15 @@ AgLMS::AgLMS()
     m_fMatchStart = 0.0;
     m_fNextCountdown = 0.0;
     m_Status = Waiting;
+    m_bFinalStageActive = false;
+    m_bFinalStageExpired = false;
+    m_iPreviousAlivePlayerCount = 0;
 }
 
 AgLMS::~AgLMS()
 {
 
 }
-
 
 void AgLMS::Think()
 {
@@ -76,7 +78,11 @@ void AgLMS::Think()
 
             if (!(setTeams.size() > 1))
             {
+                CancelFinalStageDeadline();
+                m_iPreviousAlivePlayerCount = 0;
+
                 m_sWinner = "";
+
                 AgStringSet::iterator itrTeams = setTeams.begin();
                 if (itrTeams != setTeams.end())
                 {
@@ -87,46 +93,80 @@ void AgLMS::Think()
         }
         else
         {
-            int iPlayersAlive = 0;
-            CBasePlayer* pPlayer = NULL;
+            std::vector<CBasePlayer*> alivePlayers;
 
-            for (int i = 1; i <= gpGlobals->maxClients; i++)
+            for (int i = 1;
+                i <= gpGlobals->maxClients;
+                ++i)
             {
-                CBasePlayer* pPlayerLoop = AgPlayerByIndex(i);
-                if (pPlayerLoop)
+                CBasePlayer* pPlayerLoop =
+                    AgPlayerByIndex(i);
+
+                if (!pPlayerLoop)
+                    continue;
+
+                /*
+                    Only players participating in the current LMS round
+                    should count. This prevents waiting spectators or late
+                    joiners from affecting FINAL_DUEL_QUOTA.
+                */
+                if (!pPlayerLoop->IsIngame())
+                    continue;
+
+                if (!pPlayerLoop->IsAlive())
                 {
-                    if (!pPlayerLoop->IsAlive())
-                    {
-                        pPlayerLoop->SetIngame(false); //Cant respawn
-                        if (!pPlayerLoop->IsSpectator())
-                        {
-                            //Quake1 teleport splash around him.
-                            MESSAGE_BEGIN(MSG_BROADCAST, SVC_TEMPENTITY);
-                            WRITE_BYTE(TE_TELEPORT);
-                            WRITE_COORD(pPlayerLoop->pev->origin.x);
-                            WRITE_COORD(pPlayerLoop->pev->origin.y);
-                            WRITE_COORD(pPlayerLoop->pev->origin.z);
-                            MESSAGE_END();
+                    pPlayerLoop->SetIngame(false);
 
-                            pPlayerLoop->Spectate_Start(false);
-                            pPlayerLoop->Spectate_SetMode(OBS_IN_EYE);
-                        }
-                    }
-                    else
+                    if (!pPlayerLoop->IsSpectator())
                     {
-                        iPlayersAlive++;
-                        pPlayer = pPlayerLoop;
+                        MESSAGE_BEGIN(
+                            MSG_BROADCAST,
+                            SVC_TEMPENTITY);
+
+                        WRITE_BYTE(TE_TELEPORT);
+                        WRITE_COORD(
+                            pPlayerLoop->pev->origin.x);
+                        WRITE_COORD(
+                            pPlayerLoop->pev->origin.y);
+                        WRITE_COORD(
+                            pPlayerLoop->pev->origin.z);
+
+                        MESSAGE_END();
+
+                        pPlayerLoop->Spectate_Start(false);
+                        pPlayerLoop->Spectate_SetMode(
+                            OBS_IN_EYE);
                     }
+
+                    continue;
                 }
+
+                alivePlayers.push_back(
+                    pPlayerLoop);
             }
 
-            if (!(iPlayersAlive > 1))
+            /*
+                Normal LMS resolution remains authoritative.
+                The deadline never chooses or eliminates a winner.
+            */
+            if (alivePlayers.size() <= 1)
             {
+                CancelFinalStageDeadline();
+
                 m_sWinner = "";
-                if (pPlayer)
-                    m_sWinner = pPlayer->GetName();
+
+                if (alivePlayers.size() == 1)
+                {
+                    m_sWinner =
+                        alivePlayers.front()->GetName();
+                }
+
                 m_Status = Waiting;
+                return;
             }
+
+            UpdateFinalStageDeadline(
+                alivePlayers);
         }
     }
     else
@@ -203,6 +243,9 @@ void AgLMS::Think()
             {
                 //Clear out the map
                 AgResetMap();
+
+                CancelFinalStageDeadline();
+                m_iPreviousAlivePlayerCount = 0;
 
                 int i = 1;
 
@@ -294,3 +337,135 @@ void AgLMS::ClientDisconnected(CBasePlayer* pPlayer)
 }
 
 //-- Martin Webrant
+
+bool AgLMS::IsFinalStageActive() const
+{
+    return m_bFinalStageActive;
+}
+
+bool AgLMS::HasFinalStageDeadlineExpired() const
+{
+    return m_bFinalStageExpired;
+}
+
+void AgLMS::StartFinalStageDeadline(
+    int iAliveCount)
+{
+    if (m_bFinalStageActive)
+        return;
+
+    const float flDuration =
+        ag_lms_final_timelimit.value;
+
+    if (flDuration <= 0.0f)
+    {
+        m_FinalStageDeadline.Cancel();
+
+        m_bFinalStageActive = false;
+        m_bFinalStageExpired = false;
+
+        return;
+    }
+
+    m_bFinalStageActive = true;
+    m_bFinalStageExpired = false;
+
+    m_FinalStageDeadline.Start(
+        flDuration,
+        "Final stage");
+
+    UTIL_ClientPrintAll(
+        HUD_PRINTCENTER,
+        UTIL_VarArgs(
+            "%d players remain\nFinal-stage timer started",
+            iAliveCount));
+
+    UTIL_ClientPrintAll(
+        HUD_PRINTTALK,
+        UTIL_VarArgs(
+            "* %d players remain. The LMS final-stage timer has started.\n",
+            iAliveCount));
+}
+
+void AgLMS::CancelFinalStageDeadline()
+{
+    m_FinalStageDeadline.Cancel();
+
+    m_bFinalStageActive = false;
+    m_bFinalStageExpired = false;
+}
+
+void AgLMS::OnFinalStageDeadlineExpired()
+{
+    if (!m_bFinalStageActive ||
+        m_bFinalStageExpired)
+    {
+        return;
+    }
+
+    m_bFinalStageExpired = true;
+
+    UTIL_ClientPrintAll(
+        HUD_PRINTCENTER,
+        "Final-stage time expired\nOvertime has begun");
+
+    UTIL_ClientPrintAll(
+        HUD_PRINTTALK,
+        "* The LMS final-stage timer has expired. Combat continues until one player remains.\n");
+
+    // I WILL ADD WAYPOINTS
+}
+
+void AgLMS::UpdateFinalStageDeadline(
+    const std::vector<CBasePlayer*>& alivePlayers)
+{
+    const int iAliveCount =
+        static_cast<int>(
+            alivePlayers.size());
+
+    if (iAliveCount < 2)
+    {
+        CancelFinalStageDeadline();
+
+        m_iPreviousAlivePlayerCount =
+            iAliveCount;
+
+        return;
+    }
+
+    if (!m_bFinalStageActive &&
+        iAliveCount <= FINAL_DUEL_QUOTA)
+    {
+        StartFinalStageDeadline(
+            iAliveCount);
+    }
+
+    /*
+        Defensive recovery in case eliminated players somehow
+        re-enter the active round.
+    */
+    if (m_bFinalStageActive &&
+        iAliveCount > FINAL_DUEL_QUOTA)
+    {
+        CancelFinalStageDeadline();
+
+        m_iPreviousAlivePlayerCount =
+            iAliveCount;
+
+        return;
+    }
+
+    if (m_bFinalStageActive &&
+        !m_bFinalStageExpired)
+    {
+        m_FinalStageDeadline.Think();
+
+        if (m_FinalStageDeadline.ConsumeExpiry())
+        {
+            OnFinalStageDeadlineExpired();
+        }
+    }
+
+    m_iPreviousAlivePlayerCount =
+        iAliveCount;
+}
