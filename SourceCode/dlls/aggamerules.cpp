@@ -1235,9 +1235,14 @@ void AgGameRules::ClientUserInfoChanged(CBasePlayer* pPlayer, char* infobuffer)
       pPlayer->SetWeaponWeights(pszWeaponWeights);
     */
 }
+#include "UserMessages.h"
 
 void AgGameRules::InitHUD(CBasePlayer* pPlayer)
 {
+
+    LinkUserMessages();
+    AgClearPlayerTargets(pPlayer);
+
     ASSERT(NULL != pPlayer);
     if (!pPlayer)
         return;
@@ -1279,8 +1284,6 @@ void AgGameRules::InitHUD(CBasePlayer* pPlayer)
 
     if (IsCurrentMapInvalid())
         SendInvalidMapState(pPlayer);
-
-    AgClearPlayerTargets(pPlayer);
 }
 
 void AgGameRules::GoToIntermission()

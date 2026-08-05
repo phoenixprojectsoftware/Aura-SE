@@ -287,7 +287,6 @@ void LinkUserMessages( void )
 	gmsgDamage = REG_USER_MSG( "Damage", 12 );
 	gmsgBattery = REG_USER_MSG( "Battery", 2);
 	gmsgTrain = REG_USER_MSG( "Train", 1);
-	//gmsgHudText = REG_USER_MSG( "HudTextPro", -1 );
 	gmsgHudText = REG_USER_MSG( "HudText", -1 ); // we don't use the message but 3rd party addons may!
 	gmsgSayText = REG_USER_MSG( "SayText", -1 );
 	gmsgTextMsg = REG_USER_MSG( "TextMsg", -1 );
@@ -296,9 +295,6 @@ void LinkUserMessages( void )
 	gmsgInitHUD = REG_USER_MSG("InitHUD", 1);		// called every time a new player joins the server
 	gmsgShowGameTitle = REG_USER_MSG("GameTitle", 1);
 	gmsgDeathMsg = REG_USER_MSG( "DeathMsg", -1 );
-//++ BulliT
-//	gmsgScoreInfo = REG_USER_MSG( "ScoreInfo", 9 );
-//-- Martin Webrant
 	gmsgTeamInfo = REG_USER_MSG( "TeamInfo", -1 );  // sets the name of a player's team
 	gmsgTeamScore = REG_USER_MSG( "TeamScore", -1 );  // sets the score of a team on the scoreboard
 	gmsgGameMode = REG_USER_MSG( "GameMode", 1 );
@@ -314,7 +310,6 @@ void LinkUserMessages( void )
 	gmsgFade = REG_USER_MSG("ScreenFade", sizeof(ScreenFade));
 	gmsgAmmoX = REG_USER_MSG("AmmoX", 2);
 	gmsgTeamNames = REG_USER_MSG( "TeamNames", -1 );
-  //++ BulliT
 	gmsgScoreInfo = REG_USER_MSG("ScoreInfo", 9);
 	gmsgAllowSpec = REG_USER_MSG("AllowSpec", 1);   //Allow spectator button message.
 	gmsgSpectator = REG_USER_MSG("Spectator", 2);   //Spectator message.
@@ -345,21 +340,12 @@ void LinkUserMessages( void )
 	gmsgCTFFlag = REG_USER_MSG("CTFFlag", 2);		  //Who is carrying the flags.
 	gmsgCRC32 = REG_USER_MSG("CRC32", -1);		  //Checksum, file
 	gmsgKOTHHill = REG_USER_MSG("KothHill", -1); // active KOTH hill name + origin.
-
 	gmsgLaserSpot = REG_USER_MSG("LaserSpot", -1);
-
 	gmsgAchievement = REG_USER_MSG("Achievement", -1); // game achievement unlock
-
 	gmsgPlayVideo = REG_USER_MSG("PlayVideo", -1); // server tells client to play a fullscreen video
-
 	gmsgFirefightKill = REG_USER_MSG("FFKill", -1); // a kill in firefight mode ;)
 	gmsgFirefightTargets = REG_USER_MSG("FFTargets", -1); // for koth waypoints.
-	gmsgPlayerTargets = REG_USER_MSG("PlayerTargets", -1); // player targets for some gamemodes
-  //-- Martin Webrant
-#ifdef AG_NO_CLIENT_DLL
-	gmsgStatusText = REG_USER_MSG("StatusText", -1);
-	gmsgStatusValue = REG_USER_MSG("StatusValue", 3);
-#endif
+	gmsgPlayerTargets = REG_USER_MSG("PlyTargets", -1); // player targets for some gamemodes
 }
 
 LINK_ENTITY_TO_CLASS( player, CBasePlayer );
