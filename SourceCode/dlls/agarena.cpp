@@ -14,7 +14,11 @@
 #include "agrounddeadline.h"
 #include "agroundresult.h"
 
+#include "agplayertargets.h"
+
 #include "algo.h"
+
+#include <vector>
 
 AgRoundDeadline m_RoundDeadline;
 
@@ -32,6 +36,7 @@ AgArena::AgArena()
     m_Player1 = NULL;
     m_Player2 = NULL;
     m_Status = Waiting;
+    m_bPlayerWaypointsActive = false;
 }
 
 AgArena::~AgArena()
@@ -59,6 +64,7 @@ void AgArena::Think()
             !pPlayer2->IsAlive())
         {
             m_RoundDeadline.Cancel();
+            ClearPlayerWaypoints();
 
             m_Status = PlayerDied;
             m_fNextCountdown =
@@ -74,6 +80,7 @@ void AgArena::Think()
         }
 
         m_RoundDeadline.Think();
+        UpdatePlayerWaypoints();
 
         if (m_RoundDeadline.ConsumeExpiry())
         {
@@ -144,6 +151,7 @@ void AgArena::Think()
             if (!GetPlayer1() || !GetPlayer2())
             {
                 m_RoundDeadline.Cancel();
+                ClearPlayerWaypoints();
                 m_Status = Waiting; //Someone left in middle of countdown. Go back to waiting.
                 return;
             }
@@ -177,6 +185,8 @@ void AgArena::Think()
                     GetPlayer2()->RespawnMatch();
 
                 m_Status = Playing;
+
+                ClearPlayerWaypoints();
                 StartRoundDeadline();
 
 #ifndef AG_NO_CLIENT_DLL
@@ -209,6 +219,7 @@ void AgArena::Think()
         else if (PlayerDied == m_Status)
         {
             m_RoundDeadline.Cancel();
+            ClearPlayerWaypoints();
 
             CBasePlayer* pPlayer1 = GetPlayer1();
             CBasePlayer* pPlayer2 = GetPlayer2();
@@ -365,8 +376,12 @@ void AgArena::ClientDisconnected(CBasePlayer* pPlayer)
         return;
 
     const bool bWasArenaPlayer = GetPlayer1() == pPlayer || GetPlayer2() == pPlayer;
+
     if (bWasArenaPlayer)
+    {
         m_RoundDeadline.Cancel();
+        ClearPlayerWaypoints();
+    }
 
     //Set status
     pPlayer->SetIngame(false);
@@ -414,6 +429,7 @@ void AgArena::ResolveRoundTimeout()
     if (!pPlayer1 || !pPlayer2)
     {
         m_RoundDeadline.Cancel();
+        ClearPlayerWaypoints();
         m_Status = Waiting;
         return;
     }
@@ -440,6 +456,7 @@ void AgArena::ResolveRoundTimeout()
 void AgArena::FinishTimedRound(CBasePlayer* pWinner, CBasePlayer* pLoser)
 {
     m_RoundDeadline.Cancel();
+    ClearPlayerWaypoints();
 
     if (!pWinner || !pLoser)
     {
@@ -488,6 +505,7 @@ void AgArena::FinishTimedRound(CBasePlayer* pWinner, CBasePlayer* pLoser)
 void AgArena::FinishTimedDraw()
 {
     m_RoundDeadline.Cancel();
+    ClearPlayerWaypoints();
 
     CBasePlayer* pPlayer1 = GetPlayer1();
     CBasePlayer* pPlayer2 = GetPlayer2();
@@ -526,4 +544,82 @@ void AgArena::FinishTimedDraw()
 
     m_Status = Waiting;
     m_fNextCountdown = gpGlobals->time + 1.0f;
+}
+
+void AgArena::UpdatePlayerWaypoints()
+{
+    if (m_Status != Playing)
+    {
+        ClearPlayerWaypoints();
+        return;
+    }
+
+    if (!m_RoundDeadline.IsActive())
+    {
+        ClearPlayerWaypoints();
+        return;
+    }
+
+    const int iSecondsRemaining =
+        m_RoundDeadline.GetSecondsRemaining();
+
+    if (iSecondsRemaining > 30)
+    {
+        ClearPlayerWaypoints();
+        return;
+    }
+
+    if (m_bPlayerWaypointsActive)
+        return;
+
+    CBasePlayer* pPlayer1 =
+        GetPlayer1();
+
+    CBasePlayer* pPlayer2 =
+        GetPlayer2();
+
+    if (!pPlayer1 ||
+        !pPlayer2)
+    {
+        return;
+    }
+
+    std::vector<CBasePlayer*> players;
+
+    players.push_back(pPlayer1);
+    players.push_back(pPlayer2);
+
+    AgSendPlayerTargets(
+        pPlayer1,
+        players);
+
+    AgSendPlayerTargets(
+        pPlayer2,
+        players);
+
+    m_bPlayerWaypointsActive = true;
+
+    UTIL_ClientPrintAll(
+        HUD_PRINTCENTER,
+        "30 seconds remain\nBoth players have been revealed");
+}
+
+void AgArena::ClearPlayerWaypoints()
+{
+    if (!m_bPlayerWaypointsActive)
+        return;
+
+    CBasePlayer* pPlayer1 =
+        GetPlayer1();
+
+    CBasePlayer* pPlayer2 =
+        GetPlayer2();
+
+    if (pPlayer1)
+        AgClearPlayerTargets(pPlayer1);
+
+    if (pPlayer2)
+        AgClearPlayerTargets(pPlayer2);
+
+    m_bPlayerWaypointsActive = false;
 }

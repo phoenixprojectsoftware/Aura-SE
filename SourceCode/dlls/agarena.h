@@ -21,6 +21,8 @@ class AgArena
     float m_fMatchStart;
     float m_fNextSay;
 
+    bool m_bPlayerWaypointsActive;
+
     EHANDLE m_Player1;
     EHANDLE m_Player2;
 
@@ -40,6 +42,9 @@ class AgArena
     void FinishTimedDraw();
 
     void StopPlayerSounds();
+
+    void UpdatePlayerWaypoints();
+    void ClearPlayerWaypoints();
 
 public:
     AgArena();

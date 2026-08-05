@@ -73,5 +73,6 @@ extern int gmsgCustomIcon;
 
 extern int gmsgFirefightKill;
 extern int gmsgFirefightTargets;
+extern int gmsgPlayerTargets;
 
 void LinkUserMessages();

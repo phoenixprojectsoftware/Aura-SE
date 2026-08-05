@@ -299,6 +299,7 @@
     <ClCompile Include="..\..\dlls\agfirefight_cache.cpp" />
     <ClCompile Include="..\..\dlls\aghideandseek.cpp" />
     <ClCompile Include="..\..\dlls\agking.cpp" />
+    <ClCompile Include="..\..\dlls\agplayertargets.cpp" />
     <ClCompile Include="..\..\dlls\agrounddeadline.cpp" />
     <ClCompile Include="..\..\dlls\agroundresult.cpp" />
     <ClCompile Include="..\..\dlls\agrunt.cpp" />
@@ -477,6 +478,7 @@
     <ClInclude Include="..\..\dlls\aghideandseek.h" />
     <ClInclude Include="..\..\dlls\agking.h" />
     <ClInclude Include="..\..\dlls\agmapvalidation.h" />
+    <ClInclude Include="..\..\dlls\agplayertargets.h" />
     <ClInclude Include="..\..\dlls\agrounddeadline.h" />
     <ClInclude Include="..\..\dlls\agroundresult.h" />
     <ClInclude Include="..\..\dlls\agswat.h" />

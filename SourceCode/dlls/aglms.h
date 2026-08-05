@@ -38,6 +38,9 @@ class AgLMS
 
     int m_iPreviousAlivePlayerCount;
 
+    bool m_bOvertimeWaypointsActive;
+    int m_iLastWaypointAliveCount;
+
     void UpdateFinalStageDeadline(
         const std::vector<CBasePlayer*>& alivePlayers);
 
@@ -49,6 +52,9 @@ class AgLMS
     bool IsFinalStageActive() const;
     bool HasFinalStageDeadlineExpired() const;
 
+    void UpdateOvertimeWaypoints(const std::vector<CBasePlayer*>& alivePlayers);
+    void ClearOvertimeWaypoints();
+
 public:
     AgLMS();
     virtual ~AgLMS();
@@ -59,6 +65,8 @@ public:
     void ClientConnected(CBasePlayer* pPlayer);
 
     bool CanTakeDamage();
+
+    void InitHUD(CBasePlayer* pPlayer);
 };
 
 inline bool AgLMS::CanTakeDamage()

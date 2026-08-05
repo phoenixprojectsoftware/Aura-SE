@@ -191,6 +191,7 @@ HLDLL_OBJS = \
 	$(HLDLL_OBJ_DIR)/aglms.o \
 	$(HLDLL_OBJ_DIR)/agdom.o \
 	$(HLDLL_OBJ_DIR)/agking.o \
+	$(HLDLL_OBJ_DIR)/agplayertargets.o \
 	$(HLDLL_OBJ_DIR)/spawnchooser.o \
 	$(HLDLL_OBJ_DIR)/genericitem.o
 

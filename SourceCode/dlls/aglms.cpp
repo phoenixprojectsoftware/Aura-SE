@@ -10,6 +10,7 @@
 #include "aggamerules.h"
 #include "agglobal.h"
 #include "aglms.h"
+#include "agplayertargets.h"
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -165,8 +166,8 @@ void AgLMS::Think()
                 return;
             }
 
-            UpdateFinalStageDeadline(
-                alivePlayers);
+            UpdateFinalStageDeadline(alivePlayers);
+            UpdateOvertimeWaypoints(alivePlayers);
         }
     }
     else
@@ -393,6 +394,8 @@ void AgLMS::CancelFinalStageDeadline()
 
     m_bFinalStageActive = false;
     m_bFinalStageExpired = false;
+
+    ClearOvertimeWaypoints();
 }
 
 void AgLMS::OnFinalStageDeadlineExpired()
@@ -404,16 +407,16 @@ void AgLMS::OnFinalStageDeadlineExpired()
     }
 
     m_bFinalStageExpired = true;
+    m_bOvertimeWaypointsActive = true;
+    m_iLastWaypointAliveCount = -1;
 
     UTIL_ClientPrintAll(
         HUD_PRINTCENTER,
-        "Final-stage time expired\nOvertime has begun");
+        "Final-stage time expired\nRemaining players have been revealed");
 
     UTIL_ClientPrintAll(
         HUD_PRINTTALK,
-        "* The LMS final-stage timer has expired. Combat continues until one player remains.\n");
-
-    // I WILL ADD WAYPOINTS
+        "* The LMS final-stage timer expired. All remaining players are now revealed.\n");
 }
 
 void AgLMS::UpdateFinalStageDeadline(
@@ -468,4 +471,102 @@ void AgLMS::UpdateFinalStageDeadline(
 
     m_iPreviousAlivePlayerCount =
         iAliveCount;
+}
+
+void AgLMS::UpdateOvertimeWaypoints(
+    const std::vector<CBasePlayer*>& alivePlayers)
+{
+    if (!m_bOvertimeWaypointsActive ||
+        !m_bFinalStageExpired)
+    {
+        return;
+    }
+
+    const int iAliveCount =
+        static_cast<int>(
+            alivePlayers.size());
+
+    if (iAliveCount <= 1)
+    {
+        ClearOvertimeWaypoints();
+        return;
+    }
+
+    if (iAliveCount ==
+        m_iLastWaypointAliveCount)
+    {
+        return;
+    }
+
+    m_iLastWaypointAliveCount =
+        iAliveCount;
+
+    for (std::vector<CBasePlayer*>::const_iterator it =
+        alivePlayers.begin();
+        it != alivePlayers.end();
+        ++it)
+    {
+        CBasePlayer* pRecipient = *it;
+
+        if (!pRecipient)
+            continue;
+
+        AgSendPlayerTargets(
+            pRecipient,
+            alivePlayers);
+    }
+}
+
+void AgLMS::ClearOvertimeWaypoints()
+{
+    const bool bWasActive =
+        m_bOvertimeWaypointsActive ||
+        m_iLastWaypointAliveCount >= 0;
+
+    m_bOvertimeWaypointsActive = false;
+    m_iLastWaypointAliveCount = -1;
+
+    if (bWasActive)
+    {
+        AgClearAllPlayerTargets();
+    }
+}
+
+void AgLMS::InitHUD(
+    CBasePlayer* pPlayer)
+{
+    if (!pPlayer)
+        return;
+
+    if (!m_bOvertimeWaypointsActive ||
+        !m_bFinalStageExpired ||
+        !pPlayer->IsIngame() ||
+        !pPlayer->IsAlive())
+    {
+        AgClearPlayerTargets(pPlayer);
+        return;
+    }
+
+    std::vector<CBasePlayer*> alivePlayers;
+
+    for (int i = 1;
+        i <= gpGlobals->maxClients;
+        ++i)
+    {
+        CBasePlayer* pAlive =
+            AgPlayerByIndex(i);
+
+        if (!pAlive ||
+            !pAlive->IsIngame() ||
+            !pAlive->IsAlive())
+        {
+            continue;
+        }
+
+        alivePlayers.push_back(pAlive);
+    }
+
+    AgSendPlayerTargets(
+        pPlayer,
+        alivePlayers);
 }

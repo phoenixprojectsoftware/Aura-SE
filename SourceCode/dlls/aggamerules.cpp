@@ -13,6 +13,7 @@
 #include "agvote.h"
 #include "agclient.h"
 #include "aggamerules.h"
+#include "agplayertargets.h"
 #include "music.h"
 #ifdef AGSTATS
 #include "agstats.h"
@@ -1263,6 +1264,9 @@ void AgGameRules::InitHUD(CBasePlayer* pPlayer)
     if (AgGametype() == FIREFIGHT || AgGametype() == FIESTAFIGHT)
         m_Firefight.InitHUD(pPlayer);
 
+    if (LMS == AgGametype())
+        m_LMS.InitHUD(pPlayer);
+
 #ifdef AG_USE_CHEATPROTECTION
     const char* pszModel = g_engfuncs.pfnInfoKeyValue(g_engfuncs.pfnGetInfoKeyBuffer(pPlayer->edict()), "model");
     if (pszModel && strlen(pszModel))
@@ -1275,6 +1279,8 @@ void AgGameRules::InitHUD(CBasePlayer* pPlayer)
 
     if (IsCurrentMapInvalid())
         SendInvalidMapState(pPlayer);
+
+    AgClearPlayerTargets(pPlayer);
 }
 
 void AgGameRules::GoToIntermission()

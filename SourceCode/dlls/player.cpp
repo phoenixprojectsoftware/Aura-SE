@@ -261,6 +261,7 @@ int gmsgPlayVideo = 0;
 
 int gmsgFirefightKill = 0;
 int gmsgFirefightTargets = 0;
+int gmsgPlayerTargets = 0;
 
 extern int g_teamplay;
 #ifdef AGSTATS
@@ -353,6 +354,7 @@ void LinkUserMessages( void )
 
 	gmsgFirefightKill = REG_USER_MSG("FFKill", -1); // a kill in firefight mode ;)
 	gmsgFirefightTargets = REG_USER_MSG("FFTargets", -1); // for koth waypoints.
+	gmsgPlayerTargets = REG_USER_MSG("PlayerTargets", -1); // player targets for some gamemodes
   //-- Martin Webrant
 #ifdef AG_NO_CLIENT_DLL
 	gmsgStatusText = REG_USER_MSG("StatusText", -1);
