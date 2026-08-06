@@ -598,6 +598,8 @@ int CBasePlayer :: TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, 
 	float flBonus;
 	float flHealthPrev = pev->health;
 
+	const float flArmorPrev = pev->armorvalue;
+
 	flBonus = ARMOR_BONUS;
 	flRatio = ARMOR_RATIO;
 
@@ -672,6 +674,24 @@ int CBasePlayer :: TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, 
 				EMIT_SOUND(ENT(pev), CHAN_AUTO, "weapons/bullet_hit2.wav", 1, ATTN_NORM);
 				break;
 			}
+		}
+	}
+
+	const float flArmorDamage = flArmorPrev - pev->armorvalue;
+
+	if (flArmorDamage > 0.0f)
+	{
+		/*
+			Tell the HUD that armour/shield damage was absorbed.
+
+			This makes the directional damage indicator appear
+			even when regeneration prevents health damage.
+		*/
+		pev->dmg_save += flArmorDamage;
+
+		if (pevInflictor)
+		{
+			pev->dmg_inflictor = ENT(pevInflictor);
 		}
 	}
 
@@ -5173,41 +5193,43 @@ void CBasePlayer :: UpdateClientData( void )
       MESSAGE_END();
     }
   }
-//-- Martin Webrant
 
-	if (pev->dmg_take || pev->dmg_save || m_bitsHUDDamage != m_bitsDamageType)
-	{
-		// Comes from inside me if not set
-		Vector damageOrigin = pev->origin;
-		// send "damage" message
-		// causes screen to flash, and pain compass to show direction of damage
-		edict_t *other = pev->dmg_inflictor;
-		if ( other )
-		{
-			CBaseEntity *pEntity = CBaseEntity::Instance(other);
-			if ( pEntity )
-				damageOrigin = pEntity->Center();
-		}
+    if (pev->dmg_take || pev->dmg_save || m_bitsHUDDamage != m_bitsDamageType)
+    {
+	    Vector vecDamageOrigin = pev->origin;
+	    // use the damage causing entity as the source of the indicator.
+	    if (pev->dmg_inflictor)
+	    {
+		    CBaseEntity* pInflictor = CBaseEntity::Instance(pev->dmg_inflictor);
 
-		// only send down damage type that have hud art
-		int visibleDamageBits = m_bitsDamageType & DMG_SHOWNHUD;
+			if (pInflictor)
+			{
+				vecDamageOrigin = pInflictor->Center();
+			}
+	    }
 
-		MESSAGE_BEGIN( MSG_ONE, gmsgDamage, NULL, pev );
-			WRITE_BYTE( pev->dmg_save );
-			WRITE_BYTE( pev->dmg_take );
-			WRITE_LONG( visibleDamageBits );
-			WRITE_COORD( damageOrigin.x );
-			WRITE_COORD( damageOrigin.y );
-			WRITE_COORD( damageOrigin.z );
+		// both values are transmitted as bytes, so clamp them.
+		const int iDamageSaved = min(255, max(0, (int)pev->dmg_save));
+		const int iDamageTaken = min(255, max(0, (int)pev->dmg_take));
+
+		MESSAGE_BEGIN(MSG_ONE, gmsgDamage, NULL, pev);
+		WRITE_BYTE(iDamageSaved); // damage absorbed by armour/shields.
+		WRITE_BYTE(iDamageTaken); // damage taken by health.
+		WRITE_LONG(m_bitsDamageType);
+		WRITE_COORD(vecDamageOrigin.x);
+		WRITE_COORD(vecDamageOrigin.y);
+		WRITE_COORD(vecDamageOrigin.z);
+
 		MESSAGE_END();
-	
+
+		/**
+		* Clear the accumulated damage values now that they have been sent to the client.
+		**/
 		pev->dmg_take = 0;
 		pev->dmg_save = 0;
+
 		m_bitsHUDDamage = m_bitsDamageType;
-		
-		// Clear off non-time-based damage indicators
-		m_bitsDamageType &= DMG_TIMEBASED;
-	}
+    }
 
 	// Update Flashlight
 	if ((m_flFlashLightTime) && (m_flFlashLightTime <= gpGlobals->time))
