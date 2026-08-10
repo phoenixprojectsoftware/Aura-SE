@@ -626,18 +626,18 @@ void CHalfLifeMultiplay :: ClientDisconnected( edict_t *pClient )
 //=========================================================
 float CHalfLifeMultiplay :: FlPlayerFallDamage( CBasePlayer *pPlayer )
 {
-	int iFallDamage = (int)falldamage.value;
+	const int iFallDamage = (int)falldamage.value;
 
-	switch ( iFallDamage )
+	switch (iFallDamage)
 	{
-	case 1://progressive
+	case 0:
+		return 0.0f;
+	case 1:
+	default:
+		return PLAYER_FALL_DAMAGE;
+	case 2: // realistic mode
 		pPlayer->m_flFallVelocity -= PLAYER_MAX_SAFE_FALL_SPEED;
 		return pPlayer->m_flFallVelocity * DAMAGE_FOR_FALL_SPEED;
-		break;
-	default:
-	case 0:// fixed
-		return PLAYER_FALL_DAMAGE;
-		break;
 	}
 } 
 
