@@ -263,6 +263,8 @@ int gmsgFirefightKill = 0;
 int gmsgFirefightTargets = 0;
 int gmsgPlayerTargets = 0;
 
+int gmsgShieldSound = 0;
+
 extern int g_teamplay;
 #ifdef AGSTATS
 #include "agstats.h"
@@ -346,6 +348,7 @@ void LinkUserMessages( void )
 	gmsgFirefightKill = REG_USER_MSG("FFKill", -1); // a kill in firefight mode ;)
 	gmsgFirefightTargets = REG_USER_MSG("FFTargets", -1); // for koth waypoints.
 	gmsgPlayerTargets = REG_USER_MSG("PlyTargets", -1); // player targets for some gamemodes
+	gmsgShieldSound = REG_USER_MSG("ShieldSnd", 2);
 }
 
 LINK_ENTITY_TO_CLASS( player, CBasePlayer );
@@ -451,19 +454,6 @@ int TrainSpeed(int iSpeed, int iMax)
 	return iRet;
 }
 
-void CBasePlayer::StopAllShieldSounds()
-{
-	if (sv_aura_regeneration.value != 0)
-	{
-		ALERT(at_console, "[Shield] StopAllShieldSounds() called\n");
-		STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_empty.wav");
-		STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_low.wav");
-		STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_lp.wav");
-	}
-	else
-		return;
-}
-
 void CBasePlayer :: DeathSound( void )
 {
 	// water death sounds
@@ -565,307 +555,529 @@ void CBasePlayer :: TraceAttack( entvars_t *pevAttacker, float flDamage, Vector 
 #define ARMOR_RATIO	 0.2	// Armor Takes 80% of the damage
 #define ARMOR_BONUS  0.5	// Each Point of Armor is work 1/x points of health
 
-int CBasePlayer :: TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType )
+int CBasePlayer::TakeDamage(
+	entvars_t* pevInflictor,
+	entvars_t* pevAttacker,
+	float flDamage,
+	int bitsDamageType)
 {
 	if (m_fLoading)
 		return 0;
 
-	// Already dead
+	// Already dead.
 	if (!IsAlive())
 		return 0;
 
-	CBaseEntity* pAttacker = CBaseEntity::Instance(pevAttacker);
+	CBaseEntity* pAttacker =
+		CBaseEntity::Instance(pevAttacker);
 
-	if (!g_pGameRules->FPlayerCanTakeDamage(this, pAttacker))
+	if (!g_pGameRules->FPlayerCanTakeDamage(
+		this,
+		pAttacker))
 	{
-		// Refuse the damage
 		return 0;
 	}
 
-	// Also refuse dmg on Firefight & Fiestafight.
-	if (FIREFIGHT == AgGametype() || FIESTAFIGHT == AgGametype() || CHILL == AgGametype())
-		if (pAttacker && pAttacker->IsPlayer() && this->IsPlayer())
+	// Also refuse player damage in these gametypes.
+	if (FIREFIGHT == AgGametype() ||
+		FIESTAFIGHT == AgGametype() ||
+		CHILL == AgGametype())
+	{
+		if (pAttacker &&
+			pAttacker->IsPlayer() &&
+			this->IsPlayer())
+		{
 			return 0;
+		}
+	}
 
-	// have suit diagnose the problem - ie: report damage type
+	// Have suit diagnose the problem.
 	int bitsDamage = bitsDamageType;
 	int ffound = TRUE;
 	int fmajor;
 	int fcritical;
 	int fTookDamage;
 	int ftrivial;
+
 	float flRatio;
 	float flBonus;
-	float flHealthPrev = pev->health;
 
-	const float flArmorPrev = pev->armorvalue;
+	const float flHealthPrev =
+		pev->health;
+
+	const float flArmorPrev =
+		pev->armorvalue;
 
 	flBonus = ARMOR_BONUS;
 	flRatio = ARMOR_RATIO;
 
-	if ( ( bitsDamageType & DMG_BLAST ) && g_pGameRules->IsMultiplayer() )
+	if ((bitsDamageType & DMG_BLAST) &&
+		g_pGameRules->IsMultiplayer())
 	{
-		// blasts damage armor more.
+		// Blasts damage armour more.
 		flBonus *= 2;
 	}
 
-	// go take the damage first
-
-	// keep track of amount of damage last sustained
+	// Keep track of amount of damage last sustained.
 	m_lastDamageAmount = flDamage;
 
-	// Armor. 
-	if (pev->armorvalue && !(bitsDamageType & (DMG_FALL | DMG_DROWN | DMG_SKIPARMOR)) )// armor doesn't protect against fall or drown damage!
+	// Armour/shield.
+	if (pev->armorvalue &&
+		!(bitsDamageType &
+			(DMG_FALL |
+				DMG_DROWN |
+				DMG_SKIPARMOR)))
 	{
-		float flNew = flDamage * flRatio;
+		float flNew =
+			flDamage * flRatio;
 
-		float flArmor;
+		float flArmor =
+			(flDamage - flNew) *
+			flBonus;
 
-		flArmor = (flDamage - flNew) * flBonus;
-
-		// Does this use more armor than we have?
+		// Does this use more armour than we have?
 		if (flArmor > pev->armorvalue)
 		{
-			flArmor = pev->armorvalue;
-			flArmor *= (1/flBonus);
-			flNew = flDamage - flArmor;
+			flArmor =
+				pev->armorvalue;
+
+			flArmor *=
+				(1 / flBonus);
+
+			flNew =
+				flDamage - flArmor;
+
 			pev->armorvalue = 0;
 		}
 		else
-			pev->armorvalue -= flArmor;
-		
-		// Switch off Half-Life's damage ratio ONLY with regen on. also do the sound
+		{
+			pev->armorvalue -=
+				flArmor;
+		}
+
+		/*
+			Shield regeneration mode:
+			the shield absorbs the health component entirely
+			while armour remains available.
+		*/
 		if (sv_aura_regeneration.value != 0)
 		{
 			flDamage = 0;
 
-			int randomsoundmate = RANDOM_LONG(0, 3);
-			switch (randomsoundmate)
+			/*
+				KEEP THESE WORLD-AUDIBLE.
+
+				These are combat hit sounds, so nearby players
+				should still hear another player's shield being hit.
+			*/
+			switch (RANDOM_LONG(0, 3))
 			{
 			case 0:
-				EMIT_SOUND(ENT(pev), CHAN_AUTO, "player/hitsound01.wav", 0.55, ATTN_NORM);
+				EMIT_SOUND(
+					ENT(pev),
+					CHAN_AUTO,
+					"player/hitsound01.wav",
+					0.55f,
+					ATTN_NORM);
 				break;
+
 			case 1:
-				EMIT_SOUND(ENT(pev), CHAN_AUTO, "player/hitsound02.wav", 0.55, ATTN_NORM);
+				EMIT_SOUND(
+					ENT(pev),
+					CHAN_AUTO,
+					"player/hitsound02.wav",
+					0.55f,
+					ATTN_NORM);
 				break;
+
 			case 2:
-				EMIT_SOUND(ENT(pev), CHAN_AUTO, "player/hitsound03.wav", 0.55, ATTN_NORM);
+				EMIT_SOUND(
+					ENT(pev),
+					CHAN_AUTO,
+					"player/hitsound03.wav",
+					0.55f,
+					ATTN_NORM);
 				break;
+
 			case 3:
-				EMIT_SOUND(ENT(pev), CHAN_AUTO, "player/hitsound04.wav", 0.55, ATTN_NORM);
+				EMIT_SOUND(
+					ENT(pev),
+					CHAN_AUTO,
+					"player/hitsound04.wav",
+					0.55f,
+					ATTN_NORM);
 				break;
 			}
 		}
 		else
 		{
-			flDamage = flNew; // halflife damage ratio
+			// Standard Half-Life damage ratio.
+			flDamage = flNew;
 		}
 
-		if (sv_aura_regeneration.value < 1 || pev->armorvalue <= 0 || HLDM == AgGametype())
+		/*
+			These also remain world-audible.
+
+			They represent an actual impact rather than a private
+			shield-status notification.
+		*/
+		if (sv_aura_regeneration.value < 1 ||
+			pev->armorvalue <= 0 ||
+			HLDM == AgGametype())
 		{
-			//do the sound
-			int randomhealthsnd = RANDOM_LONG(0, 1);
-			switch (randomhealthsnd)
+			switch (RANDOM_LONG(0, 1))
 			{
 			case 0:
-				EMIT_SOUND(ENT(pev), CHAN_AUTO, "weapons/bullet_hit1.wav", 1, ATTN_NORM);
+				EMIT_SOUND(
+					ENT(pev),
+					CHAN_AUTO,
+					"weapons/bullet_hit1.wav",
+					1.0f,
+					ATTN_NORM);
 				break;
+
 			case 1:
-				EMIT_SOUND(ENT(pev), CHAN_AUTO, "weapons/bullet_hit2.wav", 1, ATTN_NORM);
+				EMIT_SOUND(
+					ENT(pev),
+					CHAN_AUTO,
+					"weapons/bullet_hit2.wav",
+					1.0f,
+					ATTN_NORM);
 				break;
 			}
 		}
 	}
 
-	const float flArmorDamage = flArmorPrev - pev->armorvalue;
+	/*
+		Process shield-state transitions caused directly by damage.
 
-	if (flArmorDamage > 0.0f)
+		TakeDamage modifies pev->armorvalue itself, so without
+		this call HandleArmorChanged() would only see changes made
+		through SetArmor().
+	*/
+	if ((int)flArmorPrev !=
+		(int)pev->armorvalue)
 	{
-		/*
-			Tell the HUD that armour/shield damage was absorbed.
+		HandleArmorChanged(
+			flArmorPrev,
+			pev->armorvalue);
+	}
 
-			This makes the directional damage indicator appear
-			even when regeneration prevents health damage.
-		*/
-		pev->dmg_save += flArmorDamage;
+	/*
+		Record absorbed shield damage for gmsgDamage.
+
+		This allows directional damage indicators to appear when
+		the player's shield absorbed the entire hit and health
+		took zero damage.
+	*/
+	const float flShieldDamage =
+		flArmorPrev -
+		pev->armorvalue;
+
+	if (flShieldDamage > 0.0f)
+	{
+		pev->dmg_save =
+			V_min(
+				255.0f,
+				pev->dmg_save +
+				flShieldDamage);
 
 		if (pevInflictor)
 		{
-			pev->dmg_inflictor = ENT(pevInflictor);
+			pev->dmg_inflictor =
+				ENT(pevInflictor);
 		}
 	}
 
-	// this cast to INT is critical!!! If a player ends up with 0.5 health, the engine will get that
-	// as an int (zero) and think the player is dead! (this will incite a clientside screentilt, etc)
-	fTookDamage = CBaseMonster::TakeDamage(pevInflictor, pevAttacker, (int)flDamage, bitsDamageType);
+	/*
+		This cast to int is critical. If a player ends up with
+		0.5 health, the engine will see zero and think they died.
+	*/
+	fTookDamage =
+		CBaseMonster::TakeDamage(
+			pevInflictor,
+			pevAttacker,
+			(int)flDamage,
+			bitsDamageType);
 
-	// reset damage time countdown for each type of time based damage player just sustained
-
+	// Reset damage time countdowns.
+	for (int i = 0;
+		i < CDMG_TIMEBASED;
+		++i)
 	{
-		for (int i = 0; i < CDMG_TIMEBASED; i++)
-			if (bitsDamageType & (DMG_PARALYZE << i))
-				m_rgbTimeBasedDamage[i] = 0;
+		if (bitsDamageType &
+			(DMG_PARALYZE << i))
+		{
+			m_rgbTimeBasedDamage[i] = 0;
+		}
 	}
 
-//++ BulliT
-  UTIL_SendDirectorMessage( this->edict(), ENT(pevInflictor), 5 | DRC_FLAG_DRAMATIC);
-  /*
-	// tell director about it
-	MESSAGE_BEGIN( MSG_SPEC, SVC_DIRECTOR );
-		WRITE_BYTE ( 9 );	// command length in bytes
-		WRITE_BYTE ( DRC_CMD_EVENT );	// take damage event
-		WRITE_SHORT( ENTINDEX(this->edict()) );	// index number of primary entity
-		WRITE_SHORT( ENTINDEX(ENT(pevInflictor)) );	// index number of secondary entity
-		WRITE_LONG( 5 );   // eventflags (priority and flags)
-	MESSAGE_END();
-  */
-//-- Martin Webrant
+	// Tell director about it.
+	UTIL_SendDirectorMessage(
+		this->edict(),
+		ENT(pevInflictor),
+		5 | DRC_FLAG_DRAMATIC);
 
-	// how bad is it, doc?
+	// How bad is it?
+	ftrivial =
+		(pev->health > 75 ||
+			m_lastDamageAmount < 5);
 
-	ftrivial = (pev->health > 75 || m_lastDamageAmount < 5);
-	fmajor = (m_lastDamageAmount > 25);
-	fcritical = (pev->health < 30);
+	fmajor =
+		(m_lastDamageAmount > 25);
 
-	// handle all bits set in this damage message,
-	// let the suit give player the diagnosis
+	fcritical =
+		(pev->health < 30);
 
-	// UNDONE: add sounds for types of damage sustained (ie: burn, shock, slash )
+	m_bitsDamageType |=
+		bitsDamage;
 
-	// UNDONE: still need to record damage and heal messages for the following types
+	// Make sure damage bits are resent.
+	m_bitsHUDDamage = -1;
 
-		// DMG_BURN	
-		// DMG_FREEZE
-		// DMG_BLAST
-		// DMG_SHOCK
-
-	m_bitsDamageType |= bitsDamage; // Save this so we can report it to the client
-	m_bitsHUDDamage = -1;  // make sure the damage bits get resent
-
-	while (fTookDamage && (!ftrivial || (bitsDamage & DMG_TIMEBASED)) && ffound && bitsDamage)
+	while (fTookDamage &&
+		(!ftrivial ||
+			(bitsDamage & DMG_TIMEBASED)) &&
+		ffound &&
+		bitsDamage)
 	{
 		ffound = FALSE;
 
 		if (bitsDamage & DMG_CLUB)
 		{
 			if (fmajor)
-				SetSuitUpdate("!HEV_DMG4", FALSE, SUIT_NEXT_IN_30SEC);	// minor fracture
-			bitsDamage &= ~DMG_CLUB;
+			{
+				SetSuitUpdate(
+					"!HEV_DMG4",
+					FALSE,
+					SUIT_NEXT_IN_30SEC);
+			}
+
+			bitsDamage &=
+				~DMG_CLUB;
+
 			ffound = TRUE;
 		}
-		if (bitsDamage & (DMG_FALL | DMG_CRUSH))
+
+		if (bitsDamage &
+			(DMG_FALL | DMG_CRUSH))
 		{
 			if (fmajor)
-				SetSuitUpdate("!HEV_DMG5", FALSE, SUIT_NEXT_IN_30SEC);	// major fracture
+			{
+				SetSuitUpdate(
+					"!HEV_DMG5",
+					FALSE,
+					SUIT_NEXT_IN_30SEC);
+			}
 			else
-				SetSuitUpdate("!HEV_DMG4", FALSE, SUIT_NEXT_IN_30SEC);	// minor fracture
-	
-			bitsDamage &= ~(DMG_FALL | DMG_CRUSH);
+			{
+				SetSuitUpdate(
+					"!HEV_DMG4",
+					FALSE,
+					SUIT_NEXT_IN_30SEC);
+			}
+
+			bitsDamage &=
+				~(DMG_FALL | DMG_CRUSH);
+
 			ffound = TRUE;
 		}
-		
+
 		if (bitsDamage & DMG_BULLET)
 		{
 			if (m_lastDamageAmount > 5)
-				SetSuitUpdate("!HEV_DMG6", FALSE, SUIT_NEXT_IN_30SEC);	// blood loss detected
-			//else
-			//	SetSuitUpdate("!HEV_DMG0", FALSE, SUIT_NEXT_IN_30SEC);	// minor laceration
-			
-			bitsDamage &= ~DMG_BULLET;
+			{
+				SetSuitUpdate(
+					"!HEV_DMG6",
+					FALSE,
+					SUIT_NEXT_IN_30SEC);
+			}
+
+			bitsDamage &=
+				~DMG_BULLET;
+
 			ffound = TRUE;
 		}
 
 		if (bitsDamage & DMG_SLASH)
 		{
 			if (fmajor)
-				SetSuitUpdate("!HEV_DMG1", FALSE, SUIT_NEXT_IN_30SEC);	// major laceration
+			{
+				SetSuitUpdate(
+					"!HEV_DMG1",
+					FALSE,
+					SUIT_NEXT_IN_30SEC);
+			}
 			else
-				SetSuitUpdate("!HEV_DMG0", FALSE, SUIT_NEXT_IN_30SEC);	// minor laceration
+			{
+				SetSuitUpdate(
+					"!HEV_DMG0",
+					FALSE,
+					SUIT_NEXT_IN_30SEC);
+			}
 
-			bitsDamage &= ~DMG_SLASH;
+			bitsDamage &=
+				~DMG_SLASH;
+
 			ffound = TRUE;
 		}
-		
+
 		if (bitsDamage & DMG_SONIC)
 		{
 			if (fmajor)
-				SetSuitUpdate("!HEV_DMG2", FALSE, SUIT_NEXT_IN_1MIN);	// internal bleeding
-			bitsDamage &= ~DMG_SONIC;
+			{
+				SetSuitUpdate(
+					"!HEV_DMG2",
+					FALSE,
+					SUIT_NEXT_IN_1MIN);
+			}
+
+			bitsDamage &=
+				~DMG_SONIC;
+
 			ffound = TRUE;
 		}
 
-		if (bitsDamage & (DMG_POISON | DMG_PARALYZE))
+		if (bitsDamage &
+			(DMG_POISON | DMG_PARALYZE))
 		{
-			SetSuitUpdate("!HEV_DMG3", FALSE, SUIT_NEXT_IN_1MIN);	// blood toxins detected
-			bitsDamage &= ~(DMG_POISON | DMG_PARALYZE);
+			SetSuitUpdate(
+				"!HEV_DMG3",
+				FALSE,
+				SUIT_NEXT_IN_1MIN);
+
+			bitsDamage &=
+				~(DMG_POISON |
+					DMG_PARALYZE);
+
 			ffound = TRUE;
 		}
 
 		if (bitsDamage & DMG_ACID)
 		{
-			SetSuitUpdate("!HEV_DET1", FALSE, SUIT_NEXT_IN_1MIN);	// hazardous chemicals detected
-			bitsDamage &= ~DMG_ACID;
+			SetSuitUpdate(
+				"!HEV_DET1",
+				FALSE,
+				SUIT_NEXT_IN_1MIN);
+
+			bitsDamage &=
+				~DMG_ACID;
+
 			ffound = TRUE;
 		}
 
 		if (bitsDamage & DMG_NERVEGAS)
 		{
-			SetSuitUpdate("!HEV_DET0", FALSE, SUIT_NEXT_IN_1MIN);	// biohazard detected
-			bitsDamage &= ~DMG_NERVEGAS;
+			SetSuitUpdate(
+				"!HEV_DET0",
+				FALSE,
+				SUIT_NEXT_IN_1MIN);
+
+			bitsDamage &=
+				~DMG_NERVEGAS;
+
 			ffound = TRUE;
 		}
 
 		if (bitsDamage & DMG_RADIATION)
 		{
-			SetSuitUpdate("!HEV_DET2", FALSE, SUIT_NEXT_IN_1MIN);	// radiation detected
-			bitsDamage &= ~DMG_RADIATION;
+			SetSuitUpdate(
+				"!HEV_DET2",
+				FALSE,
+				SUIT_NEXT_IN_1MIN);
+
+			bitsDamage &=
+				~DMG_RADIATION;
+
 			ffound = TRUE;
 		}
+
 		if (bitsDamage & DMG_SHOCK)
 		{
-			bitsDamage &= ~DMG_SHOCK;
+			bitsDamage &=
+				~DMG_SHOCK;
+
 			ffound = TRUE;
 		}
 	}
 
-	pev->punchangle.x = -2; // Punch the screen when we take damage.
+	pev->punchangle.x = -2;
 
-	if (fTookDamage && !ftrivial && fmajor && flHealthPrev >= 75) 
+	if (fTookDamage &&
+		!ftrivial &&
+		fmajor &&
+		flHealthPrev >= 75)
 	{
-		// first time we take major damage...
-		// turn automedic on if not on
-		SetSuitUpdate("!HEV_MED1", FALSE, SUIT_NEXT_IN_30MIN);	// automedic on
+		SetSuitUpdate(
+			"!HEV_MED1",
+			FALSE,
+			SUIT_NEXT_IN_30MIN);
 
-		// give morphine shot if not given recently
-		SetSuitUpdate("!HEV_HEAL7", FALSE, SUIT_NEXT_IN_30MIN);	// morphine shot
+		SetSuitUpdate(
+			"!HEV_HEAL7",
+			FALSE,
+			SUIT_NEXT_IN_30MIN);
 	}
-	
-	if (fTookDamage && !ftrivial && fcritical && flHealthPrev < 75)
-	{
 
-		// already took major damage, now it's critical...
+	if (fTookDamage &&
+		!ftrivial &&
+		fcritical &&
+		flHealthPrev < 75)
+	{
 		if (pev->health < 6)
-			SetSuitUpdate("!HEV_HLTH3", FALSE, SUIT_NEXT_IN_10MIN);	// near death
-		else if (pev->health < 20)
-			SetSuitUpdate("!HEV_HLTH2", FALSE, SUIT_NEXT_IN_10MIN);	// health critical
-	
-		// give critical health warnings
-		if (!RANDOM_LONG(0,3) && flHealthPrev < 50)
-			SetSuitUpdate("!HEV_DMG7", FALSE, SUIT_NEXT_IN_5MIN); //seek medical attention
-	}
-
-	// if we're taking time based damage, warn about its continuing effects
-	if (fTookDamage && (bitsDamageType & DMG_TIMEBASED) && flHealthPrev < 75)
 		{
-			if (flHealthPrev < 50)
-			{
-				if (!RANDOM_LONG(0,3))
-					SetSuitUpdate("!HEV_DMG7", FALSE, SUIT_NEXT_IN_5MIN); //seek medical attention
-			}
-			else
-				SetSuitUpdate("!HEV_HLTH1", FALSE, SUIT_NEXT_IN_10MIN);	// health dropping
+			SetSuitUpdate(
+				"!HEV_HLTH3",
+				FALSE,
+				SUIT_NEXT_IN_10MIN);
+		}
+		else if (pev->health < 20)
+		{
+			SetSuitUpdate(
+				"!HEV_HLTH2",
+				FALSE,
+				SUIT_NEXT_IN_10MIN);
 		}
 
+		if (!RANDOM_LONG(0, 3) &&
+			flHealthPrev < 50)
+		{
+			SetSuitUpdate(
+				"!HEV_DMG7",
+				FALSE,
+				SUIT_NEXT_IN_5MIN);
+		}
+	}
+
+	if (fTookDamage &&
+		(bitsDamageType &
+			DMG_TIMEBASED) &&
+		flHealthPrev < 75)
+	{
+		if (flHealthPrev < 50)
+		{
+			if (!RANDOM_LONG(0, 3))
+			{
+				SetSuitUpdate(
+					"!HEV_DMG7",
+					FALSE,
+					SUIT_NEXT_IN_5MIN);
+			}
+		}
+		else
+		{
+			SetSuitUpdate(
+				"!HEV_HLTH1",
+				FALSE,
+				SUIT_NEXT_IN_10MIN);
+		}
+	}
+
+	/*
+		Shield-only hits still interrupt regeneration, even though
+		CBaseMonster::TakeDamage may return 0 because flDamage was
+		zeroed by the shield.
+	*/
 	InterruptShieldRegenOnDamage();
 
 	return fTookDamage;
@@ -4742,18 +4954,60 @@ void CBasePlayer::SendAmmoUpdate(void)
 
 #define SHIELD_DEBUG 1
 // START OF SHIELD REGENERATION LOGIC ( BlueNightHawk : Suit Energy Regeneration )
+void CBasePlayer::StopAllShieldSounds()
+{
+	if (sv_aura_regeneration.value == 0)
+		return;
+
+#ifdef SHIELD_DEBUG
+	ALERT(
+		at_console,
+		"[Shield] StopAllShieldSounds() called\n");
+#endif
+
+	StopPrivateShieldSound(
+		SHIELD_SOUND_EMPTY);
+
+	StopPrivateShieldSound(
+		SHIELD_SOUND_LOW);
+
+	StopPrivateShieldSound(
+		SHIELD_SOUND_REGEN_LOOP);
+
+	StopPrivateShieldSound(
+		SHIELD_SOUND_REGEN_START);
+
+	StopPrivateShieldSound(
+		SHIELD_SOUND_REGEN_FINISH);
+
+	StopPrivateShieldSound(
+		SHIELD_SOUND_REGEN_INTERRUPT);
+}
+
 void CBasePlayer::SetArmor(float newArmor)
 {
-	float oldArmor = pev->armorvalue;
-	pev->armorvalue = V_min(newArmor, (float)MAX_NORMAL_BATTERY);
+	float oldArmor =
+		pev->armorvalue;
 
-	// Only trigger event if integer value actually changed
-	if ((int)oldArmor != (int)pev->armorvalue)
+	pev->armorvalue =
+		V_min(
+			newArmor,
+			(float)MAX_NORMAL_BATTERY);
+
+	if ((int)oldArmor !=
+		(int)pev->armorvalue)
 	{
 #ifdef SHIELD_DEBUG
-		ALERT(at_console, "[SHIELD] Armor changed from %d -> %d\n", (int)oldArmor, (int)pev->armorvalue);
+		ALERT(
+			at_console,
+			"[SHIELD] Armor changed from %d -> %d\n",
+			(int)oldArmor,
+			(int)pev->armorvalue);
 #endif
-		HandleArmorChanged(oldArmor, pev->armorvalue);
+
+		HandleArmorChanged(
+			oldArmor,
+			pev->armorvalue);
 	}
 }
 
@@ -4767,95 +5021,185 @@ void CBasePlayer::AddArmor(float amount)
 
 }
 
-void CBasePlayer::HandleArmorChanged(float oldArmorF, float newArmorF)
+void CBasePlayer::HandleArmorChanged(
+	float oldArmorF,
+	float newArmorF)
 {
-	int oldArmor = (int)oldArmorF;
-	int newArmor = (int)newArmorF;
-	float now = gpGlobals->time;
+	const int oldArmor =
+		(int)oldArmorF;
+
+	const int newArmor =
+		(int)newArmorF;
+
+	const float now =
+		gpGlobals->time;
 
 #ifdef SHIELD_DEBUG
-	ALERT(at_console, "[Shield] HandleArmorChanged: %d -> %d\n", oldArmor, newArmor);
+	ALERT(
+		at_console,
+		"[Shield] HandleArmorChanged: %d -> %d\n",
+		oldArmor,
+		newArmor);
 #endif
 
-	// --- FULL shield ---
-	if (newArmor >= MAX_NORMAL_BATTERY && oldArmor < MAX_NORMAL_BATTERY)
+	// ---------------------------------------------------------
+	// FULL shield
+	// ---------------------------------------------------------
+
+	if (newArmor >= MAX_NORMAL_BATTERY &&
+		oldArmor < MAX_NORMAL_BATTERY)
 	{
 #ifdef SHIELD_DEBUG
-		ALERT(at_console, "[Shield] FULL capacity reached!\n");
+		ALERT(
+			at_console,
+			"[Shield] FULL capacity reached!\n");
 #endif
-		STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_lp.wav");
-		STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_low.wav");
-		STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_empty.wav");
+
+		StopPrivateShieldSound(
+			SHIELD_SOUND_REGEN_LOOP);
+
+		StopPrivateShieldSound(
+			SHIELD_SOUND_LOW);
+
+		StopPrivateShieldSound(
+			SHIELD_SOUND_EMPTY);
+
 #ifndef _HALO
-		EMIT_SOUND(ENT(pev), CHAN_STATIC, "player/shield_finish.wav", 1.0f, ATTN_NORM);
+		PlayPrivateShieldSound(
+			SHIELD_SOUND_REGEN_FINISH);
 #endif
 
 		bAreWeMaxxed = true;
 		bAreWeAt100 = true;
+
 		m_fRegenOn = false;
 		m_flNextSuitRegenTime = 0.0f;
 	}
-	else if (oldArmor >= MAX_NORMAL_BATTERY && newArmor < MAX_NORMAL_BATTERY)
+	else if (
+		oldArmor >= MAX_NORMAL_BATTERY &&
+		newArmor < MAX_NORMAL_BATTERY)
 	{
 #ifdef SHIELD_DEBUG
-		ALERT(at_console, "[Shield] Dropped below FULL capacity.\n");
+		ALERT(
+			at_console,
+			"[Shield] Dropped below FULL capacity.\n");
 #endif
+
 		bAreWeMaxxed = false;
 		bAreWeAt100 = false;
 	}
 
-	// --- EMPTY shield ---
-	if (newArmor <= SHIELD_EMPTY_THRESHOLD && !isShieldEmpty)
+	// ---------------------------------------------------------
+	// EMPTY shield
+	// ---------------------------------------------------------
+
+	if (newArmor <= SHIELD_EMPTY_THRESHOLD &&
+		!isShieldEmpty)
 	{
 #ifdef SHIELD_DEBUG
-		ALERT(at_console, "[Shield] ENTERED EMPTY state.\n");
+		ALERT(
+			at_console,
+			"[Shield] ENTERED EMPTY state.\n");
 #endif
+
 		if (isShieldLow)
 		{
-			STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_low.wav");
+			StopPrivateShieldSound(
+				SHIELD_SOUND_LOW);
+
 			isShieldLow = false;
 		}
 
-		EMIT_SOUND(ENT(pev), CHAN_STATIC, "player/shield_empty.wav", 0.85f, ATTN_NORM);
-		EMIT_SOUND(ENT(pev), CHAN_AUTO, "player/shield_depleted2.wav", 0.7f, ATTN_NORM);
+		/*
+			Private warning loop.
+			Only the shield owner hears this.
+		*/
+		PlayPrivateShieldSound(
+			SHIELD_SOUND_EMPTY);
+
+		/*
+			KEEP THIS PUBLIC.
+
+			This is the shield-depletion combat cue, so other
+			players nearby should hear the shield breaking.
+		*/
+		EMIT_SOUND(
+			ENT(pev),
+			CHAN_AUTO,
+			"player/shield_depleted2.wav",
+			0.7f,
+			ATTN_NORM);
+
 		isShieldEmpty = true;
 		lastShieldSoundTime = now;
 	}
-	else if (isShieldEmpty && newArmor > SHIELD_EMPTY_THRESHOLD)
+	else if (
+		isShieldEmpty &&
+		newArmor > SHIELD_EMPTY_THRESHOLD)
 	{
 #ifdef SHIELD_DEBUG
-		ALERT(at_console, "[Shield] EXITED EMPTY state.\n");
+		ALERT(
+			at_console,
+			"[Shield] EXITED EMPTY state.\n");
 #endif
-		STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_empty.wav");
+
+		StopPrivateShieldSound(
+			SHIELD_SOUND_EMPTY);
+
 		isShieldEmpty = false;
 
-		// Enter low if still below threshold
-		if (newArmor > 0 && newArmor <= SHIELD_LOW_THRESHOLD)
+		// Enter LOW if still below threshold.
+		if (newArmor > 0 &&
+			newArmor <= SHIELD_LOW_THRESHOLD)
 		{
 #ifdef SHIELD_DEBUG
-			ALERT(at_console, "[Shield] Transition EMPTY -> LOW\n");
+			ALERT(
+				at_console,
+				"[Shield] Transition EMPTY -> LOW\n");
 #endif
-			EMIT_SOUND(ENT(pev), CHAN_STATIC, "player/shield_low.wav", 0.75f, ATTN_NORM);
+
+			PlayPrivateShieldSound(
+				SHIELD_SOUND_LOW);
+
 			isShieldLow = true;
 		}
 	}
 
-	// --- LOW shield ---
-	if (newArmor > SHIELD_EMPTY_THRESHOLD && newArmor <= SHIELD_LOW_THRESHOLD && !isShieldLow && !isShieldEmpty)
+	// ---------------------------------------------------------
+	// LOW shield
+	// ---------------------------------------------------------
+
+	if (newArmor > SHIELD_EMPTY_THRESHOLD &&
+		newArmor <= SHIELD_LOW_THRESHOLD &&
+		!isShieldLow &&
+		!isShieldEmpty)
 	{
 #ifdef SHIELD_DEBUG
-		ALERT(at_console, "[Shield] ENTERED LOW state.\n");
+		ALERT(
+			at_console,
+			"[Shield] ENTERED LOW state.\n");
 #endif
-		EMIT_SOUND(ENT(pev), CHAN_STATIC, "player/shield_low.wav", 0.75f, ATTN_NORM);
+
+		PlayPrivateShieldSound(
+			SHIELD_SOUND_LOW);
+
 		isShieldLow = true;
 		lastShieldSoundTime = now;
 	}
-	else if (isShieldLow && (newArmor == 0 || newArmor > SHIELD_LOW_THRESHOLD))
+	else if (
+		isShieldLow &&
+		(newArmor == 0 ||
+			newArmor > SHIELD_LOW_THRESHOLD))
 	{
 #ifdef SHIELD_DEBUG
-		ALERT(at_console, "[Shield] EXITED LOW state.\n");
+		ALERT(
+			at_console,
+			"[Shield] EXITED LOW state.\n");
 #endif
-		STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_low.wav");
+
+		StopPrivateShieldSound(
+			SHIELD_SOUND_LOW);
+
 		isShieldLow = false;
 	}
 }
@@ -4863,80 +5207,164 @@ void CBasePlayer::HandleArmorChanged(float oldArmorF, float newArmorF)
 // --- Regen tick ---
 void CBasePlayer::RunShieldUpdates()
 {
-	if (sv_aura_regeneration.value <= 0) return;
-
-	if (!IsAlive() || IsObserver() || IsSpectator())
+	if (sv_aura_regeneration.value <= 0)
 		return;
+
+	if (!IsAlive() ||
+		IsObserver() ||
+		IsSpectator())
+	{
+		return;
+	}
 
 	// Gametypes not allowed to run shield updates.
-	if (HLDM == AgGametype() || SWAT == AgGametype() || INSTAGIB == AgGametype() || OITC == AgGametype())
+	if (HLDM == AgGametype() ||
+		SWAT == AgGametype() ||
+		INSTAGIB == AgGametype() ||
+		OITC == AgGametype())
+	{
 		return;
+	}
 
-	int armorInt = (int)pev->armorvalue;
+	int armorInt =
+		(int)pev->armorvalue;
 
-	// Prevent adding when fully maxed
-	if (armorInt >= MAX_NORMAL_BATTERY || bAreWeMaxxed) return;
+	// Prevent adding when fully maxed.
+	if (armorInt >= MAX_NORMAL_BATTERY ||
+		bAreWeMaxxed)
+	{
+		return;
+	}
 
-	float now = gpGlobals->time;
+	const float now =
+		gpGlobals->time;
 
 	if (now >= m_flNextSuitRegenTime)
 	{
 #ifdef SHIELD_DEBUG
-		ALERT(at_console, "[Shield] Regen tick at %.2f (armor=%d)\n", now, armorInt);
+		ALERT(
+			at_console,
+			"[Shield] Regen tick at %.2f (armor=%d)\n",
+			now,
+			armorInt);
 #endif
 
-		AddArmor(sv_aura_regeneration_rate.value);
+		AddArmor(
+			sv_aura_regeneration_rate.value);
 
-		// Clamp manually to MAX_NORMAL_BATTERY
-		if ((int)pev->armorvalue >= MAX_NORMAL_BATTERY)
+		// Clamp manually to MAX_NORMAL_BATTERY.
+		if ((int)pev->armorvalue >=
+			MAX_NORMAL_BATTERY)
 		{
 #ifdef SHIELD_DEBUG
-			ALERT(at_console, "[Shield] Reached MAX during regen.\n");
+			ALERT(
+				at_console,
+				"[Shield] Reached MAX during regen.\n");
 #endif
 
-			pev->armorvalue = (float)MAX_NORMAL_BATTERY;
+			pev->armorvalue =
+				(float)MAX_NORMAL_BATTERY;
+
 			bAreWeMaxxed = true;
 			m_fRegenOn = false;
-			STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_lp.wav");
+
+			StopPrivateShieldSound(
+				SHIELD_SOUND_REGEN_LOOP);
+
 #ifndef _HALO
-			EMIT_SOUND(ENT(pev), CHAN_STATIC, "player/shield_finish.wav", 1.0f, ATTN_NORM);
+			/*
+				HandleArmorChanged() normally catches the transition
+				to maximum through AddArmor(). Don't play this twice.
+
+				Only issue it here if the integer transition somehow
+				didn't cause HandleArmorChanged().
+			*/
+			if (!bAreWeAt100)
+			{
+				PlayPrivateShieldSound(
+					SHIELD_SOUND_REGEN_FINISH);
+			}
 #endif
+
+			bAreWeAt100 = true;
 		}
 		else if (!m_fRegenOn)
 		{
 #ifdef SHIELD_DEBUG
-			ALERT(at_console, "[Shield] Regen STARTED.\n");
+			ALERT(
+				at_console,
+				"[Shield] Regen STARTED.\n");
 #endif
 
 #ifndef _HALO
-			EMIT_SOUND(ENT(pev), CHAN_AUTO, "player/shield_start.wav", 1.0f, ATTN_NORM);
+			PlayPrivateShieldSound(
+				SHIELD_SOUND_REGEN_START);
 #endif
-			EMIT_SOUND(ENT(pev), CHAN_STATIC, "player/shield_lp.wav", 0.85f, ATTN_NORM);
+
+			PlayPrivateShieldSound(
+				SHIELD_SOUND_REGEN_LOOP);
+
 			m_fRegenOn = true;
 		}
 
-		m_flNextSuitRegenTime = now + sv_aura_regeneration_wait.value;
+		m_flNextSuitRegenTime =
+			now +
+			sv_aura_regeneration_wait.value;
+
 #ifdef SHIELD_DEBUG
-		ALERT(at_console, "[Shield] Next regen scheduled at %.2f\n", m_flNextSuitRegenTime);
+		ALERT(
+			at_console,
+			"[Shield] Next regen scheduled at %.2f\n",
+			m_flNextSuitRegenTime);
 #endif
 	}
 
-	// --- Ensure looping low / empty sounds always play ---
-	int armorNow = (int)pev->armorvalue;
+	/*
+		Ensure the LOW / EMPTY state is always internally correct.
 
-	// Empty loop
-	if (armorNow <= SHIELD_EMPTY_THRESHOLD)
+		Normally HandleArmorChanged() performs these transitions.
+		This remains as a defensive consistency check.
+	*/
+	const int armorNow =
+		(int)pev->armorvalue;
+
+	// ---------------------------------------------------------
+	// EMPTY
+	// ---------------------------------------------------------
+
+	if (armorNow <=
+		SHIELD_EMPTY_THRESHOLD)
 	{
 		if (!isShieldEmpty)
 		{
 #ifdef SHIELD_DEBUG
-			ALERT(at_console, "[Shield] FORCE Empty loop triggered.\n");
+			ALERT(
+				at_console,
+				"[Shield] FORCE Empty loop triggered.\n");
 #endif
+
 			isShieldEmpty = true;
-			isShieldLow = false; // empty overrides low
-			STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_low.wav");
-			EMIT_SOUND(ENT(pev), CHAN_STATIC, "player/shield_empty.wav", 0.85f, ATTN_NORM);
-			EMIT_SOUND(ENT(pev), CHAN_AUTO, "player/shield_depleted2.wav", 0.7f, ATTN_NORM);
+			isShieldLow = false;
+
+			StopPrivateShieldSound(
+				SHIELD_SOUND_LOW);
+
+			PlayPrivateShieldSound(
+				SHIELD_SOUND_EMPTY);
+
+			/*
+				KEEP PUBLIC.
+
+				If we genuinely reached empty without the normal
+				HandleArmorChanged path, other players should still
+				receive the depletion cue.
+			*/
+			EMIT_SOUND(
+				ENT(pev),
+				CHAN_AUTO,
+				"player/shield_depleted2.wav",
+				0.7f,
+				ATTN_NORM);
 		}
 	}
 	else
@@ -4944,61 +5372,131 @@ void CBasePlayer::RunShieldUpdates()
 		if (isShieldEmpty)
 		{
 #ifdef SHIELD_DEBUG
-			ALERT(at_console, "[Shield] FORCE Exit Empty loop.\n");
+			ALERT(
+				at_console,
+				"[Shield] FORCE Exit Empty loop.\n");
 #endif
+
 			isShieldEmpty = false;
-			STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_empty.wav");
+
+			StopPrivateShieldSound(
+				SHIELD_SOUND_EMPTY);
 		}
 
-		// Low loop
-		if (armorNow > SHIELD_EMPTY_THRESHOLD && armorNow <= SHIELD_LOW_THRESHOLD)
+		// -----------------------------------------------------
+		// LOW
+		// -----------------------------------------------------
+
+		if (armorNow >
+			SHIELD_EMPTY_THRESHOLD &&
+			armorNow <=
+			SHIELD_LOW_THRESHOLD)
 		{
 			if (!isShieldLow)
 			{
 #ifdef SHIELD_DEBUG
-				ALERT(at_console, "[Shield] FORCE Low loop triggered.\n");
+				ALERT(
+					at_console,
+					"[Shield] FORCE Low loop triggered.\n");
 #endif
+
 				isShieldLow = true;
-				EMIT_SOUND(ENT(pev), CHAN_STATIC, "player/shield_low.wav", 0.75f, ATTN_NORM);
+
+				PlayPrivateShieldSound(
+					SHIELD_SOUND_LOW);
 			}
 		}
 		else if (isShieldLow)
 		{
 #ifdef SHIELD_DEBUG
-			ALERT(at_console, "[Shield] FORCE Exit Low loop.\n");
+			ALERT(
+				at_console,
+				"[Shield] FORCE Exit Low loop.\n");
 #endif
+
 			isShieldLow = false;
-			STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_low.wav");
+
+			StopPrivateShieldSound(
+				SHIELD_SOUND_LOW);
 		}
 	}
 }
 
 void CBasePlayer::InterruptShieldRegenOnDamage()
 {
-	if (sv_aura_regeneration.value <= 0 || pev->armorvalue >= MAX_NORMAL_BATTERY) return;
+	if (sv_aura_regeneration.value <= 0 ||
+		pev->armorvalue >= MAX_NORMAL_BATTERY)
+	{
+		return;
+	}
 
 #ifdef SHIELD_DEBUG
-	ALERT(at_console, "[Shield] Regen interrupted by DAMAGE!\n");
+	ALERT(
+		at_console,
+		"[Shield] Regen interrupted by DAMAGE!\n");
 #endif
 
-	STOP_SOUND(ENT(pev), CHAN_STATIC, "player/shield_lp.wav");
-	if (m_fRegenOn && !isShieldEmpty)
+	StopPrivateShieldSound(
+		SHIELD_SOUND_REGEN_LOOP);
+
+	if (m_fRegenOn &&
+		!isShieldEmpty)
 	{
 #ifdef SHIELD_DEBUG
-		ALERT(at_console, "[Shield] Play regen interrupt sound.\n");
+		ALERT(
+			at_console,
+			"[Shield] Play regen interrupt sound.\n");
 #endif
-		EMIT_SOUND(ENT(pev), CHAN_ITEM, "items/suitchargeno1.wav", 0.85f, ATTN_NORM);
+
+		/*
+			Private HEV/shield feedback.
+			Nearby players should NOT hear this.
+		*/
+		PlayPrivateShieldSound(
+			SHIELD_SOUND_REGEN_INTERRUPT);
 	}
 
 	m_fRegenOn = false;
 	bAreWeMaxxed = false;
 	bAreWeAt100 = false;
 
-	m_flNextSuitRegenTime = gpGlobals->time + SHIELD_POSTDAMAGE_DELAY + sv_aura_regeneration_wait.value;
+	m_flNextSuitRegenTime =
+		gpGlobals->time +
+		SHIELD_POSTDAMAGE_DELAY +
+		sv_aura_regeneration_wait.value;
+
 #ifdef SHIELD_DEBUG
-	ALERT(at_console, "[Shield] Next possible regen at %.2f\n", m_flNextSuitRegenTime);
+	ALERT(
+		at_console,
+		"[Shield] Next possible regen at %.2f\n",
+		m_flNextSuitRegenTime);
 #endif
 }
+
+void CBasePlayer::PlayPrivateShieldSound(int iSound)
+{
+	if (gmsgShieldSound <= 0)
+		return;
+
+	MESSAGE_BEGIN(MSG_ONE, gmsgShieldSound, NULL, pev);
+	WRITE_BYTE(SHIELD_SOUND_PLAY);
+	WRITE_BYTE(iSound);
+
+	MESSAGE_END();
+}
+
+void CBasePlayer::StopPrivateShieldSound(int iSound)
+{
+	if (gmsgShieldSound <= 0)
+		return;
+
+	MESSAGE_BEGIN(MSG_ONE, gmsgShieldSound, NULL, pev);
+	WRITE_BYTE(SHIELD_SOUND_STOP);
+	WRITE_BYTE(iSound);
+
+	MESSAGE_END();
+}
+
 // END OF SHIELD REGENERATION LOGIC ( BlueNightHawk : Suit Energy Regeneration )
 
 /*
