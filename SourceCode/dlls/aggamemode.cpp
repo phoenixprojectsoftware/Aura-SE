@@ -57,6 +57,8 @@ void SetupGametype()
         g_GameType = OITC;
     else if (sGametype == "king" || sGametype == "koth")
         g_GameType = KING;
+    else if (sGametype == "sandbox")
+        g_GameType = SANDBOX;
 }
 
 AgString AgGamename()

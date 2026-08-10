@@ -540,7 +540,7 @@ void CWorld :: Precache( void )
 // player precaches     
 	W_Precache ();									// get weapon precaches
 
-	if ((FIREFIGHT == AgGametype()) || (FIESTAFIGHT == AgGametype()))
+	if ((FIREFIGHT == AgGametype()) || (FIESTAFIGHT == AgGametype()) || SANDBOX == AgGametype())
 		M_Precache ();										// get monster precaches for firefight
 
 	ClientPrecache();

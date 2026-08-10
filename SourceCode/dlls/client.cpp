@@ -503,6 +503,79 @@ void Host_Say( edict_t *pEntity, int teamonly )
 	}
 }
 
+static void EntCreate(CBasePlayer* pPlayer, const char* pszClassname)
+{
+	if (!pPlayer || !pPlayer->pev || !pszClassname || !pszClassname[0])
+	{
+		return;
+	}
+
+	if (SANDBOX != AgGametype())
+		return;
+
+	// get the player's view direction
+	UTIL_MakeVectors(pPlayer->pev->v_angle + pPlayer->pev->punchangle);
+
+	const Vector vecStart = pPlayer->pev->origin + pPlayer->pev->view_ofs;
+	const Vector vecEnd = vecStart + gpGlobals->v_forward * 4096.0f;
+
+	TraceResult tr;
+
+	UTIL_TraceLine(vecStart, vecEnd, dont_ignore_monsters, pPlayer->edict(), &tr);
+
+	Vector vecSpawn;
+
+	if (tr.flFraction < 1.0f)
+	{
+		vecSpawn = tr.vecEndPos + tr.vecPlaneNormal * 16.0f;
+	}
+	else
+	{
+		vecSpawn = vecStart + gpGlobals->v_forward * 128.0f;
+	}
+
+	const string_t iszClassname = ALLOC_STRING(pszClassname);
+
+	edict_t* pEdict = CREATE_NAMED_ENTITY(iszClassname);
+
+	if (FNullEnt(pEdict))
+	{
+		ClientPrint(pPlayer->pev, HUD_PRINTCONSOLE, UTIL_VarArgs("ent_create: couldn't create \"%s\"\n", pszClassname));
+
+		return;
+	}
+
+	CBaseEntity* pEntity = CBaseEntity::Instance(pEdict);
+
+	if (!pEntity)
+	{
+		REMOVE_ENTITY(pEdict);
+
+		ClientPrint(pPlayer->pev, HUD_PRINTCONSOLE, UTIL_VarArgs("ent_create: \" %s\" is not a valid class.\nI'm going to fart on your face if you ever try that ever again.\n", pszClassname));
+
+		return;
+	}
+
+	pEntity->pev->origin = vecSpawn;
+
+	// Face the entity in roughly the same yaw as the player.
+	// We don't copy pitch bitch, because monsters/items generally remain upright.
+	pEntity->pev->angles = Vector(0.0f, pPlayer->pev->v_angle.y, 0.0f);
+
+	const int iSpawnResult = DispatchSpawn(pEntity->edict());
+
+	if (iSpawnResult < 0 || (pEntity->pev->flags & FL_KILLME))
+	{
+		REMOVE_ENTITY(pEntity->edict());
+		ClientPrint(pPlayer->pev, HUD_PRINTCONSOLE, UTIL_VarArgs("ent_create: \"%s\" could not be spawned\n", pszClassname));
+
+		return;
+	}
+
+	// ensure its engine origin is current
+	UTIL_SetOrigin(pEntity->pev, pEntity->pev->origin);
+	ClientPrint(pPlayer->pev, HUD_PRINTCONSOLE, UTIL_VarArgs("Created entity \"%s\" at %.0f %.0f.\n", pszClassname, vecSpawn.x, vecSpawn.y, vecSpawn.z));
+}
 
 /*
 ===========
@@ -551,6 +624,19 @@ void ClientCommand( edict_t *pEntity )
 		}
 	}
 #endif
+	else if (FStrEq(pcmd, "ent_create"))
+	{
+		CBasePlayer* pPlayer = GetClassPtr((CBasePlayer*)pev);
+		if (CMD_ARGC() < 2)
+		{
+			ClientPrint(pev, HUD_PRINTCONSOLE, "Usage: ent_create <classname>\n");
+			return;
+		}
+
+		EntCreate(pPlayer, CMD_ARGV(1));
+
+		return;
+	}
 	else if (FStrEq(pcmd, "closemenus"))
 	{
 		// just ignore it
