@@ -5478,6 +5478,9 @@ void CBasePlayer::PlayPrivateShieldSound(int iSound)
 	if (gmsgShieldSound <= 0)
 		return;
 
+	if (sv_aura_regeneration.value == 0)
+		return;
+
 	MESSAGE_BEGIN(MSG_ONE, gmsgShieldSound, NULL, pev);
 	WRITE_BYTE(SHIELD_SOUND_PLAY);
 	WRITE_BYTE(iSound);
@@ -5574,7 +5577,13 @@ void CBasePlayer :: UpdateClientData( void )
 
 	// BlueNightHawk : Suit Energy Regeneration
 	if (SWAT != AgGametype() && INSTAGIB != AgGametype())
-		RunShieldUpdates();
+	{
+		if (sv_aura_regeneration.value != 0)
+		{
+			RunShieldUpdates();
+		}
+	}
+
 //++ BulliT
   CBasePlayer* pPlayerTarget = NULL;
   if (m_hSpectateTarget != NULL && m_hSpectateTarget->pev != NULL)
