@@ -92,23 +92,28 @@ BOOL CHandGrenade::CanHolster( void )
 	return ( m_flStartThrow == 0 );
 }
 
-void CHandGrenade::Holster( int skiplocal /* = 0 */ )
+void CHandGrenade::Holster(int skiplocal)
 {
 	m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + 0.5;
 
-	if ( m_pPlayer->m_rgAmmo[ m_iPrimaryAmmoType ] )
+	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType])
 	{
-		SendWeaponAnim( HANDGRENADE_HOLSTER );
+		SendWeaponAnim(HANDGRENADE_HOLSTER);
 	}
 	else
 	{
-		// no more grenades!
-		m_pPlayer->pev->weapons &= ~(1<<WEAPON_HANDGRENADE);
-		SetThink( &CHandGrenade::DestroyItem );
-		pev->nextthink = gpGlobals->time + 0.1;
+		// arcade -- keep the weapon in inventory
+		if (ARCADE != AgGametype() && ARENA != AgGametype() && INSTAGIB != AgGametype())
+		{
+			m_pPlayer->pev->weapons &= ~(1 << WEAPON_HANDGRENADE);
+
+			SetThink(&CHandGrenade::DestroyItem);
+
+			pev->nextthink = gpGlobals->time + 0.1;
+		}
 	}
 
-	EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_WEAPON, "common/null.wav", 1.0, ATTN_NORM);
+	EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_WEAPON, "common/null.wav", VOL_NORM, ATTN_NORM);
 }
 
 void CHandGrenade::PrimaryAttack()
