@@ -973,13 +973,25 @@ int AgGameRules::IPointsForKill(CBasePlayer* pAttacker, CBasePlayer* pKilled)
             }
 
             if (0 < ag_start_hgrenade.value)
+            {
                 pAttacker->GiveAmmo(ag_start_hgrenade.value, "Hand Grenade", HANDGRENADE_MAX_CARRY);
+                pAttacker->GiveNamedItem("weapon_handgrande");
+            }
             if (0 < ag_start_satchel.value)
+            {
                 pAttacker->GiveAmmo(ag_start_satchel.value, "Satchel Charge", SATCHEL_MAX_CARRY);
+                pAttacker->GiveNamedItem("weapon_satchel");
+            }
             if (0 < ag_start_tripmine.value)
+            {
                 pAttacker->GiveAmmo(ag_start_tripmine.value, "Trip Mine", TRIPMINE_MAX_CARRY);
+                pAttacker->GiveNamedItem("weapon_tripmine");
+            }
             if (0 < ag_start_snark.value)
+            {
                 pAttacker->GiveAmmo(ag_start_snark.value, "Snarks", SNARK_MAX_CARRY);
+                pAttacker->GiveNamedItem("weapon_snark");
+            }
             if (0 < ag_start_hornet.value)
                 pAttacker->GiveAmmo(ag_start_hornet.value, "Hornets", HORNET_MAX_CARRY);
             if (0 < ag_start_m203.value)
