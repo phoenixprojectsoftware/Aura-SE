@@ -352,9 +352,12 @@ void CSatchel::Holster( int skiplocal /* = 0 */ )
 
 	if ( !m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] && !m_chargeReady )
 	{
-		m_pPlayer->pev->weapons &= ~(1<<WEAPON_SATCHEL);
-		SetThink( &CSatchel::DestroyItem );
-		pev->nextthink = gpGlobals->time + 0.1;
+		if (ARCADE != AgGametype() && ARENA != AgGametype() && INSTAGIB != AgGametype())
+		{
+			m_pPlayer->pev->weapons &= ~(1 << WEAPON_SATCHEL);
+			SetThink(&CSatchel::DestroyItem);
+			pev->nextthink = gpGlobals->time + 0.1;
+		}
 	}
 }
 

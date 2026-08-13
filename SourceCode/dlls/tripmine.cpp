@@ -421,10 +421,13 @@ void CTripmine::Holster( int skiplocal /* = 0 */ )
 
 	if (!m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType])
 	{
-		// out of mines
-		m_pPlayer->pev->weapons &= ~(1<<WEAPON_TRIPMINE);
-		SetThink( &CTripmine::DestroyItem );
-		pev->nextthink = gpGlobals->time + 0.1;
+		if (ARCADE != AgGametype() && ARENA != AgGametype() && INSTAGIB != AgGametype())
+		{
+			// out of mines
+			m_pPlayer->pev->weapons &= ~(1 << WEAPON_TRIPMINE);
+			SetThink(&CTripmine::DestroyItem);
+			pev->nextthink = gpGlobals->time + 0.1;
+		}
 	}
 
 	SendWeaponAnim( TRIPMINE_HOLSTER );
