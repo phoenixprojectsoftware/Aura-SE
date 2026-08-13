@@ -18,6 +18,7 @@
 #include "agglobal.h"
 #include "monsters.h" // for spawning monsters
 #include "player.h"
+#include "UserMessages.h"
 
 extern cvar_t only_zobies;
 
@@ -245,6 +246,14 @@ AgFirefight::AgFirefight()
 	m_iWaveNumber = 0;
 	m_iEnemiesRemaining = 0;
 	m_iAliveMonsters = 0;
+
+	m_iWaypointTargetCount = 0;
+
+	for (int i = 0; i < 3; ++i)
+	{
+		m_iWaypointTargets[i] = 0;
+	}
+
 	m_FileCache.Load(); // no duplicate needed. maybe.
 }
 
@@ -307,6 +316,7 @@ void AgFirefight::Think()
 	}
 
 	UpdateMonsterTargets();
+	UpdateFinalEnemyWaypoints();
 }
 
 void AgFirefight::SendCommand(const char* cmd, ...)
@@ -388,6 +398,8 @@ void AgFirefight::TrySpawnNext()
 
 void AgFirefight::StartNextWave()
 {
+	ClearFinalEnemyWaypoints();
+
 	m_Enemies.clear();
 	m_ActiveSpawns.clear();
 	m_iAliveMonsters = 0;
@@ -471,6 +483,14 @@ void AgFirefight::OnMonsterKilled(CBaseMonster* pMonster)
 	//	TrySpawnNext();
 }
 
+void AgFirefight::InitHUD(CBasePlayer* pPlayer)
+{
+	if (!pPlayer)
+		return;
+
+	SendFinalEnemyWaypoints(pPlayer);
+}
+
 const char* AgFirefight::GetWaveMonsterName() const
 {
 	static char szName[32];
@@ -504,18 +524,21 @@ void AgFirefight::CheckWaveStatus()
 
 	UTIL_ClientPrintAll(HUD_PRINTCENTER, UTIL_VarArgs("Wave %d cleared", m_iWaveNumber));
 
+	ClearFinalEnemyWaypoints();
 	m_State = FF_ROUND_OVER;
 	m_flWaveStartTime = gpGlobals->time;
 }
 
 void AgFirefight::GameOver()
 {
+	ClearFinalEnemyWaypoints();
 	UTIL_ClientPrintAll(HUD_PRINTCENTER, "Game over");
 	m_State = FF_GAME_OVER;
 }
 
 void AgFirefight::EndRound()
 {
+	ClearFinalEnemyWaypoints();
 	// do we need more cleanup here??
 	m_State = FF_ROUND_OVER;
 }
@@ -617,3 +640,118 @@ void AgFirefight::UpdateMonsterTargets()
 
 	m_iAliveMonsters = (int)m_Enemies.size();
 }
+
+void AgFirefight::SendFinalEnemyWaypoints(CBasePlayer* pPlayer)
+{
+	if (pPlayer)
+	{
+		MESSAGE_BEGIN(MSG_ONE, gmsgFirefightTargets, NULL, pPlayer->edict());
+	}
+	else
+	{
+		MESSAGE_BEGIN(MSG_ALL, gmsgFirefightTargets);
+	}
+
+	WRITE_BYTE(m_iWaypointTargetCount);
+
+	for (int i = 0; i < m_iWaypointTargetCount; ++i)
+	{
+		WRITE_SHORT(m_iWaypointTargets[i]);
+	}
+
+	MESSAGE_END();
+}
+
+void AgFirefight::ClearFinalEnemyWaypoints()
+{
+	bool bChanged = m_iWaypointTargetCount != 0;
+
+	for (int i = 0; i < 3; ++i)
+	{
+		if (m_iWaypointTargets[i] != 0)
+			bChanged = true;
+
+		m_iWaypointTargets[i] = 0;
+	}
+
+	m_iWaypointTargetCount = 0;
+
+	if (bChanged)
+		SendFinalEnemyWaypoints();
+}
+
+void AgFirefight::UpdateFinalEnemyWaypoints()
+{
+	int iNewTargets[3] =
+	{
+		0,
+		0,
+		0
+	};
+
+	int iNewTargetCount = 0;
+
+	// waypoints are only active during a wave.
+	if (m_State == FF_FIGHTING || m_State == FF_SPAWNING)
+	{
+		const int iAliveCount = static_cast<int>(m_Enemies.size());
+
+		if (iAliveCount > 0 && iAliveCount <= 3)
+		{
+			for (std::vector<EHANDLE>::iterator it = m_Enemies.begin(); it != m_Enemies.end() && iNewTargetCount < 3; ++it)
+			{
+				CBaseEntity* pEntity = *it;
+
+				if (!pEntity || !pEntity->pev)
+				{
+					continue;
+				}
+
+				CBaseMonster* pMonster = pEntity->MyMonsterPointer();
+
+				if (!pMonster)
+					continue;
+
+				if (pMonster->pev->deadflag != DEAD_NO)
+					continue;
+
+				if (pMonster->pev->health <= 0.0f)
+					continue;
+
+				const int iEntityIndex = ENTINDEX(pMonster->edict());
+
+				if (iEntityIndex <= 0)
+					continue;
+
+				iNewTargets[iNewTargetCount++] = iEntityIndex;
+			}
+		}
+	}
+
+	bool bChanged = iNewTargetCount != m_iWaypointTargetCount;
+
+	if (!bChanged)
+	{
+		for (int i = 0; i < 3; ++i)
+		{
+			if (iNewTargets[i] != m_iWaypointTargets[i])
+			{
+				bChanged = true;
+				break;
+			}
+		}
+	}
+
+	if (!bChanged)
+		return;
+
+	m_iWaypointTargetCount = iNewTargetCount;
+
+	for (int i = 0; i < 3; ++i)
+	{
+		m_iWaypointTargets[i] = iNewTargets[i];
+	}
+
+	SendFinalEnemyWaypoints();
+}
+

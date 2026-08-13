@@ -64,7 +64,8 @@ enum enumGameType
     CHILL,
     TAUGUYS,
     OITC,
-    KING
+    KING,
+    SANDBOX
 };
 //-- muphicks
 extern DLL_GLOBAL BYTE g_GameType;

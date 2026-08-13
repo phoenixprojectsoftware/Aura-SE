@@ -49,6 +49,9 @@ extern cvar_t	ag_wallgauss;
 extern cvar_t	ag_headshot;
 extern cvar_t	ag_blastradius;
 
+extern cvar_t	ag_arena_round_timelimit;
+extern cvar_t	ag_lms_final_timelimit;
+
 extern cvar_t	ag_ban_crowbar;
 extern cvar_t	ag_ban_glock;
 extern cvar_t   ag_ban_oitc;

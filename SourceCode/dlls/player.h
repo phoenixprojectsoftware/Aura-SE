@@ -15,6 +15,21 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
+enum ShieldAction
+{
+	SHIELD_SOUND_PLAY = 0,
+	SHIELD_SOUND_STOP
+};
+
+enum ShieldSoundId
+{
+	SHIELD_SOUND_EMPTY = 0,
+	SHIELD_SOUND_LOW,
+	SHIELD_SOUND_REGEN_LOOP,
+	SHIELD_SOUND_REGEN_START,
+	SHIELD_SOUND_REGEN_FINISH,
+	SHIELD_SOUND_REGEN_INTERRUPT
+};
 
 #include "pm_materials.h"
 
@@ -554,6 +569,9 @@ public:
 	void HandleArmorChanged(float oldArmor, float newArmor);
 	void RunShieldUpdates();
 	void InterruptShieldRegenOnDamage();
+	void PlayPrivateShieldSound(int iSound);
+	void StopPrivateShieldSound(int iSound);
+
 	void UpdateClientData();
 
 private:

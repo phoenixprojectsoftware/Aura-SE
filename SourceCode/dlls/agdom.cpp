@@ -222,8 +222,10 @@ void AgDOM::Think()
         // Could check whether a team has all the control points and if so play DOMINATION sound?
     }
 
-
     m_FileItemCache.Init();
+
+    if (g_pGameRules->IsCurrentMapInvalid())
+        return;
 }
 
 void AgDOM::ClientConnected(CBasePlayer* pPlayer)
@@ -492,6 +494,26 @@ LINK_ENTITY_TO_CLASS(item_dom_controlpoint, AgDOMControlPoint);
 //
 ///////////////////////////////////////////////////////////////////////////////////
 
+static bool AgIsEmptyString(const char* pszText)
+{
+    if (!pszText)
+        return true;
+
+    while (*pszText)
+    {
+        if (*pszText != ' ' &&
+            *pszText != '\t' &&
+            *pszText != '\r' &&
+            *pszText != '\n')
+        {
+            return false;
+        }
+
+        ++pszText;
+    }
+
+    return true;
+}
 
 #include "vector.h"
 
@@ -518,7 +540,16 @@ void AgDOMFileItem::Show()
     pSpot->LiveForTime(5.0);
 }
 
+void AgDOMFileItemCache::Clear()
+{
+    for (AgDOMFileItemList::iterator itr = m_lstFileItems.begin(); itr != m_lstFileItems.end(); ++itr)
+    {
+        delete* itr;
+    }
 
+    m_lstFileItems.clear();
+    m_bInitDone = false;
+}
 
 AgDOMFileItemCache::AgDOMFileItemCache()
 {
@@ -528,10 +559,7 @@ AgDOMFileItemCache::AgDOMFileItemCache()
 
 AgDOMFileItemCache::~AgDOMFileItemCache()
 {
-    //Delete all.
-    for (AgDOMFileItemList::iterator itrFileItems = m_lstFileItems.begin(); itrFileItems != m_lstFileItems.end(); ++itrFileItems)
-        delete* itrFileItems;
-    m_lstFileItems.clear();
+    Clear();
 }
 
 void AgDOMFileItemCache::Add(const AgString& sFileItem, CBasePlayer* pPlayer)
@@ -547,7 +575,12 @@ void AgDOMFileItemCache::Add(const AgString& sFileItem, CBasePlayer* pPlayer)
         return;
 
     AgDOMFileItem* pFileItem = new AgDOMFileItem;
-    strcpy(pFileItem->m_szName, sFileItem.c_str());
+    strncpy(
+        pFileItem->m_szName,
+        sFileItem.c_str(),
+        sizeof(pFileItem->m_szName) - 1);
+
+    pFileItem->m_szName[sizeof(pFileItem->m_szName) - 1] = '\0';
     pFileItem->m_vOrigin = pPlayer->pev->origin;
     pFileItem->m_vAngles = pPlayer->pev->angles;
 
@@ -572,8 +605,16 @@ void AgDOMFileItemCache::Del(CBasePlayer* pPlayer)
         return;
 
     AgDOMFileItem* pFileItem = m_lstFileItems.back();
-    AgConsole(UTIL_VarArgs("Deleted last item - %s.", pFileItem->m_szName, pPlayer));
+
+    AgConsole(
+        UTIL_VarArgs(
+            "Deleted last item - %s.",
+            pFileItem->m_szName),
+        pPlayer);
+
     m_lstFileItems.pop_back();
+    delete pFileItem;
+
     Save(pPlayer);
 }
 
@@ -595,36 +636,98 @@ void AgDOMFileItemCache::List(CBasePlayer* pPlayer)
 
 void AgDOMFileItemCache::Load(CBasePlayer* pPlayer)
 {
-    for (AgDOMFileItemList::iterator itrFileItems = m_lstFileItems.begin(); itrFileItems != m_lstFileItems.end(); ++itrFileItems)
-        delete* itrFileItems;
-    m_lstFileItems.clear();
+    Clear();
 
+    char szFile[MAX_PATH];
 
-    char	szFile[MAX_PATH];
-    char	szData[20000];
-    sprintf(szFile, "%s/dom/%s.dom", AgGetDirectory(), STRING(gpGlobals->mapname));
+    snprintf(
+        szFile,
+        sizeof(szFile),
+        "%s/dom/%s.dom",
+        AgGetDirectory(),
+        STRING(gpGlobals->mapname));
+
+    szFile[sizeof(szFile) - 1] = '\0';
+
     FILE* pFile = fopen(szFile, "r");
+
     if (!pFile)
     {
-        // file error
         return;
     }
 
-    int iRead = fread(szData, sizeof(char), sizeof(szData) - 2, pFile);
-    fclose(pFile);
-    if (0 >= iRead)
-        return;
-    szData[iRead] = '\0';
+    char szLine[512];
+    int iLineNumber = 0;
+    int iLoadedItems = 0;
+    int iRejectedItems = 0;
 
-    char* pszCTFString = strtok(szData, "\n");
-    while (pszCTFString != NULL)
+    while (fgets(szLine, sizeof(szLine), pFile))
     {
+        ++iLineNumber;
+
+        char* pszLine = szLine;
+
+        while (*pszLine == ' ' || *pszLine == '\t' ||
+            *pszLine == '\r' || *pszLine == '\n')
+        {
+            ++pszLine;
+        }
+
+        if (*pszLine == '\0' ||
+            *pszLine == '\r' ||
+            *pszLine == '\n' ||
+            *pszLine == '#' ||
+            *pszLine == ';')
+        {
+            continue;
+        }
+
         AgDOMFileItem* pFileItem = new AgDOMFileItem;
-        sscanf(pszCTFString, "%s %f %f %f %f %f %f %s\n", pFileItem->m_szName, &pFileItem->m_vOrigin.x, &pFileItem->m_vOrigin.y, &pFileItem->m_vOrigin.z,
-            &pFileItem->m_vAngles.x, &pFileItem->m_vAngles.y, &pFileItem->m_vAngles.z,
+
+        const int iParsedFields = sscanf(
+            pszLine,
+            "%31s %f %f %f %f %f %f %63s",
+            pFileItem->m_szName,
+            &pFileItem->m_vOrigin.x,
+            &pFileItem->m_vOrigin.y,
+            &pFileItem->m_vOrigin.z,
+            &pFileItem->m_vAngles.x,
+            &pFileItem->m_vAngles.y,
+            &pFileItem->m_vAngles.z,
             pFileItem->m_szData1);
+
+        if (iParsedFields != 8)
+        {
+            delete pFileItem;
+            ++iRejectedItems;
+
+            ALERT(
+                at_warning,
+                "Rejected malformed DOM entry in %s at line %d.\n",
+                szFile,
+                iLineNumber);
+
+            continue;
+        }
+
         m_lstFileItems.push_back(pFileItem);
-        pszCTFString = strtok(NULL, "\n");
+        ++iLoadedItems;
+    }
+
+    fclose(pFile);
+
+    ALERT(
+        at_console,
+        "Loaded %d DOM configuration entries from %s.\n",
+        iLoadedItems,
+        szFile);
+
+    if (iRejectedItems > 0)
+    {
+        ALERT(
+            at_warning,
+            "Rejected %d malformed DOM configuration entries.\n",
+            iRejectedItems);
     }
 }
 
@@ -662,29 +765,171 @@ void AgDOMFileItemCache::Init()
 {
     if (m_bInitDone)
         return;
-    m_bInitDone = true;
 
-    CBaseEntity* pEnt = NULL;
+    const AgMapValidationResult validationResult =
+        Validate();
 
-    for (AgDOMFileItemList::iterator itrFileItems = m_lstFileItems.begin(); itrFileItems != m_lstFileItems.end(); ++itrFileItems)
+    if (!validationResult.IsValid())
     {
-        AgDOMFileItem* pFileItem = *itrFileItems;
-
-        if (g_pGameRules->IsAllowedToSpawn(pFileItem->m_szName))
-            pEnt = CBaseEntity::Create(pFileItem->m_szName, pFileItem->m_vOrigin, pFileItem->m_vAngles, INDEXENT(0));
-
-        if (FStrEq("item_dom_controlpoint", pFileItem->m_szName) && pEnt)
+        if (g_pGameRules)
         {
-            AgDOMControlPoint* pCP = (AgDOMControlPoint*)pEnt;
-            strncpy(pCP->m_szLocation, pFileItem->m_szData1, sizeof(pCP->m_szLocation));
+            g_pGameRules->BeginInvalidMapSequence(
+                validationResult);
+        }
 
-            int entIndex = ENTINDEX(pEnt->edict());
-            g_PendingCPInfo.emplace_back(entIndex, std::string(pFileItem->m_szData1));
+        m_bInitDone = true;
+        return;
+    }
+
+    g_PendingCPInfo.clear();
+    g_bSentCPInfo = false;
+
+    for (AgDOMFileItemList::iterator itr =
+        m_lstFileItems.begin();
+        itr != m_lstFileItems.end();
+        ++itr)
+    {
+        AgDOMFileItem* pFileItem = *itr;
+
+        if (!pFileItem)
+            continue;
+
+        CBaseEntity* pEnt = NULL;
+
+        if (g_pGameRules->IsAllowedToSpawn(
+            pFileItem->m_szName))
+        {
+            pEnt = CBaseEntity::Create(
+                pFileItem->m_szName,
+                pFileItem->m_vOrigin,
+                pFileItem->m_vAngles,
+                INDEXENT(0));
+        }
+
+        if (FStrEq(
+            "item_dom_controlpoint",
+            pFileItem->m_szName) &&
+            pEnt)
+        {
+            AgDOMControlPoint* pCP =
+                static_cast<AgDOMControlPoint*>(pEnt);
+
+            strncpy(
+                pCP->m_szLocation,
+                pFileItem->m_szData1,
+                sizeof(pCP->m_szLocation) - 1);
+
+            pCP->m_szLocation[
+                sizeof(pCP->m_szLocation) - 1] = '\0';
+
+            const int iEntityIndex =
+                ENTINDEX(pEnt->edict());
+
+            g_PendingCPInfo.emplace_back(
+                iEntityIndex,
+                std::string(pFileItem->m_szData1));
         }
     }
 
-    // Spawn the entity that will send the CP info after delay
-    CBaseEntity* pSender = CBaseEntity::Create("controlpoint_info_sender", Vector(0, 0, 0), Vector(0, 0, 0), INDEXENT(0));
+    CBaseEntity* pSender = CBaseEntity::Create(
+        "controlpoint_info_sender",
+        Vector(0, 0, 0),
+        Vector(0, 0, 0),
+        INDEXENT(0));
+
     if (pSender)
         pSender->Spawn();
+
+    m_bInitDone = true;
+}
+
+int AgDOMFileItemCache::GetItemCount(
+    const char* pszClassname) const
+{
+    if (!pszClassname || !pszClassname[0])
+        return 0;
+
+    int iCount = 0;
+
+    for (AgDOMFileItemList::const_iterator itr =
+        m_lstFileItems.begin();
+        itr != m_lstFileItems.end();
+        ++itr)
+    {
+        const AgDOMFileItem* pFileItem = *itr;
+
+        if (!pFileItem)
+            continue;
+
+        if (FStrEq(pFileItem->m_szName, pszClassname))
+            ++iCount;
+    }
+
+    return iCount;
+}
+
+int AgDOMFileItemCache::GetSpawnCount() const
+{
+    return GetItemCount("info_player_deathmatch");
+}
+
+int AgDOMFileItemCache::GetControlPointCount() const
+{
+    return GetItemCount("item_dom_controlpoint");
+}
+
+AgMapValidationResult AgDOMFileItemCache::Validate() const
+{
+    const int iSpawnCount =
+        GetSpawnCount();
+
+    const int iControlPointCount =
+        GetControlPointCount();
+
+    if (iSpawnCount < 8)
+    {
+        return AgMapValidationResult(
+            AG_MAP_INVALID_DOM_CONFIG,
+            UTIL_VarArgs(
+                "DOM requires at least 8 player spawn points; this configuration contains %d.",
+                iSpawnCount),
+            iSpawnCount,
+            8);
+    }
+
+    if (iControlPointCount < 1)
+    {
+        return AgMapValidationResult(
+            AG_MAP_INVALID_DOM_CONFIG,
+            "DOM requires at least one control point.",
+            iControlPointCount,
+            1);
+    }
+
+    for (AgDOMFileItemList::const_iterator itr =
+        m_lstFileItems.begin();
+        itr != m_lstFileItems.end();
+        ++itr)
+    {
+        const AgDOMFileItem* pFileItem = *itr;
+
+        if (!pFileItem)
+            continue;
+
+        if (!FStrEq(
+            pFileItem->m_szName,
+            "item_dom_controlpoint"))
+        {
+            continue;
+        }
+
+        if (AgIsEmptyString(pFileItem->m_szData1))
+        {
+            return AgMapValidationResult(
+                AG_MAP_INVALID_DOM_CONFIG,
+                "Every DOM control point must have a display name.");
+        }
+    }
+
+    return AgMapValidationResult();
 }

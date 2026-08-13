@@ -180,6 +180,8 @@ HLDLL_OBJS = \
 	$(HLDLL_OBJ_DIR)/agvote.o \
 	$(HLDLL_OBJ_DIR)/agspectator.o \
 	$(HLDLL_OBJ_DIR)/aginfointermission.o \
+	$(HLDLL_OBJ_DIR)/agrounddeadline.o \
+	$(HLDLL_OBJ_DIR)/agroundresult.o \
 	$(HLDLL_OBJ_DIR)/agsuddendeath.o \
 	$(HLDLL_OBJ_DIR)/agtimeout.o \
 	$(HLDLL_OBJ_DIR)/aggame.o \
@@ -189,6 +191,7 @@ HLDLL_OBJS = \
 	$(HLDLL_OBJ_DIR)/aglms.o \
 	$(HLDLL_OBJ_DIR)/agdom.o \
 	$(HLDLL_OBJ_DIR)/agking.o \
+	$(HLDLL_OBJ_DIR)/agplayertargets.o \
 	$(HLDLL_OBJ_DIR)/spawnchooser.o \
 	$(HLDLL_OBJ_DIR)/genericitem.o
 

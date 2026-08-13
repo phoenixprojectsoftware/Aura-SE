@@ -86,6 +86,7 @@ public:
 
 	void OnMonsterKilled(CBaseMonster* pMonster);
 
+	void InitHUD(CBasePlayer* pPlayer);
 
 	bool m_bAuthoring = false;
 
@@ -108,6 +109,10 @@ private:
 	void EndRound();
 	void GameOver();
 
+	void UpdateFinalEnemyWaypoints();
+	void SendFinalEnemyWaypoints(CBasePlayer* pPlayer = NULL);
+	void ClearFinalEnemyWaypoints();
+
 	bool m_bMusicSet1; // War Games
 	bool m_bMusicSet2; // Set 2 (stub)
 	bool m_bMusicSet3; // Set 3 (stub)
@@ -129,6 +134,9 @@ private:
 
 	std::vector<ActiveSpawn> m_ActiveSpawns;
 	int m_iAliveMonsters;
+
+	int m_iWaypointTargets[3];
+	int m_iWaypointTargetCount;
 };
 
 extern AgFirefight g_AgFirefight;

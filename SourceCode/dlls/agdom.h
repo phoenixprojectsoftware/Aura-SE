@@ -8,6 +8,8 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
+#include "agmapvalidation.h"
+
 #define DOM_TEAM1_NAME "blue"
 #define DOM_TEAM2_NAME "red"
 #define DOM_NEUTRAL_NAME "neutral"
@@ -39,6 +41,7 @@ class AgDOMFileItemCache
     typedef list<AgDOMFileItem*>  AgDOMFileItemList;
     AgDOMFileItemList m_lstFileItems;
 
+    void Clear();
     void Load(CBasePlayer* pPlayer = NULL);
     void Save(CBasePlayer* pPlayer = NULL);
 
@@ -52,6 +55,12 @@ public:
     void     Add(const AgString& sItem, CBasePlayer* pPlayer);
     void     Del(CBasePlayer* pPlayer);
     void     List(CBasePlayer* pPlayer);
+
+    int GetItemCount(const char* pszClassname) const;
+    int GetSpawnCount() const;
+    int GetControlPointCount() const;
+
+    AgMapValidationResult Validate() const;
 };
 
 

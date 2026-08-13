@@ -73,10 +73,8 @@ DLL_GLOBAL cvar_t	ag_wallgauss = { "sv_aura_wallgauss","1" };           //Defaul
 DLL_GLOBAL cvar_t	ag_headshot = { "sv_aura_headshot","3" };            //Default 3 = 3 times damage
 DLL_GLOBAL cvar_t	ag_blastradius = { "sv_aura_blastradius","1" };         //Default 1 = Standard radius
 
-DLL_GLOBAL cvar_t ff_wave_size = { "ff_wave_size", "6", FCVAR_SERVER };
-DLL_GLOBAL cvar_t ff_rounds_per_set = { "ff_rounds_per_set", "3", FCVAR_SERVER };
-DLL_GLOBAL cvar_t ff_waves_per_round = { "ff_waves_per_round", "5", FCVAR_SERVER };
-DLL_GLOBAL cvar_t ff_max_sets = { "ff_max_sets", "10", FCVAR_SERVER };
+DLL_GLOBAL cvar_t ag_arena_round_timelimit = { "sv_aura_arena_round_timelimit", "120", FCVAR_SERVER };
+DLL_GLOBAL cvar_t ag_lms_final_timelimit = { "sv_aura_lms_final_timelimit", "120", FCVAR_SERVER };
 
 
 DLL_GLOBAL cvar_t	ag_ban_crowbar = { "sv_aura_ban_crowbar","0" };
@@ -351,6 +349,9 @@ void AgInitGame()
     CVAR_REGISTER(&ag_wallgauss);
     CVAR_REGISTER(&ag_headshot);
     CVAR_REGISTER(&ag_blastradius);
+
+    CVAR_REGISTER(&ag_arena_round_timelimit);
+    CVAR_REGISTER(&ag_lms_final_timelimit);
 
     CVAR_REGISTER(&ag_ban_crowbar);
     CVAR_REGISTER(&ag_ban_glock);

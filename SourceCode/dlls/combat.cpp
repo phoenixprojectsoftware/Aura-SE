@@ -30,6 +30,7 @@
 #include "weapons.h"
 #include "func_break.h"
 #include "agglobal.h"
+#include "player.h"
 
 extern DLL_GLOBAL Vector		g_vecAttackDir;
 extern DLL_GLOBAL int			g_iSkillLevel;
@@ -568,6 +569,68 @@ void CBaseMonster::CallGibMonster( void )
 		UTIL_Remove(this);
 }
 
+#define GETNAME(classname) FStrEq(pszClassname, "monster_" classname)
+
+static const char* GetFirefightMonsterDisplayName(const CBaseMonster* pMonster)
+{
+	if (!pMonster || !pMonster->pev)
+		return "Enemy";
+
+	const char* pszClassname = STRING(pMonster->pev->classname);
+
+	if (GETNAME("hgrunt") || GETNAME("human_grunt"))
+		return "HECU Soldier";
+
+	if (GETNAME("agrunt") || GETNAME("alien_grunt"))
+		return "Alien Grunt";
+
+	if (GETNAME("apache"))
+		return "Apache";
+
+	if (GETNAME("bullsquid") || GETNAME("bullchicken"))
+		return "Bullsquid";
+
+	if (GETNAME("hassassin") || GETNAME("human_assassin"))
+		return "Assassin";
+
+	if (GETNAME("houndeye"))
+		return "Houndeye";
+
+	if (GETNAME("alien_slave") || GETNAME("islave"))
+		return "Alien Slave";
+
+	if (GETNAME("zamnhl"))
+		return "Fast Zombie";
+
+	if (GETNAME("zombie"))
+		return "Headcrab Zombie";
+
+	// fallback
+	return "Enemy";
+}
+
+static const char* GetFirefightWeaponName(CBasePlayer* pPlayer)
+{
+	if (!pPlayer)
+		return "world";
+
+	const char* pszWeapon = "world";
+
+	if (pPlayer->m_pActiveItem)
+	{
+		pszWeapon = pPlayer->m_pActiveItem->pszName();
+	}
+
+	if (!pszWeapon || !pszWeapon[0])
+		return "world";
+
+	if (strncmp(pszWeapon, "weapon_", 7) == 0)
+	{
+		pszWeapon += 7;
+	}
+
+	return pszWeapon;
+}
 
 /*
 ============
@@ -577,6 +640,7 @@ Killed
 #include "gamerules.h"
 #include "player.h"
 extern int gmsgDeathMsg;
+extern int gmsgFirefightKill;
 void CBaseMonster :: Killed( entvars_t *pevAttacker, int iGib )
 {
 	unsigned int	cCount = 0;
@@ -638,19 +702,13 @@ void CBaseMonster :: Killed( entvars_t *pevAttacker, int iGib )
 
 			pPlayer->AddPoints(1, TRUE);
 
-			const char* pszWeapon = "world"; // weapon is world by default
+			const char* pszWeapon = GetFirefightWeaponName(pPlayer);
+			const char* pszMonster = GetFirefightMonsterDisplayName(this);
 
-			if (pPlayer->m_pActiveItem)
-				pszWeapon = pPlayer->m_pActiveItem->pszName();
-
-			if (strncmp(pszWeapon, "weapon_", 7) == 0)
-				pszWeapon += 7;
-
-			// report to killfeed
-			MESSAGE_BEGIN(MSG_ALL, gmsgDeathMsg);
-				WRITE_BYTE(pPlayer->entindex()); // killer
-				WRITE_BYTE(-1); // no player victim
-				WRITE_STRING(pszWeapon); // weapon/icon string
+			MESSAGE_BEGIN(MSG_ALL, gmsgFirefightKill);
+				WRITE_BYTE(pPlayer->entindex());
+				WRITE_STRING(pszMonster);
+				WRITE_STRING(pszWeapon);
 			MESSAGE_END();
 		}
 

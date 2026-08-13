@@ -300,6 +300,12 @@ bool AgClient::HandleCommand(CBasePlayer* pPlayer)
         //Continue with more help commands.
         return false;
     }
+#ifdef _DEBUG
+    else if (FStrEq(CMD_ARGV(0), "testinval"))
+    {
+        g_pGameRules->TestInvalidSequence();
+    }
+#endif
     else if (FStrEq(CMD_ARGV(0), "settings"))
     {
         pPlayer->SetDisplayGamemode(0);

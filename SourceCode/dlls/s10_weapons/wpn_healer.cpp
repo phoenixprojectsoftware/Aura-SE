@@ -108,15 +108,32 @@ CBaseEntity* CHealer::FindMedkitTarget(float flRange)
 
 bool CHealer::IsFriendlyPlayer(CBaseEntity* pEntity)
 {
-	if (!pEntity || !pEntity->IsPlayer())
+	if (!pEntity || !pEntity->IsPlayer() || !m_pPlayer)
+	{
 		return false;
+	}
 
 	CBasePlayer* pOther = (CBasePlayer*)pEntity;
 
-	if (pOther->IsTeammate(pEntity))
-		return true;
+	/*
+		Firefight is inherently cooperative.
 
-	return false;
+		All participating players are considered friendly to one
+		another regardless of the normal team relationship system.
+	*/
+	if (FIREFIGHT == AgGametype() || FIESTAFIGHT == AgGametype())
+	{
+		// Don't allow spectators / non-participants.
+		if (pOther->IsSpectator())
+			return false;
+
+		return true;
+	}
+
+	/*
+		For every other gametype, retain the normal team rules.
+	*/
+	return m_pPlayer->IsTeammate(pOther);
 }
 
 bool CHealer::IsFriendlyMonster(CBaseMonster* pMonster)
