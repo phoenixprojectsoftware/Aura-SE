@@ -36,6 +36,8 @@ public:
     bool IsAllowedGamemode(const AgString& sGamemode, CBasePlayer* pPlayer = NULL);
 
     void NextGamemode(const AgString& sGamemode, CBasePlayer* pPlayer = NULL);
+
+    AgString GetGamemodeName(const AgString& sGamemode) const;
 };
 
 extern DLL_GLOBAL AgGameMode GameMode;

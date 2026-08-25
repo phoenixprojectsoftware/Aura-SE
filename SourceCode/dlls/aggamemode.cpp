@@ -349,4 +349,14 @@ void AgGameMode::LoadGames()
     }
 }
 
+AgString AgGameMode::GetGamemodeName(const AgString& sGamemode) const
+{
+    AgGameMap::const_iterator itr = m_mapGames.find(sGamemode);
+
+    if (itr == m_mapGames.end() || !itr->second)
+        return sGamemode;
+
+    return itr->second->m_sName;
+}
+
 //-- Martin Webrant
