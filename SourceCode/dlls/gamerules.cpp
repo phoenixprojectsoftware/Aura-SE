@@ -125,7 +125,8 @@ void CGameRules::RefreshSkillData ( void )
 	iSkill = (int)CVAR_GET_FLOAT("skill");
 	g_iSkillLevel = iSkill;
 
-	iSkill = 3; // always hard
+	if (FIREFIGHT == AgGametype() || FIESTAFIGHT == AgGametype())
+		iSkill = 3; // always hard
 
 	gSkillData.iSkillLevel = iSkill;
 
