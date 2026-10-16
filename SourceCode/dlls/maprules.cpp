@@ -922,6 +922,7 @@ private:
 	string_t m_iszAudio = 0;
 };
 
+#define SF_GAME_PLAYVIDEO_ALL_PLAYERS (1 << 0)
 LINK_ENTITY_TO_CLASS(game_playvideo, CGamePlayVideo);
 
 void CGamePlayVideo::Spawn(void)
@@ -952,7 +953,9 @@ void CGamePlayVideo::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE
 	if (!CanFireForActivator(pActivator))
 		return;
 
-	if (!pActivator || !pActivator->IsPlayer())
+	const bool bAllPlayers = (pev->spawnflags & SF_GAME_PLAYVIDEO_ALL_PLAYERS) != 0;
+
+	if (!bAllPlayers && (!pActivator || !pActivator->IsPlayer()))
 		return;
 
 	if (FStringNull(pev->message) || !VideoName()[0])
@@ -966,9 +969,10 @@ void CGamePlayVideo::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE
 
 	ALERT(at_console, "game_playvideo: video='%s' audio='%s'\n", pszVideo, pszAudio);
 
-	CBasePlayer* pPlayer = (CBasePlayer*)pActivator;
+	int iMessageDest = bAllPlayers ? MSG_ALL : MSG_ONE;
+	edict_t* pRecipient = bAllPlayers ? NULL : pActivator->edict();
 
-	MESSAGE_BEGIN(MSG_ONE, gmsgPlayVideo, NULL, pPlayer->edict());
+	MESSAGE_BEGIN(iMessageDest, gmsgPlayVideo, NULL, pRecipient);
 	WRITE_STRING(pszVideo);
 	WRITE_STRING(pszAudio);
 	MESSAGE_END();
