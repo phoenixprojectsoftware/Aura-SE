@@ -868,14 +868,29 @@ int AgDOMFileItemCache::GetItemCount(
     return iCount;
 }
 
+static int CountMapEntitiesByClassname(const char* pszClassname)
+{
+    int iCount = 0;
+
+    edict_t* pEntity = FIND_ENTITY_BY_CLASSNAME(NULL, pszClassname);
+
+    while (!FNullEnt(pEntity))
+    {
+        ++iCount;
+        pEntity = FIND_ENTITY_BY_CLASSNAME(pEntity, pszClassname);
+    }
+
+    return iCount;
+}
+
 int AgDOMFileItemCache::GetSpawnCount() const
 {
-    return GetItemCount("info_player_deathmatch");
+    return GetItemCount("info_player_deathmatch") + CountMapEntitiesByClassname("info_player_deathmatch");
 }
 
 int AgDOMFileItemCache::GetControlPointCount() const
 {
-    return GetItemCount("item_dom_controlpoint");
+    return GetItemCount("item_dom_controlpoint") + CountMapEntitiesByClassname("item_dom_controlpoint");
 }
 
 AgMapValidationResult AgDOMFileItemCache::Validate() const
