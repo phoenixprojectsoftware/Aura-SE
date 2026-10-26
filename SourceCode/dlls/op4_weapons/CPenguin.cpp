@@ -12,11 +12,15 @@
 *   without written permission from Valve LLC.
 *
 ****/
+#ifndef _HALO
 #include "../extdll.h"
 #include "../util.h"
 #include "../cbase.h"
 #include "../weapons.h"
+#include "../weapon_hierarchy.h"
 #include "../player.h"
+
+#include "../game.h"
 
 #include "CPenguin.h"
 
@@ -187,7 +191,14 @@ void CPenguin::PrimaryAttack()
 			--m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType];
 			m_fJustThrown = true;
 
-			m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 1.9;
+#ifndef CLIENT_DLL
+			int CrazyFireRate = AbsoluteInsaneness.value;
+
+			if (CrazyFireRate != 1)
+				m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 0.3;
+			else if (CrazyFireRate >= 1)
+				m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 0.065;
+#endif
 			m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 0.8;
 		}
 	}
@@ -211,11 +222,13 @@ int CPenguin::GetItemInfo(ItemInfo* p)
 	p->pszAmmo2 = nullptr;
 	p->iMaxAmmo2 = WEAPON_NOCLIP;
 	p->iMaxClip = WEAPON_NOCLIP;
-	p->iSlot = 4;
-	p->iPosition = 4;
+	p->iSlot = WPN_EXPL_SLOT;
+	p->iPosition = WPN_PENGUIN_POS;
 	p->iId = m_iId = WEAPON_PENGUIN;
 	p->iWeight = PENGUIN_WEIGHT;
 	p->iFlags = ITEM_FLAG_LIMITINWORLD | ITEM_FLAG_EXHAUSTIBLE;
 
 	return 1;
 }
+
+#endif // _HALO

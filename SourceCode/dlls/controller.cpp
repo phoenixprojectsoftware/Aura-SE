@@ -102,6 +102,7 @@ public:
 };
 
 LINK_ENTITY_TO_CLASS( monster_alien_controller, CController );
+LINK_ENTITY_TO_CLASS(monster_controller, CController);
 
 TYPEDESCRIPTION	CController::m_SaveData[] = 
 {

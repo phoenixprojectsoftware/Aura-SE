@@ -61,8 +61,6 @@ extern int g_teamplay;
 
 void LinkUserMessages( void );
 
-void PlayCDTrack(int iTrack);
-
 /*
  * used by kill command and disconnect command
  * ROBIN: Moved here from player.cpp, to allow multiple player models
@@ -505,6 +503,79 @@ void Host_Say( edict_t *pEntity, int teamonly )
 	}
 }
 
+static void EntCreate(CBasePlayer* pPlayer, const char* pszClassname)
+{
+	if (!pPlayer || !pPlayer->pev || !pszClassname || !pszClassname[0])
+	{
+		return;
+	}
+
+	if (SANDBOX != AgGametype())
+		return;
+
+	// get the player's view direction
+	UTIL_MakeVectors(pPlayer->pev->v_angle + pPlayer->pev->punchangle);
+
+	const Vector vecStart = pPlayer->pev->origin + pPlayer->pev->view_ofs;
+	const Vector vecEnd = vecStart + gpGlobals->v_forward * 4096.0f;
+
+	TraceResult tr;
+
+	UTIL_TraceLine(vecStart, vecEnd, dont_ignore_monsters, pPlayer->edict(), &tr);
+
+	Vector vecSpawn;
+
+	if (tr.flFraction < 1.0f)
+	{
+		vecSpawn = tr.vecEndPos + tr.vecPlaneNormal * 16.0f;
+	}
+	else
+	{
+		vecSpawn = vecStart + gpGlobals->v_forward * 128.0f;
+	}
+
+	const string_t iszClassname = ALLOC_STRING(pszClassname);
+
+	edict_t* pEdict = CREATE_NAMED_ENTITY(iszClassname);
+
+	if (FNullEnt(pEdict))
+	{
+		ClientPrint(pPlayer->pev, HUD_PRINTCONSOLE, UTIL_VarArgs("ent_create: couldn't create \"%s\"\n", pszClassname));
+
+		return;
+	}
+
+	CBaseEntity* pEntity = CBaseEntity::Instance(pEdict);
+
+	if (!pEntity)
+	{
+		REMOVE_ENTITY(pEdict);
+
+		ClientPrint(pPlayer->pev, HUD_PRINTCONSOLE, UTIL_VarArgs("ent_create: \" %s\" is not a valid class.\nI'm going to fart on your face if you ever try that ever again.\n", pszClassname));
+
+		return;
+	}
+
+	pEntity->pev->origin = vecSpawn;
+
+	// Face the entity in roughly the same yaw as the player.
+	// We don't copy pitch bitch, because monsters/items generally remain upright.
+	pEntity->pev->angles = Vector(0.0f, pPlayer->pev->v_angle.y, 0.0f);
+
+	const int iSpawnResult = DispatchSpawn(pEntity->edict());
+
+	if (iSpawnResult < 0 || (pEntity->pev->flags & FL_KILLME))
+	{
+		REMOVE_ENTITY(pEntity->edict());
+		ClientPrint(pPlayer->pev, HUD_PRINTCONSOLE, UTIL_VarArgs("ent_create: \"%s\" could not be spawned\n", pszClassname));
+
+		return;
+	}
+
+	// ensure its engine origin is current
+	UTIL_SetOrigin(pEntity->pev, pEntity->pev->origin);
+	ClientPrint(pPlayer->pev, HUD_PRINTCONSOLE, UTIL_VarArgs("Created entity \"%s\" at %.0f %.0f.\n", pszClassname, vecSpawn.x, vecSpawn.y, vecSpawn.z));
+}
 
 /*
 ===========
@@ -553,21 +624,26 @@ void ClientCommand( edict_t *pEntity )
 		}
 	}
 #endif
+	else if (FStrEq(pcmd, "ent_create"))
+	{
+		CBasePlayer* pPlayer = GetClassPtr((CBasePlayer*)pev);
+		if (CMD_ARGC() < 2)
+		{
+			ClientPrint(pev, HUD_PRINTCONSOLE, "Usage: ent_create <classname>\n");
+			return;
+		}
+
+		EntCreate(pPlayer, CMD_ARGV(1));
+
+		return;
+	}
 	else if (FStrEq(pcmd, "closemenus"))
 	{
 		// just ignore it
 	}
-	else if (FStrEq(pcmd, "VModEnable"))
-	{
-		// ignore, handled by the voice manager
-	}
 	else if ( g_pGameRules->ClientCommand( GetClassPtr((CBasePlayer *)pev), pcmd ) )
 	{
 		// MenuSelect returns true only if the command is properly handled,  so don't print a warning
-	}
-	else if (FStrEq(pcmd, "cdplayall"))
-	{
-		PlayCDTrack(atoi(CMD_ARGV(1)));
 	}
 	else
 	{
@@ -904,17 +980,17 @@ void ClientPrecache( void )
 	PRECACHE_SOUND("player/shield_depleted2.wav"); // shield depleted sound
 	PRECACHE_SOUND("player/shield_low.wav"); // shield low sound
 	PRECACHE_SOUND("player/shield_empty.wav"); // shield empty sound
-#ifdef _HALO
-	PRECACHE_SOUND("player/shield_charge.wav"); // shield charge sound
-#endif
+	PRECACHE_SOUND("player/shield_lp.wav"); // shield currently-recharging / loop sound
 
 #ifndef _HALO
 	PRECACHE_SOUND("player/shield_start.wav"); // shield start sound
-	PRECACHE_SOUND("player/shield_lp.wav"); // shield currently-recharging / loop sound
 	PRECACHE_SOUND("player/shield_finish.wav"); // shield finish sound
+
+	PRECACHE_SOUND("buttons/button6.wav");
 #endif
 
 	PRECACHE_SOUND("player/spawn.wav");
+	PRECACHE_SOUND("player/friend_online.wav");
 
 	// BlueNightHawk : Suit Energy Regeneration
 	PRECACHE_SOUND("buttons/blip1.wav");
@@ -1809,6 +1885,7 @@ void UpdateClientData ( const edict_t *ent, int sendweapons, struct clientdata_s
 			cd->fuser2			= pl->m_flNextAmmoBurn;
 			cd->fuser3			= pl->m_flAmmoStartCharge;
 			cd->vuser1.x		= pl->ammo_9mm;
+			cd->vuser1.x = pl->ammo_br;
 			cd->vuser1.y		= pl->ammo_357;
 			cd->vuser1.z		= pl->ammo_argrens;
 			cd->vuser2.z		= pl->ammo_762;

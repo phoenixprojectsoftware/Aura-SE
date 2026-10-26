@@ -1,4 +1,6 @@
 .vs/
 Debug/
+HaloDebug/
+HaloRelease/
 Release/
 *.vcxproj.user

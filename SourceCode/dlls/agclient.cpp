@@ -66,6 +66,10 @@ FILE_GLOBAL char* s_szCommands[] =
   "dropitems - Drops flag in CTF mode",
 };
 
+static void GetFFPath(char* out, size_t size)
+{
+    snprintf(out, size, "%s/ff/%s.ff", AgGetDirectory(), STRING(gpGlobals->mapname));
+}
 
 bool AgClient::HandleCommand(CBasePlayer* pPlayer)
 {
@@ -101,7 +105,7 @@ bool AgClient::HandleCommand(CBasePlayer* pPlayer)
     }
     else if (FStrEq(CMD_ARGV(0), "drop"))
     {
-        if (ARENA != AgGametype() && ARCADE != AgGametype() && INSTAGIB != AgGametype())
+        if (ARENA != AgGametype() && ARCADE != AgGametype() && INSTAGIB != AgGametype() && FIESTA != AgGametype() && FIESTAFIGHT != AgGametype() && OITC != AgGametype())
         {
             // player is dropping an item.
             pPlayer->DropPlayerItem((char*)CMD_ARGV(1));
@@ -147,6 +151,7 @@ bool AgClient::HandleCommand(CBasePlayer* pPlayer)
             const char* pszTeamName = "";
             const char* pszTeamNumber = CMD_ARGV(1);
             int iTeam = atoi(pszTeamNumber) - 1;
+
             if (5 == iTeam && g_teamplay)
             {
                 if (!g_pGameRules->IsValidTeam(pPlayer->TeamID()))
@@ -156,13 +161,30 @@ bool AgClient::HandleCommand(CBasePlayer* pPlayer)
                 }
             }
             else
+            {
                 pszTeamName = g_pGameRules->GetIndexedTeamName(iTeam);
+            }
+
             if (strlen(pszTeamName))
-                g_pGameRules->ChangePlayerTeam(pPlayer, pszTeamName, TRUE, TRUE);
+            {
+                if (pPlayer->IsSpectator())
+                {
+                    // Do NOT kill spectators while changing team.
+                    g_pGameRules->ChangePlayerTeam(pPlayer, pszTeamName, FALSE, FALSE);
+
+                    // Normal team modes should allow the player to re-enter immediately.
+                    if (ARENA != AgGametype() && LMS != AgGametype())
+                        pPlayer->SetIngame(true);
+
+                    pPlayer->Spectate_Stop();
+                }
+                else
+                {
+                    g_pGameRules->ChangePlayerTeam(pPlayer, pszTeamName, TRUE, TRUE);
+                }
+            }
         }
 
-        if (pPlayer->IsSpectator())
-            pPlayer->Spectate_Stop();
         return true;
     }
     else if (FStrEq(CMD_ARGV(0), "timeleft"))
@@ -278,6 +300,12 @@ bool AgClient::HandleCommand(CBasePlayer* pPlayer)
         //Continue with more help commands.
         return false;
     }
+#ifdef _DEBUG
+    else if (FStrEq(CMD_ARGV(0), "testinval"))
+    {
+        g_pGameRules->TestInvalidSequence();
+    }
+#endif
     else if (FStrEq(CMD_ARGV(0), "settings"))
     {
         pPlayer->SetDisplayGamemode(0);
@@ -364,26 +392,104 @@ bool AgClient::HandleCommand(CBasePlayer* pPlayer)
     }
     //-- muphicks
 #endif
-    else if (FStrEq(CMD_ARGV(0), "changeteam"))
+
+    // ++ FIREFIGHT
+#ifdef _DEBUG
+    else if (FStrEq(CMD_ARGV(0), "phx_set_wave"))
+#else
+    else if (FStrEq(CMD_ARGV(0), "phx_set_wave") && g_bLangame)
+#endif
     {
+        if (AgGametype() != FIREFIGHT && AgGametype() != FIESTAFIGHT)
+        {
+            AgConsole("phx_set_wave: Firefight only\n", pPlayer);
+            return true;
+        }
+
+        if (CMD_ARGC() != 2)
+        {
+            AgConsole("Usage: phx_set_wave <number>\n", pPlayer);
+            return true;
+        }
+
+        int wave = atoi(CMD_ARGV(1));
+        if (wave < 1)
+        {
+            AgConsole("Wave must be >= 1\n", pPlayer);
+            return true;
+        }
+
+        g_pGameRules->m_Firefight.SetAuthoringWave(wave);
+
+        AgConsole(UTIL_VarArgs("Firefight authoring wave set to %d\n", wave), pPlayer);
+
+        return true;
+    }
+#ifdef _DEBUG
+    else if (FStrEq(CMD_ARGV(0), "phx_add_spawn"))
+#else
+    else if (FStrEq(CMD_ARGV(0), "phx_add_spawn"))
+#endif
+    {
+        if (AgGametype() != FIREFIGHT && AgGametype() != FIESTAFIGHT)
+        {
+            AgConsole("this command is firefight only\n", pPlayer);
+            return true;
+        }
+
+        //AgFirefight* pFF = static_cast<AgFirefight*>(g_pGameRules);
+
+        Vector org = pPlayer->pev->origin;
+
+        char path[MAX_PATH];
+        GetFFPath(path, sizeof(path));
+
+        FILE* f = fopen(path, "a");
+        if (!f)
+        {
+            AgConsole("Failed to open .ff file for writing\n", pPlayer);
+            return true;
+        }
+
+        fprintf(f, "%d %.1f %1.f %.1f\n", g_pGameRules->m_Firefight.GetAuthoringWave(), org.x, org.y, org.z);
+
+        fclose(f);
+
+        AgConsole(
+            UTIL_VarArgs(
+                "Added FF spawn (wave %d) at %.1f %1.f %1.f\n",
+                g_pGameRules->m_Firefight.GetAuthoringWave(),
+                org.x, org.y, org.z),
+            pPlayer
+        );
+
+        return true;
+    }
+#ifdef _DEBUG
+    else if (FStrEq(CMD_ARGV(0), "phx_ff_authoring"))
+    {
+        g_pGameRules->m_Firefight.m_bAuthoring = !g_pGameRules->m_Firefight.m_bAuthoring;
+        AgConsole(UTIL_VarArgs("Firefight authoring: %s", g_pGameRules->m_Firefight.m_bAuthoring ? "ON" : "OFF"), pPlayer);
+        return true;
+        }
+#endif
+    // -- FIREFIGHT
 #define MENU_TEAM 					2
+    else if (FStrEq(CMD_ARGV(0), "changeteam") || FStrEq(CMD_ARGV(0), "jointeam"))
+    {
+        if (!pPlayer)
+            return true;
+
+        if (gpGlobals->time < pPlayer->m_flNextChangeTeamCommand)
+        {
+            ClientPrint(pPlayer->pev, HUD_PRINTCENTER, "YOU MUST WAIT BEFORE CHANGING TEAM AGAIN");
+            CLIENT_COMMAND(pPlayer->edict(), "play no.wav\n");
+            return true;
+        }
+        pPlayer->m_flNextChangeTeamCommand = gpGlobals->time + 180.0f;
         pPlayer->ShowVGUI(MENU_TEAM);
         return true;
     }
-    /*
-    else if (FStrEq(CMD_ARGV(0), "agosinfo"))
-    {
-        AgConsole(AgOSVersion(), pPlayer);
-        return true;
-    }
-    */
-#ifndef AG_NO_CLIENT_DLL
-    else if (FStrEq(CMD_ARGV(0), "maplist"))
-    {
-        g_pGameRules->SendMapListToClient(pPlayer, true);
-        return true;
-    }
-#endif
 #ifdef AGMSGSTAT
     else if (FStrEq(CMD_ARGV(0), "agmsgstat"))
     {

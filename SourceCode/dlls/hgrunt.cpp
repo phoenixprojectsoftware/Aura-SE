@@ -41,6 +41,8 @@
 #include	"soundent.h"
 #include	"effects.h"
 #include	"customentity.h"
+#include "gamerules.h"
+#include "aggamerules.h"
 
 int g_fGruntQuestion;				// true if an idle grunt asked a question. Cleared when someone answers.
 
@@ -147,6 +149,9 @@ public:
 	void GibMonster( void );
 	void SpeakSentence( void );
 
+	void Killed(entvars_t* pevAttacker, int iGib) override;
+	void RespawnFirefightMonster();
+
 	int	Save( CSave &save ); 
 	int Restore( CRestore &restore );
 	
@@ -188,6 +193,7 @@ public:
 };
 
 LINK_ENTITY_TO_CLASS( monster_human_grunt, CHGrunt );
+LINK_ENTITY_TO_CLASS(monster_hgrunt, CHGrunt);
 
 TYPEDESCRIPTION	CHGrunt::m_SaveData[] = 
 {
@@ -257,18 +263,44 @@ void CHGrunt :: SpeakSentence( void )
 	}
 }
 
+void CHGrunt::Killed(entvars_t* pevAttacker, int iGib)
+{
+	// Call the base Killed function if the parent class has one
+	CBaseMonster::Killed(pevAttacker, iGib);
+}
+
+void CHGrunt::RespawnFirefightMonster()
+{
+	pev->origin = m_vecInitialPos;
+	pev->health = pev->max_health;
+	pev->deadflag = DEAD_NO;
+	pev->takedamage = DAMAGE_AIM;
+
+	Spawn();
+}
+
 //=========================================================
 // IRelationship - overridden because Alien Grunts are 
 // Human Grunt's nemesis.
 //=========================================================
-int CHGrunt::IRelationship ( CBaseEntity *pTarget )
+int CHGrunt::IRelationship(CBaseEntity* pTarget)
 {
-	if ( FClassnameIs( pTarget->pev, "monster_alien_grunt" ) || ( FClassnameIs( pTarget->pev,  "monster_gargantua" ) ) )
+	if ((FIREFIGHT == AgGametype() || FIESTAFIGHT == AgGametype()) &&
+		g_pGameRules &&
+		g_pGameRules->m_Firefight.IsFirefightMonster(this))
+	{
+		if (pTarget && pTarget->IsPlayer() && pTarget->IsAlive() && !FBitSet(pTarget->pev->flags, FL_NOTARGET))
+			return R_HT;
+
+		return R_NO;
+	}
+
+	if (FClassnameIs(pTarget->pev, "monster_alien_grunt") || (FClassnameIs(pTarget->pev, "monster_gargantua")))
 	{
 		return R_NM;
 	}
 
-	return CSquadMonster::IRelationship( pTarget );
+	return CSquadMonster::IRelationship(pTarget);
 }
 
 //=========================================================
@@ -987,7 +1019,7 @@ void CHGrunt :: Spawn()
 	pev->movetype		= MOVETYPE_STEP;
 	m_bloodColor		= BLOOD_COLOR_RED;
 	pev->effects		= 0;
-	pev->health			= gSkillData.hgruntHealth;
+	pev->health			= gSkillData.hgruntHealth * 4;
 	m_flFieldOfView		= 0.2;// indicates the width of this monster's forward view cone ( as a dotproduct result )
 	m_MonsterState		= MONSTERSTATE_NONE;
 	m_flNextGrenadeCheck = gpGlobals->time + 1;

@@ -10,6 +10,7 @@
 #include "agscorecache.h"
 #include "agadmincache.h"
 #include "agglobal.h"
+#include "agmapvalidation.h"
 #include "agsettings.h"
 #include "agtimer.h"
 #include "agmatch.h"
@@ -18,10 +19,13 @@
 #include "agclient.h"
 #include "agarena.h"
 #include "aghideandseek.h"
+#include "agfirefight.h"
+#include "agfiesta.h"
 #include "agswat.h"
 #include "aglms.h"
 #include "agctf.h"
 #include "agdom.h"
+#include "agking.h"
 #include "aginfointermission.h"
 #include "agsuddendeath.h"
 #include "agtimeout.h"
@@ -36,6 +40,13 @@ protected:
     AgString m_sHostname;
     typedef map<int, AgString, less<int> > AgIPAddress;
     AgIPAddress			     m_mapIPAddress;
+
+    AgMapValidationResult m_MapValidationResult;
+
+    bool m_bInvalidMapSequenceActive;
+    bool m_bInvalidMapChangeRequested;
+    float m_flInvalidMapChangeTime;
+    int m_iLastInvalidMapCountdown;
 
 public:
     AgGameRules();
@@ -75,6 +86,7 @@ public:
     virtual const char* GetGameDescription(void) { return AgGamenameChar(); }  // this is the game name that gets seen in the server browser
     //New
     bool    AgThink();
+	bool    m_bMusicSystemEngaged = false; // is the music system engaged?
     void    Start(const AgString& sSpawn);
     void    ChangeNextLevel();
     void    ResendScoreBoard();
@@ -82,7 +94,17 @@ public:
     //AgString GetTeamWithFewestPlayers();
     virtual BOOL IsAllowedToSpawn(const char* pszClass);
 
+    void BeginInvalidMapSequence(const AgMapValidationResult& reuslt);
+    bool ThinkInvalidMapSequence();
+
+    bool IsCurrentMapInvalid() const;
+    const AgMapValidationResult& GetMapValidationResult() const;
+
+    void SendInvalidMapState(CBasePlayer* pPlayer);
+
     void SendMapListToClient(CBasePlayer* pPlayer, bool bStart);
+
+    void TestInvalidSequence();
 
     const char* GetIPAddress(edict_t* pEntity);
     bool    m_bProxyConnected;
@@ -100,6 +122,9 @@ public:
     AgLMS               m_LMS;
     AgCTF               m_CTF;
     AgDOM               m_DOM;
+    AgFirefight         m_Firefight;
+	AgFiesta            m_Fiesta;
+    AgKing              m_King;
     AgInfoIntermission  m_InfoInterMission;
     AgSuddenDeath       m_SuddenDeath;
     AgTimeout           m_Timeout;

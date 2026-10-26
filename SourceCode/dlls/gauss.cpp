@@ -12,13 +12,14 @@
 *   without written permission from Valve LLC.
 *
 ****/
-#if !defined( OEM_BUILD ) && !defined( HLDEMO_BUILD )
+#ifndef _HALO
 
 #include "extdll.h"
 #include "util.h"
 #include "cbase.h"
 #include "monsters.h"
 #include "weapons.h"
+#include "weapon_hierarchy.h"
 #include "nodes.h"
 #include "player.h"
 #include "soundent.h"
@@ -28,6 +29,8 @@
 
 #define	GAUSS_PRIMARY_CHARGE_VOLUME	256// how loud gauss is while charging
 #define GAUSS_PRIMARY_FIRE_VOLUME	450// how loud gauss is when discharged
+
+extern cvar_t gauss_charge_time;
 
 enum gauss_e {
 	GAUSS_IDLE = 0,
@@ -45,16 +48,15 @@ LINK_ENTITY_TO_CLASS(weapon_gauss, CGauss);
 
 float CGauss::GetFullChargeTime(void)
 {
-#ifdef CLIENT_DLL
-	if (bIsMultiplayer())
-#else
-	if (g_pGameRules->IsMultiplayer())
-#endif
-	{
-		return 1.5;
-	}
+	if (TAUGUYS == AgGametype())
+		return 20;
+	else
+		return gauss_charge_time.value;
+}
 
-	return 4;
+bool CGauss::IsTauGuysGame()
+{
+	return TAUGUYS == AgGametype();
 }
 
 #ifdef CLIENT_DLL
@@ -78,6 +80,8 @@ void CGauss::Precache(void)
 	PRECACHE_MODEL("models/w_gauss.mdl");
 	PRECACHE_MODEL("models/v_gauss.mdl");
 	PRECACHE_MODEL("models/p_gauss.mdl");
+
+	PRECACHE_MODEL("models/weapons/hldmtau/v_hldmtau.mdl");
 
 	PRECACHE_SOUND("items/9mmclip1.wav");
 
@@ -115,8 +119,12 @@ int CGauss::GetItemInfo(ItemInfo* p)
 	p->pszAmmo2 = NULL;
 	p->iMaxAmmo2 = -1;
 	p->iMaxClip = WEAPON_NOCLIP;
-	p->iSlot = 3;
-	p->iPosition = 1;
+#ifdef _HALO
+	p->iSlot = WPN_EXPL_SLOT;
+#else
+	p->iSlot = WPN_FOREIGN_SLOT;
+#endif
+	p->iPosition = WPN_GAUSS_POS;
 	p->iId = m_iId = WEAPON_GAUSS;
 	p->iFlags = 0;
 	p->iWeight = GAUSS_WEIGHT;
@@ -126,8 +134,12 @@ int CGauss::GetItemInfo(ItemInfo* p)
 
 BOOL CGauss::Deploy()
 {
+	m_bHasPlayedSnd = false;
 	m_pPlayer->m_flPlayAftershock = 0.0;
-	return DefaultDeploy("models/v_gauss.mdl", "models/p_gauss.mdl", GAUSS_DRAW, "gauss");
+	if (HLDM == AgGametype())
+		return DefaultDeploy("models/weapons/hldmtau/v_hldmtau.mdl", "models/p_gauss.mdl", GAUSS_DRAW, "gauss");
+	else
+		return DefaultDeploy("models/v_gauss.mdl", "models/p_gauss.mdl", GAUSS_DRAW, "gauss");
 }
 
 void CGauss::Holster(int skiplocal /* = 0 */)
@@ -166,7 +178,10 @@ void CGauss::PrimaryAttack()
 	StartFire();
 	m_fInAttack = 0;
 	m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 1.0;
-	m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + 0.1;
+	if (HLDM == AgGametype())
+		m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + 0.2;
+	else
+		m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + 0.1;
 }
 
 void CGauss::SecondaryAttack()
@@ -262,22 +277,31 @@ void CGauss::SecondaryAttack()
 		}
 
 		int pitch = (gpGlobals->time - m_pPlayer->m_flStartCharge) * (150 / GetFullChargeTime()) + 100;
-		if (pitch > 250)
-			pitch = 250;
+		int fullCharge = 250;
+		int maxPitch = IsTauGuysGame() ? 250 : fullCharge;
 
-		// ALERT( at_console, "%d %d %d\n", m_fInAttack, m_iSoundState, pitch );
+		if (pitch > maxPitch)
+			pitch = maxPitch;
+
+		if (pitch >= maxPitch && !m_bHasPlayedSnd)
+		{
+			EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_AUTO, "buttons/button6.wav", VOL_NORM, ATTN_NORM);
+			m_bHasPlayedSnd = true;
+		}
+
+		ALERT( at_console, "%d %d %d\n", m_fInAttack, m_iSoundState, pitch );
 
 		if (m_iSoundState == 0)
 			ALERT(at_console, "sound state %d\n", m_iSoundState);
 
-		PLAYBACK_EVENT_FULL(FEV_NOTHOST, m_pPlayer->edict(), m_usGaussSpin, 0.0, (float*)&g_vecZero, (float*)&g_vecZero, 0.0, 0.0, pitch, 0, (m_iSoundState == SND_CHANGE_PITCH) ? 1 : 0, 0);
+		PLAYBACK_EVENT_FULL(FEV_NOTHOST, m_pPlayer->edict(), m_usGaussSpin, 0.0, (float*)&g_vecZero, (float*)&g_vecZero, GetFullChargeTime(), 0.0, pitch, 0, (m_iSoundState == SND_CHANGE_PITCH) ? 1 : 0, 0);
 
 		m_iSoundState = SND_CHANGE_PITCH; // hack for going through level transitions
 
 		m_pPlayer->m_iWeaponVolume = GAUSS_PRIMARY_CHARGE_VOLUME;
 
 		// m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 0.1;
-		if (m_pPlayer->m_flStartCharge < gpGlobals->time - 10)
+		if (GetFullChargeTime() + m_pPlayer->m_flStartCharge < gpGlobals->time - 10)
 		{
 			// Player charged up too long. Zap him.
 			STOP_SOUND(ENT(m_pPlayer->pev), CHAN_WEAPON, "ambience/pulsemachine.wav");
@@ -287,9 +311,15 @@ void CGauss::SecondaryAttack()
 			m_fInAttack = 0;
 			m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 1.0;
 			m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + 1.0;
+			m_bHasPlayedSnd = false;
 
 #ifndef CLIENT_DLL
-			m_pPlayer->TakeDamage(VARS(eoNullEntity), VARS(eoNullEntity), 50, DMG_SHOCK);
+			float flTauChargeDmg;
+			if (IsTauGuysGame())
+				flTauChargeDmg = 2000;
+			else
+				flTauChargeDmg = 50;
+			m_pPlayer->TakeDamage(VARS(eoNullEntity), VARS(eoNullEntity), flTauChargeDmg, DMG_SHOCK);
 			UTIL_ScreenFade(m_pPlayer, Vector(255, 128, 0), 2, 0.5, 128, FFADE_IN);
 #endif
 			SendWeaponAnim(GAUSS_IDLE);
@@ -309,6 +339,8 @@ void CGauss::SecondaryAttack()
 void CGauss::StartFire(void)
 {
 	float flDamage;
+
+	m_bHasPlayedSnd = false;
 
 	UTIL_MakeVectors(m_pPlayer->pev->v_angle + m_pPlayer->pev->punchangle);
 	Vector vecAiming = gpGlobals->v_forward;

@@ -15,6 +15,21 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
+enum ShieldAction
+{
+	SHIELD_SOUND_PLAY = 0,
+	SHIELD_SOUND_STOP
+};
+
+enum ShieldSoundId
+{
+	SHIELD_SOUND_EMPTY = 0,
+	SHIELD_SOUND_LOW,
+	SHIELD_SOUND_REGEN_LOOP,
+	SHIELD_SOUND_REGEN_START,
+	SHIELD_SOUND_REGEN_FINISH,
+	SHIELD_SOUND_REGEN_INTERRUPT
+};
 
 #include "pm_materials.h"
 
@@ -27,6 +42,8 @@ class CRope;
 #include "pm_shared.h"
 extern int gmsgSpectator;
 //-- Martin Webrant
+
+extern const char* killer_weapon_name;
 
 // Number of frames where -showscores will be triggered to try and fix invisible menus blocking mouse and other input
 #define INPUT_FIX_FRAMES	3
@@ -228,6 +245,8 @@ public:
 	int m_nCustomSprayFrames;// Custom clan logo frames for this player
 	float	m_flNextDecalTime;// next time this player can spray a decal
 
+	float m_flNextChangeTeamCommand; // the next time the player can change team. THEY ALL NEED TO STOP DOING IT !!!
+
 	char m_szTeamName[TEAM_NAME_LENGTH];
 
 	virtual void Spawn( void );
@@ -398,6 +417,7 @@ protected:
 	bool m_bSentCheatCheck;
 
 public:
+	bool m_bFiestaLock = false;
 	int  m_iVote;             //What player voted. -1 (not voted), 0 no, 1 yes.
 	bool m_bDoneFirstSpawn;   //True if player has done the first spawn.
 	bool m_bInSpawn;          //True if player is spawning.
@@ -544,6 +564,9 @@ public:
 	void HandleArmorChanged(float oldArmor, float newArmor);
 	void RunShieldUpdates();
 	void InterruptShieldRegenOnDamage();
+	void PlayPrivateShieldSound(int iSound);
+	void StopPrivateShieldSound(int iSound);
+
 	void UpdateClientData();
 
 private:

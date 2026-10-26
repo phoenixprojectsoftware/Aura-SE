@@ -24,29 +24,41 @@ void SetupGametype()
     AgString sGametype = CVAR_GET_STRING("sv_aura_gametype");
     g_GameType = STANDARD;
     if (sGametype == "arena")
-    {
         g_GameType = ARENA;
-    }
     else if (sGametype == "arcade")
         g_GameType = ARCADE;
     else if (sGametype == "hideandseek")
         g_GameType = HIDEANDSEEK;
+    else if (sGametype == "firefight")
+        g_GameType = FIREFIGHT;
+    else if (sGametype == "fiesta")
+        g_GameType = FIESTA;
     else if (sGametype == "swat")
         g_GameType = SWAT;
-#ifndef AG_NO_CLIENT_DLL
+    else if (sGametype == "hldm")
+        g_GameType = HLDM;
+    else if (sGametype == "busters")
+        g_GameType = BUSTERS;
+    else if (sGametype == "chill")
+        g_GameType = CHILL;
     else if (sGametype == "ctf")
         g_GameType = CTF;
-    //++ muphicks
     else if (sGametype == "dom")
         g_GameType = DOM;
-    //--muphicks
-#endif
     else if (sGametype == "lms")
         g_GameType = LMS;
     else if (sGametype == "sgbow")
         g_GameType = SGBOW;
     else if (sGametype == "instagib")
         g_GameType = INSTAGIB;
+    else if (sGametype == "tauguys")
+        g_GameType = TAUGUYS;
+    else if (sGametype == "oitc")
+        g_GameType = OITC;
+    else if (sGametype == "king" || sGametype == "koth")
+        g_GameType = KING;
+    else if (sGametype == "sandbox")
+        g_GameType = SANDBOX;
 }
 
 AgString AgGamename()
@@ -335,6 +347,16 @@ void AgGameMode::LoadGames()
                 delete pGame;
         }
     }
+}
+
+AgString AgGameMode::GetGamemodeName(const AgString& sGamemode) const
+{
+    AgGameMap::const_iterator itr = m_mapGames.find(sGamemode);
+
+    if (itr == m_mapGames.end() || !itr->second)
+        return sGamemode;
+
+    return itr->second->m_sName;
 }
 
 //-- Martin Webrant

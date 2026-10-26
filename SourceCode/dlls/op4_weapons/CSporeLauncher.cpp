@@ -12,10 +12,13 @@
 *   without written permission from Valve LLC.
 *
 ****/
+#ifndef _HALO
+
 #include "../extdll.h"
 #include "../util.h"
 #include "../cbase.h"
 #include "../weapons.h"
+#include "../weapon_hierarchy.h"
 #include "../player.h"
 
 #ifndef CLIENT_DLL
@@ -313,8 +316,8 @@ int CSporeLauncher::GetItemInfo(ItemInfo* p)
 	p->pszAmmo2 = nullptr;
 	p->iMaxAmmo2 = WEAPON_NOCLIP;
 	p->iMaxClip = SPORELAUNCHER_MAX_CLIP;
-	p->iSlot = 6;
-	p->iPosition = 0;
+	p->iSlot = WPN_GEARBOX2_SLOT;
+	p->iPosition = WPN_SPORE_POS;
 	p->iId = m_iId = WEAPON_SPORELAUNCHER;
 	p->iFlags = 0;
 	p->iWeight = SPORELAUNCHER_WEIGHT;
@@ -504,3 +507,4 @@ public:
 
 LINK_ENTITY_TO_CLASS(ammo_spore, CSporeAmmo);
 #endif
+#endif // _HALO

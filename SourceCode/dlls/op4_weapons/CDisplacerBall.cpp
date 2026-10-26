@@ -12,6 +12,7 @@
 *   without written permission from Valve LLC.
 *
 ****/
+#ifndef _HALO
 #include "../extdll.h"
 #include "../util.h"
 #include "../cbase.h"
@@ -23,6 +24,8 @@
 #include "../gamerules.h"
 
 #include "CDisplacerBall.h"
+
+float DISPLACER_BALL_SPEED_YEAH_BABY_SHAGADELIC = 750;
 
 namespace
 {
@@ -245,10 +248,54 @@ void CDisplacerBall::BallTouch(CBaseEntity* pOther)
 	pev->nextthink = gpGlobals->time + (g_pGameRules->IsMultiplayer() ? 0.2 : 0.5);
 }
 
+CBaseEntity* CDisplacerBall::PlayerCrosshair(CBaseEntity* pOwner)
+{
+	float minAngle = 180.0f;
+	CBaseEntity* pNearestPlayer = nullptr;
+
+	for (int i = 1; i <= gpGlobals->maxClients; ++i)
+	{
+		CBaseEntity* pPlayer = UTIL_PlayerByIndex(i);
+		if (pPlayer && pPlayer->IsAlive() && pPlayer != pOwner)
+		{
+			Vector vecDir = pPlayer->pev->origin - pOwner->pev->origin;
+			vecDir.Normalize();
+			
+			Vector vecOwnerView;
+			UTIL_MakeVectorsPrivate(pOwner->pev->v_angle, vecOwnerView, nullptr, nullptr);
+			float angle = acos(DotProduct(pOwner->pev->v_angle, vecDir)) * (180.0f / M_PI);
+
+			if (angle < minAngle)
+			{
+				minAngle = angle;
+				pNearestPlayer = pPlayer;
+			}
+		}
+	}
+	return pNearestPlayer;
+}
+
+void CDisplacerBall::FollowTarget(CBaseEntity* pOwner)
+{
+	CBaseEntity* pTarget = PlayerCrosshair(pOwner);
+	if (!pTarget)
+		return;
+
+	Vector vecTargetPos = pTarget->pev->origin;
+	Vector vecCurrentPos = pev->origin;
+	Vector vecDir = vecTargetPos - vecCurrentPos;
+	vecDir = vecDir.Normalize();
+
+	pev->origin = vecCurrentPos + vecDir * 100 * gpGlobals->frametime; // Adjust speed as needed
+}
+
 void CDisplacerBall::FlyThink()
 {
 	ArmBeam(-1);
 	ArmBeam(1);
+
+	CBaseEntity* pOwner = CBaseEntity::Instance(pev->owner);
+	FollowTarget(pOwner);
 	pev->nextthink = gpGlobals->time + 0.05;
 }
 
@@ -436,7 +483,10 @@ CDisplacerBall* CDisplacerBall::CreateDisplacerBall(const Vector& vecOrigin, con
 
 	UTIL_MakeVectors(vecAngles);
 
-	pBall->pev->velocity = gpGlobals->v_forward * 500;
+	if (FIESTA == AgGametype())
+		DISPLACER_BALL_SPEED_YEAH_BABY_SHAGADELIC = 850;
+
+	pBall->pev->velocity = gpGlobals->v_forward * DISPLACER_BALL_SPEED_YEAH_BABY_SHAGADELIC;
 
 	pBall->pev->owner = pOwner->edict();
 
@@ -444,3 +494,5 @@ CDisplacerBall* CDisplacerBall::CreateDisplacerBall(const Vector& vecOrigin, con
 
 	return pBall;
 }
+
+#endif // _HALO

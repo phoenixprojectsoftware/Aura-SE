@@ -58,6 +58,15 @@
     <Filter Include="Header Files\dlls\rope">
       <UniqueIdentifier>{c1b5db1d-3fee-417a-8723-c1afb6770ee6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\dlls\halo_weapons">
+      <UniqueIdentifier>{6616a46c-fea2-4f56-8195-a33dc2b28eb8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\dlls\s10_weapons">
+      <UniqueIdentifier>{0807ac84-99ea-41a6-9291-073101674102}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\dlls\s10_weapons">
+      <UniqueIdentifier>{936b4b40-e7b5-4839-adc0-8301a3e5c509}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\dlls\aflock.cpp">
@@ -522,13 +531,55 @@
     <ClCompile Include="..\..\dlls\genericitem.cpp">
       <Filter>Source Files\dlls</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\dlls\agfirefight.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\agfiesta.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\dlls\agswat.cpp">
       <Filter>Source Files\dlls</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\dlls\horse.cpp">
+    <ClCompile Include="..\..\dlls\agfirefight_cache.cpp">
       <Filter>Source Files\dlls</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\dlls\fruit.cpp">
+    <ClCompile Include="..\..\dlls\halo_weapons\smg.cpp">
+      <Filter>Source Files\dlls\halo_weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\br.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\hldmar.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\music.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\s10_weapons\railgun.cpp">
+      <Filter>Source Files\dlls\s10_weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\s10_weapons\ray.cpp">
+      <Filter>Source Files\dlls\s10_weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\s10_weapons\wpn_healer.cpp">
+      <Filter>Source Files\dlls\s10_weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\s10_weapons\thumper.cpp">
+      <Filter>Source Files\dlls\s10_weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\agking.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\burger_bap.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\agrounddeadline.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\agroundresult.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\dlls\agplayertargets.cpp">
       <Filter>Source Files\dlls</Filter>
     </ClCompile>
   </ItemGroup>
@@ -833,8 +884,38 @@
     <ClInclude Include="..\..\dlls\net_profiling.h">
       <Filter>Header Files\dlls</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\dlls\agfirefight.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\agfiesta.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\dlls\agswat.h">
       <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\weapon_hierarchy.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\music.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\s10_weapons\ray.h">
+      <Filter>Header Files\dlls\s10_weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\agking.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\agmapvalidation.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\agrounddeadline.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\agroundresult.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\dlls\agplayertargets.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

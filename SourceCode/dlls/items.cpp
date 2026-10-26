@@ -207,6 +207,9 @@ class CItemBattery : public CItem
 {
 	void Spawn( void )
 	{ 
+		if (sv_aura_regeneration.value != 0)
+			return;
+
 		Precache( );
 		SET_MODEL(ENT(pev), "models/w_battery.mdl");
 		CItem::Spawn( );
@@ -256,10 +259,15 @@ class CItemBattery : public CItem
 			}
 			return FALSE;
 		}
+
+		return TRUE;
 	}
 };
 
+// Remove item_battery from Halo
+#ifndef _HALO
 LINK_ENTITY_TO_CLASS(item_battery, CItemBattery);
+#endif
 
 
 class CItemAntidote : public CItem

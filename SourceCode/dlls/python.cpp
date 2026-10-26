@@ -12,12 +12,13 @@
 *   without written permission from Valve LLC.
 *
 ****/
-#if !defined( OEM_BUILD ) && !defined( HLDEMO_BUILD )
+#if !defined( OEM_BUILD ) && !defined( HLDEMO_BUILD ) && !defined (_HALO)
 
 #include "extdll.h"
 #include "util.h"
 #include "cbase.h"
 #include "weapons.h"
+#include "weapon_hierarchy.h"
 #include "monsters.h"
 #include "player.h"
 #include "gamerules.h"
@@ -52,8 +53,8 @@ int CPython::GetItemInfo(ItemInfo *p)
 	p->iMaxAmmo2 = -1;
 	p->iMaxClip = PYTHON_MAX_CLIP;
 	p->iFlags = 0;
-	p->iSlot = 1;
-	p->iPosition = 1;
+	p->iSlot = WPN_HANDGUN_SLOT;
+	p->iPosition = WPN_PYTHON_POS;
 	p->iId = m_iId = WEAPON_PYTHON;
 	p->iWeight = PYTHON_WEIGHT;
 

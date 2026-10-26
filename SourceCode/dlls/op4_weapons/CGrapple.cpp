@@ -12,10 +12,12 @@
 *   use or distribution of this code by or to any unlicensed person is illegal.
 *
 ****/
+#ifndef _HALO
 #include "../extdll.h"
 #include "../util.h"
 #include "../cbase.h"
 #include "../weapons.h"
+#include "../weapon_hierarchy.h"
 #include "../player.h"
 #include "../skill.h"
 #include "customentity.h"
@@ -556,11 +558,13 @@ int CGrapple::GetItemInfo(ItemInfo* p)
 	p->pszAmmo2 = nullptr;
 	p->iMaxAmmo2 = WEAPON_NOCLIP;
 	p->iMaxClip = WEAPON_NOCLIP;
-	p->iSlot = 0;
-	p->iPosition = 3;
+	p->iSlot = WPN_MELEE_SLOT;
+	p->iPosition = WPN_GRAPPLE_POS;
 	p->iId = m_iId = WEAPON_GRAPPLE;
 	p->iFlags = 0;
 	p->iWeight = GRAPPLE_WEIGHT;
 
 	return true;
 }
+
+#endif // _HALO

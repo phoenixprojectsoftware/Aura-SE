@@ -135,6 +135,10 @@ struct skilldata_t
 	float zombieDmgOneSlash;
 	float zombieDmgBothSlash;
 
+	float fastZombieHealth;
+	float fastZombieDmgOneSlash;
+	float fastZombieDmgBothSlash;
+
 	float zombieBarneyHealth;
 	float zombieBarneyDmgOneSlash;
 	float zombieBarneyDmgBothSlash;
@@ -158,6 +162,7 @@ struct skilldata_t
 	float plrDmg9MM;
 	float plrDmg357;
 	float plrDmgMP5;
+	float plrDmgOLR;
 	float plrDmgM203Grenade;
 	float plrDmgBuckshot;
 	float plrDmgCrossbowClient;

@@ -27,6 +27,10 @@
 #include	"animation.h"
 #include	"soundent.h"
 
+#include "gamerules.h"
+#include "agglobal.h"
+#include "aggamerules.h"
+
 #define		SCIENTIST_EXTRA_HEALTH	50.0
 #define		NUM_SCIENTIST_HEADS		4 // four heads available for scientist model
 enum { HEAD_GLASSES = 0, HEAD_EINSTEIN = 1, HEAD_LUTHER = 2, HEAD_SLICK = 3 };
@@ -759,6 +763,8 @@ void CScientist :: TalkInit()
 
 int CScientist :: TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType)
 {
+	if (CHILL == AgGametype())
+		return 0;
 
 	if ( pevInflictor && pevInflictor->flags & FL_CLIENT )
 	{

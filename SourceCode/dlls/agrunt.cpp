@@ -25,6 +25,8 @@
 #include	"weapons.h"
 #include	"soundent.h"
 #include	"hornet.h"
+#include "gamerules.h"
+#include "aggamerules.h"
 
 //=========================================================
 // monster-specific schedule types
@@ -123,6 +125,7 @@ public:
 	int		m_iLastWord;
 };
 LINK_ENTITY_TO_CLASS( monster_alien_grunt, CAGrunt );
+LINK_ENTITY_TO_CLASS(monster_agrunt, CAGrunt);
 
 TYPEDESCRIPTION	CAGrunt::m_SaveData[] = 
 {
@@ -192,14 +195,24 @@ const char *CAGrunt::pAlertSounds[] =
 // IRelationship - overridden because Human Grunts are 
 // Alien Grunt's nemesis.
 //=========================================================
-int CAGrunt::IRelationship ( CBaseEntity *pTarget )
+int CAGrunt::IRelationship(CBaseEntity* pTarget)
 {
-	if ( FClassnameIs( pTarget->pev, "monster_human_grunt" ) )
+	if ((FIREFIGHT == AgGametype() || FIESTAFIGHT == AgGametype()) &&
+		g_pGameRules &&
+		g_pGameRules->m_Firefight.IsFirefightMonster(this))
+	{
+		if (pTarget && pTarget->IsPlayer() && pTarget->IsAlive() && !FBitSet(pTarget->pev->flags, FL_NOTARGET))
+			return R_HT;
+
+		return R_NO;
+	}
+
+	if (FClassnameIs(pTarget->pev, "monster_human_grunt"))
 	{
 		return R_NM;
 	}
 
-	return CSquadMonster :: IRelationship( pTarget );
+	return CSquadMonster::IRelationship(pTarget);
 }
 
 //=========================================================

@@ -12,10 +12,12 @@
 *   without written permission from Valve LLC.
 *
 ****/
+#ifndef _HALO
 #include "../extdll.h"
 #include "../util.h"
 #include "../cbase.h"
 #include "../weapons.h"
+#include "../weapon_hierarchy.h"
 #include "../player.h"
 #include "../UserMessages.h"
 
@@ -345,8 +347,8 @@ int CEagle::GetItemInfo(ItemInfo* p)
 	p->pszAmmo2 = 0;
 	p->iMaxAmmo2 = WEAPON_NOCLIP;
 	p->iMaxClip = EAGLE_MAX_CLIP;
-	p->iSlot = 1;
-	p->iPosition = 2;
+	p->iSlot = WPN_HANDGUN_SLOT;
+	p->iPosition = WPN_EAGLE_POS;
 	p->iFlags = 0;
 	p->iId = m_iId = WEAPON_EAGLE;
 	p->iWeight = EAGLE_WEIGHT;
@@ -395,3 +397,5 @@ class CEagleAmmo : public CBasePlayerAmmo
 };
 
 LINK_ENTITY_TO_CLASS(ammo_eagleclip, CEagleAmmo);
+
+#endif // _HALO

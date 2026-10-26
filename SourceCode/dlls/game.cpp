@@ -16,10 +16,13 @@
 #include "net_profiling.h"
 #include "eiface.h"
 #include "util.h"
-#include "game.h"
+#include "cbase.h"
 
 //++ BulliT
 #include "agglobal.h"
+#include "aggamemode.h"
+
+
 //-- Martin Webrant
 cvar_t	displaysoundlist = {"displaysoundlist","0"};
 
@@ -32,7 +35,7 @@ cvar_t	teamplay	= {"mp_teamplay","0", FCVAR_SERVER };
 cvar_t	fraglimit	= {"mp_fraglimit","0", FCVAR_SERVER };
 cvar_t	timelimit	= {"mp_timelimit","0", FCVAR_SERVER };
 cvar_t	friendlyfire= {"mp_friendlyfire","0", FCVAR_SERVER };
-cvar_t	falldamage	= {"mp_falldamage","0", FCVAR_SERVER };
+cvar_t	falldamage	= {"mp_falldamage","1", FCVAR_SERVER };
 cvar_t	weaponstay	= {"mp_weaponstay","0", FCVAR_SERVER };
 cvar_t	forcerespawn= {"mp_forcerespawn","1", FCVAR_SERVER };
 cvar_t	flashlight	= {"mp_flashlight","0", FCVAR_SERVER };
@@ -44,8 +47,11 @@ cvar_t	defaultteam = {"mp_defaultteam","0" };
 cvar_t  coopmode = { "sv_aura_coop", "0", FCVAR_SERVER };
 cvar_t	allowmonsters={"mp_allowmonsters","0", FCVAR_SERVER };
 cvar_t  mp5_old_rate = { "sv_aura_mp5_old_rate", "1", FCVAR_SERVER };
+cvar_t AbsoluteInsaneness = { "sv_aura_brojustdont", "0", FCVAR_SERVER };
 cvar_t fire_weapons_underwater = { "sv_aura_fire_weapons_underwater", "0", FCVAR_SERVER };
 cvar_t motionsensor = { "sv_aura_motionsensor", "1", FCVAR_SERVER };
+cvar_t gauss_charge_time = { "sv_aura_gauss_charge_time", "1.5", FCVAR_SERVER };
+cvar_t only_zobies = { "_ogduffy", "0", FCVAR_SERVER | FCVAR_UNLOGGED };
 
 // mp_chattime is like the minimum intermission time, you can't skip it, it's meant
 // to have some time for saying gg, etc. before changing map, it's part of the intermission
@@ -362,6 +368,11 @@ cvar_t	sk_zombie_dmg_one_slash3 = {"sk_zombie_dmg_one_slash3","0"};
 cvar_t	sk_zombie_dmg_both_slash1 = {"sk_zombie_dmg_both_slash1","0"};
 cvar_t	sk_zombie_dmg_both_slash2 = {"sk_zombie_dmg_both_slash2","0"};
 cvar_t	sk_zombie_dmg_both_slash3 = {"sk_zombie_dmg_both_slash3","0"};
+
+// Fast Zombie
+DECLARE_SKILL_CVARS(fast_zombie_health);
+DECLARE_SKILL_CVARS(fast_zombie_dmg_one_slash);
+DECLARE_SKILL_CVARS(fast_zombie_dmg_both_slash);
 
 
 // Zombie Barney
@@ -784,7 +795,7 @@ void GameDLLInit( void )
 
 
 	// Register cvars here:
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(_HALO)
 	g_engfuncs.pfnAddServerCommand("dump_net_stats", []()
 		{
 			NetProfiling::GetProfiler().DumpStats();
@@ -819,7 +830,9 @@ void GameDLLInit( void )
 	CVAR_REGISTER (&allowmonsters);
 
 	CVAR_REGISTER (&mp5_old_rate);
+	CVAR_REGISTER(&AbsoluteInsaneness);
 	CVAR_REGISTER(&fire_weapons_underwater);
+	CVAR_REGISTER(&gauss_charge_time);
 
 	CVAR_REGISTER (&mp_chattime);
 	CVAR_REGISTER (&mp_intermission_time);
@@ -828,6 +841,8 @@ void GameDLLInit( void )
 	CVAR_REGISTER (&singleplayer);
 	CVAR_REGISTER (&sploading);
 	CVAR_REGISTER (&spgausscharging);
+
+	CVAR_REGISTER(&only_zobies);
 
 // REGISTER CVARS FOR SKILL LEVEL STUFF
 	// Agrunt
@@ -1103,6 +1118,11 @@ void GameDLLInit( void )
 	CVAR_REGISTER ( &sk_zombie_dmg_both_slash2 );// {"sk_zombie_dmg_both_slash2","0"};
 	CVAR_REGISTER ( &sk_zombie_dmg_both_slash3 );// {"sk_zombie_dmg_both_slash3","0"};
 
+	// Fast Zombie
+	REGISTER_SKILL_CVARS(fast_zombie_health);
+	REGISTER_SKILL_CVARS(fast_zombie_dmg_one_slash);
+	REGISTER_SKILL_CVARS(fast_zombie_dmg_both_slash);
+
 
 	// Zombie Barney
 	REGISTER_SKILL_CVARS(zombie_barney_health);
@@ -1354,6 +1374,9 @@ void GameDLLInit( void )
 	//++ BulliT
 	AgInitGame();
 	//-- Martin Webrant
+
+	//if (FIREFIGHT == AgGametype())
+	//	g_AgFirefight.Precache();
 	SERVER_COMMAND( "exec skill.cfg\n" );
 	SERVER_COMMAND("exec skillopfor.cfg\n");
 }

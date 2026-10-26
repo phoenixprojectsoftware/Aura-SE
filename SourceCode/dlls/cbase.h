@@ -116,7 +116,7 @@ private:
 	edict_t *m_pent;
 	int		m_serialnumber;
 public:
-	edict_t *Get( void );
+	edict_t *Get( void ) const;
 	edict_t *Set( edict_t *pent );
 
 	operator int ();
@@ -350,6 +350,7 @@ public:
 
 	//We use this variables to store each ammo count.
 	int ammo_9mm;
+	int ammo_br;
 	int ammo_357;
 	int ammo_bolts;
 	int ammo_buckshot;

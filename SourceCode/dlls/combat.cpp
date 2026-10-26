@@ -30,6 +30,7 @@
 #include "weapons.h"
 #include "func_break.h"
 #include "agglobal.h"
+#include "player.h"
 
 extern DLL_GLOBAL Vector		g_vecAttackDir;
 extern DLL_GLOBAL int			g_iSkillLevel;
@@ -568,12 +569,78 @@ void CBaseMonster::CallGibMonster( void )
 		UTIL_Remove(this);
 }
 
+#define GETNAME(classname) FStrEq(pszClassname, "monster_" classname)
+
+static const char* GetFirefightMonsterDisplayName(const CBaseMonster* pMonster)
+{
+	if (!pMonster || !pMonster->pev)
+		return "Enemy";
+
+	const char* pszClassname = STRING(pMonster->pev->classname);
+
+	if (GETNAME("hgrunt") || GETNAME("human_grunt"))
+		return "HECU Soldier";
+
+	if (GETNAME("agrunt") || GETNAME("alien_grunt"))
+		return "Alien Grunt";
+
+	if (GETNAME("apache"))
+		return "Apache";
+
+	if (GETNAME("bullsquid") || GETNAME("bullchicken"))
+		return "Bullsquid";
+
+	if (GETNAME("hassassin") || GETNAME("human_assassin"))
+		return "Assassin";
+
+	if (GETNAME("houndeye"))
+		return "Houndeye";
+
+	if (GETNAME("alien_slave") || GETNAME("islave"))
+		return "Alien Slave";
+
+	if (GETNAME("zamnhl"))
+		return "Fast Zombie";
+
+	if (GETNAME("zombie"))
+		return "Headcrab Zombie";
+
+	// fallback
+	return "Enemy";
+}
+
+static const char* GetFirefightWeaponName(CBasePlayer* pPlayer)
+{
+	if (!pPlayer)
+		return "world";
+
+	const char* pszWeapon = "world";
+
+	if (pPlayer->m_pActiveItem)
+	{
+		pszWeapon = pPlayer->m_pActiveItem->pszName();
+	}
+
+	if (!pszWeapon || !pszWeapon[0])
+		return "world";
+
+	if (strncmp(pszWeapon, "weapon_", 7) == 0)
+	{
+		pszWeapon += 7;
+	}
+
+	return pszWeapon;
+}
 
 /*
 ============
 Killed
 ============
 */
+#include "gamerules.h"
+#include "player.h"
+extern int gmsgDeathMsg;
+extern int gmsgFirefightKill;
 void CBaseMonster :: Killed( entvars_t *pevAttacker, int iGib )
 {
 	unsigned int	cCount = 0;
@@ -621,6 +688,37 @@ void CBaseMonster :: Killed( entvars_t *pevAttacker, int iGib )
 	//pev->enemy = ENT( pevAttacker );//why? (sjb)
 	
 	m_IdealMonsterState = MONSTERSTATE_DEAD;
+
+	// Firefight kill logic.
+	if (FIREFIGHT == AgGametype() || FIESTAFIGHT == AgGametype())
+	{
+		if (!g_pGameRules->m_Firefight.IsFirefightMonster(this))
+			return;
+
+		CBaseEntity* pAttacker = CBaseEntity::Instance(pevAttacker);
+		if (pAttacker && pAttacker->IsPlayer())
+		{
+			CBasePlayer* pPlayer = (CBasePlayer*)pAttacker;
+
+			pPlayer->AddPoints(1, TRUE);
+
+			const char* pszWeapon = GetFirefightWeaponName(pPlayer);
+			const char* pszMonster = GetFirefightMonsterDisplayName(this);
+
+			MESSAGE_BEGIN(MSG_ALL, gmsgFirefightKill);
+				WRITE_BYTE(pPlayer->entindex());
+				WRITE_STRING(pszMonster);
+				WRITE_STRING(pszWeapon);
+			MESSAGE_END();
+		}
+
+		// fade out monster
+		SetThink(&CBaseMonster::SUB_StartFadeOut);
+		pev->nextthink = gpGlobals->time + 0.1f;
+
+		g_pGameRules->m_Firefight.OnMonsterKilled(this);
+		UTIL_Remove(this);
+	}
 }
 
 //
@@ -1564,6 +1662,10 @@ Vector CBaseEntity::FireBulletsPlayer ( ULONG cShots, Vector vecSrc, Vector vecD
 
 			case BULLET_PLAYER_MP5:		
 				pEntity->TraceAttack(pevAttacker, gSkillData.plrDmgMP5, vecDir, &tr, DMG_BULLET); 
+				break;
+
+			case BULLET_PLAYER_OLR:
+				pEntity->TraceAttack(pevAttacker, gSkillData.plrDmgOLR, vecDir, &tr, DMG_BULLET);
 				break;
 
 			case BULLET_PLAYER_BUCKSHOT:	

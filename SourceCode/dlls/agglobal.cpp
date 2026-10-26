@@ -25,11 +25,7 @@
 
 void AgInitTimer();
 
-#ifdef AG_NO_CLIENT_DLL
-DLL_GLOBAL cvar_t	ag_version = { "sv_aura_version","2.4.4", FCVAR_SERVER };
-#else
-DLL_GLOBAL cvar_t	ag_version = { "sv_aura_version","2.4.4-AF26A", FCVAR_SERVER };
-#endif
+DLL_GLOBAL cvar_t	ag_version = { "sv_aura_version","3.0", FCVAR_SERVER };
 
 DLL_GLOBAL cvar_t	ag_gamemode = { "sv_aura_gamemode","ffa", FCVAR_SERVER }; //The current gamemode
 DLL_GLOBAL cvar_t	ag_gamemode_auto = { "sv_aura_gamemode_auto","1", FCVAR_SERVER }; // Detect the gamemode based on the map and switch gamemode automatically
@@ -38,6 +34,8 @@ DLL_GLOBAL cvar_t	ag_allowed_gamemodes = { "sv_aura_allowed_gamemodes","" };
 DLL_GLOBAL cvar_t	ag_pure = { "sv_aura_pure","0",FCVAR_SERVER };     //Default off.
 
 DLL_GLOBAL cvar_t	ag_match_running = { "sv_aura_match_running","0",FCVAR_SERVER | FCVAR_UNLOGGED };          //Default not match. Protects players from wondering into the server.
+
+DLL_GLOBAL cvar_t ag_autobalance = { "sv_aura_autobalance", "1", FCVAR_SERVER }; // Team auto-balancing is enabled by default.
 
 DLL_GLOBAL cvar_t	ag_oldphysics = { "sv_aura_oldphysics","1" };
 
@@ -75,12 +73,18 @@ DLL_GLOBAL cvar_t	ag_wallgauss = { "sv_aura_wallgauss","1" };           //Defaul
 DLL_GLOBAL cvar_t	ag_headshot = { "sv_aura_headshot","3" };            //Default 3 = 3 times damage
 DLL_GLOBAL cvar_t	ag_blastradius = { "sv_aura_blastradius","1" };         //Default 1 = Standard radius
 
+DLL_GLOBAL cvar_t ag_arena_round_timelimit = { "sv_aura_arena_round_timelimit", "120", FCVAR_SERVER };
+DLL_GLOBAL cvar_t ag_lms_final_timelimit = { "sv_aura_lms_final_timelimit", "120", FCVAR_SERVER };
+
+DLL_GLOBAL cvar_t ag_mapcycle_order = { "mapcycle_order", "1", FCVAR_SERVER };
 
 DLL_GLOBAL cvar_t	ag_ban_crowbar = { "sv_aura_ban_crowbar","0" };
 DLL_GLOBAL cvar_t	ag_ban_glock = { "sv_aura_ban_glock","0" };
 DLL_GLOBAL cvar_t   ag_ban_oitc = { "sv_aura_ban_oitc", "1" };
 DLL_GLOBAL cvar_t	ag_ban_357 = { "sv_aura_ban_357","0" };
 DLL_GLOBAL cvar_t	ag_ban_mp5 = { "sv_aura_ban_mp5","0" };
+DLL_GLOBAL cvar_t ag_ban_hldmar = { "sv_aura_ban_hldmar", "0" };
+DLL_GLOBAL cvar_t  ag_ban_br = { "sv_aura_ban_br", "0" };
 DLL_GLOBAL cvar_t	ag_ban_shotgun = { "sv_aura_ban_shotgun", "0" };
 DLL_GLOBAL cvar_t	ag_ban_crossbow = { "sv_aura_ban_crossbow", "0" };
 DLL_GLOBAL cvar_t	ag_ban_rpg = { "sv_aura_ban_rpg","0" };
@@ -99,6 +103,11 @@ DLL_GLOBAL cvar_t   ag_ban_shockrifle = { "sv_aura_ban_shockrifle", "0" };
 DLL_GLOBAL cvar_t   ag_ban_sniperrifle = { "sv_aura_ban_sniper", "0" };
 DLL_GLOBAL cvar_t   ag_ban_sporelauncher = { "sv_aura_ban_sporelauncher", "0" };
 
+#ifdef _HALO
+DLL_GLOBAL cvar_t ag_ban_smg = { "sv_aura_ban_smg", "0" };
+DLL_GLOBAL cvar_t ag_ban_sword = { "sv_aura_ban_sword", "0" };
+#endif
+
 DLL_GLOBAL cvar_t	ag_ban_hgrenade = { "sv_aura_ban_hgrenade","0" };
 DLL_GLOBAL cvar_t	ag_ban_satchel = { "sv_aura_ban_satchel","0" };
 DLL_GLOBAL cvar_t	ag_ban_tripmine = { "sv_aura_ban_tripmine","0" };
@@ -106,6 +115,7 @@ DLL_GLOBAL cvar_t	ag_ban_snark = { "sv_aura_ban_snark","0" };
 DLL_GLOBAL cvar_t	ag_ban_longjump = { "sv_aura_ban_longjump","0" };
 DLL_GLOBAL cvar_t	ag_ban_m203 = { "sv_aura_ban_m203","0" };
 DLL_GLOBAL cvar_t	ag_ban_9mmar = { "sv_aura_ban_9mmar","0" };
+DLL_GLOBAL cvar_t  ag_ban_brammo = { "sv_aura_ban_brammo", "0" };
 DLL_GLOBAL cvar_t	ag_ban_bockshot = { "sv_aura_ban_bockshot","0" };
 DLL_GLOBAL cvar_t	ag_ban_uranium = { "sv_aura_ban_uranium","0" };
 DLL_GLOBAL cvar_t	ag_ban_bolts = { "sv_aura_ban_bolts","0" };
@@ -114,6 +124,11 @@ DLL_GLOBAL cvar_t	ag_ban_357ammo = { "sv_aura_ban_357ammo","0" };
 DLL_GLOBAL cvar_t   ag_ban_ammo556 = { "sv_aura_ban_ammo_556","0" };
 DLL_GLOBAL cvar_t   ag_ban_ammo762 = { "sv_aura_ban_ammo_762","0" };
 DLL_GLOBAL cvar_t   ag_ban_ammoSpore = { "sv_aura_ban_ammo_spore","0" };
+
+#ifndef _HALO
+DLL_GLOBAL cvar_t ag_ban_healer = { "sv_aura_ban_healer", "0" };
+DLL_GLOBAL cvar_t ag_ban_thumper = { "sv_aura_ban_thumper", "0" };
+#endif
 
 DLL_GLOBAL cvar_t	ag_ban_armour = { "sv_aura_ban_armour","0" };
 DLL_GLOBAL cvar_t	ag_ban_health = { "sv_aura_ban_health","0" };
@@ -124,12 +139,19 @@ DLL_GLOBAL cvar_t	ag_start_glock = { "sv_aura_start_glock","1" };
 DLL_GLOBAL cvar_t   ag_start_oitc = { "sv_aura_start_oitc", "0" };
 DLL_GLOBAL cvar_t	ag_start_357 = { "sv_aura_start_357","0" };
 DLL_GLOBAL cvar_t	ag_start_mp5 = { "sv_aura_start_mp5","0" };
+DLL_GLOBAL cvar_t  ag_start_hldmar = { "sv_aura_start_hldmar", "0" };
+DLL_GLOBAL cvar_t  ag_start_br = { "sv_aura_start_br", "0" };
 DLL_GLOBAL cvar_t	ag_start_shotgun = { "sv_aura_start_shotgun", "0" };
 DLL_GLOBAL cvar_t	ag_start_crossbow = { "sv_aura_start_crossbow", "0" };
 DLL_GLOBAL cvar_t	ag_start_rpg = { "sv_aura_start_rpg","0" };
 DLL_GLOBAL cvar_t	ag_start_gauss = { "sv_aura_start_gauss","0" };
 DLL_GLOBAL cvar_t	ag_start_egon = { "sv_aura_start_egon","0" };
 DLL_GLOBAL cvar_t	ag_start_hornet = { "sv_aura_start_hornet","0" };
+
+#ifdef _HALO
+DLL_GLOBAL cvar_t ag_start_smg = { "sv_aura_start_smg", "0" };
+DLL_GLOBAL cvar_t ag_start_sword = { "sv_aura_start_sword", "0" };
+#endif
 
 DLL_GLOBAL cvar_t	ag_start_hgrenade = { "sv_aura_start_hgrenade","0" };
 DLL_GLOBAL cvar_t	ag_start_satchel = { "sv_aura_start_satchel","0" };
@@ -138,6 +160,7 @@ DLL_GLOBAL cvar_t	ag_start_snark = { "sv_aura_start_snark","0" };
 DLL_GLOBAL cvar_t	ag_start_longjump = { "sv_aura_start_longjump","0" };
 DLL_GLOBAL cvar_t	ag_start_m203 = { "sv_aura_start_m203","0" };
 DLL_GLOBAL cvar_t	ag_start_9mmar = { "sv_aura_start_9mmar","68" };
+DLL_GLOBAL cvar_t  ag_start_brammo = { "sv_aura_start_brammo", "0" };
 DLL_GLOBAL cvar_t	ag_start_bockshot = { "sv_aura_start_bockshot","0" };
 DLL_GLOBAL cvar_t	ag_start_uranium = { "sv_aura_start_uranium","0" };
 DLL_GLOBAL cvar_t	ag_start_bolts = { "sv_aura_start_bolts","0" };
@@ -161,11 +184,18 @@ DLL_GLOBAL cvar_t   ag_start_ammo556 = { "sv_aura_start_ammo_556", "0" }; // thi
 DLL_GLOBAL cvar_t   ag_start_ammo762 = { "sv_aura_start_ammo_762", "0" }; // this should be 15 in gamemodes
 DLL_GLOBAL cvar_t   ag_start_ammoSpore = { "sv_aura_start_ammo_spore", "0" }; // this should be 20 in gamemodes
 
+// Season 10 Team Healer.
+#ifndef _HALO
+DLL_GLOBAL cvar_t ag_start_healer = { "sv_aura_start_healer", "0" };
+DLL_GLOBAL cvar_t ag_start_thumper = { "sv_aura_start_thumper", "0" };
+#endif
+
 // Half-Life Weapons
 DLL_GLOBAL cvar_t	ag_dmg_crowbar = { "sv_aura_dmg_crowbar","25" };
 DLL_GLOBAL cvar_t	ag_dmg_glock = { "sv_aura_dmg_glock","12" };
 DLL_GLOBAL cvar_t	ag_dmg_357 = { "sv_aura_dmg_357","50" };
 DLL_GLOBAL cvar_t	ag_dmg_mp5 = { "sv_aura_dmg_mp5","12" };
+DLL_GLOBAL cvar_t  ag_dmg_olr = { "sv_aura_dmg_br", "20" };
 DLL_GLOBAL cvar_t	ag_dmg_shotgun = { "sv_aura_dmg_shotgun", "20" };
 DLL_GLOBAL cvar_t	ag_dmg_crossbow = { "sv_aura_dmg_crossbow", "20" };
 DLL_GLOBAL cvar_t	ag_dmg_bolts = { "sv_aura_dmg_bolts","50" };
@@ -193,6 +223,12 @@ DLL_GLOBAL cvar_t ag_displacer_radius = { "sv_aura_displacer_radius", "300" }; /
 DLL_GLOBAL cvar_t ag_dmg_shockrifle_m = { "sv_aura_dmg_shockrifle_m", "15" };
 DLL_GLOBAL cvar_t ag_dmg_shockrifle_s = { "sv_aura_dmg_shockrifle_s", "15" };
 DLL_GLOBAL cvar_t ag_dmg_spore = { "sv_aura_dmg_spore", "50" };
+
+// Halo Weapons
+#ifdef _HALO
+DLL_GLOBAL cvar_t ag_dmg_smg = { "sv_aura_dmg_smg", "15" };
+DLL_GLOBAL cvar_t ag_dmg_sword = { "sv_aura_dmg_sword", "200" };
+#endif
 
 
 DLL_GLOBAL cvar_t	ag_max_spectators = { "sv_aura_max_spectators","5" };
@@ -295,7 +331,6 @@ void AgInitGame()
 {
     AgInitTimer();
 
-    CVAR_REGISTER(&ag_version);
     CVAR_REGISTER(&ag_gamemode);
     CVAR_REGISTER(&ag_gamemode_auto);
     CVAR_REGISTER(&ag_allowed_gamemodes);
@@ -303,6 +338,8 @@ void AgInitGame()
     CVAR_REGISTER(&ag_allow_vote);
     CVAR_REGISTER(&ag_pure);
     CVAR_REGISTER(&ag_match_running);
+
+    CVAR_REGISTER(&ag_autobalance);
 
     CVAR_REGISTER(&ag_oldphysics);
 
@@ -314,11 +351,18 @@ void AgInitGame()
     CVAR_REGISTER(&ag_headshot);
     CVAR_REGISTER(&ag_blastradius);
 
+    CVAR_REGISTER(&ag_arena_round_timelimit);
+    CVAR_REGISTER(&ag_lms_final_timelimit);
+
+    CVAR_REGISTER(&ag_mapcycle_order);
+
     CVAR_REGISTER(&ag_ban_crowbar);
     CVAR_REGISTER(&ag_ban_glock);
     CVAR_REGISTER(&ag_ban_oitc);
     CVAR_REGISTER(&ag_ban_357);
     CVAR_REGISTER(&ag_ban_mp5);
+    CVAR_REGISTER(&ag_ban_hldmar);
+    CVAR_REGISTER(&ag_ban_br);
     CVAR_REGISTER(&ag_ban_shotgun);
     CVAR_REGISTER(&ag_ban_crossbow);
     CVAR_REGISTER(&ag_ban_rpg);
@@ -336,6 +380,16 @@ void AgInitGame()
     CVAR_REGISTER(&ag_ban_sniperrifle);
     CVAR_REGISTER(&ag_ban_sporelauncher);
 
+#ifndef _HALO
+    CVAR_REGISTER(&ag_ban_healer);
+    CVAR_REGISTER(&ag_ban_thumper);
+#endif
+
+#ifdef _HALO
+    CVAR_REGISTER(&ag_ban_smg);
+    CVAR_REGISTER(&ag_ban_sword);
+#endif
+
     CVAR_REGISTER(&ag_ban_hgrenade);
     CVAR_REGISTER(&ag_ban_satchel);
     CVAR_REGISTER(&ag_ban_tripmine);
@@ -343,6 +397,7 @@ void AgInitGame()
     CVAR_REGISTER(&ag_ban_m203);
     CVAR_REGISTER(&ag_ban_longjump);
     CVAR_REGISTER(&ag_ban_9mmar);
+	CVAR_REGISTER(&ag_ban_brammo);
     CVAR_REGISTER(&ag_ban_bockshot);
     CVAR_REGISTER(&ag_ban_uranium);
     CVAR_REGISTER(&ag_ban_bolts);
@@ -361,6 +416,8 @@ void AgInitGame()
     CVAR_REGISTER(&ag_start_oitc);
     CVAR_REGISTER(&ag_start_357);
     CVAR_REGISTER(&ag_start_mp5);
+    CVAR_REGISTER(&ag_start_hldmar);
+    CVAR_REGISTER(&ag_start_br);
     CVAR_REGISTER(&ag_start_shotgun);
     CVAR_REGISTER(&ag_start_crossbow);
     CVAR_REGISTER(&ag_start_rpg);
@@ -378,6 +435,16 @@ void AgInitGame()
     CVAR_REGISTER(&ag_start_sniperrifle);
     CVAR_REGISTER(&ag_start_sporelauncher);
 
+#ifndef _HALO
+    CVAR_REGISTER(&ag_start_healer);
+    CVAR_REGISTER(&ag_start_thumper);
+#endif
+
+#ifdef _HALO
+    CVAR_REGISTER(&ag_start_smg);
+    CVAR_REGISTER(&ag_start_sword);
+#endif
+
     CVAR_REGISTER(&ag_start_hgrenade);
     CVAR_REGISTER(&ag_start_satchel);
     CVAR_REGISTER(&ag_start_tripmine);
@@ -385,6 +452,7 @@ void AgInitGame()
     CVAR_REGISTER(&ag_start_m203);
     CVAR_REGISTER(&ag_start_longjump);
     CVAR_REGISTER(&ag_start_9mmar);
+    CVAR_REGISTER(&ag_start_brammo);
     CVAR_REGISTER(&ag_start_bockshot);
     CVAR_REGISTER(&ag_start_uranium);
     CVAR_REGISTER(&ag_start_bolts);
@@ -404,6 +472,7 @@ void AgInitGame()
     CVAR_REGISTER(&ag_dmg_glock);
     CVAR_REGISTER(&ag_dmg_357);
     CVAR_REGISTER(&ag_dmg_mp5);
+    CVAR_REGISTER(&ag_dmg_olr);
     CVAR_REGISTER(&ag_dmg_shotgun);
     CVAR_REGISTER(&ag_dmg_crossbow);
     CVAR_REGISTER(&ag_dmg_bolts);
@@ -430,6 +499,12 @@ void AgInitGame()
     CVAR_REGISTER(&ag_dmg_shockrifle_m);
     CVAR_REGISTER(&ag_dmg_shockrifle_s);
     CVAR_REGISTER(&ag_dmg_spore);
+
+    // Halo Weapons
+#ifdef _HALO
+    CVAR_REGISTER(&ag_dmg_smg);
+    CVAR_REGISTER(&ag_dmg_sword);
+#endif
 
     CVAR_REGISTER(&ag_allow_timeout);
 

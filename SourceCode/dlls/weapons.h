@@ -56,6 +56,9 @@ public:
 	virtual void Killed( entvars_t *pevAttacker, int iGib );
 
 	BOOL m_fRegisteredSound;// whether or not this grenade has issued its DANGER sound to the world sound list yet.
+	bool m_bThumperGrenade;
+
+	void ApplyThumperBoost();
 };
 #endif
 
@@ -71,7 +74,7 @@ public:
 #define	WEAPON_GLOCK			2
 #define WEAPON_PYTHON			3
 #define WEAPON_MP5				4
-#define WEAPON_CHAINGUN			5
+// #define WEAPON_CHAINGUN			5 // our last weapon slot?!
 #define WEAPON_CROSSBOW			6
 #define WEAPON_SHOTGUN			7
 #define WEAPON_RPG				8
@@ -95,6 +98,16 @@ public:
 #define WEAPON_ONE 27
 #define WEAPON_FRUIT 28
 
+#ifdef _HALO
+#define WEAPON_SMG 28
+#define WEAPON_SWORD 29
+#endif
+
+#define WEAPON_BATTLERIFLE 30
+#define WEAPON_HLDMAR 28
+#define WEAPON_HEALER 29
+#define WEAPON_THUMPER 21
+
 #define WEAPON_ALLWEAPONS		(~(1<<WEAPON_SUIT))
 
 #define WEAPON_SUIT				31	// ?????
@@ -110,6 +123,8 @@ public:
 #define GLOCK_WEIGHT		10
 #define PYTHON_WEIGHT		15
 #define MP5_WEIGHT			25
+#define HLDMAR_WEIGHT MP5_WEIGHT
+#define BR_WEIGHT 30
 #define SHOTGUN_WEIGHT		15
 #define CROSSBOW_WEIGHT		10
 #define RPG_WEIGHT			20
@@ -129,9 +144,30 @@ public:
 #define M249_WEIGHT					20
 #define DISPLACER_WEIGHT	10
 #define PENGUIN_WEIGHT		5
+#define THUMPER_WEIGHT 25
+
+#ifdef _HALO
+#define M7_WEIGHT 7
+#define OLR_WEIGHT 20
+#define CARBINE_WEIGHT 20
+#endif
 
 
 // weapon clip/carry ammo capacities
+#ifdef _HALO
+#define URANIUM_MAX_CARRY 50
+#define _9MM_MAX_CARRY 600 // AR
+#define _357_MAX_CARRY 200 // magnum?
+#define BUCKSHOT_MAX_CARRY 60 // shotgun
+#define BOLT_MAX_CARRY 24 // to become sniper
+#define ROCKET_MAX_CARRY 2 // spanker
+#define HANDGRENADE_MAX_CARRY 4
+#define SATCHEL_MAX_CARRY 4
+#define TRIPMINE_MAX_CARRY 3
+#define HORNET_MAX_CARRY 100 // needler
+#define M203_GRENADE_MAX_CARRY 10 // AR grenades... might get rid of these
+#define CARBINE_MAX_CARRY 120 // covenant carbine
+#else
 #define URANIUM_MAX_CARRY		200
 #define	_9MM_MAX_CARRY			240
 #define _357_MAX_CARRY			36
@@ -141,27 +177,52 @@ public:
 #define HANDGRENADE_MAX_CARRY	10
 #define SATCHEL_MAX_CARRY		5
 #define TRIPMINE_MAX_CARRY		5
-#define SNARK_MAX_CARRY			15
 #define HORNET_MAX_CARRY		8
-#define M203_GRENADE_MAX_CARRY	20
+#define M203_GRENADE_MAX_CARRY	10
 #define SPORELAUNCHER_MAX_CARRY 20
 #define M249_MAX_CARRY			200
 #define PENGUIN_MAX_CARRY 9
 #define SNIPERRIFLE_MAX_CARRY 15
+#endif
 #define ONE_MAX_CARRY 1
+#define BR_MAX_CARRY 180
+#define SNARK_MAX_CARRY			15
+#define HEALER_MAX_CARRY 100
 
 // the maximum amount of ammo each weapon's clip can hold
 #define WEAPON_NOCLIP			-1
 
-//#define CROWBAR_MAX_CLIP		WEAPON_NOCLIP
+#ifdef _HALO
+#define GLOCK_MAX_CLIP 12 // magnum?
+#define PYTHON_MAX_CLIP 12
+#define MP5_MAX_CLIP 60
+#define MP5_DEFAULT_AMMO 60
+#define SHOTGUN_MAX_CLIP 12
+#define CROSSBOW_MAX_CLIP 4
+#define RPG_MAX_CLIP 2
+#define M7_MAX_CLIP 46
+#define OLR_MAX_CLIP 30
+#define NEEDLER_MAX_CLIP 20
+#define CARBINE_MAX_CLIP 18
+#else
 #define GLOCK_MAX_CLIP			18
-#define ONE_MAX_CLIP			WEAPON_NOCLIP
 #define PYTHON_MAX_CLIP			6
 #define MP5_MAX_CLIP			60
 #define MP5_DEFAULT_AMMO		60
+#define HLDMAR_MAX_CLIP 50
+#define HLDMAR_DEFAULT_AMMO HLDMAR_MAX_CLIP
 #define SHOTGUN_MAX_CLIP		8
 #define CROSSBOW_MAX_CLIP		5
 #define RPG_MAX_CLIP			1
+#define EAGLE_MAX_CLIP			7
+#define SPORELAUNCHER_MAX_CLIP 5
+#define SHOCKRIFLE_MAX_CLIP 30
+#define M249_MAX_CLIP				100
+#define PENGUIN_MAX_CLIP 3
+#define SNIPERRIFLE_MAX_CLIP 5
+#endif
+#define ONE_MAX_CLIP			WEAPON_NOCLIP
+#define BR_MAX_CLIP 36
 #define GAUSS_MAX_CLIP			WEAPON_NOCLIP
 #define EGON_MAX_CLIP			WEAPON_NOCLIP
 #define HORNETGUN_MAX_CLIP		WEAPON_NOCLIP
@@ -169,21 +230,35 @@ public:
 #define SATCHEL_MAX_CLIP		WEAPON_NOCLIP
 #define TRIPMINE_MAX_CLIP		WEAPON_NOCLIP
 #define SNARK_MAX_CLIP			WEAPON_NOCLIP
-#define EAGLE_MAX_CLIP			7
-#define SPORELAUNCHER_MAX_CLIP 5
-#define SHOCKRIFLE_MAX_CLIP 10
-#define M249_MAX_CLIP				100
-#define PENGUIN_MAX_CLIP 3
-#define SNIPERRIFLE_MAX_CLIP 5
-
+#define THUMPER_MAX_CLIP 1
 
 // the default amount of ammo that comes with each gun when it spawns
+#ifdef _HALO
+#define GLOCK_DEFAULT_GIVE 12
+#define PYTHON_DEFAULT_GIVE 12
+#define MP5_DEFAULT_GIVE 60
+#define MP5_DEFAULT_AMMO 60
+#define MP5_M203_DEFAULT_GIVE 0
+#define SHOTGUN_DEFAULT_GIVE 12
+#define CROSSBOW_DEFAULT_GIVE 4
+#define RPG_DEFAULT_GIVE 1
+#define GAUSS_DEFAULT_GIVE 20
+#define EGON_DEFAULT_GIVE 20
+#define HANDGRENADE_DEFAULT_GIVE 2
+#define SATCHEL_DEFAULT_GIVE 1
+#define TRIPMINE_DEFAULT_GIVE 1
+#define SNARK_DEFAULT_GIVE 5
+#define HIVEHAND_DEFAULT_GIVE 60
+#define SMG_DEFAULT_GIVE 46
+#define OLR_DEFAULT_GIVE 150
+#define CARBINE_DEFAULT_GIVE 54
+#else
 #define GLOCK_DEFAULT_GIVE			17
-#define ONE_DEFAULT_GIVE			1
 #define PYTHON_DEFAULT_GIVE			6
 #define MP5_DEFAULT_GIVE			60
 #define MP5_DEFAULT_AMMO			60
 #define MP5_M203_DEFAULT_GIVE		0
+#define HLDMAR_DEFAULT_GIVE HLDMAR_MAX_CLIP
 #define SHOTGUN_DEFAULT_GIVE		12
 #define CROSSBOW_DEFAULT_GIVE		5
 #define RPG_DEFAULT_GIVE			1
@@ -195,13 +270,32 @@ public:
 #define SNARK_DEFAULT_GIVE			5
 #define HIVEHAND_DEFAULT_GIVE		8
 #define SPORELAUNCHER_DEFAULT_GIVE 5
-#define SHOCKRIFLE_DEFAULT_GIVE 10
+#define SHOCKRIFLE_DEFAULT_GIVE 30
 #define EAGLE_DEFAULT_GIVE				7
 #define SNIPERRIFLE_DEFAULT_GIVE 5
 #define M249_DEFAULT_GIVE					100
 #define DISPLACER_DEFAULT_GIVE		40
+#define RAILGUN_DEFAULT_GIVE 20
+#define THUMPER_DEFAULT_GIVE 3
+#endif
+#define ONE_DEFAULT_GIVE			1
+#define BR_DEFAULT_GIVE BR_MAX_CLIP
 
 // The amount of ammo given to a player by an ammo item.
+#ifdef _HALO
+#define AMMO_URANIUMBOX_GIVE 20
+#define AMMO_GLOCKCLIP_GIVE GLOCK_MAX_CLIP
+#define AMMO_357BOX_GIVE PYTHON_MAX_CLIP
+#define AMMO_MP5CLIP_GIVE MP5_MAX_CLIP
+#define AMMO_CHAINBOX_GIVE 200
+#define AMMO_M203BOX_GIVE 2
+#define AMMO_BUCKSHOTBOX_GIVE 12
+#define AMMO_CROSSBOWCLIP_GIVE CROSSBOW_MAX_CLIP
+#define AMMO_RPGCLIP_GIVE RPG_MAX_CLIP
+#define AMMO_URANIUMBOX_GIVE 20
+#define AMMO_SNARKBOX_GIVE 5
+#define AMMO_CARBINECLIP_GIVE CARBINE_MAX_CLIP
+#else
 #define AMMO_URANIUMBOX_GIVE	80
 #define AMMO_GLOCKCLIP_GIVE		GLOCK_MAX_CLIP
 #define AMMO_357BOX_GIVE		PYTHON_MAX_CLIP
@@ -217,6 +311,8 @@ public:
 #define AMMO_SPORE_GIVE 1
 #define AMMO_SNIPERRIFLE_GIVE 5
 #define AMMO_M249_GIVE					100
+#endif
+#define AMMO_BR_GIVE BR_MAX_CLIP
 
 // bullet types
 typedef	enum
@@ -224,9 +320,13 @@ typedef	enum
 	BULLET_NONE = 0,
 	BULLET_PLAYER_9MM, // glock
 	BULLET_PLAYER_MP5, // mp5
+	BULLET_PLAYER_OLR, // battlerifle
 	BULLET_PLAYER_357, // python
 	BULLET_PLAYER_BUCKSHOT, // shotgun
 	BULLET_PLAYER_CROWBAR, // crowbar swipe
+#ifdef _HALO
+	BULLET_PLAYER_CARBINE,
+#endif
 
 	BULLET_MONSTER_9MM,
 	BULLET_MONSTER_MP5,
@@ -385,6 +485,7 @@ public:
 	// called by CBasePlayerWeapons ItemPostFrame()
 	virtual void PrimaryAttack( void ) { return; }				// do "+ATTACK"
 	virtual void SecondaryAttack( void ) { return; }			// do "+ATTACK2"
+	virtual void MeleeAttack(void); // do "+MELEE"
 	virtual void Reload( void ) { return; }						// do "+RELOAD"
 	virtual void WeaponIdle( void ) { return; }					// called when no buttons pressed
 	virtual int UpdateClientData( CBasePlayer *pPlayer );		// sends hud info to client dll, if things have changed
@@ -542,10 +643,16 @@ public:
 
 	void PrimaryAttack( void );
 	void SecondaryAttack( void );
+#ifdef _HALO
+	void Holster(int skiplocal = 0) override;
+	void ToggleZoom();
+#endif
 	void GlockFire( float flSpread, float flCycleTime, BOOL fUseAutoAim );
 	BOOL Deploy( void );
 	void Reload( void );
 	void WeaponIdle( void );
+
+	bool m_bInZoom;
 
 	virtual BOOL UseDecrement( void )
 	{ 
@@ -658,6 +765,39 @@ private:
 	unsigned short m_usFirePython;
 };
 
+class CHLDMAR : public CBasePlayerWeapon
+{
+public:
+	void Spawn(void);
+	void Precache(void);
+	int iItemSlot(void) { return 3; }
+	int GetItemInfo(ItemInfo* p);
+	int AddToPlayer(CBasePlayer* pPlayer);
+
+	void PrimaryAttack(void);
+	void SecondaryAttack(void);
+	int SecondaryAmmoIndex(void);
+	BOOL Deploy(void);
+	void Reload(void);
+	void WeaponIdle(void);
+	float m_flNextAnimTime;
+	int m_iShell;
+
+	virtual BOOL UseDecrement(void)
+	{
+#if defined( CLIENT_WEAPONS )
+		return TRUE;
+#else
+		return FALSE;
+#endif
+	}
+
+private:
+	unsigned short m_usMP5;
+	unsigned short m_usMP52;
+};
+
+
 class CMP5 : public CBasePlayerWeapon
 {
 public:
@@ -689,6 +829,180 @@ private:
 	unsigned short m_usMP5;
 	unsigned short m_usMP52;
 };
+
+enum olr_e
+{
+	OLR_LONGIDLE = 0,
+	OLR_IDLE1,
+	OLR_LAUNCH,
+	OLR_RELOAD,
+	OLR_DEPLOY,
+	OLR_FIRE1,
+	OLR_FIRE2,
+	OLR_FIRE3,
+};
+
+
+class CBattleRifle : public CBasePlayerWeapon
+{
+public:
+	void Spawn(void);
+	void Precache(void);
+	int iItemSlot(void) { return 3; } // mid range rifle slot
+	int GetItemInfo(ItemInfo* p);
+
+	BOOL Deploy(void);
+	void Holster(int skiplocal = 0) override;
+	void PrimaryAttack(void);
+	void ItemPostFrame();
+	void SecondaryAttack(void);
+	void ToggleZoom();
+	void Reload(void);
+	void WeaponIdle(void);
+
+	bool m_bInZoom;
+
+private:
+	unsigned short m_usOLR;
+	void FireBurstShot(void);
+	void BurstThink(void);
+
+	int m_iBurstShotsFired;
+};
+
+#ifndef _HALO
+class CRailgun : public CBasePlayerWeapon
+{
+public:
+	void Spawn(void);
+	void Precache(void);
+	int GetItemInfo(ItemInfo* p);
+	void Fire(void);
+	void PrimaryAttack(void);
+	void SecondaryAttack(void);
+	BOOL Deploy();
+	void Holster(int skiplocal = 0) override;
+	void WeaponIdle(void);
+
+private:
+	unsigned short m_usRailgun;
+};
+
+enum healer_e
+{
+	HEALER_IDLE = 0,
+	HEALER_LONGIDLE,
+	HEALER_HEAL,
+	HEALER_LONGUSE,
+	HEALER_SHORTUSE,
+	HEALER_HOLSTER,
+	HEALER_DRAW
+};
+
+class CHealer : public CBasePlayerWeapon
+{
+public:
+	void Spawn(void);
+	void Precache(void);
+	int GetItemInfo(ItemInfo* p);
+	int AddToPlayer(CBasePlayer* pPlayer);
+	void PrimaryAttack(void);
+	void SecondaryAttack(void);
+
+	BOOL Deploy();
+	void Holster(int skiplocal = 0) override;
+	void WeaponIdle(void);
+
+private:
+	void PlayFailSound();
+	void PlayHealSound();
+	void PlayReviveSound();
+
+	CBaseEntity* FindMedkitTarget(float flRange);
+	bool CanHealTarget(CBaseEntity* pTarget);
+	bool CanReviveTarget(CBaseMonster* pMonster);
+	
+	void HealTarget(CBaseEntity* pTarget, float flAmount);
+	bool ReviveTarget(CBaseMonster* pCorpse);
+
+	bool IsFriendlyMonster(CBaseMonster* pMonster);
+	bool IsFriendlyPlayer(CBaseEntity* pEntity);
+
+	bool CheckReviveHullClear(const Vector& vecOrigin, edict_t* pentIgnore);
+};
+#endif
+
+enum m7_e
+{
+	M7_LONGIDLE = 0,
+	M7_IDLE1,
+	M7_LAUNCH,
+	M7_RELOAD,
+	M7_DEPLOY,
+	M7_FIRE1,
+	M7_FIRE2,
+	M7_FIRE3,
+};
+
+class CThumper : public CBasePlayerWeapon
+{
+public:
+	void Spawn() override;
+	void Precache() override;
+	int GetItemInfo(ItemInfo* p) override;
+	BOOL Deploy() override;
+	void Holster(int skiplocal) override;
+	void PrimaryAttack() override;
+	void SecondaryAttack() override;
+	void ToggleZoom();
+	void Reload() override;
+	void WeaponIdle() override;
+
+private:
+	unsigned short m_usThumper;
+	bool m_bInZoom;
+};
+
+enum thumper_e
+{
+	THUMPER_DRAW = 0,
+	THUMPER_FIRE,
+	THUMPER_IDLE1,
+	THUMPER_IDLE2,
+	THUMPER_RELOAD
+};
+
+
+#ifdef _HALO
+class CSMG : public CBasePlayerWeapon
+{
+public:
+	void Spawn() override;
+	void Precache() override;
+	int iItemSlot() { return 3; }
+	int GetItemInfo(ItemInfo* p) override;
+
+	void PrimaryAttack() override;
+	void SecondaryAttack() override;
+	BOOL Deploy() override;
+	void Reload() override;
+	void WeaponIdle() override;
+	float m_flNextAnimTime;
+	int m_iShell;
+
+	BOOL UseDecrement() override
+	{
+#if defined(CLIENT_WEAPONS)
+		return true;
+#else
+		return false;
+#endif
+	}
+
+private:
+	unsigned short m_usM7;
+};
+#endif
 
 class CCrossbow : public CBasePlayerWeapon
 {
@@ -871,10 +1185,12 @@ public:
 	void StartFire( void );
 	void Fire( Vector vecOrigSrc, Vector vecDirShooting, float flDamage );
 	float GetFullChargeTime( void );
+	bool IsTauGuysGame();
 	int m_iBalls;
 	int m_iGlow;
 	int m_iBeam;
 	int m_iSoundState; // don't save this
+	bool m_bHasPlayedSnd = false;
 
 	// was this weapon just fired primary or secondary?
 	// we need to know so we can pick the right set of effects. 

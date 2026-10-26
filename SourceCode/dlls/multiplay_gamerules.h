@@ -31,6 +31,7 @@
 #define AMMO_RESPAWN_TIME			20
 #define HEALTHCHARGER_RECHARGE_TIME	60
 #define HEVCHARGER_RECHARGE_TIME	30
+#define MAX_CLIENTS 32
 
 //=========================================================
 // CHalfLifeMultiplay - rules for the basic half life multiplayer

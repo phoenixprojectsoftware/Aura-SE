@@ -175,6 +175,9 @@ void CHalfLifeMultiplay::RefreshSkillData( void )
 	// MP5 Round
 	gSkillData.plrDmgMP5 = 12;
 
+	// Battle Rifle / "OLR"
+	gSkillData.plrDmgOLR = 17;
+
 	// M203 grenade
 	gSkillData.plrDmgM203Grenade = 100;
 
@@ -311,7 +314,8 @@ void CHalfLifeMultiplay :: Think ( void )
 	float flFragLimit = fraglimit.value;
 	//-- Martin Webrant
 
-	if ( flFragLimit )
+	// frag limit logic
+	if ( flFragLimit && FIREFIGHT != AgGametype() && FIESTAFIGHT != AgGametype() &&  KING != AgGametype())
 	{
 		int bestfrags = 9999;
 		int remain;
@@ -622,18 +626,18 @@ void CHalfLifeMultiplay :: ClientDisconnected( edict_t *pClient )
 //=========================================================
 float CHalfLifeMultiplay :: FlPlayerFallDamage( CBasePlayer *pPlayer )
 {
-	int iFallDamage = (int)falldamage.value;
+	const int iFallDamage = (int)falldamage.value;
 
-	switch ( iFallDamage )
+	switch (iFallDamage)
 	{
-	case 1://progressive
+	case 0:
+		return 0.0f;
+	case 1:
+	default:
+		return PLAYER_FALL_DAMAGE;
+	case 2: // realistic mode
 		pPlayer->m_flFallVelocity -= PLAYER_MAX_SAFE_FALL_SPEED;
 		return pPlayer->m_flFallVelocity * DAMAGE_FOR_FALL_SPEED;
-		break;
-	default:
-	case 0:// fixed
-		return PLAYER_FALL_DAMAGE;
-		break;
 	}
 } 
 
@@ -728,6 +732,11 @@ int CHalfLifeMultiplay :: IPointsForKill( CBasePlayer *pAttacker, CBasePlayer *p
 	return 1;
 }
 
+// returns true if the gametype is not Instagib, Firefight, or Fiestafight.
+bool SuicidePenalty()
+{
+	return INSTAGIB != AgGametype() && FIREFIGHT != AgGametype() && FIESTAFIGHT != AgGametype();
+}
 
 //=========================================================
 // PlayerKilled - someone/something killed this player
@@ -747,22 +756,23 @@ void CHalfLifeMultiplay :: PlayerKilled( CBasePlayer *pVictim, entvars_t *pKille
 
 	if ( pVictim->pev == pKiller )  
 	{  // killed self
+		if (SuicidePenalty())
 		pKiller->frags -= 1;
 	}
-	else if ( (ktmp && ktmp->IsPlayer()) && (CTF != AgGametype() && DOM != AgGametype()) ) // don't award points for killing players in CTF or DOM.
+	else if (ktmp && ktmp->IsPlayer()) // don't award points for killing players in CTF or DOM.
 	{
-		// if a player dies in a deathmatch game and the killer is a client, award the killer some points
-		pKiller->frags += IPointsForKill( peKiller, pVictim );
-		
+		// CTF, DOM, and KING do not use normal frag scoring.
+		if (CTF != AgGametype() && DOM != AgGametype() && KING != AgGametype())
+		{
+			pKiller->frags += IPointsForKill(peKiller, pVictim); // if a player dies in a deathmatch game and the killer is a client, award the killer some points
+		}
 		FireTargets( "game_playerkill", ktmp, ktmp, USE_TOGGLE, 0 );
 	}
 	else
 	{  // killed by the world
-//++ BulliT
-		//pKiller->frags -= 1;
 		if (pVictim->pev)
+			if (SuicidePenalty())
 			pVictim->pev->frags -= 1;
-		//-- Martin Webrant
 	}
 
 	// update the scores
@@ -796,7 +806,7 @@ void CHalfLifeMultiplay :: PlayerKilled( CBasePlayer *pVictim, entvars_t *pKille
 		// let the killer paint another decal as soon as he'd like.
 		PK->m_flNextDecalTime = gpGlobals->time;
 	}
-#ifndef HLDEMO_BUILD
+#if !defined (_HALO)
 	if ( pVictim->HasNamedPlayerItem("weapon_satchel") )
 	{
 		DeactivateSatchels( pVictim );
@@ -806,6 +816,8 @@ void CHalfLifeMultiplay :: PlayerKilled( CBasePlayer *pVictim, entvars_t *pKille
 	AgGameRules::PlayerKilled(pVictim, pKiller, pInflictor);
 	//-- Martin Webrant
 }
+
+const char* killer_weapon_name = "world";		// by default, the player is killed by the world
 
 //=========================================================
 // Deathnotice. 
@@ -818,7 +830,6 @@ void CHalfLifeMultiplay::DeathNotice( CBasePlayer *pVictim, entvars_t *pKiller, 
 	// Work out what killed the player, and send a message to all clients about it
 	CBaseEntity *Killer = CBaseEntity::Instance( pKiller );
 
-	const char *killer_weapon_name = "world";		// by default, the player is killed by the world
 	int killer_index = 0;
 	
 	// Hack to fix name change
@@ -1030,7 +1041,7 @@ void CHalfLifeMultiplay :: PlayerGotWeapon( CBasePlayer *pPlayer, CBasePlayerIte
 //=========================================================
 float CHalfLifeMultiplay :: FlWeaponRespawnTime( CBasePlayerItem *pWeapon )
 {
-	if ( weaponstay.value > 0 )
+	if ( weaponstay.value > 0 || FIREFIGHT == AgGametype())
 	{
 		// make sure it's only certain weapons
 		if ( !(pWeapon->iFlags() & ITEM_FLAG_LIMITINWORLD) )
@@ -1094,7 +1105,7 @@ int CHalfLifeMultiplay :: WeaponShouldRespawn( CBasePlayerItem *pWeapon )
 //=========================================================
 BOOL CHalfLifeMultiplay::CanHavePlayerItem( CBasePlayer *pPlayer, CBasePlayerItem *pItem )
 {
-	if ( weaponstay.value > 0 )
+	if ( weaponstay.value > 0 || FIREFIGHT == AgGametype())
 	{
 		if ( pItem->iFlags() & ITEM_FLAG_LIMITINWORLD )
 			//++ BulliT

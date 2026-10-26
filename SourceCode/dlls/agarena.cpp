@@ -11,7 +11,16 @@
 #include "agglobal.h"
 #include "agarena.h"
 
+#include "agrounddeadline.h"
+#include "agroundresult.h"
+
+#include "agplayertargets.h"
+
 #include "algo.h"
+
+#include <vector>
+
+AgRoundDeadline m_RoundDeadline;
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -27,6 +36,7 @@ AgArena::AgArena()
     m_Player1 = NULL;
     m_Player2 = NULL;
     m_Status = Waiting;
+    m_bPlayerWaypointsActive = false;
 }
 
 AgArena::~AgArena()
@@ -42,18 +52,40 @@ void AgArena::Think()
 
     if (Playing == m_Status)
     {
-        CBasePlayer* pPlayer1 = GetPlayer1();
-        CBasePlayer* pPlayer2 = GetPlayer2();
+        CBasePlayer* pPlayer1 =
+            GetPlayer1();
 
-        if (!pPlayer1 || pPlayer1 && !pPlayer1->IsAlive() || !pPlayer2 || pPlayer2 && !pPlayer2->IsAlive())
+        CBasePlayer* pPlayer2 =
+            GetPlayer2();
+
+        if (!pPlayer1 ||
+            !pPlayer1->IsAlive() ||
+            !pPlayer2 ||
+            !pPlayer2->IsAlive())
         {
+            m_RoundDeadline.Cancel();
+            ClearPlayerWaypoints();
+
             m_Status = PlayerDied;
-            m_fNextCountdown = gpGlobals->time + 3.0;  //Let the effect of him dying play for 3 seconds
+            m_fNextCountdown =
+                gpGlobals->time + 3.0f;
 
             if (pPlayer1)
-                pPlayer1->SetIngame(false); //Cant respawn
+                pPlayer1->SetIngame(false);
+
             if (pPlayer2)
-                pPlayer2->SetIngame(false); //Cant respawn
+                pPlayer2->SetIngame(false);
+
+            return;
+        }
+
+        m_RoundDeadline.Think();
+        UpdatePlayerWaypoints();
+
+        if (m_RoundDeadline.ConsumeExpiry())
+        {
+            ResolveRoundTimeout();
+            return;
         }
     }
     else
@@ -118,6 +150,8 @@ void AgArena::Think()
         {
             if (!GetPlayer1() || !GetPlayer2())
             {
+                m_RoundDeadline.Cancel();
+                ClearPlayerWaypoints();
                 m_Status = Waiting; //Someone left in middle of countdown. Go back to waiting.
                 return;
             }
@@ -152,6 +186,9 @@ void AgArena::Think()
 
                 m_Status = Playing;
 
+                ClearPlayerWaypoints();
+                StartRoundDeadline();
+
 #ifndef AG_NO_CLIENT_DLL
                 //Stop countdown
                 MESSAGE_BEGIN(MSG_ALL, gmsgCountdown);
@@ -181,6 +218,9 @@ void AgArena::Think()
         }
         else if (PlayerDied == m_Status)
         {
+            m_RoundDeadline.Cancel();
+            ClearPlayerWaypoints();
+
             CBasePlayer* pPlayer1 = GetPlayer1();
             CBasePlayer* pPlayer2 = GetPlayer2();
 
@@ -224,15 +264,7 @@ void AgArena::Think()
                 }
             }
 
-            //Stop sounds.
-            for (int i = 1; i <= gpGlobals->maxClients; i++)
-            {
-                CBasePlayer* pPlayerLoop = AgPlayerByIndex(i);
-                if (pPlayerLoop)
-                {
-                    CLIENT_COMMAND(pPlayerLoop->edict(), "stopsound\n");
-                }
-            }
+            StopPlayerSounds();
         }
     }
 }
@@ -267,9 +299,8 @@ void AgArena::Remove(CBasePlayer* pPlayer)
     else if (0 != m_lstWaitList.size())
     {
         AgWaitList::iterator itrWaitlist = ALGO_H::find(m_lstWaitList.begin(), m_lstWaitList.end(), pPlayer->entindex());
-        if (itrWaitlist == m_lstWaitList.end())
+        if (itrWaitlist != m_lstWaitList.end())
             m_lstWaitList.erase(itrWaitlist);
-        //m_lstWaitList.remove(pPlayer->entindex());
     }
 }
 
@@ -344,6 +375,14 @@ void AgArena::ClientDisconnected(CBasePlayer* pPlayer)
     if (!pPlayer->pev)
         return;
 
+    const bool bWasArenaPlayer = GetPlayer1() == pPlayer || GetPlayer2() == pPlayer;
+
+    if (bWasArenaPlayer)
+    {
+        m_RoundDeadline.Cancel();
+        ClearPlayerWaypoints();
+    }
+
     //Set status
     pPlayer->SetIngame(false);
 
@@ -355,3 +394,232 @@ void AgArena::ClientDisconnected(CBasePlayer* pPlayer)
 
 
 //-- Martin Webrant
+
+void AgArena::StopPlayerSounds()
+{
+    //Stop sounds.
+    for (int i = 1; i <= gpGlobals->maxClients; i++)
+    {
+        CBasePlayer* pPlayerLoop = AgPlayerByIndex(i);
+        if (pPlayerLoop)
+        {
+            CLIENT_COMMAND(pPlayerLoop->edict(), "stopsound\n");
+        }
+    }
+}
+
+void AgArena::StartRoundDeadline()
+{
+    const float flDuration = ag_arena_round_timelimit.value;
+
+    if (flDuration <= 0.0f)
+    {
+        m_RoundDeadline.Cancel();
+        return;
+    }
+    
+    m_RoundDeadline.Start(flDuration, "Arena round");
+}
+
+void AgArena::ResolveRoundTimeout()
+{
+    CBasePlayer* pPlayer1 = GetPlayer1();
+    CBasePlayer* pPlayer2 = GetPlayer2();
+
+    if (!pPlayer1 || !pPlayer2)
+    {
+        m_RoundDeadline.Cancel();
+        ClearPlayerWaypoints();
+        m_Status = Waiting;
+        return;
+    }
+
+    std::vector<CBasePlayer*> players;
+
+    players.push_back(pPlayer1);
+    players.push_back(pPlayer2);
+
+    const AgRoundTimeoutResult result = AgChooseRoundTimeoutWinner(players);
+
+    if (!result.HasWinner())
+    {
+        FinishTimedDraw();
+        return;
+    }
+
+    CBasePlayer* pWinner = result.m_pWinner;
+    CBasePlayer* pLoser = pWinner == pPlayer1 ? pPlayer2 : pPlayer1;
+
+    FinishTimedRound(pWinner, pLoser);
+}
+
+void AgArena::FinishTimedRound(CBasePlayer* pWinner, CBasePlayer* pLoser)
+{
+    m_RoundDeadline.Cancel();
+    ClearPlayerWaypoints();
+
+    if (!pWinner || !pLoser)
+    {
+        FinishTimedDraw();
+        return;
+    }
+
+    m_sWinner = pWinner->GetName();
+
+    UTIL_ClientPrintAll(HUD_PRINTCENTER, UTIL_VarArgs("%s wins this round on health and armour", pWinner->GetName()));
+
+    pWinner->SetIngame(false);
+    pLoser->SetIngame(false);
+
+    // the loser returns to the queue
+    if (!pLoser->IsSpectator())
+    {
+        pLoser->Spectate_Start(false);
+
+        EHANDLE hWinner;
+        hWinner = pWinner;
+
+        pLoser->Spectate_Follow(hWinner, OBS_IN_EYE);
+    }
+
+    const int iLoserIndex = pLoser->entindex();
+
+    if (GetPlayer1() == pLoser)
+    {
+        m_Player1 = NULL;
+    }
+    else if (GetPlayer2() == pLoser)
+    {
+        m_Player2 = NULL;
+    }
+
+    // add only after clearing the active Arena slot
+    Add(pLoser);
+
+    StopPlayerSounds();
+
+    m_Status = Waiting;
+    m_fNextCountdown = gpGlobals->time + 1.0f;
+}
+
+void AgArena::FinishTimedDraw()
+{
+    m_RoundDeadline.Cancel();
+    ClearPlayerWaypoints();
+
+    CBasePlayer* pPlayer1 = GetPlayer1();
+    CBasePlayer* pPlayer2 = GetPlayer2();
+
+    m_sWinner = "";
+
+    UTIL_ClientPrintAll(HUD_PRINTCENTER, "Arena round ended in a draw.");
+    UTIL_ClientPrintAll(HUD_PRINTTALK, "* ARENA ROUND ENDED IN A DRAW BECAUSE THE TIME EXPIRED.\n");
+
+    if (pPlayer1)
+    {
+        pPlayer1->SetIngame(false);
+
+        if (!pPlayer1->IsSpectator())
+            pPlayer1->Spectate_Start(false);
+    }
+
+    if (pPlayer2)
+    {
+        pPlayer2->SetIngame(false);
+
+        if (!pPlayer2->IsSpectator())
+            pPlayer2->Spectate_Start(false);
+    }
+
+    // clear the players' active slots before re-adding them
+    m_Player1 = NULL;
+    m_Player2 = NULL;
+
+    if (pPlayer1)
+        Add(pPlayer1);
+    if (pPlayer2)
+        Add(pPlayer2);
+
+    StopPlayerSounds();
+
+    m_Status = Waiting;
+    m_fNextCountdown = gpGlobals->time + 1.0f;
+}
+
+void AgArena::UpdatePlayerWaypoints()
+{
+    if (m_Status != Playing)
+    {
+        ClearPlayerWaypoints();
+        return;
+    }
+
+    if (!m_RoundDeadline.IsActive())
+    {
+        ClearPlayerWaypoints();
+        return;
+    }
+
+    const int iSecondsRemaining =
+        m_RoundDeadline.GetSecondsRemaining();
+
+    if (iSecondsRemaining > 30)
+    {
+        ClearPlayerWaypoints();
+        return;
+    }
+
+    if (m_bPlayerWaypointsActive)
+        return;
+
+    CBasePlayer* pPlayer1 =
+        GetPlayer1();
+
+    CBasePlayer* pPlayer2 =
+        GetPlayer2();
+
+    if (!pPlayer1 ||
+        !pPlayer2)
+    {
+        return;
+    }
+
+    std::vector<CBasePlayer*> players;
+
+    players.push_back(pPlayer1);
+    players.push_back(pPlayer2);
+
+    AgSendPlayerTargets(
+        pPlayer1,
+        players);
+
+    AgSendPlayerTargets(
+        pPlayer2,
+        players);
+
+    m_bPlayerWaypointsActive = true;
+
+    UTIL_ClientPrintAll(
+        HUD_PRINTCENTER,
+        "30 seconds remain\nBoth players have been revealed");
+}
+
+void AgArena::ClearPlayerWaypoints()
+{
+    if (!m_bPlayerWaypointsActive)
+        return;
+
+    CBasePlayer* pPlayer1 =
+        GetPlayer1();
+
+    CBasePlayer* pPlayer2 =
+        GetPlayer2();
+
+    if (pPlayer1)
+        AgClearPlayerTargets(pPlayer1);
+
+    if (pPlayer2)
+        AgClearPlayerTargets(pPlayer2);
+
+    m_bPlayerWaypointsActive = false;
+}
