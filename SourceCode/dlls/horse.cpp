@@ -630,13 +630,6 @@ void CHorse :: HandleAnimEvent( MonsterEvent_t *pEvent )
 		}
 		break;
 
-		case BSQUID_AE_BLINK:
-		{
-			// close eye. 
-			pev->skin = 1;
-		}
-		break;
-
 		case BSQUID_AE_HOP:
 		{
 			float flGravity = g_psv_gravity->value;
@@ -717,6 +710,8 @@ void CHorse :: Spawn()
 	SetUse(&CHorse::Use);
 	m_flFieldOfView		= 0.2;// indicates the width of this monster's forward view cone ( as a dotproduct result )
 	m_MonsterState		= MONSTERSTATE_NONE;
+
+	pev->skin = RANDOM_LONG(1, 6);
 
 	m_fCanThreatDisplay	= TRUE;
 	m_flNextSpitTime = gpGlobals->time;
@@ -819,17 +814,6 @@ void CHorse :: RunAI ( void )
 	// first, do base class stuff
 	CBaseMonster :: RunAI();
 
-	if ( pev->skin != 0 )
-	{
-		// close eye if it was open.
-		pev->skin = 0; 
-	}
-
-	if ( RANDOM_LONG(0,39) == 0 )
-	{
-		pev->skin = 1;
-	}
-
 	if ( m_hEnemy != NULL && m_Activity == ACT_RUN )
 	{
 		// chasing enemy. Sprint for last bit
@@ -851,6 +835,9 @@ void CHorse::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType
 	ALERT(at_console, "HORSE USED\n");
 #endif
 	if (!pActivator || !pActivator->IsPlayer())
+		return;
+
+	if (pev->deadflag != DEAD_NO)
 		return;
 
 	CBasePlayer* pPlayer = (CBasePlayer*)pActivator;
