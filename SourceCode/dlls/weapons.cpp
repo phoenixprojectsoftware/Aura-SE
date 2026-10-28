@@ -484,20 +484,11 @@ void M_Precache(void)
 	UTIL_PrecacheOther("monster_agrunt");
 	ALERT(at_console, "agrunt precached\n");
 
-	UTIL_PrecacheOther("monster_apache");
-	ALERT(at_console, "apache precached\n");
-
 	UTIL_PrecacheOther("monster_bullsquid");
 	ALERT(at_console, "bullsquid precached\n");
 
-	UTIL_PrecacheOther("monster_bigmomma");
-	ALERT(at_console, "bigmomma precached\n");
-
 	UTIL_PrecacheOther("monster_controller");
 	ALERT(at_console, "controller precached\n");
-
-	UTIL_PrecacheOther("monster_gargantua");
-	ALERT(at_console, "gargantua precached\n");
 
 	UTIL_PrecacheOther("monster_hassassin");
 	ALERT(at_console, "assassin precached\n");
@@ -517,9 +508,6 @@ void M_Precache(void)
 
 	UTIL_PrecacheOther("monster_zombie");
 	ALERT(at_console, "zombie precached\n");
-
-	UTIL_PrecacheOther("monster_horse");
-	ALERT(at_console, "horse precached\n");
 }
 
 
