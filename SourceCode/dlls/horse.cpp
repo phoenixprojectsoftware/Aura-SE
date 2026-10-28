@@ -829,6 +829,7 @@ void CHorse :: RunAI ( void )
 	}
 }
 
+extern int gmsgStatInc;
 void CHorse::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
 {
 #ifdef _DEBUG
@@ -858,6 +859,10 @@ void CHorse::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType
 			SetSequenceByName("nodding");
 			pev->frame = 0;
 			ResetSequenceInfo();
+
+			MESSAGE_BEGIN(MSG_ONE, gmsgStatInc, NULL, pPlayer->edict());
+			WRITE_STRING("zak_apples");
+			MESSAGE_END();
 		}
 
 		m_flNextFeedTime = gpGlobals->time + 1.0f;

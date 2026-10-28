@@ -256,6 +256,7 @@ int gmsgKOTHHill = 0;
 int gmsgLaserSpot = 0;
 
 int gmsgAchievement = 0;
+int gmsgStatInc = 0;
 
 int gmsgPlayVideo = 0;
 
@@ -344,6 +345,7 @@ void LinkUserMessages( void )
 	gmsgKOTHHill = REG_USER_MSG("KothHill", -1); // active KOTH hill name + origin.
 	gmsgLaserSpot = REG_USER_MSG("LaserSpot", -1);
 	gmsgAchievement = REG_USER_MSG("Achievement", -1); // game achievement unlock
+	gmsgStatInc = REG_USER_MSG("StatInc", -1); // game stat increment.
 	gmsgPlayVideo = REG_USER_MSG("PlayVideo", -1); // server tells client to play a fullscreen video
 	gmsgFirefightKill = REG_USER_MSG("FFKill", -1); // a kill in firefight mode ;)
 	gmsgFirefightTargets = REG_USER_MSG("FFTargets", -1); // for koth waypoints.
