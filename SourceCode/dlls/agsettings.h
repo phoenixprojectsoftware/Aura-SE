@@ -28,6 +28,8 @@ public:
     void      Changelevel(const AgString& sMap);
     bool      AdminSetting(const AgString& sSetting, const AgString& sValue);  //Not all settings is allowed.
 
+    AgString GetNextMode();
+    void AnnounceNextMap();
 };
 
 

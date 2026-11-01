@@ -181,8 +181,8 @@ public:
 #define M249_MAX_CARRY			200
 #define PENGUIN_MAX_CARRY 9
 #define SNIPERRIFLE_MAX_CARRY 15
-#define ONE_MAX_CARRY 1
 #endif
+#define ONE_MAX_CARRY 1
 #define BR_MAX_CARRY 180
 #define SNARK_MAX_CARRY			15
 #define HEALER_MAX_CARRY 100
@@ -204,7 +204,6 @@ public:
 #define CARBINE_MAX_CLIP 18
 #else
 #define GLOCK_MAX_CLIP			18
-#define ONE_MAX_CLIP			WEAPON_NOCLIP
 #define PYTHON_MAX_CLIP			6
 #define MP5_MAX_CLIP			60
 #define MP5_DEFAULT_AMMO		60
@@ -220,6 +219,7 @@ public:
 #define PENGUIN_MAX_CLIP 3
 #define SNIPERRIFLE_MAX_CLIP 5
 #endif
+#define ONE_MAX_CLIP			WEAPON_NOCLIP
 #define BR_MAX_CLIP 36
 #define GAUSS_MAX_CLIP			WEAPON_NOCLIP
 #define EGON_MAX_CLIP			WEAPON_NOCLIP
@@ -252,7 +252,6 @@ public:
 #define CARBINE_DEFAULT_GIVE 54
 #else
 #define GLOCK_DEFAULT_GIVE			17
-#define ONE_DEFAULT_GIVE			1
 #define PYTHON_DEFAULT_GIVE			6
 #define MP5_DEFAULT_GIVE			60
 #define MP5_DEFAULT_AMMO			60
@@ -277,6 +276,7 @@ public:
 #define RAILGUN_DEFAULT_GIVE 20
 #define THUMPER_DEFAULT_GIVE 3
 #endif
+#define ONE_DEFAULT_GIVE			1
 #define BR_DEFAULT_GIVE BR_MAX_CLIP
 
 // The amount of ammo given to a player by an ammo item.

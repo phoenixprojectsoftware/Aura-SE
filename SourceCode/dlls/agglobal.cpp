@@ -76,6 +76,7 @@ DLL_GLOBAL cvar_t	ag_blastradius = { "sv_aura_blastradius","1" };         //Defa
 DLL_GLOBAL cvar_t ag_arena_round_timelimit = { "sv_aura_arena_round_timelimit", "120", FCVAR_SERVER };
 DLL_GLOBAL cvar_t ag_lms_final_timelimit = { "sv_aura_lms_final_timelimit", "120", FCVAR_SERVER };
 
+DLL_GLOBAL cvar_t ag_mapcycle_order = { "mapcycle_order", "1", FCVAR_SERVER };
 
 DLL_GLOBAL cvar_t	ag_ban_crowbar = { "sv_aura_ban_crowbar","0" };
 DLL_GLOBAL cvar_t	ag_ban_glock = { "sv_aura_ban_glock","0" };
@@ -352,6 +353,8 @@ void AgInitGame()
 
     CVAR_REGISTER(&ag_arena_round_timelimit);
     CVAR_REGISTER(&ag_lms_final_timelimit);
+
+    CVAR_REGISTER(&ag_mapcycle_order);
 
     CVAR_REGISTER(&ag_ban_crowbar);
     CVAR_REGISTER(&ag_ban_glock);
