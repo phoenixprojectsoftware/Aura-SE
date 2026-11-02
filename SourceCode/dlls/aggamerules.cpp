@@ -14,6 +14,7 @@
 #include "agclient.h"
 #include "aggamerules.h"
 #include "agplayertargets.h"
+#include "phoenix_developers.h"
 #include "music.h"
 #ifdef AGSTATS
 #include "agstats.h"
@@ -333,6 +334,31 @@ void AgGameRules::PlayerSpawn(CBasePlayer* pPlayer)
     if (!pPlayer->pev)
         return;
 
+#ifdef _DEBUG
+    const Phoenix::IdentityStatus identity =
+        Phoenix::GetIdentityStatus(pPlayer->GetAuthID());
+
+    const char* identityName = "Unverified";
+
+    switch (identity)
+    {
+    case Phoenix::IdentityStatus::Developer:
+        identityName = "Developer";
+        break;
+    case Phoenix::IdentityStatus::Player:
+        identityName = "Player";
+    case Phoenix::IdentityStatus::Unverified:
+        break;
+    }
+
+    ALERT(
+        at_console,
+        "[DvP] %s: auth=%s, identity=%s\n",
+        pPlayer->GetName(),
+        pPlayer->GetAuthID(),
+        identityName);
+#endif
+
     if (!FPlayerCanRespawn(pPlayer) && !pPlayer->IsProxy())
     {
         if (!pPlayer->m_bDoneFirstSpawn)
@@ -354,7 +380,12 @@ void AgGameRules::PlayerSpawn(CBasePlayer* pPlayer)
                 }
             }
 
-            if (iSpectators >= ag_max_spectators.value && ARENA != AgGametype() && LMS != AgGametype() && !pPlayer->IsAdmin())
+            const bool waitingForPhoenixAuth =
+                DVP == AgGametype() &&
+                Phoenix::GetIdentityStatus(pPlayer->GetAuthID()) ==
+                Phoenix::IdentityStatus::Unverified;
+
+            if (!waitingForPhoenixAuth && iSpectators >= ag_max_spectators.value && ARENA != AgGametype() && LMS != AgGametype() && !pPlayer->IsAdmin())
             {
                 //He has to go.
                 AgConsole("Too many spectators, kicking.");

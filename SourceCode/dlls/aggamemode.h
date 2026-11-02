@@ -67,7 +67,8 @@ enum enumGameType
     TAUGUYS,
     OITC,
     KING,
-    SANDBOX
+    SANDBOX,
+    DVP // Developers vs. Players
 };
 //-- muphicks
 extern DLL_GLOBAL BYTE g_GameType;

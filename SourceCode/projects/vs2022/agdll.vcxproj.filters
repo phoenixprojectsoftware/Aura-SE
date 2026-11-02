@@ -917,5 +917,8 @@
     <ClInclude Include="..\..\dlls\agplayertargets.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\dlls\phoenix_developers.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

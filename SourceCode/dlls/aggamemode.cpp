@@ -59,6 +59,8 @@ void SetupGametype()
         g_GameType = KING;
     else if (sGametype == "sandbox")
         g_GameType = SANDBOX;
+    else if (sGametype == "dvp" || sGametype == "developersvsplayers")
+        g_GameType = DVP;
 }
 
 AgString AgGamename()

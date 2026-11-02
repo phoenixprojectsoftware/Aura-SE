@@ -29,6 +29,8 @@ extern int g_teamplay;
 //-- Martin Webrant
 #include	"game.h"
 
+#include "phoenix_developers.h"
+
 static char team_names[MAX_TEAMS][MAX_TEAMNAME_LENGTH];
 static int team_scores[MAX_TEAMS];
 static int num_teams = 0;
@@ -73,6 +75,8 @@ CHalfLifeTeamplay :: CHalfLifeTeamplay()
 	// Copy over the team from the server config
 	m_szTeamList[0] = 0;
 
+	m_flNextPhoenixAuthCheck = 0.0f;
+
 	// Cache this because the team code doesn't want to deal with changing this in the middle of a game
 	strncpy( m_szTeamList, teamlist.string, TEAMPLAY_TEAMLISTLENGTH );
 
@@ -94,6 +98,18 @@ CHalfLifeTeamplay :: CHalfLifeTeamplay()
 			}
 		}
 	}
+
+	// developers vs players teams
+	if (DVP == AgGametype())
+	{
+		strncpy(
+			m_szTeamList,
+			"blue;red",
+			sizeof(m_szTeamList) - 1);
+
+		m_szTeamList[sizeof(m_szTeamList) - 1] = '\0';
+	}
+
 	// Has the server set teams
 	if ( strlen( m_szTeamList ) )
 		m_teamLimit = TRUE;
@@ -127,6 +143,8 @@ void CHalfLifeTeamplay :: Think ( void )
 	if (!AgGameRules::AgThink())
 		return;
 	//-- Martin Webrant
+
+	PhoenixAuthThink();
 
 	if ( g_fGameOver )   // someone else quit the game already
 	{
@@ -221,9 +239,104 @@ void CHalfLifeTeamplay :: Think ( void )
 	last_time  = time_remaining;
 }
 
+BOOL CHalfLifeTeamplay::FPlayerCanRespawn(CBasePlayer* pPlayer)
+{
+	if (!CHalfLifeMultiplay::FPlayerCanRespawn(pPlayer))
+		return FALSE;
+
+	if (DVP != AgGametype())
+		return TRUE;
+
+	if (!pPlayer)
+		return FALSE;
+
+	// Never allow an unauthenticated human player
+	// to enter the match.
+	const Phoenix::IdentityStatus identity =
+		Phoenix::GetIdentityStatus(pPlayer->GetAuthID());
+
+	if (identity == Phoenix::IdentityStatus::Unverified)
+		return FALSE;
+
+	// Require the authenticated player's assigned team
+	// to match their verified identity.
+	const char* expectedTeam =
+		identity == Phoenix::IdentityStatus::Developer
+		? "blue"
+		: "red";
+
+	return stricmp(pPlayer->m_szTeamName, expectedTeam) == 0
+		? TRUE
+		: FALSE;
+}
+
+void CHalfLifeTeamplay::PhoenixAuthThink()
+{
+	if (DVP != AgGametype())
+		return;
+
+	if (gpGlobals->time < m_flNextPhoenixAuthCheck)
+		return;
+
+	// retry twice per second
+	m_flNextPhoenixAuthCheck = gpGlobals->time + 0.5f;
+
+	for (int i = 1; i <= gpGlobals->maxClients; ++i)
+	{
+		CBasePlayer* pPlayer = AgPlayerByIndex(i);
+
+		if (!pPlayer)
+			continue;
+
+		// ignore hltv proxies and bots for now
+		if (pPlayer->IsProxy() ||
+			(pPlayer->pev->flags & FL_FAKECLIENT))
+		{
+			continue;
+		}
+
+		// only process those awaiting assignment
+		if (pPlayer->m_szTeamName[0] != '\0')
+			continue;
+
+		const Phoenix::IdentityStatus identity =
+			Phoenix::GetIdentityStatus(pPlayer->GetAuthID());
+
+		// steam hasn't authenticated this player yet
+		if (identity == Phoenix::IdentityStatus::Unverified)
+			continue;
+		
+		const char* teamName =
+			identity == Phoenix::IdentityStatus::Developer
+			? "blue"
+			: "red";
+
+		// assign the team without killing or respawning the player
+		ChangePlayerTeam(
+			pPlayer,
+			teamName,
+			FALSE,
+			FALSE);
+
+		ALERT(
+			at_console,
+			"DVP - %s authenticated and assigned to %s\n",
+			pPlayer->GetName(),
+			teamName);
+
+		ClientPrint(
+			pPlayer->pev,
+			HUD_PRINTCENTER,
+			"Steam authentication complete. You can now join the match.\n");
+	}
+}
+
 void CHalfLifeTeamplay::AutoBalanceThink()
 {
 	if (ag_autobalance.value <= 0.0f)
+		return;
+
+	if (DVP == AgGametype())
 		return;
 
 	if (!g_teamplay || !IsTeamplay())
@@ -487,6 +600,51 @@ void CHalfLifeTeamplay :: UpdateGameMode( CBasePlayer *pPlayer )
 
 const char *CHalfLifeTeamplay::SetDefaultPlayerTeam( CBasePlayer *pPlayer )
 {
+	if (DVP == AgGametype())
+	{
+		const Phoenix::IdentityStatus identity =
+			Phoenix::GetIdentityStatus(pPlayer->GetAuthID());
+
+		const char* teamName = nullptr;
+
+		switch (identity)
+		{
+		case Phoenix::IdentityStatus::Developer:
+			teamName = "blue";
+			break;
+
+		case Phoenix::IdentityStatus::Player:
+			teamName = "red";
+			break;
+
+		case Phoenix::IdentityStatus::Unverified:
+			// don't assign no team
+			pPlayer->m_szTeamName[0] = '\0';
+			return pPlayer->m_szTeamName;
+		}
+
+		strncpy(
+			pPlayer->m_szTeamName,
+			teamName,
+			TEAM_NAME_LENGTH - 1);
+
+		pPlayer->m_szTeamName[TEAM_NAME_LENGTH - 1] = '\0';
+
+		g_engfuncs.pfnSetClientKeyValue(
+			pPlayer->entindex(),
+			g_engfuncs.pfnGetInfoKeyBuffer(pPlayer->edict()),
+			"model",
+			pPlayer->m_szTeamName);
+
+		g_engfuncs.pfnSetClientKeyValue(
+			pPlayer->entindex(),
+			g_engfuncs.pfnGetInfoKeyBuffer(pPlayer->edict()),
+			"team",
+			pPlayer->m_szTeamName);
+
+		return pPlayer->m_szTeamName;
+	}
+
 	// copy out the team name from the model
 	char *mdls = g_engfuncs.pfnInfoKeyValue( g_engfuncs.pfnGetInfoKeyBuffer( pPlayer->edict() ), "model" );
 	strncpy( pPlayer->m_szTeamName, mdls, TEAM_NAME_LENGTH );
@@ -567,8 +725,21 @@ void CHalfLifeTeamplay::InitHUD( CBasePlayer *pPlayer )
 		sprintf( text, "* assigned to team %s\n", pPlayer->m_szTeamName );
 	}
 
-	ChangePlayerTeam( pPlayer, pPlayer->m_szTeamName, FALSE, FALSE );
-	UTIL_SayText( text, pPlayer );
+	if (DVP == AgGametype() && pPlayer->m_szTeamName[0] == '\0')
+	{
+		UTIL_SayText("* Waiting for Steam authentication before assigning your team.\n", pPlayer);
+	}
+	else
+	{
+		ChangePlayerTeam(
+			pPlayer,
+			pPlayer->m_szTeamName,
+			FALSE,
+			FALSE);
+
+		UTIL_SayText(text, pPlayer);
+	}
+
 	int clientIndex = pPlayer->entindex();
 	RecountTeams();
 	// update this player with all the other players team info
@@ -592,9 +763,11 @@ void CHalfLifeTeamplay::InitHUD( CBasePlayer *pPlayer )
 	else if (KING == AgGametype())
 		m_King.PlayerInitHud(pPlayer);
 
-#define MENU_TEAM 					2
-  if (strlen(m_szTeamList))
-    pPlayer->ShowVGUI(MENU_TEAM);
+#define MENU_TEAM 2
+	if (DVP != AgGametype() && strlen(m_szTeamList))
+	{
+		pPlayer->ShowVGUI(MENU_TEAM);
+	}
 //-- Martin Webrant
 }
 

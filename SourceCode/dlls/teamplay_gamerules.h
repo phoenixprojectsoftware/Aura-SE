@@ -48,6 +48,7 @@ public:
 	virtual void PlayerKilled( CBasePlayer *pVictim, entvars_t *pKiller, entvars_t *pInflictor );
 	virtual void Think ( void );
 
+	void PhoenixAuthThink();
 	void AutoBalanceThink();
 	void ClearAutoBalanceForPlayer(CBasePlayer* pPlayer);
 
@@ -61,6 +62,8 @@ public:
 	const char* TeamWithFewestPlayers(void);
 	//-- Martin Webrant
 
+	virtual BOOL FPlayerCanRespawn(CBasePlayer* pPlayer);
+
 private:
 	//++ BulliT
 		//void RecountTeams( void );
@@ -71,5 +74,8 @@ private:
 	BOOL m_DisableDeathPenalty;
 	BOOL m_teamLimit;				// This means the server set only some teams as valid
 	char m_szTeamList[TEAMPLAY_TEAMLISTLENGTH];
+
+	// dvp check
+	float m_flNextPhoenixAuthCheck;
 };
 #endif //_TEAMPLAY_H_

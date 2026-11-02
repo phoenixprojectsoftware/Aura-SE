@@ -519,6 +519,7 @@
     <ClInclude Include="..\..\dlls\op4_weapons\CSniperRifle.h" />
     <ClInclude Include="..\..\dlls\op4_weapons\CSpore.h" />
     <ClInclude Include="..\..\dlls\op4_weapons\CSporeLauncher.h" />
+    <ClInclude Include="..\..\dlls\phoenix_developers.h" />
     <ClInclude Include="..\..\dlls\plane.h" />
     <ClInclude Include="..\..\dlls\player.h" />
     <ClInclude Include="..\..\dlls\rope\CElectrifiedWire.h" />
