@@ -39,6 +39,7 @@
 #include "pm_shared.h"
 #include "hltv.h"
 #include "spawnchooser.h"
+#include "phoenix_developers.h"
 
 #include "rope/CRope.h"
 
@@ -6814,6 +6815,31 @@ void CBasePlayer::ResetScore()
 
 void CBasePlayer::ChangeTeam(const char* pszNewTeam, bool bSendScores)
 {
+	if (AgGametype() == DVP)
+	{
+		const Phoenix::IdentityStatus identity =
+			Phoenix::GetIdentityStatus(GetAuthID());
+
+		if (identity == Phoenix::IdentityStatus::Unverified)
+			return;
+
+		const char* expectedTeam =
+			identity == Phoenix::IdentityStatus::Developer
+			? "blue"
+			: "red";
+
+		if (!pszNewTeam ||
+			stricmp(pszNewTeam, expectedTeam) != 0)
+		{
+			ALERT(
+				at_console,
+				"[DevVsPlayers] Rejected direct team change for %s\n",
+				GetName());
+
+			return;
+		}
+	}
+
   //Save the teamname
   if (TEAM_NAME_LENGTH > strlen(pszNewTeam))
   {

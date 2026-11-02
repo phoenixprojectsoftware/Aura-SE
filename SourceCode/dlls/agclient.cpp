@@ -84,6 +84,19 @@ bool AgClient::HandleCommand(CBasePlayer* pPlayer)
     if (!g_pGameRules || 0 == CMD_ARGC())
         return false;
 
+    //DVP
+    if (DVP == AgGametype() &&
+        (FStrEq(CMD_ARGV(0), "jointeam") ||
+            FStrEq(CMD_ARGV(0), "changeteam")))
+    {
+        ClientPrint(
+            pPlayer->pev,
+            HUD_PRINTCENTER,
+            "WHAT DO YOU FUCKING THINK YOU'RE DOING?\n");
+
+        return true;
+    }
+
     if (FStrEq(CMD_ARGV(0), "_special"))
     {
         return true;

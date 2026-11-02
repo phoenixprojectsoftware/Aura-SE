@@ -774,6 +774,42 @@ void CHalfLifeTeamplay::InitHUD( CBasePlayer *pPlayer )
 
 void CHalfLifeTeamplay::ChangePlayerTeam( CBasePlayer *pPlayer, const char *pTeamName, BOOL bKill, BOOL bGib )
 {
+	if (!pPlayer || !pTeamName)
+		return;
+
+	if (DVP == AgGametype())
+	{
+		const Phoenix::IdentityStatus identity =
+			Phoenix::GetIdentityStatus(pPlayer->GetAuthID());
+
+		if (identity == Phoenix::IdentityStatus::Unverified)
+			return;
+
+		const char* expectedTeam =
+			identity == Phoenix::IdentityStatus::Developer
+			? "blue"
+			: "red";
+
+		if (stricmp(pTeamName, expectedTeam) != 0)
+		{
+			ALERT(
+				at_console,
+				"DVP - blocked invalid team change for %s\n",
+				pPlayer->GetName());
+
+			if (stricmp(pPlayer->m_szTeamName, expectedTeam) != 0)
+			{
+				ChangePlayerTeam(
+					pPlayer,
+					expectedTeam,
+					FALSE,
+					FALSE);
+			}
+
+			return;
+		}
+	}
+
 	int damageFlags = DMG_GENERIC;
 	int clientIndex = pPlayer->entindex();
 
@@ -856,6 +892,64 @@ void CHalfLifeTeamplay::ClientUserInfoChanged( CBasePlayer *pPlayer, char *infob
 
 	// prevent skin/color/model changes
 	char *mdls = g_engfuncs.pfnInfoKeyValue( infobuffer, "model" );
+
+	if (DVP == AgGametype())
+	{
+		const Phoenix::IdentityStatus identity =
+			Phoenix::GetIdentityStatus(pPlayer->GetAuthID());
+
+		const char* expectedTeam = "";
+
+		if (identity == Phoenix::IdentityStatus::Developer)
+			expectedTeam = "blue";
+		else if (identity == Phoenix::IdentityStatus::Player)
+			expectedTeam = "red";
+
+		// Repair an incorrect internal team assignment.
+		if (stricmp(pPlayer->m_szTeamName, expectedTeam) != 0)
+		{
+			if (identity != Phoenix::IdentityStatus::Unverified)
+			{
+				ChangePlayerTeam(
+					pPlayer,
+					expectedTeam,
+					FALSE,
+					FALSE);
+			}
+			else
+			{
+				pPlayer->m_szTeamName[0] = '\0';
+			}
+		}
+
+		const int clientIndex = pPlayer->entindex();
+
+		// Restore the required player model.
+		if (!mdls || stricmp(mdls, expectedTeam) != 0)
+		{
+			g_engfuncs.pfnSetClientKeyValue(
+				clientIndex,
+				infobuffer,
+				"model",
+				(char*)expectedTeam);
+		}
+
+		// Restore the team userinfo value.
+		const char* currentTeam =
+			g_engfuncs.pfnInfoKeyValue(infobuffer, "team");
+
+		if (!currentTeam ||
+			stricmp(currentTeam, expectedTeam) != 0)
+		{
+			g_engfuncs.pfnSetClientKeyValue(
+				clientIndex,
+				infobuffer,
+				"team",
+				(char*)expectedTeam);
+		}
+
+		return;
+	}
 
 	if ( !stricmp( mdls, pPlayer->m_szTeamName ) )
 		return;
