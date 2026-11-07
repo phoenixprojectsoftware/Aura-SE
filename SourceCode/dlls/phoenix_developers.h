@@ -29,7 +29,7 @@ namespace Phoenix
 	static const char* const DeveloperSteamIDs[] =
 	{
 		"0:1:420777771", // sabian
-		//"0:0:141116975", // ryley
+		"0:0:141116975", // ryley
 		"0:1:419649759", // glitchgod
 		"0:0:192404376", // enzo
 		"0:1:54795934", // jan
