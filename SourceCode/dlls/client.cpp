@@ -40,6 +40,8 @@
 #include "netadr.h"
 #include "pm_shared.h"
 
+#include "player_name_filter.h"
+
 #if !defined ( _WIN32 )
 #include <ctype.h>
 #endif
@@ -86,7 +88,25 @@ called when a player connects to a server
 ============
 */
 BOOL ClientConnect( edict_t *pEntity, const char *pszName, const char *pszAddress, char szRejectReason[ 128 ]  )
-{	
+{
+	// refuse connections if moderation is unavailable
+	if (!NameFilter::IsReady())
+	{
+		snprintf(szRejectReason, 128, "Server name moderation is unavailable. Contact the operator.");
+
+		return FALSE;
+	}
+
+	// reject names matches any prohibited expression
+	if (NameFilter::IsBlocked(pszName))
+	{
+		snprintf(szRejectReason, 128, "Connection refused: Your player name violates The Phoenix Project Software's policy. Change your Steam name now.");
+
+		ALERT(at_console, "[NameFilter] Player '%s' refused from %s\n", pszName, pszAddress);
+
+		return FALSE;
+	}
+
 	return g_pGameRules->ClientConnected( pEntity, pszName, pszAddress, szRejectReason );
 
 // a client connecting during an intermission can cause problems
@@ -675,6 +695,25 @@ void ClientUserInfoChanged( edict_t *pEntity, char *infobuffer )
 	// Is the client spawned yet?
 	if ( !pEntity->pvPrivateData )
 		return;
+
+	// inspect the submitted playername before the existing
+	// namechange announcement and logging code
+	const char* requestedName = g_engfuncs.pfnInfoKeyValue(infobuffer, "name");
+
+	if (NameFilter::IsReady() && NameFilter::IsBlocked(requestedName))
+	{
+		// replace this name now
+		g_engfuncs.pfnSetClientKeyValue(ENTINDEX(pEntity), infobuffer, "name", "BLAM!");
+		ALERT(at_console, "[NameFilter] Censored name change from client %d\n", ENTINDEX(pEntity));
+		ClientPrint(&pEntity->v, HUD_PRINTCONSOLE, "[NameFilter] Your name is inappropriate.\n");
+
+		const int userID = GETPLAYERUSERID(pEntity);
+
+		if (userID > 0)
+		{
+			SERVER_COMMAND(UTIL_VarArgs("kick #&d\n", userID));
+		}
+	}
 
 	// msg everyone if someone changes their name,  and it isn't the first time (changing no name to current name)
 	if ( pEntity->v.netname && STRING(pEntity->v.netname)[0] != 0 && !FStrEq( STRING(pEntity->v.netname), g_engfuncs.pfnInfoKeyValue( infobuffer, "name" )) )

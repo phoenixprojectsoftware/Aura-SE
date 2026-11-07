@@ -522,6 +522,7 @@
     <ClInclude Include="..\..\dlls\phoenix_developers.h" />
     <ClInclude Include="..\..\dlls\plane.h" />
     <ClInclude Include="..\..\dlls\player.h" />
+    <ClInclude Include="..\..\dlls\player_name_filter.h" />
     <ClInclude Include="..\..\dlls\rope\CElectrifiedWire.h" />
     <ClInclude Include="..\..\dlls\rope\CRope.h" />
     <ClInclude Include="..\..\dlls\rope\CRopeSample.h" />

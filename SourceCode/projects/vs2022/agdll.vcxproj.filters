@@ -920,5 +920,8 @@
     <ClInclude Include="..\..\dlls\phoenix_developers.h">
       <Filter>Header Files\dlls</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\dlls\player_name_filter.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -9,156 +9,164 @@
 *
 ****/
 
+
 #pragma once
 
 #include "agglobal.h"
 
+#include <regex>
 #include <sstream>
 #include <string>
 #include <vector>
+#include <cstring>
 
 namespace NameFilter
 {
-	// convert names into a comparable ascii representation.
-	// handles case, common substitutions, and separators.
-	inline std::string Normalize(const char* input)
-	{
-		std::string result;
+    struct FilterData
+    {
+        bool ready = false;
+        std::vector<std::regex> patterns;
+    };
 
-		if (!input)
-			return result;
+    inline const FilterData& GetFilter()
+    {
+        static const FilterData filter = []()
+            {
+                FilterData data;
 
-		for (const unsigned char* p = reinterpret_cast<const unsigned char*>(input); *p; ++p)
-		{
-			unsigned char c = *p;
+                // AgReadFile reads relative to Aura's game directory.
+                std::string contents = AgReadFile("char.auc");
 
-			if (c >= 'A' && c <= 'Z')
-				c = c - 'A' + 'a';
+                if (contents.empty())
+                {
+                    ALERT(
+                        at_console,
+                        "[NameFilter] ERROR: char.auc is missing or empty!\n");
 
-			switch (c)
-			{
-			case '0': c = 'o'; break;
-			case '1': c = 'i'; break;
-			case '2': c = 'z'; break;
-			case '3': c = 'e'; break;
-			case '4': c = 'a'; break;
-			case '5': c = 's'; break;
-			case '6': c = 'g'; break;
-			case '7': c = 't'; break;
-			case '8': c = 'b'; break;
-			case '9': c = 'g'; break;
+                    return data;
+                }
 
-			case '@': c = 'a'; break;
-			case '$': c = 's'; break;
-			case '!': c = 'i'; break;
-			case '|': c = 'i'; break;
+                // Remove the UTF-8 BOM, if present.
+                if (contents.compare(0, 3, "\xEF\xBB\xBF") == 0)
+                    contents.erase(0, 3);
 
-				// wildcards in submitted names.
-			case '*':
-			case '?':
-				c = '?';
-				break;
+                std::istringstream stream(contents);
+                std::string line;
+                unsigned int lineNumber = 0;
 
-			default:
-				break;
-			}
+                while (std::getline(stream, line))
+                {
+                    ++lineNumber;
 
-			if ((c >= 'a' && c <= 'z') || c == '?')
-			{
-				result.push_back(static_cast<char>(c));
-			}
+                    // Remove Windows CRLF terminators.
+                    if (!line.empty() && line.back() == '\r')
+                        line.pop_back();
 
-			// other punctuation is ignored
-		}
+                    // Trim outer whitespace only.
+                    const size_t first =
+                        line.find_first_not_of(" \t");
 
-		return result;
-	}
+                    if (first == std::string::npos)
+                        continue;
 
-	inline const std::vector<std::string>& GetBlockedTerms()
-	{
-		static const std::vector<std::string> terms = []()
-			{
-				std::vector<std::string> result;
+                    const size_t last =
+                        line.find_last_not_of(" \t");
 
-				const std::string file = AgReadFile("char.auc");
+                    line = line.substr(first, last - first + 1);
 
-				std::istringstream stream(file);
-				std::string line;
+                    // Ignore comments.
+                    if (line[0] == '#')
+                        continue;
 
-				while (std::getline(stream, line))
-				{
-					const size_t first = line.find_first_not_of(" \t\r");
+                    // Limit configuration complexity.
+                    if (line.size() > 256 ||
+                        data.patterns.size() >= 256)
+                    {
+                        ALERT(
+                            at_console,
+                            "[NameFilter] ERROR: Invalid limits at line %u.\n",
+                            lineNumber);
 
-					if (first == std::string::npos)
-						continue;
+                        return FilterData{};
+                    }
 
-					// comments begin with #
-					if (line[first] == '#')
-						continue;
+                    try
+                    {
+                        data.patterns.emplace_back(
+                            line,
+                            std::regex_constants::ECMAScript |
+                            std::regex_constants::icase);
+                    }
+                    catch (const std::regex_error& error)
+                    {
+                        ALERT(
+                            at_console,
+                            "[NameFilter] Invalid regex at line %u: %s\n",
+                            lineNumber,
+                            error.what());
 
-					const std::string term = Normalize(line.c_str());
+                        // Fail closed: do not use an incomplete
+                        // moderation configuration.
+                        return FilterData{};
+                    }
+                }
 
-					// avoid short, ambiguous matches
-					if (term.size() < 5 || term.find('?') != std::string::npos)
-						continue;
+                if (data.patterns.empty())
+                {
+                    ALERT(
+                        at_console,
+                        "[NameFilter] ERROR: No valid rules loaded!\n");
 
-					result.push_back(term);
-				}
+                    return data;
+                }
 
-				if (result.empty())
-				{
-					ALERT(at_console, "[NameFilter] WARNING: No blocked terms loaded!\n");
-				}
-				else
-				{
-					ALERT(at_console, "[NameFilter] Loaded %u blocked terms.\n", static_cast<unsigned int>(result.size()));
-				}
+                data.ready = true;
 
-				return result;
-			}();
+                ALERT(
+                    at_console,
+                    "[NameFilter] Loaded %u prohibited-name patterns.\n",
+                    static_cast<unsigned int>(data.patterns.size()));
 
-		return terms;
-	}
+                return data;
+            }();
 
-	inline bool IsBlocked(const char* name)
-	{
-		const std::string normalized = Normalize(name);
+        return filter;
+    }
 
-		if (normalized.empty())
-			return;
+    inline bool IsReady()
+    {
+        return GetFilter().ready;
+    }
 
-		for (const std::string& term : GetBlockedTerms())
-		{
-			if (normalized.size() < term.size())
-				continue;
+    inline bool IsBlocked(const char* name)
+    {
+        // Missing rules or malformed names are rejected.
+        if (!IsReady() || !name || !name[0])
+            return true;
 
-			for (size_t i = 0; i + term.size() <= normalized.size(); ++i)
-			{
-				bool matches = true;
-				size_t wildcards = 0;
+        // GoldSrc player names are normally much shorter.
+        // This prevents excessively long regex inputs.
+        if (std::strlen(name) > 63)
+            return true;
 
-				for (size_t j = 0; j < term.size(); ++j)
-				{
-					const char candidate = normalized[i + j];
-					if (candidate == '?')
-					{
-						++wildcards;
-						continue;
-					}
+        for (const std::regex& pattern : GetFilter().patterns)
+        {
+            try
+            {
+                if (std::regex_search(name, pattern))
+                    return true;
+            }
+            catch (const std::regex_error&)
+            {
+                ALERT(
+                    at_console,
+                    "[NameFilter] ERROR: Regex matching failed.\n");
 
-					if (candidate != term[j])
-					{
-						matches = false;
-						break;
-					}
-				}
+                // Fail closed if a regex cannot be evaluated.
+                return true;
+            }
+        }
 
-				// limit wildcard matches to reduce false positives
-				if (matches && wildcards <= 2)
-					return true;
-			}
-		}
-
-		return false;
-	}
+        return false;
+    }
 }
